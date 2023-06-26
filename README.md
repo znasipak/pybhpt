@@ -1,8 +1,18 @@
 # pybhpt
 
-Python package for solving problems in black hole perturbation theory
+A python package for solving problems in black hole perturbation theory
 
-PyBHPT is a collection of numerical tools for analyzing perturbations of Kerr spacetime, particularly the self-forces experienced by small bodies moving in a Kerr background. 
+`pybhpt` is a collection of numerical tools for analyzing perturbations of Kerr spacetime, particularly the self-forces experienced by small bodies moving in a Kerr background. Subpackages include: 
+    - `pybhpt.geodesic`: a module that generates bound timelike geodesics in Kerr spacetime
+    - `pybhpt.radial`: a module that calculates homogeneous solutions of the radial Teukolsky equation
+    - `pybhpt.swsh`: a module that constructs the spin-weighted spheroidal harmonics
+    - `pybhpt.teuk`: a module that evaluates the inhomogeneous solutions (Teukolsky amplitudes) of the radial Teukolsky equation due to a point-particle on a bound timelike Kerr geodesic
+    - `pybhpt.flux`: a module that produces the gravitational wave fluxes sourced by a point-particle on a generic bound timelike Kerr geodesic
+    - `pybhpt.hertz`: a module that solves for the Hertz potentials for the CCK and AAB metric reconstruction procedures
+    - `pybhpt.redshift`: a module that computes the generalized Detweiler redshift invariant in a variety of gauges
+
+> **Warning**
+> This project is still under heavy active development. Please use at your own risk. If you plan on using this code for research purposes, please reach out to the authors first.
 
 ## Installation
 
