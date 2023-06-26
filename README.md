@@ -3,6 +3,7 @@
 A python package for solving problems in black hole perturbation theory
 
 `pybhpt` is a collection of numerical tools for analyzing perturbations of Kerr spacetime, particularly the self-forces experienced by small bodies moving in a Kerr background. Subpackages include: 
+
     - `pybhpt.geodesic`: a module that generates bound timelike geodesics in Kerr spacetime
     - `pybhpt.radial`: a module that calculates homogeneous solutions of the radial Teukolsky equation
     - `pybhpt.swsh`: a module that constructs the spin-weighted spheroidal harmonics
