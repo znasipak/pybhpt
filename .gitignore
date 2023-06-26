@@ -130,5 +130,7 @@ dmypy.json
 
 # pybhpt
 .DS_Store
+test/
 tests/
+test-temp/
 .vscode/
