@@ -2,7 +2,7 @@
 
 #include "teukolsky.hpp"
 
-#define ZERO_FREQ_LIMIT 1.e-9
+#define ZERO_FREQ_LIMIT 1.e-10
 #define MST_AUTO_FREQ 0.1
 #define SAMPLE_SIZE_INIT 256
 
@@ -37,8 +37,8 @@ void flip_spin_of_spheroidal_harmonic(Vector &SlmFlip, Vector &SlmPFlip, int l, 
 }
 
 TeukolskyMode::TeukolskyMode(int L, int m, int k, int n, GeodesicSource& geo): TeukolskyMode(-2, L, m, k, n, geo) {}
-TeukolskyMode::TeukolskyMode(int s, int L, int m, int k, int n, GeodesicSource& geo): TeukolskyMode(s, L, m, k, n, geo.getBlackHoleSpin(), geo.getPolarPosition(), geo.getRadialPosition()) {}
-TeukolskyMode::TeukolskyMode(int s, int L, int m, int k, int n, double a, Vector theta, Vector r):  _s(s),  _L(L), _m(m), _k(k), _n(n), _sampleSize(r.size()), _a(a), _omega(0.), _lambda(0.), _theta(theta), _Slm(theta.size(), 0.), _SlmP(theta.size(), 0.), _r(r), _Rin(r.size(), 0.), _RinP(r.size(), 0.), _Rup(r.size(), 0.), _RupP(r.size(), 0.), _ZlmIn(0.), _ZlmUp(0.) {}
+TeukolskyMode::TeukolskyMode(int s, int L, int m, int k, int n, GeodesicSource& geo): TeukolskyMode(s, L, m, k, n, geo.getBlackHoleSpin(), geo.getTimeFrequency(m, k, n), geo.getPolarPosition(), geo.getRadialPosition()) {}
+TeukolskyMode::TeukolskyMode(int s, int L, int m, int k, int n, double a, double omega, Vector theta, Vector r):  _s(s),  _L(L), _m(m), _k(k), _n(n), _sampleSize(r.size()), _a(a), _omega(omega), _lambda(0.), _theta(theta), _Slm(theta.size(), 0.), _SlmP(theta.size(), 0.), _r(r), _Rin(r.size(), 0.), _RinP(r.size(), 0.), _Rup(r.size(), 0.), _RupP(r.size(), 0.), _ZlmIn(0.), _ZlmUp(0.) {}
 TeukolskyMode::~TeukolskyMode() {}
 
 int TeukolskyMode::generateSolutions(GeodesicSource& geo, SolutionMethod method, int samplesize){
@@ -120,11 +120,26 @@ int TeukolskyMode::generateSolutions(SpinWeightedHarmonic& swsh, RadialTeukolsky
 		DerivativesMatrix SlmMat = {.solution = _Slm, .derivative = _SlmP, .secondDerivative = swsh.getSecondDerivative()};
 
 		if(geoConst.e == 0. && abs(geoConst.x) == 1.){
-			Zlm = field_amplitude_circeq(_s, _L, _m, traj, geoConst, RinMat, RupMat, SlmMat);
+			if(abs(_k) > 0 || abs(_n) > 0){
+				Zlm.in = 0.;
+				Zlm.up = 0.;
+			}else{
+				Zlm = field_amplitude_circeq(_s, _L, _m, traj, geoConst, RinMat, RupMat, SlmMat);
+			}
 		}else if(geoConst.e == 0.){
-			Zlm = field_amplitude_sphinc(_s, _L, _m, _k, traj, geoConst, RinMat, RupMat, SlmMat);
+			if(abs(_n) > 0){
+				Zlm.in = 0.;
+				Zlm.up = 0.;
+			}else{
+				Zlm = field_amplitude_sphinc(_s, _L, _m, _k, traj, geoConst, RinMat, RupMat, SlmMat);
+			}
 		}else if(abs(geoConst.x) == 1.){
-			Zlm = field_amplitude_ecceq(_s, _L, _m, _n, traj, geoConst, RinMat, RupMat, SlmMat);
+			if(abs(_k) > 0){
+				Zlm.in = 0.;
+				Zlm.up = 0.;
+			}else{
+				Zlm = field_amplitude_ecceq(_s, _L, _m, _n, traj, geoConst, RinMat, RupMat, SlmMat);
+			}
 		}else{
 			Zlm = field_amplitude(_s, _L, _m, _k, _n, traj, geoConst, RinMat, RupMat, SlmMat);
 		}
@@ -166,6 +181,7 @@ int TeukolskyMode::flipSpinWeightAndFrequency(){
 	_lambda = flip_eigenvalue(_s, _lambda);
 	_s = flip_spin(_s);
 	_omega *= -1.;
+	_m *= -1.;
 
 	return 0;
 }
@@ -191,7 +207,6 @@ int TeukolskyMode::flipSpinWeight(){
 
 	_lambda = flip_eigenvalue(_s, _lambda);
 	_s = flip_spin(_s);
-	_omega *= -1.;
 
 	return 0;
 }
@@ -294,6 +309,9 @@ int TeukolskyMode::getPolarSampleNumber(){ return _theta.size(); }
 double TeukolskyMode::getPolarPoints(int pos){ return _theta[pos]; }
 double TeukolskyMode::getPolarSolution(int pos){ return _Slm[pos]; }
 double TeukolskyMode::getPolarDerivative(int pos){ return _SlmP[pos]; }
+double TeukolskyMode::getPolarSecondDerivative(int pos){ 
+	return Sslm_secondDerivative(_s, _L, _m, _a*_omega, _lambda, _theta[pos], _Slm[pos], _SlmP[pos]);
+}
 
 double test_teukolsky_solutions(int spin, Complex R0, Complex R1, Complex R2, double r, double a, double m, double omega, double lambda){
 	double Kt = (r*r + a*a)*omega - m*a;

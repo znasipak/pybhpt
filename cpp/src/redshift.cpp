@@ -5,11 +5,26 @@
 #define HUU_EXPANSION_ORDER 0
 
 
+RedshiftCoefficients::RedshiftCoefficients(Gauge gauge, GeodesicSource &geo){
+  if(gauge == IRG || gauge == SAAB0 || gauge == ASAAB0){
+    _coeffs = redshift_coefficients_IRG(geo, geo.getOrbitalSampleNumber());
+  }else{
+    _coeffs = redshift_coefficients_ORG(geo, geo.getOrbitalSampleNumber());
+  }
+}
+
+Complex RedshiftCoefficients::getComponent(int Ni, int ai, int bi, int ci, int di, int jr, int jz){
+  return redshift_coefficient_components(_coeffs, Ni, ai, bi, ci, di, jr, jz);
+}
+
 void redshift_circular_reconstruction_RG(std::string filename, Gauge gauge, int lmax, GeodesicSource &geoCirc){
   double regParam = redshift_regularization_circular(geoCirc);
   ComplexTensor huuCoeffCirc = redshift_coefficients_IRG(geoCirc, pow(2, 2));
+
+  int s = -2;
   if(gauge == ORG){
-    huuCoeffCirc = redshift_coefficients(geoCirc, pow(2, 2));
+    s = 2;
+    huuCoeffCirc = redshift_coefficients_ORG(geoCirc, pow(2, 2));
   }
   int modeCoupling = 20;
   if(geoCirc.getBlackHoleSpin() == 0.){
@@ -17,24 +32,26 @@ void redshift_circular_reconstruction_RG(std::string filename, Gauge gauge, int 
   }
 
   // first we create the matrices for the spherical harmonic basis
-  ComplexMatrix huuCircInYlm(lmax + 1, ComplexVector(lmax + 1));
-  ComplexMatrix huuCircUpYlm(lmax + 1, ComplexVector(lmax + 1));
+  ComplexMatrix huuCircInYlm(lmax + 1, ComplexVector(lmax + 1, 0.));
+  ComplexMatrix huuCircUpYlm(lmax + 1, ComplexVector(lmax + 1, 0.));
 
   // then we create the matrices for the unprojected basis
-  ComplexMatrix huuCircInSlm(lmax + 1, ComplexVector(lmax + 1));
-  ComplexMatrix huuCircUpSlm(lmax + 1, ComplexVector(lmax + 1));
+  ComplexMatrix huuCircInSlm(lmax + 1, ComplexVector(lmax + 1, 0.));
+  ComplexMatrix huuCircUpSlm(lmax + 1, ComplexVector(lmax + 1, 0.));
   for(int m = 0; m <= lmax; m++){
     int lmin = abs(m) < 2 ? 2 : abs(m);
     SphericalHarmonicCoupling Cjlm(lmax + 6, m);
     Cjlm.generateCouplings();
     for(int j = lmin; j <= lmax + modeCoupling; j++){
-      TeukolskyMode teuk(-2, j, m, 0, 0, geoCirc);
+      TeukolskyMode teuk(s, j, m, 0, 0, geoCirc);
       teuk.generateSolutions(geoCirc);
       HertzMode hertz(teuk, gauge);
       hertz.generateSolutions();
 
       for(int l = abs(m); l <= lmax + modeCoupling; l++){
         Complex tempMode = redshift_mode(huuCoeffCirc, Cjlm, hertz, In, l, 0, 0, 0, 0);
+        std::cout << j << " " << l << " " << m <<  "\n";
+        std::cout << tempMode << "\n";
         if(abs(tempMode/regParam) > DBL_EPSILON){
           if(l <= lmax){
             huuCircInYlm[l][m] += tempMode;
@@ -44,6 +61,7 @@ void redshift_circular_reconstruction_RG(std::string filename, Gauge gauge, int 
             huuCircInSlm[j][m] += tempMode;
           }
         }
+        // std::cout << huuCircInYlm[l][m] << "\n";
 
         tempMode = redshift_mode(huuCoeffCirc, Cjlm, hertz, Up, l, 0, 0, 0, 0);
         if(abs(tempMode/regParam) > DBL_EPSILON){
@@ -66,8 +84,8 @@ void redshift_circular_reconstruction_RG(std::string filename, Gauge gauge, int 
     huuCircInL[l] = huuCircInYlm[l][0];
     huuCircUpL[l] = huuCircUpYlm[l][0];
     for(int m = 1; m <= l; m++){
-      huuCircInL[l] += 2.*huuCircInYlm[l][m];
-      huuCircUpL[l] += 2.*huuCircUpYlm[l][m];
+      huuCircInL[l] += std::real((1. + pow(-1., l + m))*huuCircInYlm[l][m]);
+      huuCircUpL[l] += std::real((1. + pow(-1., l + m))*huuCircUpYlm[l][m]);
     }
     std::cout << "HuuIn(l = "<<l<<") = " << huuCircInL[l] << ", HuuUp(l = "<<l<<") = " << huuCircUpL[l] << "\n";
   }
@@ -105,7 +123,7 @@ void redshift_circular_reconstruction_RG(std::string filename, Gauge gauge, int 
 
 void redshift_circular_reconstruction_AAB(std::string filename, Gauge gauge0, Gauge gauge4, int lmax, GeodesicSource &geoCirc){
   double regParam = redshift_regularization_circular(geoCirc);
-  ComplexTensor huuCoeffCircORG = redshift_coefficients(geoCirc, pow(2, 2));
+  ComplexTensor huuCoeffCircORG = redshift_coefficients_ORG(geoCirc, pow(2, 2));
   ComplexTensor huuCoeffCircIRG = redshift_coefficients_IRG(geoCirc, pow(2, 2));
   double prefactor0, prefactor4;
   if(gauge0 == SAAB0){
@@ -322,13 +340,13 @@ Complex redshift_mode(ComplexTensor &huuCoeff, SphericalHarmonicCoupling &Cjlm, 
   int jru = jr;
   int jzu = jz;
   Complex hNabcd = 1.;
-  if(sgnUr < 0 && jru > 0){
+  if(sgnUr == -1 && jru > 0){
     jru = huuCoeff[0].size() - jr;
   }
-  if(sgnUz > 0 && jzu > 0){
+  if(sgnUz == -1 && jzu > 0){
     jzu = huuCoeff[0].size() - jz;
   }
-  double ylm = Ylm(l, hertz.getAzimuthalModeNumber(), hertz.getPolarPoints(jz));
+  double ylm = Ylm(l, m, hertz.getPolarPoints(jz));
   ComplexVector hertzR = {hertz.getRadialSolution(bc, 0, jr), hertz.getRadialSolution(bc, 1, jr), hertz.getRadialSolution(bc, 2, jr)};
   // if(isnan(abs(hertzR[0])) || isinf(abs(hertzR[0]))){
   //   std::cout << "("<<l<<", "<<hertz.getAzimuthalModeNumber()<<") \n";
@@ -490,7 +508,7 @@ Complex redshift_coefficient_components(ComplexTensor &huu, int Ni, int ai, int 
   return huu[3*compABCD + Ni][jr][jz];
 }
 
-void huu_coeffs_subfunction(Complex &huu0, Complex &huu1, Complex &huu2, double z, Complex u1, Complex u1dz, Complex u1dz2, Complex u3, Complex u3dz, Complex u3dz2, Complex h11, Complex h11dz, Complex h11dz2, Complex h13, Complex h13dz, Complex h13dz2, Complex h33, Complex h33dz, Complex h33dz2){
+void huu_coeffs_subfunction_ORG(Complex &huu0, Complex &huu1, Complex &huu2, double z, Complex u1, Complex u1dz, Complex u1dz2, Complex u3, Complex u3dz, Complex u3dz2, Complex h11, Complex h11dz, Complex h11dz2, Complex h13, Complex h13dz, Complex h13dz2, Complex h33, Complex h33dz, Complex h33dz2){
   Complex h0 = u1*u1*h11 + 2.*u1*u3*h13 + u3*u3*h33;
 
   if(HUU_EXPANSION_ORDER > 0){
@@ -506,11 +524,12 @@ void huu_coeffs_subfunction(Complex &huu0, Complex &huu1, Complex &huu2, double 
     huu2 = 0.;
   }
 
-  huu0 = h33;
+  // huu0 = h33;
 }
 
 void huu_coeffs_subfunction_IRG(Complex &huu0, Complex &huu1, Complex &huu2, double z, Complex u2, Complex u2dz, Complex u2dz2, Complex u4, Complex u4dz, Complex u4dz2, Complex h22, Complex h22dz, Complex h22dz2, Complex h24, Complex h24dz, Complex h24dz2, Complex h44, Complex h44dz, Complex h44dz2){
   Complex h0 = u2*u2*h22 + 2.*u2*u4*h24 + u4*u4*h44;
+  // std::cout << "u2 = " << u2 << ", u4 = " << u4 << ", h22 = " << h22 << ", h24 = " << h24 << ", h44 = " << h44 << "\n";
 
   if(HUU_EXPANSION_ORDER > 0){
     Complex h1 = 2.*(u2*u2dz*h22 + u2*u4dz*h24 + u4*u2dz*h24 + u4*u4dz*h44) + (u2*u2*h22dz + 2.*u2*u4*h24dz + u4*u4*h44dz);
@@ -525,10 +544,10 @@ void huu_coeffs_subfunction_IRG(Complex &huu0, Complex &huu1, Complex &huu2, dou
     huu2 = 0.;
   }
 
-  huu0 = h44;
+  // huu0 = h44;
 }
 
-ComplexTensor redshift_coefficients(GeodesicSource geo, int sampleNum){
+ComplexTensor redshift_coefficients_ORG(GeodesicSource geo, int sampleNum){
   double a = geo.getBlackHoleSpin();
   double En = geo.getOrbitalEnergy();
   double Lz = geo.getOrbitalAngularMomentum();
@@ -543,7 +562,7 @@ ComplexTensor redshift_coefficients(GeodesicSource geo, int sampleNum){
     z[ii] = cos(geo.getPolarPosition(sampleFactor*ii));
   }
 
-  return redshift_coefficients(a, En, Lz, Qc, r, z);
+  return redshift_coefficients_ORG(a, En, Lz, Qc, r, z);
 }
 
 ComplexTensor redshift_coefficients_IRG(GeodesicSource geo, int sampleNum){
@@ -564,7 +583,7 @@ ComplexTensor redshift_coefficients_IRG(GeodesicSource geo, int sampleNum){
   return redshift_coefficients_IRG(a, En, Lz, Qc, r, z);
 }
 
-void rescale_redshift_coefficients(ComplexTensor &huu){
+void rescale_redshift_coefficients_ORG(ComplexTensor &huu){
   Complex rescale = 1.;
   for(int ai = 0; ai <= 2; ai++){
     rescale *= pow(-I, ai);
@@ -586,16 +605,16 @@ void rescale_redshift_coefficients(ComplexTensor &huu){
 }
 
 
-ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, Vector r, Vector z){
-  ComplexTensor h11 = metric_coefficients_11(a, r, z);
-  ComplexTensor h11dz = metric_coefficients_11_dz(a, r, z);
-  ComplexTensor h11dz2 = metric_coefficients_11_dz2(a, r, z);
-  ComplexTensor h13 = metric_coefficients_13(a, r, z);
-  ComplexTensor h13dz = metric_coefficients_13_dz(a, r, z);
-  ComplexTensor h13dz2 = metric_coefficients_13_dz2(a, r, z);
-  ComplexTensor h33 = metric_coefficients_33(a, r, z);
-  ComplexTensor h33dz = metric_coefficients_33_dz(a, r, z);
-  ComplexTensor h33dz2 = metric_coefficients_33_dz2(a, r, z);
+ComplexTensor redshift_coefficients_ORG(double a, double En, double Lz, double Qc, Vector r, Vector z){
+  ComplexTensor h11 = metric_coefficients_ORG_11(a, r, z);
+  ComplexTensor h11dz = metric_coefficients_ORG_11_dz(a, r, z);
+  ComplexTensor h11dz2 = metric_coefficients_ORG_11_dz2(a, r, z);
+  ComplexTensor h13 = metric_coefficients_ORG_13(a, r, z);
+  ComplexTensor h13dz = metric_coefficients_ORG_13_dz(a, r, z);
+  ComplexTensor h13dz2 = metric_coefficients_ORG_13_dz2(a, r, z);
+  ComplexTensor h33 = metric_coefficients_ORG_33(a, r, z);
+  ComplexTensor h33dz = metric_coefficients_ORG_33_dz(a, r, z);
+  ComplexTensor h33dz2 = metric_coefficients_ORG_33_dz2(a, r, z);
 
   ComplexMatrix u1 = tetrad_velocity_1(a, En, Lz, Qc, r, z);
   ComplexMatrix u1dz = tetrad_velocity_1_dz(a, En, Lz, Qc, r, z);
@@ -615,7 +634,7 @@ ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, V
     // first consider ur = 0 and uz = 0
     jr = 0;
     jz = 0;
-    huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+    huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
     huu[3*i][jr][jz] = huu0; //n = 0;
     huu[3*i + 1][jr][jz] = huu1; //n = 1;
@@ -623,7 +642,7 @@ ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, V
 
     jr = 0;
     jz = z.size() - 1;
-    huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+    huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
     huu[3*i][jr][jz] = huu0; //n = 0;
     huu[3*i + 1][jr][jz] = huu1; //n = 1;
@@ -631,7 +650,7 @@ ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, V
 
     jr = r.size() - 1;
     jz = 0;
-    huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+    huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
     huu[3*i][jr][jz] = huu0; //n = 0;
     huu[3*i + 1][jr][jz] = huu1; //n = 1;
@@ -639,7 +658,7 @@ ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, V
 
     jr = r.size() - 1;
     jz = z.size() - 1;
-    huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+    huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
     huu[3*i][jr][jz] = huu0; //n = 0;
     huu[3*i + 1][jr][jz] = huu1; //n = 1;
@@ -648,7 +667,7 @@ ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, V
     for(jz = 1; jz < z.size() - 1; jz++){
       // next consider ur = 0 and uz < 0
       jr = 0;
-      huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+      huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
       huu[3*i][jr][jz] = huu0; //n = 0;
       huu[3*i + 1][jr][jz] = huu1; //n = 1;
@@ -656,7 +675,7 @@ ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, V
 
       // next consider ur = 0 and uz < 0
       jr = r.size() - 1;
-      huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+      huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
       huu[3*i][jr][jz] = huu0; //n = 0;
       huu[3*i + 1][jr][jz] = huu1; //n = 1;
@@ -664,7 +683,7 @@ ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, V
 
       // next consider ur = 0 and uz > 0
       jr = 0;
-      huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[jr][zCompNum - jz], u1dz[jr][zCompNum - jz], u1dz2[jr][zCompNum - jz], u3[jr][zCompNum - jz], u3dz[jr][zCompNum - jz], u3dz2[jr][zCompNum - jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+      huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[jr][zCompNum - jz], u1dz[jr][zCompNum - jz], u1dz2[jr][zCompNum - jz], u3[jr][zCompNum - jz], u3dz[jr][zCompNum - jz], u3dz2[jr][zCompNum - jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
       huu[3*i][jr][zCompNum - jz] = huu0; //n = 0;
       huu[3*i + 1][jr][zCompNum - jz] = huu1; //n = 1;
@@ -672,7 +691,7 @@ ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, V
 
       // next consider ur = 0 and uz > 0
       jr = r.size() - 1;
-      huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[jr][zCompNum - jz], u1dz[jr][zCompNum - jz], u1dz2[jr][zCompNum - jz], u3[jr][zCompNum - jz], u3dz[jr][zCompNum - jz], u3dz2[jr][zCompNum - jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+      huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[jr][zCompNum - jz], u1dz[jr][zCompNum - jz], u1dz2[jr][zCompNum - jz], u3[jr][zCompNum - jz], u3dz[jr][zCompNum - jz], u3dz2[jr][zCompNum - jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
       huu[3*i][jr][zCompNum - jz] = huu0; //n = 0;
       huu[3*i + 1][jr][zCompNum - jz] = huu1; //n = 1;
@@ -682,7 +701,7 @@ ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, V
     for(jr = 1; jr < r.size() - 1; jr++){
       // next consider ur > 0 and uz = 0
       jz = 0;
-      huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+      huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
       huu[3*i][jr][jz] = huu0; //n = 0;
       huu[3*i + 1][jr][jz] = huu1; //n = 1;
@@ -690,7 +709,7 @@ ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, V
 
       // next consider ur < 0 and uz = 0
       jz = 0;
-      huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[rCompNum - jr][jz], u1dz[rCompNum - jr][jz], u1dz2[rCompNum - jr][jz], u3[rCompNum - jr][jz], u3dz[rCompNum - jr][jz], u3dz2[rCompNum - jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+      huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[rCompNum - jr][jz], u1dz[rCompNum - jr][jz], u1dz2[rCompNum - jr][jz], u3[rCompNum - jr][jz], u3dz[rCompNum - jr][jz], u3dz2[rCompNum - jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
       huu[3*i][rCompNum - jr][jz] = huu0; //n = 0;
       huu[3*i + 1][rCompNum - jr][jz] = huu1; //n = 1;
@@ -698,7 +717,7 @@ ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, V
 
       // next consider ur > 0 and uz = 0
       jz = z.size() - 1;
-      huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+      huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
       huu[3*i][jr][jz] = huu0; //n = 0;
       huu[3*i + 1][jr][jz] = huu1; //n = 1;
@@ -706,7 +725,7 @@ ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, V
 
       // next consider ur < 0 and uz = 0
       jz = z.size() - 1;
-      huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[rCompNum - jr][jz], u1dz[rCompNum - jr][jz], u1dz2[rCompNum - jr][jz], u3[rCompNum - jr][jz], u3dz[rCompNum - jr][jz], u3dz2[rCompNum - jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+      huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[rCompNum - jr][jz], u1dz[rCompNum - jr][jz], u1dz2[rCompNum - jr][jz], u3[rCompNum - jr][jz], u3dz[rCompNum - jr][jz], u3dz2[rCompNum - jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
       huu[3*i][rCompNum - jr][jz] = huu0; //n = 0;
       huu[3*i + 1][rCompNum - jr][jz] = huu1; //n = 1;
@@ -716,28 +735,28 @@ ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, V
     for(jr = 1; jr < r.size() - 1; jr++){
       for(jz = 1; jz < z.size() - 1; jz++){
         // next consider ur > 0 and uz < 0
-        huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+        huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[jr][jz], u1dz[jr][jz], u1dz2[jr][jz], u3[jr][jz], u3dz[jr][jz], u3dz2[jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
         huu[3*i][jr][jz] = huu0; //n = 0;
         huu[3*i + 1][jr][jz] = huu1; //n = 1;
         huu[3*i + 2][jr][jz] = huu2; //n = 2;
 
         // next consider ur < 0 and uz < 0
-        huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[rCompNum - jr][jz], u1dz[rCompNum - jr][jz], u1dz2[rCompNum - jr][jz], u3[rCompNum - jr][jz], u3dz[rCompNum - jr][jz], u3dz2[rCompNum - jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+        huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[rCompNum - jr][jz], u1dz[rCompNum - jr][jz], u1dz2[rCompNum - jr][jz], u3[rCompNum - jr][jz], u3dz[rCompNum - jr][jz], u3dz2[rCompNum - jr][jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
         huu[3*i][rCompNum - jr][jz] = huu0; //n = 0;
         huu[3*i + 1][rCompNum - jr][jz] = huu1; //n = 1;
         huu[3*i + 2][rCompNum - jr][jz] = huu2; //n = 2;
 
         // next consider ur > 0 and uz > 0
-        huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[jr][zCompNum - jz], u1dz[jr][zCompNum - jz], u1dz2[jr][zCompNum - jz], u3[jr][zCompNum - jz], u3dz[jr][zCompNum - jz], u3dz2[jr][zCompNum - jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+        huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[jr][zCompNum - jz], u1dz[jr][zCompNum - jz], u1dz2[jr][zCompNum - jz], u3[jr][zCompNum - jz], u3dz[jr][zCompNum - jz], u3dz2[jr][zCompNum - jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
         huu[3*i][jr][zCompNum - jz] = huu0; //n = 0;
         huu[3*i + 1][jr][zCompNum - jz] = huu1; //n = 1;
         huu[3*i + 2][jr][zCompNum - jz] = huu2; //n = 2;
 
         // next consider ur < 0 and uz > 0
-        huu_coeffs_subfunction(huu0, huu1, huu2, z[jz], u1[rCompNum - jr][zCompNum - jz], u1dz[rCompNum - jr][zCompNum - jz], u1dz2[rCompNum - jr][zCompNum - jz], u3[rCompNum - jr][zCompNum - jz], u3dz[rCompNum - jr][zCompNum - jz], u3dz2[rCompNum - jr][zCompNum - jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
+        huu_coeffs_subfunction_ORG(huu0, huu1, huu2, z[jz], u1[rCompNum - jr][zCompNum - jz], u1dz[rCompNum - jr][zCompNum - jz], u1dz2[rCompNum - jr][zCompNum - jz], u3[rCompNum - jr][zCompNum - jz], u3dz[rCompNum - jr][zCompNum - jz], u3dz2[rCompNum - jr][zCompNum - jz], h11[i][jr][jz], h11dz[i][jr][jz], h11dz2[i][jr][jz], h13[i][jr][jz], h13dz[i][jr][jz], h13dz2[i][jr][jz], h33[i][jr][jz], h33dz[i][jr][jz], h33dz2[i][jr][jz]);
 
         huu[3*i][rCompNum - jr][zCompNum - jz] = huu0; //n = 0;
         huu[3*i + 1][rCompNum - jr][zCompNum - jz] = huu1; //n = 1;
@@ -745,7 +764,7 @@ ComplexTensor redshift_coefficients(double a, double En, double Lz, double Qc, V
       }
     }
   }
-  // rescale_redshift_coefficients(huu);
+  // rescale_redshift_coefficients_ORG(huu);
 
   return huu;
 }
@@ -909,7 +928,7 @@ ComplexTensor redshift_coefficients_IRG(double a, double En, double Lz, double Q
       }
     }
   }
-  // rescale_redshift_coefficients(huu);
+  // rescale_redshift_coefficients_ORG(huu);
 
   return huu;
 }

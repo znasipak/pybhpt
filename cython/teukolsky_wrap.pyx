@@ -63,6 +63,7 @@ cdef extern from "teukolsky.hpp":
         double getPolarPoints(int pos)
         double getPolarSolution(int pos)
         double getPolarDerivative(int pos)
+        double getPolarSecondDerivative(int pos)
 
 cdef extern from "hertz.hpp":
     cdef enum Gauge:
@@ -120,25 +121,22 @@ cdef extern from "hertz.hpp":
         double getPolarSolution(int pos)
         double getPolarDerivative(int pos)
         double getPolarSecondDerivative(int pos)
+    
+    void test_hertz_mode(int j, int m, int k, int n, GeodesicSource& geo)
+    void teukolsky_to_hertz_ORG(cpp_complex[double] &Psi, cpp_complex[double] Zteuk, int L, int m, int k, double a, double omega, double lambdaCH)
+    void teukolsky_to_hertz_IRG(cpp_complex[double] &Psi, cpp_complex[double] Zteuk, int L, int m, int k, double a, double omega, double lambdaCH)
+    void teukolsky_to_hertz_SAAB(cpp_complex[double] &Psi, cpp_complex[double] Zteuk, int L, int m, double a, double omega, double lambdaCH)
+    void teukolsky_to_hertz_ASAAB(cpp_complex[double] &Psi, cpp_complex[double] Zteuk, int L, int m, double a, double omega, double lambdaCH)
+
+    void teukolsky_to_hertz_ORG(cpp_complex[double] &PsiIn, cpp_complex[double] &PsiUp, cpp_complex[double] ZteukIn, cpp_complex[double] ZteukUp, int L, int m, int k, double a, double omega, double lambdaCH)
+    void teukolsky_to_hertz_IRG(cpp_complex[double] &PsiIn, cpp_complex[double] &PsiUp, cpp_complex[double] ZteukIn, cpp_complex[double] ZteukUp, int L, int m, int k, double a, double omega, double lambdaCH)
+    void teukolsky_to_hertz_SAAB(cpp_complex[double] &PsiIn, cpp_complex[double] &PsiUp, cpp_complex[double] ZteukIn, cpp_complex[double] ZteukUp, int L, int m, double a, double omega, double lambdaCH)
+    void teukolsky_to_hertz_ASAAB(cpp_complex[double] &PsiIn, cpp_complex[double] &PsiUp, cpp_complex[double] ZteukIn, cpp_complex[double] ZteukUp, int L, int m, double a, double omega, double lambdaCH)
 
 cdef extern from "metriccoeffs.hpp":
     cpp_complex[double] metric_coefficient_ORG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z)
     cpp_complex[double] metric_coefficient_IRG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z)
-    vector[vector[vector[cpp_complex[double]]]] metric_coefficients_11(double a, vector[double] r, vector[double] z)
-
-# cdef dict bc_dict = {
-#     "In" : BoundaryCondition.In,
-#     "Up" : BoundaryCondition.Up
-# }
-
-# cdef dict method_dict = {
-#     "AUTO" : SolutionMethod.AUTO, 
-#     "MST" : SolutionMethod.MST, 
-#     "ASYM" : SolutionMethod.ASYM, 
-#     "HBL" : SolutionMethod.HBL, 
-#     "GSN" : SolutionMethod.GSN, 
-#     "TEUK" : SolutionMethod.TEUK
-# }
+    vector[vector[vector[cpp_complex[double]]]] metric_coefficients_ORG_11(double a, vector[double] r, vector[double] z)
 
 cdef dict gauge_dict = {
     "ORG" : Gauge.ORG, 
@@ -151,22 +149,11 @@ cdef dict gauge_dict = {
     # "ASAAB" : Gauge.ASAAB,
 }
 
-# cdef BoundaryCondition str_to_bc(unicode bc_str):
-#     if bc_str in bc_dict.keys():
-#         return bc_dict[bc_str]
-#     else:
-#         TypeError("{} is not a supported boundary condition.".format(bc_str))
-
-# cdef SolutionMethod str_to_method(unicode method_str):
-#     if method_str in method_dict.keys():
-#         return method_dict[method_str]
-#     else:
-#         TypeError("{} is not a supported solution method.".format(method_str))
-
-cdef Gauge str_to_gauge(unicode gauge_str):
+cdef Gauge str_to_gauge(unicode gauge_str) except *:
     if gauge_str in gauge_dict.keys():
         return gauge_dict[gauge_str]
     else:
+        print("Error")
         TypeError("{} is not a supported gauge.".format(gauge_str))
 
 cdef class TeukolskyMode:
@@ -283,6 +270,8 @@ cdef class TeukolskyMode:
         return self.teukcpp.getPolarSolution(i)
     def polarderivative(self, int i):
         return self.teukcpp.getPolarDerivative(i)
+    def polarderivative2(self, int i):
+        return self.teukcpp.getPolarSecondDerivative(i)
 
     def solve(self, KerrGeodesic geo, unicode method = "AUTO", int nsample = 256, teuk=None, swsh=None):
         self.teukcpp.generateSolutions(dereference(geo.geocpp), str_to_method(method), nsample)
@@ -294,11 +283,6 @@ cdef class TeukolskyMode:
     
     def flip_spinweight(self):
         self.teukcpp.flipSpinWeight()
-
-
-# class TeukolskyMode(TeukolskyModeWrapper):
-#     def __init__(self, s, j, m, k, n, sample):
-#         TeukolskyModeWrapper.__init__(s, j, m, k, n, sample)
 
 cdef class HertzMode:
     cdef HertzModeCPP *hertzcpp
@@ -366,6 +350,14 @@ cdef class HertzMode:
     def maxcouplingmode(self):
         return self.hertzcpp.getMaxCouplingModeNumber()
 
+    @property
+    def minscalarcouplingmode(self):
+        return self.hertzcpp.getMinScalarCouplingModeNumber()
+    
+    @property
+    def maxscalarcouplingmode(self):
+        return self.hertzcpp.getMaxScalarCouplingModeNumber()
+
     # some useful aliases
     @property
     def j(self):
@@ -391,6 +383,8 @@ cdef class HertzMode:
 
     def couplingcoefficient(self, int l):
         return self.hertzcpp.getCouplingCoefficient(l)
+    def scalarcouplingcoefficient(self, int l):
+        return self.hertzcpp.getScalarCouplingCoefficient(l)
     def radialpoint(self, int i):
         return self.hertzcpp.getRadialPoints(i)
     def radialsolution(self, unicode bc, int i):
@@ -414,20 +408,35 @@ cdef class HertzMode:
     def polarderivative2(self, int i):
         return self.hertzcpp.getPolarSecondDerivative(i)
         
+def test_hertz_mode_cython(int j, int m, int k, int n, KerrGeodesic geo):
+    test_hertz_mode(j, m, k, n, dereference(geo.geocpp))
+
 cdef dict basis_dict = {
     "tetrad": None,
     "coordinate": None
 }
 
+def teuk_to_hertz_ORG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
+    cdef cpp_complex[double] PsiIn
+    cdef cpp_complex[double] PsiUp
+    teukolsky_to_hertz_ORG(PsiIn, PsiUp, ZIn, ZUp, j, m, k, a, omega, lambdaCH)
+    return (PsiIn, PsiUp)
+
+def teuk_to_hertz_IRG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
+    cdef cpp_complex[double] PsiIn
+    cdef cpp_complex[double] PsiUp
+    teukolsky_to_hertz_IRG(PsiIn, PsiUp, ZIn, ZUp, j, m, k, a, omega, lambdaCH)
+    return (PsiIn, PsiUp)
+
 cdef dict metric_component_gauge_dict = {
     "ORG" : {
         (1, 1): None, 
-        (1, 3): None, 
+        (1, 3): None,
         (1, 4): None,
         (3, 3): None,
         (4, 4): None}, 
     "IRG" : {
-        (2, 2): None, 
+        (2, 2): None,
         (2, 3): None, 
         (2, 4): None,
         (3, 3): None,
@@ -446,7 +455,7 @@ cdef dict metric_component_gauge_dict = {
         (4, 4): None}, 
     "ASAAB0" : {
         (2, 2): None, 
-        (2, 3): None, 
+        (2, 3): None,
         (2, 4): None,
         (3, 3): None,
         (4, 4): None}, 
@@ -483,7 +492,7 @@ def metric_11(double a, double r, double z):
     zvec[0] = z
     cdef cpp_complex[double] temp
 
-    cdef vector[vector[vector[cpp_complex[double]]]] coeffs = metric_coefficients_11(a, rvec, zvec)
+    cdef vector[vector[vector[cpp_complex[double]]]] coeffs = metric_coefficients_ORG_11(a, rvec, zvec)
     
     return np.array(coeffs).squeeze()
 

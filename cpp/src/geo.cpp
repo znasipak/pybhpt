@@ -77,7 +77,11 @@ GeodesicSource::GeodesicSource(double a, double p, double e, double x, int Nsamp
 
 	Vector fourier_polar, fourier_chi, fourier_tz, fourier_phiz;
 	if(abs(x) != 1.){
-		fourier_polar = mino_of_chi_fourier(a, En, z1, z2);
+		if(abs(a) > 0){
+			fourier_polar = mino_of_chi_fourier(a, En, z1, z2);
+		}else{
+			fourier_polar = mino_of_chi_schw_fourier(Lz, Qc);
+		}
 		fourier_chi = kepler_phase_of_angle_fourier(fourier_polar);
 		fourier_tz = tp_polar_of_angle_fourier(a, x, En, Lz, Qc, upTh, fourier_chi);
 		fourier_phiz = phip_polar_of_angle_fourier(a, x, En, Lz, Qc, upTh, fourier_chi);
@@ -700,11 +704,42 @@ GeodesicSource load_geodesic(std::string file){
 // Orbital constants //
 ///////////////////////
 
+double kerr_geo_energy_circ(double a, double p, double x){
+	return pow(pow(pow(p,2) - 1.*pow(a,2)*(-1. + pow(x,2)),-1)*((-3. + p)*pow(-2. + p,2)*pow(p,5) + pow(a,4)*pow(p,2)*(4. - 5.*p*(-1. + pow(x,2)) + 3.*pow(p,2)*(-1. + pow(x,2)))*(-1. + pow(x,2)) + pow(a,2)*pow(p,3)*(4. + p*(12. - 7.*pow(x,2)) - 3.*pow(p,3)*(-1. + pow(x,2)) - 4.*pow(x,2) + pow(p,2)*(-13. + 10.*pow(x,2))) - 2.*x*pow(a,5)*(-1. + pow(x,2))*pow(pow(p,3) + p*pow(a,2)*(-1. + pow(x,2)),0.5) + a*(-2.*x*pow(p,4.5)*pow(pow(p,2) + pow(a,2)*(-1. + pow(x,2)),0.5) + 4.*x*pow(p,3)*pow(pow(p,3) + p*pow(a,2)*(-1. + pow(x,2)),0.5)) + 2.*pow(a,3)*(2.*p*x*(-1. + pow(x,2))*pow(pow(p,3) + p*pow(a,2)*(-1. + pow(x,2)),0.5) - 1.*pow(x,3)*pow(pow(p,7) + pow(a,2)*pow(p,5)*(-1. + pow(x,2)),0.5)) - 1.*pow(a,6)*(pow(p,2)*(-1. + pow(x,2)) + pow(x,2) - 1.*p*(1. + 2.*pow(x,2)))*pow(-1. + pow(x,2),2))*pow(pow(-3. + p,2)*pow(p,4) - 2.*pow(a,2)*pow(p,2)*(3. + 2.*p + pow(p,2)*(-1. + pow(x,2)) - 3.*pow(x,2)) + pow(a,4)*(-1. + pow(x,2))*(-1. + pow(p,2)*(-1. + pow(x,2)) + pow(x,2) -  2.*p*(1. + pow(x,2))),-1),0.5);
+}
+
+double kerr_geo_energy_circ_2(double a, double p, double x){
+	double rmax = p;
+	double deltaMax = rmax*rmax - 2.*rmax + a*a;
+	double ddeltaMax = 2.*rmax - 2.;
+
+	double fmax = pow(rmax, 4) + a*a*(rmax*(rmax + 2.) + (1. - x*x)*deltaMax);
+	double fmin = 4.*pow(rmax, 3) + a*a*(rmax + (rmax + 2.) + (1. - x*x)*ddeltaMax);
+	double gmax = 2.*a*rmax;
+	double gmin = 2.*a;
+	double hmax = rmax*(rmax - 2.) + (1. - x*x)/(x*x)*deltaMax;
+	double hmin = rmax + (rmax - 2.) + (1. - x*x)/(x*x)*ddeltaMax;
+	double dmax = (rmax*rmax + a*a*(1. - x*x))*deltaMax;
+	double dmin = 2.*rmax*deltaMax + (rmax*rmax + a*a*(1. - x*x))*ddeltaMax;
+
+	double kap = dmax*hmin - hmax*dmin;
+	double eps = dmax*gmin - gmax*dmin;
+	double rho = fmax*hmin - hmax*fmin;
+	double eta = fmax*gmin - gmax*fmin;
+	double sig = gmax*hmin - hmax*gmin;
+
+	return sqrt((kap*rho + 2.*eps*sig - 2.*x*sqrt(sig*(sig*eps*eps + rho*eps*kap - eta*kap*kap)/(x*x)))/(rho*rho + 4.*eta*sig));
+}
+
 double kerr_geo_energy(double a, double p, double e, double x){
 	double rmax = p/(1. - e);
 	double rmin = p/(1. + e);
 	double deltaMax = rmax*rmax - 2.*rmax + a*a;
 	double deltaMin = rmin*rmin - 2.*rmin + a*a;
+
+	if(abs(e) < 1.e-14){
+		return kerr_geo_energy_circ(a, p, x);
+	}
 
 	double fmax = pow(rmax, 4) + a*a*(rmax*(rmax + 2.) + (1. - x*x)*deltaMax);
 	double fmin = pow(rmin, 4) + a*a*(rmin*(rmin + 2.) + (1. - x*x)*deltaMin);
@@ -756,7 +791,7 @@ void kerr_geo_orbital_constants(double &En, double &Lz, double &Qc, double const
 	double deltaMin = rmin*rmin - 2.*rmin + a*a;
 	double xsq = x*x;
 
-	if(rmin != rmax){
+	if(abs(e) > 1.e-14){
 		double fmax = pow(rmax, 4) + a*a*(rmax*(rmax + 2.) + (1. - xsq)*deltaMax);
 		double fmin = pow(rmin, 4) + a*a*(rmin*(rmin + 2.) + (1. - xsq)*deltaMin);
 		double gmax = 2.*a*rmax;
@@ -776,13 +811,13 @@ void kerr_geo_orbital_constants(double &En, double &Lz, double &Qc, double const
 		Lz = (-En*gmax + x*sqrt((En*En*(gmax*gmax + fmax*hmax) - dmax*hmax)/(x*x)))/hmax;
 		Qc = (1. - x*x)*(a*a*(1. - En*En) + Lz*Lz/(x*x));
 	}else{
-		double fmax = 4.*pow(rmax, 3) + 2.*a*a*((1. + xsq)*rmax + (1. - xsq));
-		double fmin = pow(rmin, 4) + a*a*(rmin*(rmin + 2.) + (1. - x*x)*deltaMin);
+		double fmax = 4.*pow(rmax, 3) + 2.*a*a*((2. - xsq)*rmax + xsq);
+		double fmin = pow(rmin, 4) + a*a*(rmin*(rmin + 2.) + (1. - xsq)*deltaMin);
 		double gmax = 2.*a;
 		double gmin = 2.*a*rmin;
-		double hmax = 2.*(rmax - 1.)/(1. - xsq);
+		double hmax = 2.*(rmax - 1.)/xsq;
 		double hmin = rmin*(rmin - 2.) + (1. - xsq)/xsq*deltaMin;
-		double dmax = 2.*(2.*rmax - 3.)*rmax*rmax + 2.*a*a*((1. + xsq)*rmax - xsq);
+		double dmax = 2.*(2.*rmax - 3.)*rmax*rmax + 2.*a*a*((2. - xsq)*rmax - (1. - xsq));
 		double dmin = (rmin*rmin + a*a*(1. - xsq))*deltaMin;
 
 		double kap = dmax*hmin - hmax*dmin;
@@ -791,9 +826,9 @@ void kerr_geo_orbital_constants(double &En, double &Lz, double &Qc, double const
 		double eta = fmax*gmin - gmax*fmin;
 		double sig = gmax*hmin - hmax*gmin;
 
-		En = sqrt((kap*rho + 2.*eps*sig - 2.*x*sqrt(sig*(sig*eps*eps + rho*eps*kap - eta*kap*kap)/(x*x)))/(rho*rho + 4.*eta*sig));
-		Lz = (-En*gmax + x*sqrt((En*En*(gmax*gmax + fmax*hmax) - dmax*hmax)/(x*x)))/hmax;
-		Qc = (1. - x*x)*(a*a*(1. - En*En) + Lz*Lz/(x*x));
+		En = sqrt((kap*rho + 2.*eps*sig - 2.*x*sqrt(sig*(sig*eps*eps + rho*eps*kap - eta*kap*kap)/xsq))/(rho*rho + 4.*eta*sig));
+		Lz = (-En*gmax + x*sqrt((En*En*(gmax*gmax + fmax*hmax) - dmax*hmax)/xsq))/hmax;
+		Qc = (1. - xsq)*(a*a*(1. - En*En) + Lz*Lz/xsq);
 	}
 }
 
@@ -1188,6 +1223,45 @@ Vector mino_of_psi_fourier(double const &a, double const &p, double const &e, do
 		fourier[i] = dmino_dpsi(0., a, p, e, En, r3, r4) + pow(-1., i)*dmino_dpsi(M_PI, a, p, e, En, r3, r4);
 		for(int j = 1; j < Nsample - 1; j++){
 			fourier[i] += 2.*dmino_dpsi(M_PI*double(j)/double(Nsample - 1), a, p, e, En, r3, r4)*cos(M_PI*double(i*j)/double(Nsample - 1));
+		}
+		fourier[i] /= double(Nsample - 1);
+		if(abs(fourier[i]) < 5*DBL_EPSILON){
+			fourier[i] = 0.;
+		}
+	}
+
+	return fourier;
+}
+
+Vector mino_of_chi_schw_fourier(double const &Lz, double const &Qc){
+	// test to see if the n = 5 harmonic converges
+	int Nsample = pow(2, 3);
+	int nTest = 2;
+	double dminodchi = dmino_dchi_schw(Lz, Qc);
+	double endpoints = dminodchi + pow(-1., nTest)*dminodchi;
+	double sum = 0.;
+	for(int i = 1; i < Nsample; i++){
+		sum += 2.*dminodchi*cos(nTest*M_PI*double(i)/double(Nsample));
+	}
+	double fourierTest = (sum + endpoints)/double(Nsample);
+	double fourierCompare = 0;
+	while(abs(fourierCompare - fourierTest) > DBL_EPSILON && Nsample < pow(2, 11)){
+		for(int i = 0; i < Nsample; i++){
+			sum += 2.*dminodchi*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
+		}
+		fourierCompare = fourierTest;
+		Nsample *= 2;
+		fourierTest = (sum + endpoints)/double(Nsample);
+	}
+
+	// generate fourier coefficients
+	Nsample += 1;
+	Vector fourier(Nsample);
+
+	for(int i = 0; i < Nsample; i++){
+		fourier[i] = dminodchi + pow(-1., i)*dminodchi;
+		for(int j = 1; j < Nsample - 1; j++){
+			fourier[i] += 2.*dminodchi*cos(M_PI*double(i*j)/double(Nsample - 1));
 		}
 		fourier[i] /= double(Nsample - 1);
 		if(abs(fourier[i]) < 5*DBL_EPSILON){

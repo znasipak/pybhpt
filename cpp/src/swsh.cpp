@@ -514,86 +514,93 @@ Complex Sslm(const int &s, const int &l, const int &m, const double &g, const do
 	return Sslm(s, l, m, g, th)*exp(I*Complex(m)*ph);
 }
 
+// double Sslm(const int &s, const int &l, const int &m, const double &g, const double &th){
+// 	unsigned int lmin = std::max(abs(s), abs(m));
+// 	unsigned int nmax = l - lmin + SPECTRAL_NMAX_INIT_ADD;
+// 	int error;
+// 	double swsh = 0;
+// 	coupling_converge bkData;
+// 	coupling_test test;
+// 	bkData.jmax = bkData.testIndex = l - lmin;
+// 	bkData.jmax_err = bkData.test_err = 10.;
+
+// 	// initialize spectral matrix using a sparse matrix representation
+// 	gsl_spmatrix* mat = gsl_spmatrix_alloc_nzmax(nmax, nmax, SPECTRAL_NMAX, GSL_SPMATRIX_COO);
+// 	spectral_matrix_sparse_init(s, lmin, m, g, mat);
+
+// 	gsl_matrix* bmat = gsl_matrix_alloc(nmax, nmax);
+// 	gsl_vector* la = gsl_vector_alloc(nmax);
+// 	error = spectral_solver_n(s, l, m, g, la, bmat, mat);
+
+// 	nmax += 2;
+// 	spectral_matrix_sparse(s, lmin, m, g, mat, nmax); // update spectral matrix to include additional entries
+// 	gsl_matrix* bmat2 = gsl_matrix_alloc(nmax, nmax);
+// 	gsl_vector* la2 = gsl_vector_alloc(nmax);
+// 	error = spectral_solver_n(s, l, m, g, la2, bmat2, mat);
+// 	test = spherical_spheroidal_coupling_convergence_test(s, l, m, g, bmat, bmat2, bkData);
+
+// 	while(nmax < SPECTRAL_NMAX && test == FAIL){
+// 		gsl_matrix_free(bmat);
+// 		gsl_vector_free(la);
+// 		bmat = bmat2;
+// 		la = la2;
+
+// 		nmax += 10;
+// 		spectral_matrix_sparse(s, lmin, m, g, mat, nmax);
+// 		bmat2 = gsl_matrix_alloc(nmax, nmax);
+// 		la2 = gsl_vector_alloc(nmax);
+
+// 		error = spectral_solver_n(s, l, m, g, la2, bmat2, mat);
+// 		test = spherical_spheroidal_coupling_convergence_test(s, l, m, g, bmat, bmat2, bkData);
+// 	}
+// 	gsl_spmatrix_free(mat);
+// 	if(nmax == SPECTRAL_NMAX){
+// 		std::cout << "(SWSH) Max number of iterations executed for spectral solver. \n";
+// 	}else{
+// 		std::cout << "(SWSH) "<< nmax <<" iterations executed for spectral solver. \n";
+// 	}
+
+// 	if(test == SUCCESS){ // if convergence test was successful, return data from the most resolved (highest nmax) spectral eigenvalue problem
+// 		gsl_matrix_free(bmat);
+// 		gsl_vector_free(la);
+// 		bmat = bmat2;
+// 		la = la2;
+// 	}else if(test == FAIL){
+// 		gsl_matrix_free(bmat); gsl_matrix_free(bmat2);
+// 		gsl_vector_free(la); gsl_vector_free(la2);
+
+// 		return 0;
+// 	}else{ // if convergence test was stalled, return data from the second most resolved (second highest nmax) spectral eigenvalue problem
+// 		gsl_matrix_free(bmat2);
+// 		gsl_vector_free(la2);
+// 		nmax = la->size;
+// 	}
+
+// 	gsl_vector* bcol = gsl_vector_alloc(nmax);
+// 	gsl_matrix_get_col(bcol, bmat, l - lmin);
+// 	if( gsl_vector_get(bcol, l - lmin) < 0 ){
+// 		gsl_vector_scale(bcol, -1.);
+// 	}
+// 	gsl_matrix_free(bmat);
+// 	gsl_vector_free(la);
+
+// 	double bj;
+// 	for(int i = 0; i < bkData.jmax; i++){
+// 		bj = gsl_vector_get(bcol, i);
+// 		// std::cout << "b_"<< lmin + i << " = " << bj << "\n";
+// 		swsh += bj*Yslm(s, lmin + i, m, th);
+// 	}
+
+// 	if(error) return 0.;
+
+// 	return swsh;
+// }
+
 double Sslm(const int &s, const int &l, const int &m, const double &g, const double &th){
-	unsigned int lmin = std::max(abs(s), abs(m));
-	unsigned int nmax = l - lmin + SPECTRAL_NMAX_INIT_ADD;
-	int error;
-	double swsh = 0;
-	coupling_converge bkData;
-	coupling_test test;
-	bkData.jmax = bkData.testIndex = l - lmin;
-	bkData.jmax_err = bkData.test_err = 10.;
-
-	// initialize spectral matrix using a sparse matrix representation
-	gsl_spmatrix* mat = gsl_spmatrix_alloc_nzmax(nmax, nmax, SPECTRAL_NMAX, GSL_SPMATRIX_COO);
-	spectral_matrix_sparse_init(s, lmin, m, g, mat);
-
-	gsl_matrix* bmat = gsl_matrix_alloc(nmax, nmax);
-	gsl_vector* la = gsl_vector_alloc(nmax);
-	error = spectral_solver_n(s, l, m, g, la, bmat, mat);
-
-	nmax += 2;
-	spectral_matrix_sparse(s, lmin, m, g, mat, nmax); // update spectral matrix to include additional entries
-	gsl_matrix* bmat2 = gsl_matrix_alloc(nmax, nmax);
-	gsl_vector* la2 = gsl_vector_alloc(nmax);
-	error = spectral_solver_n(s, l, m, g, la2, bmat2, mat);
-	test = spherical_spheroidal_coupling_convergence_test(s, l, m, g, bmat, bmat2, bkData);
-
-	while(nmax < SPECTRAL_NMAX && test == FAIL){
-		gsl_matrix_free(bmat);
-		gsl_vector_free(la);
-		bmat = bmat2;
-		la = la2;
-
-		nmax += 10;
-		spectral_matrix_sparse(s, lmin, m, g, mat, nmax);
-		bmat2 = gsl_matrix_alloc(nmax, nmax);
-		la2 = gsl_vector_alloc(nmax);
-
-		error = spectral_solver_n(s, l, m, g, la2, bmat2, mat);
-		test = spherical_spheroidal_coupling_convergence_test(s, l, m, g, bmat, bmat2, bkData);
-	}
-	gsl_spmatrix_free(mat);
-	if(nmax == SPECTRAL_NMAX){
-		std::cout << "(SWSH) Max number of iterations executed for spectral solver. \n";
-	}else{
-		std::cout << "(SWSH) "<< nmax <<" iterations executed for spectral solver. \n";
-	}
-
-	if(test == SUCCESS){ // if convergence test was successful, return data from the most resolved (highest nmax) spectral eigenvalue problem
-		gsl_matrix_free(bmat);
-		gsl_vector_free(la);
-		bmat = bmat2;
-		la = la2;
-	}else if(test == FAIL){
-		gsl_matrix_free(bmat); gsl_matrix_free(bmat2);
-		gsl_vector_free(la); gsl_vector_free(la2);
-
-		return 0;
-	}else{ // if convergence test was stalled, return data from the second most resolved (second highest nmax) spectral eigenvalue problem
-		gsl_matrix_free(bmat2);
-		gsl_vector_free(la2);
-		nmax = la->size;
-	}
-
-	gsl_vector* bcol = gsl_vector_alloc(nmax);
-	gsl_matrix_get_col(bcol, bmat, l - lmin);
-	if( gsl_vector_get(bcol, l - lmin) < 0 ){
-		gsl_vector_scale(bcol, -1.);
-	}
-	gsl_matrix_free(bmat);
-	gsl_vector_free(la);
-
-	double bj;
-	for(int i = 0; i < bkData.jmax; i++){
-		bj = gsl_vector_get(bcol, i);
-		std::cout << "b_"<< lmin + i << " = " << bj << "\n";
-		swsh += bj*Yslm(s, lmin + i, m, th);
-	}
-
-	if(error) return 0.;
-
-	return swsh;
+	Vector bvec(COUPLING_VECTOR_MAX + l - abs(m), 0.);
+	double lambda;
+	spectral_solver(s, l, m, g, lambda, bvec);
+	return Sslm(s, l, m, g, bvec, th);
 }
 
 double Sslm(const int &s, const int &l, const int &m, const double &, const Vector& bvec, const double &th){

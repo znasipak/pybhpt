@@ -1357,9 +1357,9 @@ Result hypergeo_2F1(Complex a, Complex b, Complex c, Complex z){
 		f21 = pow(1. - z, c - a - b)*hypergeo_2F1_naive(c - a, c - b, c, z);
 	}
 
-	if(abs(f21.getValue()) == 0.){
-		std::cout << "(HYPERGEO_F) ERROR: Failed to construct hypergeometric function for (a, b, c, z) = ("<<a<<", "<<b<<", "<<c<<", "<<z<<").\n";
-	}
+	// if(abs(f21.getValue()) == 0.){
+	// 	std::cout << "(HYPERGEO_F) ERROR: Failed to construct hypergeometric function for (a, b, c, z) = ("<<a<<", "<<b<<", "<<c<<", "<<z<<").\n";
+	// }
 
 	// std::cout << "F(a = "<<a<<", b = "<<b<<", c = "<<c<<", z = "<<z<<") = " << f21.getValue() << "\n";
 
@@ -1404,7 +1404,7 @@ Result hypergeo_2F1_naive(Complex a, Complex b, Complex c, Complex z){
 			break;
 
 		default:
-			printf("(HYPERGEO_F) ERROR: Argument test failed.\n");
+			// printf("(HYPERGEO_F) ERROR: Argument test failed.\n");
 			testNum = 0;
 	}
 
@@ -1420,12 +1420,12 @@ Result dhypergeo_2F1(Complex a, Complex b, Complex c, Complex z){
 	}
 
 	// if calculation appears to have failed try new relation DLMF 15.5.21
-	if(abs(dF.getValue()) == 0.){
+	if(abs(dF.getAccuracy()) == 0.){
 		dF = ((c - a)*(c - b)*hypergeo_2F1(a, b, c + 1., z) + c*(a + b - c)*hypergeo_2F1(a, b, c, z))/c/(1. - z);
 	}
 
 	// if calculation appears to have failed try new relation 15.5.20
-	if(abs(dF.getValue()) == 0.){
+	if(abs(dF.getAccuracy()) == 0.){
 		dF = ((c - a)*hypergeo_2F1(a - 1., b, c, z) + c*(a - c + b*z)*hypergeo_2F1(a, b, c, z))/z/(1. - z);
 	}
 

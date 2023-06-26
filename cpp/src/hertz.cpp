@@ -27,16 +27,15 @@ void HertzMode::flipSpinWeight(){
 
 	_lambda = flip_eigenvalue(_s, _lambda);
 	_s = flip_spin(_s);
-	_omega *= -1.;
 }
 
 int HertzMode::generateSolutions(){
   if(_s == -2){
-    if(_gauge == ORG || _gauge == SAAB0 || _gauge == ASAAB0){
+    if(_gauge == ORG || _gauge == SAAB4 || _gauge == ASAAB4){
       flipSpinWeight();
     }
   }else if(_s == 2){
-    if(_gauge == IRG || _gauge == SAAB4 || _gauge == ASAAB4){
+    if(_gauge == IRG || _gauge == SAAB0 || _gauge == ASAAB0){
       flipSpinWeight();
     }
   }else{
@@ -44,16 +43,16 @@ int HertzMode::generateSolutions(){
     return 0;
   }
 
-  double lamdbaCH = _lambda + _s*(_s + 1.);
+  double lambdaCH = _lambda + _s*(_s + 1.);
 
   if(_gauge == ORG){
-    teukolsky_to_hertz_ORG(_PsilmIn, _PsilmIn, _PsilmUp, _PsilmUp, _L, _m, _k, _a, _omega, lamdbaCH);
+    teukolsky_to_hertz_ORG(_PsilmIn, _PsilmUp, _PsilmIn, _PsilmUp, _L, _m, _k, _a, _omega, lambdaCH);
   }else if(_gauge == IRG){
-    teukolsky_to_hertz_IRG(_PsilmIn, _PsilmIn, _PsilmUp, _PsilmUp, _L, _m, _k, _a, _omega, lamdbaCH);
+    teukolsky_to_hertz_IRG(_PsilmIn, _PsilmUp, _PsilmIn, _PsilmUp, _L, _m, _k, _a, _omega, lambdaCH);
   }else if(_gauge == SAAB0 || _gauge == SAAB4){
-    teukolsky_to_hertz_SAAB(_PsilmIn, _PsilmIn, _PsilmUp, _PsilmUp, _L, _m, _a, _omega, lamdbaCH);
+    teukolsky_to_hertz_SAAB(_PsilmIn, _PsilmUp, _PsilmIn, _PsilmUp, _L, _m, _a, _omega, lambdaCH);
   }else if(_gauge == ASAAB0 || _gauge == ASAAB4){
-    teukolsky_to_hertz_ASAAB(_PsilmIn, _PsilmIn, _PsilmUp, _PsilmUp, _L, _m, _a, _omega, lamdbaCH);
+    teukolsky_to_hertz_ASAAB(_PsilmIn, _PsilmUp, _PsilmIn, _PsilmUp, _L, _m, _a, _omega, lambdaCH);
   }
 
   generate_radial_second_derivative(_RinPP, _s, _m, _a, _omega, _lambda, _r, _Rin, _RinP);
@@ -293,7 +292,7 @@ double HertzMode::getPolarSolution(int pos){ return _Slm[pos]; }
 double HertzMode::getPolarDerivative(int pos){ return _SlmP[pos]; }
 double HertzMode::getPolarSecondDerivative(int pos){ return _SlmPP[pos]; }
 
-void test_hertz_mode(int j, int m, int k, int n, GeodesicSource geo){
+void test_hertz_mode(int j, int m, int k, int n, GeodesicSource& geo){
   TeukolskyMode teuk(-2, j, m, k, n, geo);
   teuk.generateSolutions(geo);
   HertzMode hertz(teuk);
@@ -334,28 +333,28 @@ void test_hertz_mode(int j, int m, int k, int n, GeodesicSource geo){
 
 void teukolsky_to_hertz_ORG(Complex &Psi, Complex Zteuk, int L, int m, int k, double a, double omega, double lambdaCH){
   Complex plm = teukolsky_starobinsky_complex_constant(L, m, a, omega, lambdaCH);
-  Complex plmk = (std::real(plm) - pow(-1., k)*std::imag(plm));
-  Psi = 8.*Zteuk/plmk;
+  Complex plmk = (std::real(plm) - I*pow(-1., k)*std::imag(plm));
+  Psi = pow(-1., L + m + k)*8.*Zteuk/plmk;
 }
 
 void teukolsky_to_hertz_ORG(Complex &PsiIn, Complex &PsiUp, Complex ZteukIn, Complex ZteukUp, int L, int m, int k, double a, double omega, double lambdaCH){
   Complex plm = teukolsky_starobinsky_complex_constant(L, m, a, omega, lambdaCH);
-  Complex plmk = (std::real(plm) - pow(-1., k)*std::imag(plm));
-  PsiIn = 8.*ZteukIn/plmk;
-  PsiUp = 8.*ZteukUp/plmk;
+  Complex plmk = (std::real(plm) - I*pow(-1., k)*std::imag(plm));
+  PsiIn = pow(-1., L + m + k)*8.*ZteukIn/plmk;
+  PsiUp = pow(-1., L + m + k)*8.*ZteukUp/plmk;
 }
 
 void teukolsky_to_hertz_IRG(Complex &Psi, Complex Zteuk, int L, int m, int k, double a, double omega, double lambdaCH){
   Complex plm = teukolsky_starobinsky_complex_constant(L, m, a, omega, lambdaCH);
   Complex plmk = (std::real(plm) + I*pow(-1., k)*std::imag(plm));
-  Psi = 8.*Zteuk/plmk;
+  Psi = pow(-1., L + m + k)*8.*Zteuk/plmk;
 }
 
 void teukolsky_to_hertz_IRG(Complex &PsiIn, Complex &PsiUp, Complex ZteukIn, Complex ZteukUp, int L, int m, int k, double a, double omega, double lambdaCH){
   Complex plm = teukolsky_starobinsky_complex_constant(L, m, a, omega, lambdaCH);
   Complex plmk = (std::real(plm) + I*pow(-1., k)*std::imag(plm));
-  PsiIn = 8.*ZteukIn/plmk;
-  PsiUp = 8.*ZteukUp/plmk;
+  PsiIn = pow(-1., L + m + k)*8.*ZteukIn/plmk;
+  PsiUp = pow(-1., L + m + k)*8.*ZteukUp/plmk;
 }
 
 void teukolsky_to_hertz_SAAB(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambdaCH){

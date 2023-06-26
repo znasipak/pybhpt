@@ -82,6 +82,36 @@ cdef extern from "geo.hpp":
     void kerr_geo_polar_roots(double &z1, double &z2, double &a, double &x, double &En, double &Lz, double &Qc)
     void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &upPh, double &a, double &p, double &e, double &x)
 
+    double kerr_geo_VtR(const double & a, const double & En, const double & Lz, const double & Q, const double & r)
+    double kerr_geo_VtTheta(const double & a, const double & En, const double & Lz, const double & Q, const double & theta)
+    double kerr_geo_Vr(const double & a, const double & En, const double & Lz, const double & Q, const double & r)
+    double kerr_geo_Vtheta(const double & a, const double & En, const double & Lz, const double & Q, const double & theta)
+    double kerr_geo_VphiR(const double & a, const double & En, const double & Lz, const double & Q, const double & r)
+    double kerr_geo_VphiTheta(const double & a, const double & En, const double & Lz, const double & Q, const double & theta)
+    double kerr_geo_Vz(const double & a, const double & En, const double & Lz, const double & Q, const double & z)
+    double kerr_geo_Vz_dz(const double & a, const double & En, const double & Lz, const double & Q, const double & z)
+    double kerr_geo_Vz_dz2(const double & a, const double & En, const double & Lz, const double & Q, const double & z)
+    double kerr_isco(double a, int sgnX)
+    double kerr_isco_frequency(double a)
+
+def kerr_geo_V01(double a, double En, double Lz, double Q, double r):
+    return kerr_geo_VtR(a, En, Lz, Q, r)
+
+def kerr_geo_V02(double a, double En, double Lz, double Q, double theta):
+    return kerr_geo_VtTheta(a, En, Lz, Q, theta)
+
+def kerr_geo_V11(double a, double En, double Lz, double Q, double r):
+    return kerr_geo_Vr(a, En, Lz, Q, r)
+
+def kerr_geo_V22(double a, double En, double Lz, double Q, double theta):
+    return kerr_geo_Vtheta(a, En, Lz, Q, theta)
+
+def kerr_geo_V31(double a, double En, double Lz, double Q, double r):
+    return kerr_geo_VphiR(a, En, Lz, Q, r)
+
+def kerr_geo_V32(double a, double En, double Lz, double Q, double theta):
+    return kerr_geo_VphiTheta(a, En, Lz, Q, theta)
+
 cdef class KerrGeodesic:
     cdef GeodesicSource *geocpp
 
@@ -121,11 +151,11 @@ cdef class KerrGeodesic:
 
     @property
     def radialroots(self):
-        return np.array([self.geocpp.getRadialRoot(i) for i in range(4)])
+        return np.array([self.geocpp.getRadialRoot(1+i) for i in range(4)])
 
     @property
     def polarroots(self):
-        return np.array([self.geocpp.getPolarRoot(i) for i in range(2)])
+        return np.array([self.geocpp.getPolarRoot(1+i) for i in range(2)])
 
     @property
     def minofrequencies(self):

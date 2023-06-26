@@ -15,17 +15,17 @@ Complex metric_coefficient_IRG_22(int nt, int nr, int nz, int np, double a, doub
 Complex metric_coefficient_IRG_24(int nt, int nr, int nz, int np, double a, double r, double z);
 Complex metric_coefficient_IRG_44(int nt, int nr, int nz, int np, double a, double r, double z);
 
-ComplexTensor metric_coefficients_11(double a, Vector r, Vector z);
-ComplexTensor metric_coefficients_13(double a, Vector r, Vector z);
-ComplexTensor metric_coefficients_33(double a, Vector r, Vector z);
+ComplexTensor metric_coefficients_ORG_11(double a, Vector r, Vector z);
+ComplexTensor metric_coefficients_ORG_13(double a, Vector r, Vector z);
+ComplexTensor metric_coefficients_ORG_33(double a, Vector r, Vector z);
 
-ComplexTensor metric_coefficients_11_dz(double a, Vector r, Vector z);
-ComplexTensor metric_coefficients_13_dz(double a, Vector r, Vector z);
-ComplexTensor metric_coefficients_33_dz(double a, Vector r, Vector z);
+ComplexTensor metric_coefficients_ORG_11_dz(double a, Vector r, Vector z);
+ComplexTensor metric_coefficients_ORG_13_dz(double a, Vector r, Vector z);
+ComplexTensor metric_coefficients_ORG_33_dz(double a, Vector r, Vector z);
 
-ComplexTensor metric_coefficients_11_dz2(double a, Vector r, Vector z);
-ComplexTensor metric_coefficients_13_dz2(double a, Vector r, Vector z);
-ComplexTensor metric_coefficients_33_dz2(double a, Vector r, Vector z);
+ComplexTensor metric_coefficients_ORG_11_dz2(double a, Vector r, Vector z);
+ComplexTensor metric_coefficients_ORG_13_dz2(double a, Vector r, Vector z);
+ComplexTensor metric_coefficients_ORG_33_dz2(double a, Vector r, Vector z);
 
 ComplexTensor metric_coefficients_IRG_22(double a, Vector r, Vector z);
 ComplexTensor metric_coefficients_IRG_24(double a, Vector r, Vector z);

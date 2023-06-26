@@ -775,8 +775,12 @@ double carter_flux_factor(GeodesicSource& geo, TeukolskyMode& teukMode){
 	return carter_flux_factor(geo, teukMode.getAzimuthalModeNumber(), teukMode.getPolarModeNumber(), teukMode.getRadialModeNumber(), teukMode.getFrequency());
 }
 
-FluxList flux_mode(int s, GeodesicSource& geo, TeukolskyMode& teukMode){
+FluxList flux_mode(int s, GeodesicSource& geo, TeukolskyMode& teukMode, int include_minus_m){
 	Fluxes Edot;
+	double mFactor = 1.;
+	if(include_minus_m == 1){
+		mFactor = 2.;
+	}
 	if(s == 0){
 		Edot = scalar_energy_flux_mode(geo, teukMode);
 	}else{
@@ -784,17 +788,17 @@ FluxList flux_mode(int s, GeodesicSource& geo, TeukolskyMode& teukMode){
 	}
 	double LdotPrefactor = 0.;
 	double QdotPrefactor = 0.;
-	if(abs(teukMode.getFrequency()) > pow(10., -8)){
+	if(abs(teukMode.getFrequency()) > 1.e-8){
 		LdotPrefactor = angular_momentum_flux_factor(geo, teukMode);
 		QdotPrefactor = carter_flux_factor(geo, teukMode);
 	}
 	FluxList fluxes;
-	fluxes.Edot.infinity = 2.*Edot.infinity;
-	fluxes.Edot.horizon = 2.*Edot.horizon;
-	fluxes.Ldot.infinity = 2.*LdotPrefactor*Edot.infinity;
-	fluxes.Ldot.horizon = 2.*LdotPrefactor*Edot.horizon;
-	fluxes.Qdot.infinity = 2.*QdotPrefactor*Edot.infinity;
-	fluxes.Qdot.horizon = 2.*QdotPrefactor*Edot.horizon;
+	fluxes.Edot.infinity = mFactor*Edot.infinity;
+	fluxes.Edot.horizon = mFactor*Edot.horizon;
+	fluxes.Ldot.infinity = mFactor*LdotPrefactor*Edot.infinity;
+	fluxes.Ldot.horizon = mFactor*LdotPrefactor*Edot.horizon;
+	fluxes.Qdot.infinity = mFactor*QdotPrefactor*Edot.infinity;
+	fluxes.Qdot.horizon = mFactor*QdotPrefactor*Edot.horizon;
 
 	return fluxes;
 }

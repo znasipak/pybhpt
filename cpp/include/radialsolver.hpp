@@ -24,6 +24,7 @@ public:
 	double getSpinWeightedSpheroidalEigenvalue();
 
 	void generateRetardedBoundaryConditions(SolutionMethod method = AUTO);
+	void generateRetardedBoundaryCondition(BoundaryCondition bc, SolutionMethod method = AUTO);
 	void setBoundaryConditions(BoundaryCondition bc, Complex R, Complex Rp, double r);
 	void generateSolutions(SolutionMethod method = AUTO, bool make_stable=true);
 	void generateSolutions(BoundaryCondition bc, SolutionMethod method = AUTO, bool make_stable=true);
@@ -48,6 +49,9 @@ protected:
 	bool failCheck();
 	bool failCheck(BoundaryCondition bc);
 	bool validMethodDomain(SolutionMethod method);
+	int ASYMsolveBoundary(BoundaryCondition bc);
+	int MSTsolveBoundary(BoundaryCondition bc);
+	void solveBoundaryPoint(BoundaryCondition bc);
 	void AUTOsolve();
 	void ASYMsolve();
 	void MSTsolve();
@@ -144,11 +148,11 @@ Complex teukolsky_starobinsky_plus_2_in(int m, double a, double omega, double la
 Complex teukolsky_starobinsky_minus_2_up(int m, double a, double omega, double lambda);
 Complex teukolsky_starobinsky_plus_2_up(int, double, double omega, double);
 
-void flip_spin_of_radial_teukolsky_TS(Complex &RinFlip, Complex &RupFlip, int m, double a, double omega, double lambda, double r, Complex Rin, Complex RinP, Complex Rup, Complex RupP);
+// void flip_spin_of_radial_teukolsky_TS(Complex &RinFlip, Complex &RupFlip, int m, double a, double omega, double lambda, double r, Complex Rin, Complex RinP, Complex Rup, Complex RupP);
 void flip_spin_of_radial_teukolsky_TS(Complex &RinFlip, Complex &RinPFlip, BoundaryCondition bc, int s, int m, double a, double omega, double lambda, double r, Complex Rin, Complex RinP);
 void flip_spin_of_radial_teukolsky_TS(ComplexVector &RinFlip, ComplexVector &RinPFlip, BoundaryCondition bc, int s, int m, double a, double omega, double lambda, Vector r, ComplexVector Rin, ComplexVector RinP);
-void flip_spin_of_radial_teukolsky_TS(Complex &RinFlip, Complex &RinPFlip, Complex &RupFlip, Complex &RupPFlip, int m, double a, double omega, double lambda, double r, Complex Rin, Complex RinP, Complex Rup, Complex RupP);
-void flip_spin_of_radial_teukolsky(ComplexVector &RinFlip, ComplexVector &RinPFlip, ComplexVector &RupFlip, ComplexVector &RupPFlip, int m, double a, double omega, double lambda, Vector rVec, ComplexVector RinVec, ComplexVector RinPVec, ComplexVector RupVec, ComplexVector RupPVec);
+// void flip_spin_of_radial_teukolsky_TS(Complex &RinFlip, Complex &RinPFlip, Complex &RupFlip, Complex &RupPFlip, int m, double a, double omega, double lambda, double r, Complex Rin, Complex RinP, Complex Rup, Complex RupP);
+// void flip_spin_of_radial_teukolsky(ComplexVector &RinFlip, ComplexVector &RinPFlip, ComplexVector &RupFlip, ComplexVector &RupPFlip, int m, double a, double omega, double lambda, Vector rVec, ComplexVector RinVec, ComplexVector RinPVec, ComplexVector RupVec, ComplexVector RupPVec);
 // void flip_spin_of_radial_teukolsky_static(ComplexVector &RinFlip, ComplexVector &RinPFlip, ComplexVector &RupFlip, ComplexVector &RupPFlip, double a, Vector rVec, ComplexVector RinVec, ComplexVector RinPVec, ComplexVector RupVec, ComplexVector RupPVec);
 
 

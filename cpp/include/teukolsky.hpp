@@ -13,7 +13,7 @@ class TeukolskyMode{
 public:
 	TeukolskyMode(int L, int m, int k, int n, GeodesicSource& geo);
 	TeukolskyMode(int s, int L, int m, int k, int n, GeodesicSource& geo);
-	TeukolskyMode(int s, int L, int m, int k, int n, double a, Vector theta, Vector r);
+	TeukolskyMode(int s, int L, int m, int k, int n, double a, double omega, Vector theta, Vector r);
 	~TeukolskyMode();
 
 	int generateSolutions(GeodesicSource& geo, SolutionMethod method = AUTO, int samplesize = SAMPLE_SIZE_INIT);

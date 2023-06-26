@@ -203,6 +203,7 @@ void angle_vector_half(Vector &angle);
 
 Vector mino_of_psi_fourier(double const &a, double const &p, double const &e, double const &En, double const &r3, double const &r4);
 Vector mino_of_chi_fourier(double const &a, double const &En, double const &z1, double const &z2);
+Vector mino_of_chi_schw_fourier(double const &Lz, double const &Qc);
 double integrated_dct_sum(double const &angle, Vector const &fourier);
 Vector kepler_phase_of_angle_fourier(Vector const &fourier);
 double mino_of_kepler_phase(double const &angle, Vector const &fourier);

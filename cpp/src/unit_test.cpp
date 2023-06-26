@@ -73,6 +73,8 @@ int test_kerr_circ_eq_flux(){
     std::cout << "(UNIT) PASSED: Energy flux for (a, p, e, x) = ("<<testOrbitSpin<<", "<<testOrbitRadius<<", 0, 1). \n";
   }else{
     std::cout << "(UNIT) FAILED: Energy flux for (a, p, e, x) = ("<<testOrbitSpin<<", "<<testOrbitRadius<<", 0, 1). \n";
+    std::cout << "(UNIT) FAILED: Expected values = ("<< testValue_EdotHorizon <<", "<< testValue_EdotInfinity <<"). \n";
+    std::cout << "(UNIT) FAILED: Calculated values = ("<< edot.horizon <<", "<< edot.infinity <<"). \n";
   }
 
   return test;
@@ -101,6 +103,8 @@ int test_kerr_circ_eq_flux_2(){
     std::cout << "(UNIT) PASSED: Energy flux for (a, p, e, x) = ("<<testOrbitSpin<<", "<<testOrbitRadius<<", 0, 1). \n";
   }else{
     std::cout << "(UNIT) FAILED: Energy flux for (a, p, e, x) = ("<<testOrbitSpin<<", "<<testOrbitRadius<<", 0, 1). \n";
+    std::cout << "(UNIT) FAILED: Expected values = ("<< testValue_EdotHorizon <<", "<< testValue_EdotInfinity <<"). \n";
+    std::cout << "(UNIT) FAILED: Calculated values = ("<< edot.horizon <<", "<< edot.infinity <<"). \n";
   }
 
   return test;
@@ -128,6 +132,8 @@ int test_schwarzschild_circ_eq_flux(){
     std::cout << "(UNIT) PASSED: Energy flux for (a, p, e, x) = ("<<testOrbitSpin<<", "<<testOrbitRadius<<", 0, 1). \n";
   }else{
     std::cout << "(UNIT) FAILED: Energy flux for (a, p, e, x) = ("<<testOrbitSpin<<", "<<testOrbitRadius<<", 0, 1). \n";
+    std::cout << "(UNIT) FAILED: Expected values = ("<< testValue_EdotHorizon <<", "<< testValue_EdotInfinity <<"). \n";
+    std::cout << "(UNIT) FAILED: Calculated values = ("<< edot.horizon <<", "<< edot.infinity <<"). \n";
   }
 
   return test;

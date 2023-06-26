@@ -10,15 +10,27 @@ void SummationHelper::add(Complex val){
 	_previousSum = _sum;
 	_sum += val;
 	// skip error tracking if sum goes to zero
-	if(abs(_sum) == 0.){
-		double loss = (abs(_previousSum) + abs(val))/abs(_sum);
-		if(loss >= 1.){ // if we lose an order of magnitude due to cancellations, record it
-			_precisionLoss *= loss;
-		}else{ // if we add a big number back, we regain precision
-			_precisionLoss *= abs(_previousSum)/abs(val);
-		}
-		if(_precisionLoss < 1.) _precisionLoss = 1.;
+	// if(abs(_sum) == 0.){
+	// 	double loss = (abs(_previousSum) + abs(val))/abs(_sum);
+	// 	if(loss >= 1.){ // if we lose an order of magnitude due to cancellations, record it
+	// 		_precisionLoss *= loss;
+	// 	}else{ // if we add a big number back, we regain precision
+	// 		_precisionLoss *= abs(_previousSum)/abs(val);
+	// 	}
+	// 	if(_precisionLoss < 1.) _precisionLoss = 1.;
+	// }
+	double loss = 1.;
+	if(abs(_sum) > 0.){
+		loss = (abs(_previousSum) + abs(val))/abs(_sum);
+	}else{
+		loss = std::log10(abs(_previousSum));
 	}
+	if(loss >= 1.){ // if we lose an order of magnitude due to cancellations, record it
+		_precisionLoss *= loss;
+	}else{ // if we add a big number back, we regain precision
+		_precisionLoss *= abs(_previousSum)/abs(val);
+	}
+	if(_precisionLoss < 1.) _precisionLoss = 1.;
 }
 
 void SummationHelper::setBasePrecision(double val){
@@ -968,6 +980,14 @@ void weight_solutions_delta2(Complex &delta2R0, Complex &delta2Rp0, Complex &del
 	delta2Rpp0 = delta*delta*Rpp0 + 4.*delta*deltaP*Rp0 + 2.*(deltaP*deltaP + delta*deltaPP)*R0;
 }
 
+void rescale_solution(ComplexVector &R, ComplexVector &Rp, ComplexVector &Rpp, double rescale){
+	for(size_t i = 0; i < R.size(); i++){
+		R[i] *= rescale;
+		Rp[i] *= rescale;
+		Rpp[i] *= rescale;
+	}
+}
+
 TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
 	std::function<void(Complex &, Complex &, int const &, int const &, int const &, int const &, GeodesicConstants &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, Complex const &, Complex const &, Complex const &,  Complex const &, Complex const &, Complex const &, double const &, double const &, double const &)> integrand;
 	std::function<void(Complex &, Complex &, int const &, int const &, int const &, int const &, GeodesicConstants &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, Complex const &, Complex const &, Complex const &,  Complex const &, Complex const &, Complex const &, double const &, double const &, double const &)> integrandTurningPoint;
@@ -997,6 +1017,15 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	Vector phiR = traj.phiR;
 
 	Complex W = wronskian(s, geoConstants.a, rp[0], R0[0], Rp0[0], R1[0], Rp1[0]);
+	double rescaleIn = 1.;
+	double rescaleUp = 1.;
+	if(isnan(abs(W)) || isinf(abs(W))){
+		rescaleIn = 1./abs(R1[0]);
+		rescaleUp = 1./abs(R0[0]);
+		rescale_solution(R0, Rp0, Rpp0, rescaleIn);
+		rescale_solution(R1, Rp1, Rpp1, rescaleUp);
+		W = wronskian(s, geoConstants.a, rp[0], R0[0], Rp0[0], R1[0], Rp1[0]);
+	}
 
 	int Nsample = pow(2, 2);
 	while(Nsample < 2*abs(n) + 2){
@@ -1069,11 +1098,13 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 		ZlmUp = sumUp.getSum()/double(halfSample);
 		ZlmIn = sumIn.getSum()/double(halfSample);
 	}
-	std::cout << Nsample << "\n";
-	std::cout << sumIn.getPrecision() << "\n";
-	std::cout << sumUp.getPrecision() << "\n";
-	ZlmUp *= 8.*M_PI/W/geoConstants.upsilonT;
-	ZlmIn *= 8.*M_PI/W/geoConstants.upsilonT;
+	// std::cout << Nsample << "\n";
+	// std::cout << sumIn.getPrecision() << "\n";
+	// std::cout << sumUp.getPrecision() << "\n";
+	// std::cout << ZlmIn << "\n";
+	// std::cout << ZlmUp << "\n";
+	ZlmUp *= rescaleUp*8.*M_PI/W/geoConstants.upsilonT;
+	ZlmIn *= rescaleIn*8.*M_PI/W/geoConstants.upsilonT;
 
 	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
 

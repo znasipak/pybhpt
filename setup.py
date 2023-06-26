@@ -5,21 +5,36 @@ from distutils.extension import Extension
 from Cython.Distutils import build_ext
 import numpy as np
 from subprocess import run
+import sys
 
-compiler_flags = ["-std=c++11", "-Xclang", "-fopenmp", "-O2"]
+compiler_flags = ["-std=c++11", "-fopenmp", "-march=native"]
+libraries = ["gsl", "gslcblas", "boost_filesystem"]
 
-output = run(["uname", "-m"], capture_output=True)
-if output.stdout.decode("utf-8") == "x86_64":
-    compiler_flags.append("-march=x86-64")
+# set some flags and libraries depending on the system platform
+if sys.platform.startswith('win32'):
+    compiler_flags.append('/Od')
+    libraries.append('gomp')
+elif sys.platform.startswith('darwin'):
+    compiler_flags.append('-O2')
+    libraries.append('omp')
+elif sys.platform.startswith('linux'):
+    compiler_flags.append('-O2')
+    libraries.append('gomp')
+    
 
-# I have to add this flag directly to the compiler because there
-# does not seem to be any way to pass it to the compiler when 
-# constructing the library
-os.environ["CC"] += " "
-os.environ["CC"] += ' '.join(compiler_flags)
+CFLAGS = os.getenv("CFLAGS")
+if CFLAGS is None:
+    CFLAGS = ""
+else:
+    CFLAGS = str(CFLAGS)
+os.environ["CFLAGS"] = CFLAGS
+os.environ["CFLAGS"] += " "
+os.environ["CFLAGS"] += ' '.join(compiler_flags)
+base_path = sys.prefix
 
 utils_dependence = ["cpp/src/utils.cpp"]
 specialfunc_dependence = ["cpp/src/specialfunc.cpp"]
+kerr_dependence = ["cpp/src/kerr.cpp", *specialfunc_dependence]
 geo_dependence = ["cpp/src/geo.cpp", *specialfunc_dependence]
 cf_dependence = ["cpp/src/cf.cpp", *utils_dependence]
 swsh_dependence = ["cpp/src/swsh.cpp", *specialfunc_dependence]
@@ -35,31 +50,26 @@ sourceint_dependence = ["cpp/src/sourceintegration.cpp", *geo_dependence, *swsh_
 teuk_dependence = ["cpp/src/teukolsky.cpp", *sourceint_dependence, *radial_dependence]
 hertz_dependence = ["cpp/src/hertz.cpp", *teuk_dependence]
 metriccoeffs_dependence = ["cpp/src/metriccoeffs.cpp", *geo_dependence, *utils_dependence]
+fluxes_dependence = ["cpp/src/fluxes.cpp", *teuk_dependence]
+metric_dependence = ["cpp/src/metric.cpp", *hertz_dependence, *utils_dependence, *metriccoeffs_dependence, *kerr_dependence]
+redshift_dependence = ["cpp/src/redshift.cpp", *metric_dependence]
+unit_dependence = ["cpp/src/unit_test.cpp", *fluxes_dependence]
 
-full_dependence = [*geo_dependence, *teuk_dependence, *radial_dependence, *hertz_dependence, *metriccoeffs_dependence]
+full_dependence = [*geo_dependence, *teuk_dependence, *radial_dependence, *hertz_dependence, *metriccoeffs_dependence, *fluxes_dependence, *redshift_dependence, *unit_dependence]
 
 # create library of all the c++ files that get linked at the end in setup so that we are
 # not duplicating c++ file compilation across the different extensions
 lib_extension = dict(
     sources = [*set(full_dependence)],
-    libraries=["gsl", "gomp", "boost_filesystem"],
+    libraries=libraries,
     language='c++',
-    include_dirs = ["cpp/include"],
-    macros = None
+    include_dirs = ["cpp/include", base_path + "/include"],
 )
-sfcpp = ['sfcpp', lib_extension]
 
-# libsfcpp_extension = Extension(
-#     "libsfcpp",
-#     sources = [*set(full_dependence)],
-#     libraries=["gsl", "gomp", "boost_filesystem"],
-#     extra_compile_args=["-std=c++11", "-Xclang", "-fopenmp"],
-#     language='c++',
-#     include_dirs = ["include"],
-# )
+cppbhpt = ['cppbhpt', lib_extension]
 
 cpu_extension = dict(
-    libraries=["gsl", "gomp", "boost_filesystem"],
+    libraries=libraries,
     language='c++',
     # extra_compile_args=["-Xclang", "-fopenmp", "-O2"], 
     # extra_compile_args=["-Xclang", "-fopenmp", "-O0", "-ggdb"], # use to speed up compilation during development
@@ -67,12 +77,11 @@ cpu_extension = dict(
 )
 
 teuk_ext = Extension(
-    "teukmodecy", 
-    sources=["cython/teukolsky_wrap.pyx"], 
+    "cybhpt_full", 
+    sources=["cython/redshift_wrap.pyx"], 
     **cpu_extension,
 )
 
-# ext_modules = [teuk_ext, geo_ext, radial_ext]
 ext_modules = [teuk_ext]
 
 setup(
@@ -80,9 +89,10 @@ setup(
     author="Zach Nasipak",
     author_email="znasipak@gmail.com",
     version = "0.0.1",
-    description = "Self-Force Algorithms in Python",
+    description = "Black Hole Perturbation Theory and Self-Force Algorithms in Python",
     ext_modules = cythonize(ext_modules, language_level = "3"),
-    packages=["pybhpt", "pybhpt.geo", "pybhpt.radial", "pybhpt.teuk", "pybhpt.hertz"],
+    packages=["pybhpt"],
+    py_modules=["pybhpt.geo", "pybhpt.swsh", "pybhpt.radial", "pybhpt.teuk", "pybhpt.hertz"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License (GPL)",
@@ -90,7 +100,7 @@ setup(
         "Programming Language :: C++",
         "Programming Language :: Cython",
     ],
-    libraries = [sfcpp],
+    libraries = [cppbhpt],
     cmdclass = {'build_ext': build_ext},
     zip_safe=False
 )

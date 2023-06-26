@@ -13,6 +13,8 @@ void SphericalHarmonicCoupling::generateCouplings(){
   generate_derivative_scalar_spherical_coupling(_dzCoupling, _lmin, _m);
 }
 
+int SphericalHarmonicCoupling::getAzimuthalModeNumber(){ return _m; }
+
 Vector SphericalHarmonicCoupling::getZCouplingCoefficient(){ return _zCoupling; }
 double SphericalHarmonicCoupling::getZCouplingCoefficient(int n, int i, int l){
 	if(l <= getMaxZCouplingModeNumber() && l >= _lmin && abs(i) <= n){

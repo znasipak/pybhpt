@@ -99,7 +99,7 @@ private:
 	void flipSpinWeight(); //helper function taken from TeukolskyMode
 };
 
-void test_hertz_mode(int j, int m, int k, int n, GeodesicSource geo);
+void test_hertz_mode(int j, int m, int k, int n, GeodesicSource& geo);
 
 void teukolsky_to_hertz_ORG(Complex &Psi, Complex Zteuk, int L, int m, int k, double a, double omega, double lambdaCH);
 void teukolsky_to_hertz_IRG(Complex &Psi, Complex Zteuk, int L, int m, int k, double a, double omega, double lambdaCH);
@@ -111,18 +111,18 @@ void teukolsky_to_hertz_IRG(Complex &PsiIn, Complex &PsiUp, Complex ZteukIn, Com
 void teukolsky_to_hertz_SAAB(Complex &PsiIn, Complex &PsiUp, Complex ZteukIn, Complex ZteukUp, int L, int m, double a, double omega, double lambdaCH);
 void teukolsky_to_hertz_ASAAB(Complex &PsiIn, Complex &PsiUp, Complex ZteukIn, Complex ZteukUp, int L, int m, double a, double omega, double lambdaCH);
 
-void teukolsky_to_hertz_amplitude_in(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
-void teukolsky_to_hertz_amplitude_up(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
-void teukolsky_to_hertz_amplitude_IRG_in(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
-void teukolsky_to_hertz_amplitude_IRG_up(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
-void teukolsky_to_hertz_amplitude_SAAB0_in(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
-void teukolsky_to_hertz_amplitude_SAAB0_up(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
-void teukolsky_to_hertz_amplitude_SAAB4_in(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
-void teukolsky_to_hertz_amplitude_SAAB4_up(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
-void teukolsky_to_hertz_amplitude_ASAAB0_in(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
-void teukolsky_to_hertz_amplitude_ASAAB0_up(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
-void teukolsky_to_hertz_amplitude_ASAAB4_in(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
-void teukolsky_to_hertz_amplitude_ASAAB4_up(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
+// void teukolsky_to_hertz_amplitude_in(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
+// void teukolsky_to_hertz_amplitude_up(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
+// void teukolsky_to_hertz_amplitude_IRG_in(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
+// void teukolsky_to_hertz_amplitude_IRG_up(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
+// void teukolsky_to_hertz_amplitude_SAAB0_in(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
+// void teukolsky_to_hertz_amplitude_SAAB0_up(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
+// void teukolsky_to_hertz_amplitude_SAAB4_in(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
+// void teukolsky_to_hertz_amplitude_SAAB4_up(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
+// void teukolsky_to_hertz_amplitude_ASAAB0_in(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
+// void teukolsky_to_hertz_amplitude_ASAAB0_up(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
+// void teukolsky_to_hertz_amplitude_ASAAB4_in(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
+// void teukolsky_to_hertz_amplitude_ASAAB4_up(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda);
 
 void flip_spin_of_spheroidal_eigenvalue(double &lambdaFlip, int s, double lambda);
 
