@@ -52,3 +52,7 @@ If the package is installed using `pip`, then one can easily uninstall the packa
 $ pip uninstall pybhpt
 ```
 To clean the repository, one will also need to remove the directories `build/` and `pybhpt.egg.info/` from the main repository 
+
+## Authors
+
+Zachary Nasipak
