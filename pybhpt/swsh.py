@@ -317,4 +317,27 @@ class SWSH(SWSHSeriesBase):
             
     def __call__(self, th):
         return self.eval(self.l, th)
+    
+def muCoupling(s, l):
+    """
+    Eigenvalue for the spin-weighted spherical harmonic lowering operator
+    Setting s -> -s gives the negative of the eigenvalue for the raising operator
+    """
+    if l + s < 0 or l - s + 1. < 0:
+        return 0
+    return np.sqrt((l - s + 1.)*(l + s))
+
+def Asjlm(s, j, l, m):
+    if s >= 0:
+        return (-1.)**(m + s)*np.sqrt(4**s*fac(s)**2*(2*l + 1)*(2*j + 1)/fac(2*s))*w3j(s, l, j, 0, m, -m)*w3j(s, l, j, s, -s, 0)
+    else:
+        return (-1.)**(m)*np.sqrt(4**(-s)*fac(-s)**2*(2*l + 1)*(2*j + 1)/fac(-2*s))*w3j(-s, l, j, 0, m, -m)*w3j(-s, l, j, s, -s, 0)
+
+def spin_operator_normalization(s, ns, l):
+    s_sgn = np.sign(s)
+    nmax1 = np.abs(s) + 1
+    Jterm = 1.
+    for ni in range(1, ns + 1):
+        Jterm *= -s_sgn*muCoupling((nmax1-ni), l)
+    return Jterm
         

@@ -114,12 +114,18 @@ def kerr_geo_V32(double a, double En, double Lz, double Q, double theta):
 
 cdef class KerrGeodesic:
     cdef GeodesicSource *geocpp
+    cdef int nsamplescpp
 
     def __init__(self, double a, double p, double e, double x, int nsamples = 2**8):
         self.geocpp = new GeodesicSource(a, p, e, x, nsamples)
+        self.nsamplescpp = nsamples
 
     def __dealloc__(self):
         del self.geocpp
+
+    @property
+    def nsamples(self):
+        return self.nsamplescpp
 
     @property
     def blackholespin(self):

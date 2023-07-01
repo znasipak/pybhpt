@@ -92,7 +92,7 @@ setup(
     description = "Black Hole Perturbation Theory and Self-Force Algorithms in Python",
     ext_modules = cythonize(ext_modules, language_level = "3"),
     packages=["pybhpt"],
-    py_modules=["pybhpt.geo", "pybhpt.swsh", "pybhpt.radial", "pybhpt.teuk", "pybhpt.hertz"],
+    py_modules=["pybhpt.geo", "pybhpt.swsh", "pybhpt.radial", "pybhpt.teuk", "pybhpt.hertz", "pybhpt.metric"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License (GPL)",

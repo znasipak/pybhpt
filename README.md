@@ -24,7 +24,7 @@ we recommend using Anaconda and its virtual environments.
 Create a conda environment `pybhpt-env` (or whatever name you would like)
 with the necessary dependencies to install `pybhpt`:
 ```
-$ conda create -n pybhpt-env -c conda-forge gsl boost-cpp Cython numpy python=3.7
+$ conda create -n pybhpt-env -c conda-forge gsl boost-cpp Cython numpy scipy python=3.7
 $ conda activate pybhpt-env
 ```
 To include the necessary compiler on MACOSX run:

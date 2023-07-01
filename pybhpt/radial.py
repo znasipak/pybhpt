@@ -6,6 +6,7 @@ class RadialTeukolsky:
     def __init__(self, s, l, m, a, omega, r):
         self.radialpoints = r
         self.base = RadialTeukolskyCython(a, s, l, m, omega, self.radialpoints)
+        self.nsamples = r.shape[0]
 
     @property
     def blackholespin(self):
@@ -85,3 +86,22 @@ class RadialTeukolsky:
     
     def radialderivative2(self, bc, pos):
         return self.base.derivative2(bc, pos)
+    
+    def radialsolutions(self, bc):
+        return np.array([self.base.solution(bc, i) for i in range(self.nsamples)])
+    
+    def radialderivatives(self, bc):
+        return np.array([self.base.derivative(bc, i) for i in range(self.nsamples)])
+    
+    def radialderivatives2(self, bc):
+        return np.array([self.base.derivative2(bc, i) for i in range(self.nsamples)])
+    
+    def __call__(self, bc, deriv = 0):
+        if deriv == 0:
+            return self.radialsolutions(bc)
+        elif deriv == 1:
+            return self.radialderivatives(bc)
+        elif deriv == 2:
+            return self.radialderivatives2(bc)
+        else:
+            raise ValueError("RadialTeukolsky only solves up to the second derivative")

@@ -1,6 +1,8 @@
 from cybhpt_full import HertzMode as HertzModeCython
 from cybhpt_full import test_hertz_mode_cython
-from cybhpt_full import teuk_to_hertz_ORG, teuk_to_hertz_IRG
+from cybhpt_full import teuk_to_hertz_ORG, teuk_to_hertz_IRG, teuk_to_hertz_SAAB, teuk_to_hertz_ASAAB
+from pybhpt.radial import RadialTeukolsky
+import numpy as np
 
 available_gauges = [
     "IRG",
@@ -14,6 +16,27 @@ available_gauges = [
 def hertz_IRG(Zin, Zup, j, m, k, a, omega, lambdaCH):
     return teuk_to_hertz_IRG(Zin, Zup, j, m, k, a, omega, lambdaCH)
 
+def hertz_ORG(Zin, Zup, j, m, k, a, omega, lambdaCH):
+    return teuk_to_hertz_ORG(Zin, Zup, j, m, k, a, omega, lambdaCH)
+
+def hertz_SAAB(Zin, Zup, j, m, k, a, omega, lambdaCH):
+    return teuk_to_hertz_SAAB(Zin, Zup, j, m, k, a, omega, lambdaCH)
+
+def hertz_ASAAB(Zin, Zup, j, m, k, a, omega, lambdaCH):
+    return teuk_to_hertz_ASAAB(Zin, Zup, j, m, k, a, omega, lambdaCH)
+
+def teuk_to_hertz_amplitude(gauge, Zin, Zup, j, m, k, a, omega, lambdaCH):
+    if gauge == "IRG":
+        return hertz_IRG(Zin, Zup, j, m, k, a, omega, lambdaCH)
+    elif gauge == "ORG":
+        return hertz_ORG(Zin, Zup, j, m, k, a, omega, lambdaCH)
+    elif gauge == "SAAB0" or gauge == "SAAB4":
+        return hertz_SAAB(Zin, Zup, j, m, k, a, omega, lambdaCH)
+    elif gauge == "ASAAB0" or gauge == "ASAAB4":
+        return hertz_ASAAB(Zin, Zup, j, m, k, a, omega, lambdaCH)
+    else:
+        return (0.j, 0.j)
+
 def test_hertz_mode(j, m, k, n, geo):
     test_hertz_mode_cython(j, m, k, n, geo.base)
 
@@ -23,11 +46,9 @@ def gauge_check(gauge):
 
 
 class HertzMode:
-
     def __init__(self, teuk, gauge):
         self.base = HertzModeCython(teuk.base, gauge)
         self.gauge = gauge
-        
 
     @property
     def spinweight(self):
@@ -145,3 +166,50 @@ class HertzMode:
     
     def amplitude(self, bc):
         return self.base.hertz_amplitude(bc)
+    
+    @property
+    def radialpoints(self):
+        return self.base.radialpoints
+    
+    @property
+    def radialsolutions(self):
+        return self.base.radialsolutions
+    
+    @property
+    def radialderivatives(self):
+        return self.base.radialderivatives
+    
+    @property
+    def radialderivatives2(self):
+        return self.base.radialderivatives2
+    
+    @property
+    def amplitudes(self):
+        return {"In": self.amplitude('In'), "Up": self.amplitude('Up')}
+    
+    def __call__(self, r, deriv = 0):
+        rmin = self.radialpoints[0]
+        rmax = self.radialpoints[-1]
+        rinner = r[r < rmin]
+        router = r[r > rmax]
+        if np.any((r >= rmin) & (r <= rmax)):
+            raise ValueError("Radial points must lie outside the source region")
+
+        if rinner.shape[0] > 0:
+            Rt = RadialTeukolsky(self.spinweight, self.spheroidalmode, self.azimuthalmode, self.blackholespin, self.frequency, rinner)
+            Rt.solve(bc='In')
+            Rin = Rt('In', deriv=deriv)
+        else:
+            Rin = np.array([])
+
+        if router.shape[0] > 0:
+            Rt = RadialTeukolsky(self.spinweight, self.spheroidalmode, self.azimuthalmode, self.blackholespin, self.frequency, router)
+            Rt.solve(bc='Up')
+            Rup = Rt('Up', deriv=deriv)
+        else:
+            Rup = np.array([])
+
+        PsiIn = self.amplitude('In')
+        PsiUp = self.amplitude('Up')
+
+        return np.concatenate((PsiIn*Rin, PsiUp*Rup))

@@ -50,7 +50,7 @@ int HertzMode::generateSolutions(){
   }else if(_gauge == IRG){
     teukolsky_to_hertz_IRG(_PsilmIn, _PsilmUp, _PsilmIn, _PsilmUp, _L, _m, _k, _a, _omega, lambdaCH);
   }else if(_gauge == SAAB0 || _gauge == SAAB4){
-    teukolsky_to_hertz_SAAB(_PsilmIn, _PsilmUp, _PsilmIn, _PsilmUp, _L, _m, _a, _omega, lambdaCH);
+    teukolsky_to_hertz_SAAB(_PsilmIn, _PsilmUp, _PsilmIn, _PsilmUp, _L, _m, _k, _a, _omega, lambdaCH);
   }else if(_gauge == ASAAB0 || _gauge == ASAAB4){
     teukolsky_to_hertz_ASAAB(_PsilmIn, _PsilmUp, _PsilmIn, _PsilmUp, _L, _m, _a, _omega, lambdaCH);
   }
@@ -357,15 +357,15 @@ void teukolsky_to_hertz_IRG(Complex &PsiIn, Complex &PsiUp, Complex ZteukIn, Com
   PsiUp = pow(-1., L + m + k)*8.*ZteukUp/plmk;
 }
 
-void teukolsky_to_hertz_SAAB(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambdaCH){
+void teukolsky_to_hertz_SAAB(Complex &Psi, Complex Zteuk, int L, int m, int k, double a, double omega, double lambdaCH){
   double D = teukolsky_starobinsky_constant_D(m, a, omega, lambdaCH);
-  Psi = pow(-1., L + m)*Zteuk/D;
+  Psi = pow(-1., L + m + k)*Zteuk/D;
 }
 
-void teukolsky_to_hertz_SAAB(Complex &PsiIn, Complex &PsiUp, Complex ZteukIn, Complex ZteukUp, int L, int m, double a, double omega, double lambdaCH){
+void teukolsky_to_hertz_SAAB(Complex &PsiIn, Complex &PsiUp, Complex ZteukIn, Complex ZteukUp, int L, int m, int k, double a, double omega, double lambdaCH){
   double D = teukolsky_starobinsky_constant_D(m, a, omega, lambdaCH);
-  PsiIn = pow(-1., L + m)*ZteukIn/D;
-  PsiUp = pow(-1., L + m)*ZteukUp/D;
+  PsiIn = pow(-1., L + m + k)*ZteukIn/D;
+  PsiUp = pow(-1., L + m + k)*ZteukUp/D;
 }
 
 void teukolsky_to_hertz_ASAAB(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambdaCH){

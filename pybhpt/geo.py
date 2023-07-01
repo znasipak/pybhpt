@@ -29,6 +29,7 @@ class KerrGeodesic:
         self.polarpoints = self.base.get_polar_points()
         self.azimuthalradial = self.base.get_azimuthal_accumulation(1)
         self.azimuthalpolar = self.base.get_azimuthal_accumulation(2)
+        self.nsamples = self.base.nsamples
 
     @property
     def blackholespin(self):
