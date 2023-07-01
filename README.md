@@ -18,7 +18,7 @@ A python package for solving problems in black hole perturbation theory
 
 ## Installation
 
-PyBHPT relies on several dependencies to install and run, namely a C/C++ compiler (e.g., `g++`), `gsl`, `BLAS`, `boost`, `Cython`, `numpy`, and `python >= 3.7`.
+PyBHPT relies on several dependencies to install and run, namely a C/C++ compiler (e.g., `g++`), `gsl`, `boost`, `Cython`, `numpy`, `scipy`, and `python >= 3.7`.
 To reduce package conflicts and ensure that the proper dependencies are installed,
 we recommend using Anaconda and its virtual environments.
 
