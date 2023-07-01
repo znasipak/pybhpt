@@ -10,6 +10,7 @@ A python package for solving problems in black hole perturbation theory
 - `pybhpt.teuk`: a module that evaluates the inhomogeneous solutions (Teukolsky amplitudes) of the radial Teukolsky equation due to a point-particle on a bound timelike Kerr geodesic
 - `pybhpt.flux`: a module that produces the gravitational wave fluxes sourced by a point-particle on a generic bound timelike Kerr geodesic
 - `pybhpt.hertz`: a module that solves for the Hertz potentials for the CCK and AAB metric reconstruction procedures
+- `pybhpt.metric`: a module that produces the coefficients needed to reconstruct the metric from the Hertz potentials
 - `pybhpt.redshift`: a module that computes the generalized Detweiler redshift invariant in a variety of gauges
 
 > **Warning**
