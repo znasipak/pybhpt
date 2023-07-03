@@ -962,8 +962,8 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	// std::cout << halfSampleR << "\n";
 	// std::cout << halfSampleTh << "\n";
 
-	ZlmUp *= 8.*M_PI/W/geoConstants.upsilonT;
-	ZlmIn *= 8.*M_PI/W/geoConstants.upsilonT;
+	ZlmUp *= -8.*M_PI/W/geoConstants.upsilonT;
+	ZlmIn *= -8.*M_PI/W/geoConstants.upsilonT;
 
 	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
 
@@ -1103,8 +1103,8 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	// std::cout << sumUp.getPrecision() << "\n";
 	// std::cout << ZlmIn << "\n";
 	// std::cout << ZlmUp << "\n";
-	ZlmUp *= rescaleUp*8.*M_PI/W/geoConstants.upsilonT;
-	ZlmIn *= rescaleIn*8.*M_PI/W/geoConstants.upsilonT;
+	ZlmUp *= -rescaleUp*8.*M_PI/W/geoConstants.upsilonT;
+	ZlmIn *= -rescaleIn*8.*M_PI/W/geoConstants.upsilonT;
 
 	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
 
@@ -1214,8 +1214,8 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 		ZlmUp = sumUp.getSum()/double(halfSample);
 		ZlmIn = sumIn.getSum()/double(halfSample);
 	}
-	ZlmUp *= 8.*M_PI/W/geoConstants.upsilonT;
-	ZlmIn *= 8.*M_PI/W/geoConstants.upsilonT;
+	ZlmUp *= -8.*M_PI/W/geoConstants.upsilonT;
+	ZlmIn *= -8.*M_PI/W/geoConstants.upsilonT;
 
 	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
 
@@ -1251,8 +1251,8 @@ TeukolskyAmplitudes teukolsky_amplitude_circeq(int s, int L, int m, GeodesicTraj
 	integrand(ZlmIn, ZlmUp, L, m, 0, 0, geoConstants, 0., 0., rp, thp, 0., 0., 0., 0.,
 		R0, Rp0, Rpp0, R1, Rp1, Rpp1, S, Sp, Spp);
 
-	ZlmUp *= 8.*M_PI/W/geoConstants.upsilonT;
-	ZlmIn *= 8.*M_PI/W/geoConstants.upsilonT;
+	ZlmUp *= -8.*M_PI/W/geoConstants.upsilonT;
+	ZlmIn *= -8.*M_PI/W/geoConstants.upsilonT;
 
 	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
 
