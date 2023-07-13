@@ -59,14 +59,14 @@ full_dependence = [*geo_dependence, *teuk_dependence, *radial_dependence, *hertz
 
 # create library of all the c++ files that get linked at the end in setup so that we are
 # not duplicating c++ file compilation across the different extensions
-lib_extension = dict(
-    sources = [*set(full_dependence)],
-    libraries=libraries,
-    language='c++',
-    include_dirs = ["cpp/include", base_path + "/include"],
-)
+# lib_extension = dict(
+#     sources = [*set(full_dependence)],
+#     libraries=libraries,
+#     language='c++',
+#     include_dirs = ["cpp/include", base_path + "/include"],
+# )
 
-cppbhpt = ['cppbhpt', lib_extension]
+# cppbhpt = ['cppbhpt', lib_extension]
 
 cpu_extension = dict(
     libraries=libraries,
@@ -78,7 +78,7 @@ cpu_extension = dict(
 
 teuk_ext = Extension(
     "cybhpt_full", 
-    sources=["cython/redshift_wrap.pyx"], 
+    sources=["cython/redshift_wrap.pyx", *set(full_dependence)], 
     **cpu_extension,
 )
 
@@ -100,7 +100,7 @@ setup(
         "Programming Language :: C++",
         "Programming Language :: Cython",
     ],
-    libraries = [cppbhpt],
+#    libraries = [cppbhpt],
     cmdclass = {'build_ext': build_ext},
     zip_safe=False
 )
