@@ -4,11 +4,11 @@
 {
     "distutils": {
         "depends": [
-            "/Users/zachnasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/arrayobject.h",
-            "/Users/zachnasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/arrayscalars.h",
-            "/Users/zachnasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/ndarrayobject.h",
-            "/Users/zachnasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/ndarraytypes.h",
-            "/Users/zachnasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/ufuncobject.h",
+            "/Users/znasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/arrayobject.h",
+            "/Users/znasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/arrayscalars.h",
+            "/Users/znasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/ndarrayobject.h",
+            "/Users/znasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/ndarraytypes.h",
+            "/Users/znasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/ufuncobject.h",
             "cpp/include/fluxes.hpp",
             "cpp/include/geo.hpp",
             "cpp/include/hertz.hpp",
@@ -21,7 +21,7 @@
         ],
         "include_dirs": [
             "cpp/include",
-            "/Users/zachnasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include"
+            "/Users/znasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include"
         ],
         "language": "c++",
         "libraries": [
@@ -1097,7 +1097,7 @@ typedef struct {
 } __Pyx_BufFmt_Context;
 
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":690
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":690
  * # in Cython to enable them only on the right systems.
  * 
  * ctypedef npy_int8       int8_t             # <<<<<<<<<<<<<<
@@ -1106,7 +1106,7 @@ typedef struct {
  */
 typedef npy_int8 __pyx_t_5numpy_int8_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":691
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":691
  * 
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t             # <<<<<<<<<<<<<<
@@ -1115,7 +1115,7 @@ typedef npy_int8 __pyx_t_5numpy_int8_t;
  */
 typedef npy_int16 __pyx_t_5numpy_int16_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":692
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":692
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t             # <<<<<<<<<<<<<<
@@ -1124,7 +1124,7 @@ typedef npy_int16 __pyx_t_5numpy_int16_t;
  */
 typedef npy_int32 __pyx_t_5numpy_int32_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":693
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":693
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t
  * ctypedef npy_int64      int64_t             # <<<<<<<<<<<<<<
@@ -1133,7 +1133,7 @@ typedef npy_int32 __pyx_t_5numpy_int32_t;
  */
 typedef npy_int64 __pyx_t_5numpy_int64_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":697
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":697
  * #ctypedef npy_int128     int128_t
  * 
  * ctypedef npy_uint8      uint8_t             # <<<<<<<<<<<<<<
@@ -1142,7 +1142,7 @@ typedef npy_int64 __pyx_t_5numpy_int64_t;
  */
 typedef npy_uint8 __pyx_t_5numpy_uint8_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":698
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":698
  * 
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t             # <<<<<<<<<<<<<<
@@ -1151,7 +1151,7 @@ typedef npy_uint8 __pyx_t_5numpy_uint8_t;
  */
 typedef npy_uint16 __pyx_t_5numpy_uint16_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":699
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":699
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t             # <<<<<<<<<<<<<<
@@ -1160,7 +1160,7 @@ typedef npy_uint16 __pyx_t_5numpy_uint16_t;
  */
 typedef npy_uint32 __pyx_t_5numpy_uint32_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":700
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":700
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t
  * ctypedef npy_uint64     uint64_t             # <<<<<<<<<<<<<<
@@ -1169,7 +1169,7 @@ typedef npy_uint32 __pyx_t_5numpy_uint32_t;
  */
 typedef npy_uint64 __pyx_t_5numpy_uint64_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":704
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":704
  * #ctypedef npy_uint128    uint128_t
  * 
  * ctypedef npy_float32    float32_t             # <<<<<<<<<<<<<<
@@ -1178,7 +1178,7 @@ typedef npy_uint64 __pyx_t_5numpy_uint64_t;
  */
 typedef npy_float32 __pyx_t_5numpy_float32_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":705
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":705
  * 
  * ctypedef npy_float32    float32_t
  * ctypedef npy_float64    float64_t             # <<<<<<<<<<<<<<
@@ -1187,7 +1187,7 @@ typedef npy_float32 __pyx_t_5numpy_float32_t;
  */
 typedef npy_float64 __pyx_t_5numpy_float64_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":714
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":714
  * # The int types are mapped a bit surprising --
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t             # <<<<<<<<<<<<<<
@@ -1196,7 +1196,7 @@ typedef npy_float64 __pyx_t_5numpy_float64_t;
  */
 typedef npy_long __pyx_t_5numpy_int_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":715
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":715
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t
  * ctypedef npy_longlong   long_t             # <<<<<<<<<<<<<<
@@ -1205,7 +1205,7 @@ typedef npy_long __pyx_t_5numpy_int_t;
  */
 typedef npy_longlong __pyx_t_5numpy_long_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":716
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":716
  * ctypedef npy_long       int_t
  * ctypedef npy_longlong   long_t
  * ctypedef npy_longlong   longlong_t             # <<<<<<<<<<<<<<
@@ -1214,7 +1214,7 @@ typedef npy_longlong __pyx_t_5numpy_long_t;
  */
 typedef npy_longlong __pyx_t_5numpy_longlong_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":718
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":718
  * ctypedef npy_longlong   longlong_t
  * 
  * ctypedef npy_ulong      uint_t             # <<<<<<<<<<<<<<
@@ -1223,7 +1223,7 @@ typedef npy_longlong __pyx_t_5numpy_longlong_t;
  */
 typedef npy_ulong __pyx_t_5numpy_uint_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":719
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":719
  * 
  * ctypedef npy_ulong      uint_t
  * ctypedef npy_ulonglong  ulong_t             # <<<<<<<<<<<<<<
@@ -1232,7 +1232,7 @@ typedef npy_ulong __pyx_t_5numpy_uint_t;
  */
 typedef npy_ulonglong __pyx_t_5numpy_ulong_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":720
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":720
  * ctypedef npy_ulong      uint_t
  * ctypedef npy_ulonglong  ulong_t
  * ctypedef npy_ulonglong  ulonglong_t             # <<<<<<<<<<<<<<
@@ -1241,7 +1241,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulong_t;
  */
 typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":722
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":722
  * ctypedef npy_ulonglong  ulonglong_t
  * 
  * ctypedef npy_intp       intp_t             # <<<<<<<<<<<<<<
@@ -1250,7 +1250,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
  */
 typedef npy_intp __pyx_t_5numpy_intp_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":723
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":723
  * 
  * ctypedef npy_intp       intp_t
  * ctypedef npy_uintp      uintp_t             # <<<<<<<<<<<<<<
@@ -1259,7 +1259,7 @@ typedef npy_intp __pyx_t_5numpy_intp_t;
  */
 typedef npy_uintp __pyx_t_5numpy_uintp_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":725
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":725
  * ctypedef npy_uintp      uintp_t
  * 
  * ctypedef npy_double     float_t             # <<<<<<<<<<<<<<
@@ -1268,7 +1268,7 @@ typedef npy_uintp __pyx_t_5numpy_uintp_t;
  */
 typedef npy_double __pyx_t_5numpy_float_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":726
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":726
  * 
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t             # <<<<<<<<<<<<<<
@@ -1277,7 +1277,7 @@ typedef npy_double __pyx_t_5numpy_float_t;
  */
 typedef npy_double __pyx_t_5numpy_double_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":727
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":727
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t
  * ctypedef npy_longdouble longdouble_t             # <<<<<<<<<<<<<<
@@ -1320,7 +1320,7 @@ struct __pyx_obj_11cybhpt_full_FluxList;
 struct __pyx_obj_11cybhpt_full_RedshiftCoefficients;
 struct __pyx_obj_11cybhpt_full_SphericalHarmonicCoupling;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":729
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":729
  * ctypedef npy_longdouble longdouble_t
  * 
  * ctypedef npy_cfloat      cfloat_t             # <<<<<<<<<<<<<<
@@ -1329,7 +1329,7 @@ struct __pyx_obj_11cybhpt_full_SphericalHarmonicCoupling;
  */
 typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":730
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":730
  * 
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t             # <<<<<<<<<<<<<<
@@ -1338,7 +1338,7 @@ typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":731
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":731
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t
  * ctypedef npy_clongdouble clongdouble_t             # <<<<<<<<<<<<<<
@@ -1347,7 +1347,7 @@ typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
  */
 typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":733
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":733
  * ctypedef npy_clongdouble clongdouble_t
  * 
  * ctypedef npy_cdouble     complex_t             # <<<<<<<<<<<<<<
@@ -2400,9 +2400,15 @@ static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_teuk[] = "teuk";
 static const char __pyx_k_upTh[] = "upTh";
 static const char __pyx_k_zvec[] = "zvec";
+static const char __pyx_k_EdotH[] = "EdotH";
+static const char __pyx_k_EdotI[] = "EdotI";
 static const char __pyx_k_Error[] = "Error";
+static const char __pyx_k_LdotH[] = "LdotH";
+static const char __pyx_k_LdotI[] = "LdotI";
 static const char __pyx_k_PsiIn[] = "PsiIn";
 static const char __pyx_k_PsiUp[] = "PsiUp";
+static const char __pyx_k_QdotH[] = "QdotH";
+static const char __pyx_k_QdotI[] = "QdotI";
 static const char __pyx_k_SAAB0[] = "SAAB0";
 static const char __pyx_k_SAAB4[] = "SAAB4";
 static const char __pyx_k_alpha[] = "alpha";
@@ -2537,6 +2543,8 @@ static PyObject *__pyx_n_u_ASAAB4;
 static PyObject *__pyx_n_u_ASYM;
 static PyObject *__pyx_n_u_AUTO;
 static PyObject *__pyx_n_s_Edot;
+static PyObject *__pyx_n_s_EdotH;
+static PyObject *__pyx_n_s_EdotI;
 static PyObject *__pyx_n_s_En;
 static PyObject *__pyx_n_u_Error;
 static PyObject *__pyx_n_s_FluxList;
@@ -2553,6 +2561,8 @@ static PyObject *__pyx_n_u_In;
 static PyObject *__pyx_kp_s_Incompatible_checksums_0x_x_vs_0;
 static PyObject *__pyx_n_s_KerrGeodesic;
 static PyObject *__pyx_n_s_Ldot;
+static PyObject *__pyx_n_s_LdotH;
+static PyObject *__pyx_n_s_LdotI;
 static PyObject *__pyx_n_s_Lz;
 static PyObject *__pyx_n_u_MST;
 static PyObject *__pyx_n_s_MemoryError;
@@ -2567,6 +2577,8 @@ static PyObject *__pyx_n_s_PsiUp;
 static PyObject *__pyx_n_s_Q;
 static PyObject *__pyx_n_s_Qc;
 static PyObject *__pyx_n_s_Qdot;
+static PyObject *__pyx_n_s_QdotH;
+static PyObject *__pyx_n_s_QdotI;
 static PyObject *__pyx_n_s_R;
 static PyObject *__pyx_n_s_R0;
 static PyObject *__pyx_n_s_RP0;
@@ -2908,13 +2920,18 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_6__reduce_cython__
 static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_8__setstate_cython__(struct __pyx_obj_11cybhpt_full_MetricModeGenerator *__pyx_v_self, PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_11cybhpt_full_8FluxList___cinit__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
 static void __pyx_pf_11cybhpt_full_8FluxList_2__dealloc__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4set_infinity_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_horizon_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10energyflux___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_19angularmomentumflux___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10carterflux___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_8__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4zero_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_infinity_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_8set_horizon_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10add_infinity_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_12add_horizon_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14set_infinity_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_16add_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_EdotH, double __pyx_v_LdotH, double __pyx_v_QdotH, double __pyx_v_EdotI, double __pyx_v_LdotI, double __pyx_v_QdotI); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6energy___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_15angularmomentum___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14carterconstant___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_18__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_20__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_40flux(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_s, struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_geo, struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_teuk); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_42metric_coefficients_cython_ORG(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_ai, int __pyx_v_bi, int __pyx_v_nt, int __pyx_v_nr, int __pyx_v_nz, int __pyx_v_np, double __pyx_v_a, double __pyx_v_r, double __pyx_v_z); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_44metric_coefficients_cython_IRG(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_ai, int __pyx_v_bi, int __pyx_v_nt, int __pyx_v_nr, int __pyx_v_nz, int __pyx_v_np, double __pyx_v_a, double __pyx_v_r, double __pyx_v_z); /* proto */
@@ -22503,7 +22520,7 @@ static void __pyx_pf_11cybhpt_full_8FluxList_2__dealloc__(struct __pyx_obj_11cyb
  *     def __dealloc__(self):
  *         del self.fluxlistcpp             # <<<<<<<<<<<<<<
  * 
- *     cdef set_fluxes(self, FluxListCPP fluxes):
+ *     def zero_fluxes(self):
  */
   delete __pyx_v_self->fluxlistcpp;
 
@@ -22522,6 +22539,101 @@ static void __pyx_pf_11cybhpt_full_8FluxList_2__dealloc__(struct __pyx_obj_11cyb
 /* "cython/flux_wrap.pyx":33
  *         del self.fluxlistcpp
  * 
+ *     def zero_fluxes(self):             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Edot.infinity = 0.
+ *         self.fluxlistcpp.Ldot.infinity = 0.
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_5zero_fluxes(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_5zero_fluxes(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("zero_fluxes (wrapper)", 0);
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_4zero_fluxes(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4zero_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("zero_fluxes", 0);
+
+  /* "cython/flux_wrap.pyx":34
+ * 
+ *     def zero_fluxes(self):
+ *         self.fluxlistcpp.Edot.infinity = 0.             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Ldot.infinity = 0.
+ *         self.fluxlistcpp.Qdot.infinity = 0.
+ */
+  __pyx_v_self->fluxlistcpp->Edot.infinity = 0.;
+
+  /* "cython/flux_wrap.pyx":35
+ *     def zero_fluxes(self):
+ *         self.fluxlistcpp.Edot.infinity = 0.
+ *         self.fluxlistcpp.Ldot.infinity = 0.             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Qdot.infinity = 0.
+ * 
+ */
+  __pyx_v_self->fluxlistcpp->Ldot.infinity = 0.;
+
+  /* "cython/flux_wrap.pyx":36
+ *         self.fluxlistcpp.Edot.infinity = 0.
+ *         self.fluxlistcpp.Ldot.infinity = 0.
+ *         self.fluxlistcpp.Qdot.infinity = 0.             # <<<<<<<<<<<<<<
+ * 
+ *         self.fluxlistcpp.Edot.horizon = 0.
+ */
+  __pyx_v_self->fluxlistcpp->Qdot.infinity = 0.;
+
+  /* "cython/flux_wrap.pyx":38
+ *         self.fluxlistcpp.Qdot.infinity = 0.
+ * 
+ *         self.fluxlistcpp.Edot.horizon = 0.             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Ldot.horizon = 0.
+ *         self.fluxlistcpp.Qdot.horizon = 0.
+ */
+  __pyx_v_self->fluxlistcpp->Edot.horizon = 0.;
+
+  /* "cython/flux_wrap.pyx":39
+ * 
+ *         self.fluxlistcpp.Edot.horizon = 0.
+ *         self.fluxlistcpp.Ldot.horizon = 0.             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Qdot.horizon = 0.
+ * 
+ */
+  __pyx_v_self->fluxlistcpp->Ldot.horizon = 0.;
+
+  /* "cython/flux_wrap.pyx":40
+ *         self.fluxlistcpp.Edot.horizon = 0.
+ *         self.fluxlistcpp.Ldot.horizon = 0.
+ *         self.fluxlistcpp.Qdot.horizon = 0.             # <<<<<<<<<<<<<<
+ * 
+ *     cdef set_fluxes(self, FluxListCPP fluxes):
+ */
+  __pyx_v_self->fluxlistcpp->Qdot.horizon = 0.;
+
+  /* "cython/flux_wrap.pyx":33
+ *         del self.fluxlistcpp
+ * 
+ *     def zero_fluxes(self):             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Edot.infinity = 0.
+ *         self.fluxlistcpp.Ldot.infinity = 0.
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cython/flux_wrap.pyx":42
+ *         self.fluxlistcpp.Qdot.horizon = 0.
+ * 
  *     cdef set_fluxes(self, FluxListCPP fluxes):             # <<<<<<<<<<<<<<
  *         self.fluxlistcpp.Edot.infinity = fluxes.Edot.infinity
  *         self.fluxlistcpp.Ldot.infinity = fluxes.Ldot.infinity
@@ -22533,7 +22645,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   double __pyx_t_1;
   __Pyx_RefNannySetupContext("set_fluxes", 0);
 
-  /* "cython/flux_wrap.pyx":34
+  /* "cython/flux_wrap.pyx":43
  * 
  *     cdef set_fluxes(self, FluxListCPP fluxes):
  *         self.fluxlistcpp.Edot.infinity = fluxes.Edot.infinity             # <<<<<<<<<<<<<<
@@ -22543,7 +22655,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   __pyx_t_1 = __pyx_v_fluxes.Edot.infinity;
   __pyx_v_self->fluxlistcpp->Edot.infinity = __pyx_t_1;
 
-  /* "cython/flux_wrap.pyx":35
+  /* "cython/flux_wrap.pyx":44
  *     cdef set_fluxes(self, FluxListCPP fluxes):
  *         self.fluxlistcpp.Edot.infinity = fluxes.Edot.infinity
  *         self.fluxlistcpp.Ldot.infinity = fluxes.Ldot.infinity             # <<<<<<<<<<<<<<
@@ -22553,7 +22665,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   __pyx_t_1 = __pyx_v_fluxes.Ldot.infinity;
   __pyx_v_self->fluxlistcpp->Ldot.infinity = __pyx_t_1;
 
-  /* "cython/flux_wrap.pyx":36
+  /* "cython/flux_wrap.pyx":45
  *         self.fluxlistcpp.Edot.infinity = fluxes.Edot.infinity
  *         self.fluxlistcpp.Ldot.infinity = fluxes.Ldot.infinity
  *         self.fluxlistcpp.Qdot.infinity = fluxes.Qdot.infinity             # <<<<<<<<<<<<<<
@@ -22563,7 +22675,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   __pyx_t_1 = __pyx_v_fluxes.Qdot.infinity;
   __pyx_v_self->fluxlistcpp->Qdot.infinity = __pyx_t_1;
 
-  /* "cython/flux_wrap.pyx":38
+  /* "cython/flux_wrap.pyx":47
  *         self.fluxlistcpp.Qdot.infinity = fluxes.Qdot.infinity
  * 
  *         self.fluxlistcpp.Edot.horizon = fluxes.Edot.horizon             # <<<<<<<<<<<<<<
@@ -22573,7 +22685,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   __pyx_t_1 = __pyx_v_fluxes.Edot.horizon;
   __pyx_v_self->fluxlistcpp->Edot.horizon = __pyx_t_1;
 
-  /* "cython/flux_wrap.pyx":39
+  /* "cython/flux_wrap.pyx":48
  * 
  *         self.fluxlistcpp.Edot.horizon = fluxes.Edot.horizon
  *         self.fluxlistcpp.Ldot.horizon = fluxes.Ldot.horizon             # <<<<<<<<<<<<<<
@@ -22583,7 +22695,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   __pyx_t_1 = __pyx_v_fluxes.Ldot.horizon;
   __pyx_v_self->fluxlistcpp->Ldot.horizon = __pyx_t_1;
 
-  /* "cython/flux_wrap.pyx":40
+  /* "cython/flux_wrap.pyx":49
  *         self.fluxlistcpp.Edot.horizon = fluxes.Edot.horizon
  *         self.fluxlistcpp.Ldot.horizon = fluxes.Ldot.horizon
  *         self.fluxlistcpp.Qdot.horizon = fluxes.Qdot.horizon             # <<<<<<<<<<<<<<
@@ -22593,8 +22705,8 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   __pyx_t_1 = __pyx_v_fluxes.Qdot.horizon;
   __pyx_v_self->fluxlistcpp->Qdot.horizon = __pyx_t_1;
 
-  /* "cython/flux_wrap.pyx":33
- *         del self.fluxlistcpp
+  /* "cython/flux_wrap.pyx":42
+ *         self.fluxlistcpp.Qdot.horizon = 0.
  * 
  *     cdef set_fluxes(self, FluxListCPP fluxes):             # <<<<<<<<<<<<<<
  *         self.fluxlistcpp.Edot.infinity = fluxes.Edot.infinity
@@ -22608,7 +22720,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":42
+/* "cython/flux_wrap.pyx":51
  *         self.fluxlistcpp.Qdot.horizon = fluxes.Qdot.horizon
  * 
  *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
@@ -22617,8 +22729,8 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_5set_infinity_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_5set_infinity_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_7set_infinity_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_7set_infinity_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   double __pyx_v_Edot;
   double __pyx_v_Ldot;
   double __pyx_v_Qdot;
@@ -22653,17 +22765,17 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_5set_infinity_fluxes(PyObject 
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Ldot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 42, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 51, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Qdot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 42, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 51, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_infinity_fluxes") < 0)) __PYX_ERR(4, 42, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_infinity_fluxes") < 0)) __PYX_ERR(4, 51, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -22672,31 +22784,31 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_5set_infinity_fluxes(PyObject 
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 42, __pyx_L3_error)
-    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 42, __pyx_L3_error)
-    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 42, __pyx_L3_error)
+    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 51, __pyx_L3_error)
+    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 51, __pyx_L3_error)
+    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 51, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 42, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 51, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.FluxList.set_infinity_fluxes", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_4set_infinity_fluxes(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self), __pyx_v_Edot, __pyx_v_Ldot, __pyx_v_Qdot);
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_6set_infinity_fluxes(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self), __pyx_v_Edot, __pyx_v_Ldot, __pyx_v_Qdot);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4set_infinity_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot) {
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_infinity_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_infinity_fluxes", 0);
 
-  /* "cython/flux_wrap.pyx":43
+  /* "cython/flux_wrap.pyx":52
  * 
  *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
  *         self.fluxlistcpp.Edot.infinity = Edot             # <<<<<<<<<<<<<<
@@ -22705,7 +22817,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4set_infinity_fluxes(struct __
  */
   __pyx_v_self->fluxlistcpp->Edot.infinity = __pyx_v_Edot;
 
-  /* "cython/flux_wrap.pyx":44
+  /* "cython/flux_wrap.pyx":53
  *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
  *         self.fluxlistcpp.Edot.infinity = Edot
  *         self.fluxlistcpp.Ldot.infinity = Ldot             # <<<<<<<<<<<<<<
@@ -22714,7 +22826,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4set_infinity_fluxes(struct __
  */
   __pyx_v_self->fluxlistcpp->Ldot.infinity = __pyx_v_Ldot;
 
-  /* "cython/flux_wrap.pyx":45
+  /* "cython/flux_wrap.pyx":54
  *         self.fluxlistcpp.Edot.infinity = Edot
  *         self.fluxlistcpp.Ldot.infinity = Ldot
  *         self.fluxlistcpp.Qdot.infinity = Qdot             # <<<<<<<<<<<<<<
@@ -22723,7 +22835,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4set_infinity_fluxes(struct __
  */
   __pyx_v_self->fluxlistcpp->Qdot.infinity = __pyx_v_Qdot;
 
-  /* "cython/flux_wrap.pyx":42
+  /* "cython/flux_wrap.pyx":51
  *         self.fluxlistcpp.Qdot.horizon = fluxes.Qdot.horizon
  * 
  *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
@@ -22738,7 +22850,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4set_infinity_fluxes(struct __
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":47
+/* "cython/flux_wrap.pyx":56
  *         self.fluxlistcpp.Qdot.infinity = Qdot
  * 
  *     def set_horizon_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
@@ -22747,8 +22859,8 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4set_infinity_fluxes(struct __
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_7set_horizon_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_7set_horizon_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_9set_horizon_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_9set_horizon_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   double __pyx_v_Edot;
   double __pyx_v_Ldot;
   double __pyx_v_Qdot;
@@ -22783,17 +22895,17 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_7set_horizon_fluxes(PyObject *
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Ldot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("set_horizon_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 47, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("set_horizon_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 56, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Qdot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("set_horizon_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 47, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("set_horizon_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 56, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_horizon_fluxes") < 0)) __PYX_ERR(4, 47, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_horizon_fluxes") < 0)) __PYX_ERR(4, 56, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -22802,31 +22914,31 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_7set_horizon_fluxes(PyObject *
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 47, __pyx_L3_error)
-    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 47, __pyx_L3_error)
-    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 47, __pyx_L3_error)
+    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 56, __pyx_L3_error)
+    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 56, __pyx_L3_error)
+    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 56, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("set_horizon_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 47, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("set_horizon_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 56, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.FluxList.set_horizon_fluxes", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_6set_horizon_fluxes(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self), __pyx_v_Edot, __pyx_v_Ldot, __pyx_v_Qdot);
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_8set_horizon_fluxes(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self), __pyx_v_Edot, __pyx_v_Ldot, __pyx_v_Qdot);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_horizon_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot) {
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_8set_horizon_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_horizon_fluxes", 0);
 
-  /* "cython/flux_wrap.pyx":48
+  /* "cython/flux_wrap.pyx":57
  * 
  *     def set_horizon_fluxes(self, double Edot, double Ldot, double Qdot):
  *         self.fluxlistcpp.Edot.horizon = Edot             # <<<<<<<<<<<<<<
@@ -22835,7 +22947,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_horizon_fluxes(struct __p
  */
   __pyx_v_self->fluxlistcpp->Edot.horizon = __pyx_v_Edot;
 
-  /* "cython/flux_wrap.pyx":49
+  /* "cython/flux_wrap.pyx":58
  *     def set_horizon_fluxes(self, double Edot, double Ldot, double Qdot):
  *         self.fluxlistcpp.Edot.horizon = Edot
  *         self.fluxlistcpp.Ldot.horizon = Ldot             # <<<<<<<<<<<<<<
@@ -22844,16 +22956,16 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_horizon_fluxes(struct __p
  */
   __pyx_v_self->fluxlistcpp->Ldot.horizon = __pyx_v_Ldot;
 
-  /* "cython/flux_wrap.pyx":50
+  /* "cython/flux_wrap.pyx":59
  *         self.fluxlistcpp.Edot.horizon = Edot
  *         self.fluxlistcpp.Ldot.horizon = Ldot
  *         self.fluxlistcpp.Qdot.horizon = Qdot             # <<<<<<<<<<<<<<
  * 
- *     @property
+ *     def add_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
  */
   __pyx_v_self->fluxlistcpp->Qdot.horizon = __pyx_v_Qdot;
 
-  /* "cython/flux_wrap.pyx":47
+  /* "cython/flux_wrap.pyx":56
  *         self.fluxlistcpp.Qdot.infinity = Qdot
  * 
  *     def set_horizon_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
@@ -22868,28 +22980,608 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_horizon_fluxes(struct __p
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":53
+/* "cython/flux_wrap.pyx":61
+ *         self.fluxlistcpp.Qdot.horizon = Qdot
  * 
- *     @property
- *     def energyflux(self):             # <<<<<<<<<<<<<<
- *         return {
- *             "I": self.fluxlistcpp.Edot.infinity,
+ *     def add_infinity_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Edot.infinity += Edot
+ *         self.fluxlistcpp.Ldot.infinity += Ldot
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_10energyflux_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_10energyflux_1__get__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_11add_infinity_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_11add_infinity_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  double __pyx_v_Edot;
+  double __pyx_v_Ldot;
+  double __pyx_v_Qdot;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_10energyflux___get__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
+  __Pyx_RefNannySetupContext("add_infinity_fluxes (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_Edot,&__pyx_n_s_Ldot,&__pyx_n_s_Qdot,0};
+    PyObject* values[3] = {0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Edot)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Ldot)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("add_infinity_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 61, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Qdot)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("add_infinity_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 61, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "add_infinity_fluxes") < 0)) __PYX_ERR(4, 61, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+    }
+    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 61, __pyx_L3_error)
+    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 61, __pyx_L3_error)
+    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 61, __pyx_L3_error)
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("add_infinity_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 61, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("cybhpt_full.FluxList.add_infinity_fluxes", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_10add_infinity_fluxes(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self), __pyx_v_Edot, __pyx_v_Ldot, __pyx_v_Qdot);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10energyflux___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10add_infinity_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("add_infinity_fluxes", 0);
+
+  /* "cython/flux_wrap.pyx":62
+ * 
+ *     def add_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
+ *         self.fluxlistcpp.Edot.infinity += Edot             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Ldot.infinity += Ldot
+ *         self.fluxlistcpp.Qdot.infinity += Qdot
+ */
+  __pyx_v_self->fluxlistcpp->Edot.infinity = (__pyx_v_self->fluxlistcpp->Edot.infinity + __pyx_v_Edot);
+
+  /* "cython/flux_wrap.pyx":63
+ *     def add_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
+ *         self.fluxlistcpp.Edot.infinity += Edot
+ *         self.fluxlistcpp.Ldot.infinity += Ldot             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Qdot.infinity += Qdot
+ * 
+ */
+  __pyx_v_self->fluxlistcpp->Ldot.infinity = (__pyx_v_self->fluxlistcpp->Ldot.infinity + __pyx_v_Ldot);
+
+  /* "cython/flux_wrap.pyx":64
+ *         self.fluxlistcpp.Edot.infinity += Edot
+ *         self.fluxlistcpp.Ldot.infinity += Ldot
+ *         self.fluxlistcpp.Qdot.infinity += Qdot             # <<<<<<<<<<<<<<
+ * 
+ *     def add_horizon_fluxes(self, double Edot, double Ldot, double Qdot):
+ */
+  __pyx_v_self->fluxlistcpp->Qdot.infinity = (__pyx_v_self->fluxlistcpp->Qdot.infinity + __pyx_v_Qdot);
+
+  /* "cython/flux_wrap.pyx":61
+ *         self.fluxlistcpp.Qdot.horizon = Qdot
+ * 
+ *     def add_infinity_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Edot.infinity += Edot
+ *         self.fluxlistcpp.Ldot.infinity += Ldot
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cython/flux_wrap.pyx":66
+ *         self.fluxlistcpp.Qdot.infinity += Qdot
+ * 
+ *     def add_horizon_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Edot.horizon += Edot
+ *         self.fluxlistcpp.Ldot.horizon += Ldot
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_13add_horizon_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_13add_horizon_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  double __pyx_v_Edot;
+  double __pyx_v_Ldot;
+  double __pyx_v_Qdot;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("add_horizon_fluxes (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_Edot,&__pyx_n_s_Ldot,&__pyx_n_s_Qdot,0};
+    PyObject* values[3] = {0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Edot)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Ldot)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("add_horizon_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 66, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Qdot)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("add_horizon_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 66, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "add_horizon_fluxes") < 0)) __PYX_ERR(4, 66, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+    }
+    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 66, __pyx_L3_error)
+    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 66, __pyx_L3_error)
+    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 66, __pyx_L3_error)
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("add_horizon_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 66, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("cybhpt_full.FluxList.add_horizon_fluxes", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_12add_horizon_fluxes(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self), __pyx_v_Edot, __pyx_v_Ldot, __pyx_v_Qdot);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_12add_horizon_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("add_horizon_fluxes", 0);
+
+  /* "cython/flux_wrap.pyx":67
+ * 
+ *     def add_horizon_fluxes(self, double Edot, double Ldot, double Qdot):
+ *         self.fluxlistcpp.Edot.horizon += Edot             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Ldot.horizon += Ldot
+ *         self.fluxlistcpp.Qdot.horizon += Qdot
+ */
+  __pyx_v_self->fluxlistcpp->Edot.horizon = (__pyx_v_self->fluxlistcpp->Edot.horizon + __pyx_v_Edot);
+
+  /* "cython/flux_wrap.pyx":68
+ *     def add_horizon_fluxes(self, double Edot, double Ldot, double Qdot):
+ *         self.fluxlistcpp.Edot.horizon += Edot
+ *         self.fluxlistcpp.Ldot.horizon += Ldot             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Qdot.horizon += Qdot
+ * 
+ */
+  __pyx_v_self->fluxlistcpp->Ldot.horizon = (__pyx_v_self->fluxlistcpp->Ldot.horizon + __pyx_v_Ldot);
+
+  /* "cython/flux_wrap.pyx":69
+ *         self.fluxlistcpp.Edot.horizon += Edot
+ *         self.fluxlistcpp.Ldot.horizon += Ldot
+ *         self.fluxlistcpp.Qdot.horizon += Qdot             # <<<<<<<<<<<<<<
+ * 
+ *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
+ */
+  __pyx_v_self->fluxlistcpp->Qdot.horizon = (__pyx_v_self->fluxlistcpp->Qdot.horizon + __pyx_v_Qdot);
+
+  /* "cython/flux_wrap.pyx":66
+ *         self.fluxlistcpp.Qdot.infinity += Qdot
+ * 
+ *     def add_horizon_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Edot.horizon += Edot
+ *         self.fluxlistcpp.Ldot.horizon += Ldot
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cython/flux_wrap.pyx":71
+ *         self.fluxlistcpp.Qdot.horizon += Qdot
+ * 
+ *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Edot.infinity += Edot
+ *         self.fluxlistcpp.Ldot.infinity += Ldot
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_15set_infinity_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_15set_infinity_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  double __pyx_v_Edot;
+  double __pyx_v_Ldot;
+  double __pyx_v_Qdot;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("set_infinity_fluxes (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_Edot,&__pyx_n_s_Ldot,&__pyx_n_s_Qdot,0};
+    PyObject* values[3] = {0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Edot)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Ldot)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 71, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Qdot)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 71, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_infinity_fluxes") < 0)) __PYX_ERR(4, 71, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+    }
+    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 71, __pyx_L3_error)
+    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 71, __pyx_L3_error)
+    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 71, __pyx_L3_error)
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 71, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("cybhpt_full.FluxList.set_infinity_fluxes", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_14set_infinity_fluxes(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self), __pyx_v_Edot, __pyx_v_Ldot, __pyx_v_Qdot);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14set_infinity_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("set_infinity_fluxes", 0);
+
+  /* "cython/flux_wrap.pyx":72
+ * 
+ *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
+ *         self.fluxlistcpp.Edot.infinity += Edot             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Ldot.infinity += Ldot
+ *         self.fluxlistcpp.Qdot.infinity += Qdot
+ */
+  __pyx_v_self->fluxlistcpp->Edot.infinity = (__pyx_v_self->fluxlistcpp->Edot.infinity + __pyx_v_Edot);
+
+  /* "cython/flux_wrap.pyx":73
+ *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
+ *         self.fluxlistcpp.Edot.infinity += Edot
+ *         self.fluxlistcpp.Ldot.infinity += Ldot             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Qdot.infinity += Qdot
+ * 
+ */
+  __pyx_v_self->fluxlistcpp->Ldot.infinity = (__pyx_v_self->fluxlistcpp->Ldot.infinity + __pyx_v_Ldot);
+
+  /* "cython/flux_wrap.pyx":74
+ *         self.fluxlistcpp.Edot.infinity += Edot
+ *         self.fluxlistcpp.Ldot.infinity += Ldot
+ *         self.fluxlistcpp.Qdot.infinity += Qdot             # <<<<<<<<<<<<<<
+ * 
+ *     def add_fluxes(self, double EdotH, double LdotH, double QdotH, double EdotI, double LdotI, double QdotI):
+ */
+  __pyx_v_self->fluxlistcpp->Qdot.infinity = (__pyx_v_self->fluxlistcpp->Qdot.infinity + __pyx_v_Qdot);
+
+  /* "cython/flux_wrap.pyx":71
+ *         self.fluxlistcpp.Qdot.horizon += Qdot
+ * 
+ *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Edot.infinity += Edot
+ *         self.fluxlistcpp.Ldot.infinity += Ldot
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cython/flux_wrap.pyx":76
+ *         self.fluxlistcpp.Qdot.infinity += Qdot
+ * 
+ *     def add_fluxes(self, double EdotH, double LdotH, double QdotH, double EdotI, double LdotI, double QdotI):             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Edot.horizon += EdotH
+ *         self.fluxlistcpp.Ldot.horizon += LdotH
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_17add_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_17add_fluxes(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  double __pyx_v_EdotH;
+  double __pyx_v_LdotH;
+  double __pyx_v_QdotH;
+  double __pyx_v_EdotI;
+  double __pyx_v_LdotI;
+  double __pyx_v_QdotI;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("add_fluxes (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_EdotH,&__pyx_n_s_LdotH,&__pyx_n_s_QdotH,&__pyx_n_s_EdotI,&__pyx_n_s_LdotI,&__pyx_n_s_QdotI,0};
+    PyObject* values[6] = {0,0,0,0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+        CYTHON_FALLTHROUGH;
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        CYTHON_FALLTHROUGH;
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_EdotH)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_LdotH)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 1); __PYX_ERR(4, 76, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_QdotH)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 2); __PYX_ERR(4, 76, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  3:
+        if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_EdotI)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 3); __PYX_ERR(4, 76, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  4:
+        if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_LdotI)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 4); __PYX_ERR(4, 76, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  5:
+        if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_QdotI)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 5); __PYX_ERR(4, 76, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "add_fluxes") < 0)) __PYX_ERR(4, 76, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 6) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+      values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+      values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+      values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+    }
+    __pyx_v_EdotH = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_EdotH == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 76, __pyx_L3_error)
+    __pyx_v_LdotH = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_LdotH == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 76, __pyx_L3_error)
+    __pyx_v_QdotH = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_QdotH == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 76, __pyx_L3_error)
+    __pyx_v_EdotI = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_EdotI == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 76, __pyx_L3_error)
+    __pyx_v_LdotI = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_LdotI == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 76, __pyx_L3_error)
+    __pyx_v_QdotI = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_QdotI == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 76, __pyx_L3_error)
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 76, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("cybhpt_full.FluxList.add_fluxes", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_16add_fluxes(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self), __pyx_v_EdotH, __pyx_v_LdotH, __pyx_v_QdotH, __pyx_v_EdotI, __pyx_v_LdotI, __pyx_v_QdotI);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_16add_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_EdotH, double __pyx_v_LdotH, double __pyx_v_QdotH, double __pyx_v_EdotI, double __pyx_v_LdotI, double __pyx_v_QdotI) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("add_fluxes", 0);
+
+  /* "cython/flux_wrap.pyx":77
+ * 
+ *     def add_fluxes(self, double EdotH, double LdotH, double QdotH, double EdotI, double LdotI, double QdotI):
+ *         self.fluxlistcpp.Edot.horizon += EdotH             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Ldot.horizon += LdotH
+ *         self.fluxlistcpp.Qdot.horizon += QdotH
+ */
+  __pyx_v_self->fluxlistcpp->Edot.horizon = (__pyx_v_self->fluxlistcpp->Edot.horizon + __pyx_v_EdotH);
+
+  /* "cython/flux_wrap.pyx":78
+ *     def add_fluxes(self, double EdotH, double LdotH, double QdotH, double EdotI, double LdotI, double QdotI):
+ *         self.fluxlistcpp.Edot.horizon += EdotH
+ *         self.fluxlistcpp.Ldot.horizon += LdotH             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Qdot.horizon += QdotH
+ * 
+ */
+  __pyx_v_self->fluxlistcpp->Ldot.horizon = (__pyx_v_self->fluxlistcpp->Ldot.horizon + __pyx_v_LdotH);
+
+  /* "cython/flux_wrap.pyx":79
+ *         self.fluxlistcpp.Edot.horizon += EdotH
+ *         self.fluxlistcpp.Ldot.horizon += LdotH
+ *         self.fluxlistcpp.Qdot.horizon += QdotH             # <<<<<<<<<<<<<<
+ * 
+ *         self.fluxlistcpp.Edot.infinity += EdotI
+ */
+  __pyx_v_self->fluxlistcpp->Qdot.horizon = (__pyx_v_self->fluxlistcpp->Qdot.horizon + __pyx_v_QdotH);
+
+  /* "cython/flux_wrap.pyx":81
+ *         self.fluxlistcpp.Qdot.horizon += QdotH
+ * 
+ *         self.fluxlistcpp.Edot.infinity += EdotI             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Ldot.infinity += LdotI
+ *         self.fluxlistcpp.Qdot.infinity += QdotI
+ */
+  __pyx_v_self->fluxlistcpp->Edot.infinity = (__pyx_v_self->fluxlistcpp->Edot.infinity + __pyx_v_EdotI);
+
+  /* "cython/flux_wrap.pyx":82
+ * 
+ *         self.fluxlistcpp.Edot.infinity += EdotI
+ *         self.fluxlistcpp.Ldot.infinity += LdotI             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Qdot.infinity += QdotI
+ * 
+ */
+  __pyx_v_self->fluxlistcpp->Ldot.infinity = (__pyx_v_self->fluxlistcpp->Ldot.infinity + __pyx_v_LdotI);
+
+  /* "cython/flux_wrap.pyx":83
+ *         self.fluxlistcpp.Edot.infinity += EdotI
+ *         self.fluxlistcpp.Ldot.infinity += LdotI
+ *         self.fluxlistcpp.Qdot.infinity += QdotI             # <<<<<<<<<<<<<<
+ * 
+ *     @property
+ */
+  __pyx_v_self->fluxlistcpp->Qdot.infinity = (__pyx_v_self->fluxlistcpp->Qdot.infinity + __pyx_v_QdotI);
+
+  /* "cython/flux_wrap.pyx":76
+ *         self.fluxlistcpp.Qdot.infinity += Qdot
+ * 
+ *     def add_fluxes(self, double EdotH, double LdotH, double QdotH, double EdotI, double LdotI, double QdotI):             # <<<<<<<<<<<<<<
+ *         self.fluxlistcpp.Edot.horizon += EdotH
+ *         self.fluxlistcpp.Ldot.horizon += LdotH
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cython/flux_wrap.pyx":86
+ * 
+ *     @property
+ *     def energy(self):             # <<<<<<<<<<<<<<
+ *         return {
+ *             "I": self.fluxlistcpp.Edot.infinity,
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_6energy_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_6energy_1__get__(PyObject *__pyx_v_self) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_6energy___get__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6energy___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -22899,48 +23591,48 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10energyflux___get__(struct __
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/flux_wrap.pyx":54
+  /* "cython/flux_wrap.pyx":87
  *     @property
- *     def energyflux(self):
+ *     def energy(self):
  *         return {             # <<<<<<<<<<<<<<
  *             "I": self.fluxlistcpp.Edot.infinity,
  *             "H": self.fluxlistcpp.Edot.horizon
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "cython/flux_wrap.pyx":55
- *     def energyflux(self):
+  /* "cython/flux_wrap.pyx":88
+ *     def energy(self):
  *         return {
  *             "I": self.fluxlistcpp.Edot.infinity,             # <<<<<<<<<<<<<<
  *             "H": self.fluxlistcpp.Edot.horizon
  *         }
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 55, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 88, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Edot.infinity); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 55, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Edot.infinity); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 88, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_I, __pyx_t_2) < 0) __PYX_ERR(4, 55, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_I, __pyx_t_2) < 0) __PYX_ERR(4, 88, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/flux_wrap.pyx":56
+  /* "cython/flux_wrap.pyx":89
  *         return {
  *             "I": self.fluxlistcpp.Edot.infinity,
  *             "H": self.fluxlistcpp.Edot.horizon             # <<<<<<<<<<<<<<
  *         }
  * 
  */
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Edot.horizon); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 56, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Edot.horizon); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 89, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_H, __pyx_t_2) < 0) __PYX_ERR(4, 55, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_H, __pyx_t_2) < 0) __PYX_ERR(4, 88, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/flux_wrap.pyx":53
+  /* "cython/flux_wrap.pyx":86
  * 
  *     @property
- *     def energyflux(self):             # <<<<<<<<<<<<<<
+ *     def energy(self):             # <<<<<<<<<<<<<<
  *         return {
  *             "I": self.fluxlistcpp.Edot.infinity,
  */
@@ -22949,7 +23641,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10energyflux___get__(struct __
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("cybhpt_full.FluxList.energyflux.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cybhpt_full.FluxList.energy.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -22957,28 +23649,28 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10energyflux___get__(struct __
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":60
+/* "cython/flux_wrap.pyx":93
  * 
  *     @property
- *     def angularmomentumflux(self):             # <<<<<<<<<<<<<<
+ *     def angularmomentum(self):             # <<<<<<<<<<<<<<
  *         return {
  *             "I": self.fluxlistcpp.Ldot.infinity,
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_19angularmomentumflux_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_19angularmomentumflux_1__get__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_15angularmomentum_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_15angularmomentum_1__get__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_19angularmomentumflux___get__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_15angularmomentum___get__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_19angularmomentumflux___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_15angularmomentum___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -22988,48 +23680,48 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_19angularmomentumflux___get__(
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/flux_wrap.pyx":61
+  /* "cython/flux_wrap.pyx":94
  *     @property
- *     def angularmomentumflux(self):
+ *     def angularmomentum(self):
  *         return {             # <<<<<<<<<<<<<<
  *             "I": self.fluxlistcpp.Ldot.infinity,
  *             "H": self.fluxlistcpp.Ldot.horizon
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "cython/flux_wrap.pyx":62
- *     def angularmomentumflux(self):
+  /* "cython/flux_wrap.pyx":95
+ *     def angularmomentum(self):
  *         return {
  *             "I": self.fluxlistcpp.Ldot.infinity,             # <<<<<<<<<<<<<<
  *             "H": self.fluxlistcpp.Ldot.horizon
  *         }
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 62, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 95, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Ldot.infinity); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 62, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Ldot.infinity); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 95, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_I, __pyx_t_2) < 0) __PYX_ERR(4, 62, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_I, __pyx_t_2) < 0) __PYX_ERR(4, 95, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/flux_wrap.pyx":63
+  /* "cython/flux_wrap.pyx":96
  *         return {
  *             "I": self.fluxlistcpp.Ldot.infinity,
  *             "H": self.fluxlistcpp.Ldot.horizon             # <<<<<<<<<<<<<<
  *         }
  * 
  */
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Ldot.horizon); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 63, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Ldot.horizon); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 96, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_H, __pyx_t_2) < 0) __PYX_ERR(4, 62, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_H, __pyx_t_2) < 0) __PYX_ERR(4, 95, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/flux_wrap.pyx":60
+  /* "cython/flux_wrap.pyx":93
  * 
  *     @property
- *     def angularmomentumflux(self):             # <<<<<<<<<<<<<<
+ *     def angularmomentum(self):             # <<<<<<<<<<<<<<
  *         return {
  *             "I": self.fluxlistcpp.Ldot.infinity,
  */
@@ -23038,7 +23730,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_19angularmomentumflux___get__(
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("cybhpt_full.FluxList.angularmomentumflux.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cybhpt_full.FluxList.angularmomentum.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -23046,28 +23738,28 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_19angularmomentumflux___get__(
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":67
+/* "cython/flux_wrap.pyx":100
  * 
  *     @property
- *     def carterflux(self):             # <<<<<<<<<<<<<<
+ *     def carterconstant(self):             # <<<<<<<<<<<<<<
  *         return {
  *             "I": self.fluxlistcpp.Qdot.infinity,
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_10carterflux_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_10carterflux_1__get__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_14carterconstant_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_14carterconstant_1__get__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_10carterflux___get__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_14carterconstant___get__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10carterflux___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14carterconstant___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -23077,48 +23769,48 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10carterflux___get__(struct __
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/flux_wrap.pyx":68
+  /* "cython/flux_wrap.pyx":101
  *     @property
- *     def carterflux(self):
+ *     def carterconstant(self):
  *         return {             # <<<<<<<<<<<<<<
  *             "I": self.fluxlistcpp.Qdot.infinity,
  *             "H": self.fluxlistcpp.Qdot.horizon
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "cython/flux_wrap.pyx":69
- *     def carterflux(self):
+  /* "cython/flux_wrap.pyx":102
+ *     def carterconstant(self):
  *         return {
  *             "I": self.fluxlistcpp.Qdot.infinity,             # <<<<<<<<<<<<<<
  *             "H": self.fluxlistcpp.Qdot.horizon
  *         }
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 69, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 102, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Qdot.infinity); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 69, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Qdot.infinity); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 102, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_I, __pyx_t_2) < 0) __PYX_ERR(4, 69, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_I, __pyx_t_2) < 0) __PYX_ERR(4, 102, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/flux_wrap.pyx":70
+  /* "cython/flux_wrap.pyx":103
  *         return {
  *             "I": self.fluxlistcpp.Qdot.infinity,
  *             "H": self.fluxlistcpp.Qdot.horizon             # <<<<<<<<<<<<<<
  *         }
  * 
  */
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Qdot.horizon); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 70, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Qdot.horizon); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 103, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_H, __pyx_t_2) < 0) __PYX_ERR(4, 69, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_H, __pyx_t_2) < 0) __PYX_ERR(4, 102, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/flux_wrap.pyx":67
+  /* "cython/flux_wrap.pyx":100
  * 
  *     @property
- *     def carterflux(self):             # <<<<<<<<<<<<<<
+ *     def carterconstant(self):             # <<<<<<<<<<<<<<
  *         return {
  *             "I": self.fluxlistcpp.Qdot.infinity,
  */
@@ -23127,7 +23819,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10carterflux___get__(struct __
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("cybhpt_full.FluxList.carterflux.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cybhpt_full.FluxList.carterconstant.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -23142,19 +23834,19 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10carterflux___get__(struct __
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_9__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_9__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_19__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_19__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_8__reduce_cython__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_18__reduce_cython__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_8__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_18__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -23199,19 +23891,19 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_8__reduce_cython__(CYTHON_UNUS
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_11__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_11__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_21__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_21__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_10__setstate_cython__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_20__setstate_cython__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_20__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -23248,7 +23940,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10__setstate_cython__(CYTHON_U
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":74
+/* "cython/flux_wrap.pyx":107
  * 
  * 
  * def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):             # <<<<<<<<<<<<<<
@@ -23294,17 +23986,17 @@ static PyObject *__pyx_pw_11cybhpt_full_41flux(PyObject *__pyx_self, PyObject *_
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_geo)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("flux", 1, 3, 3, 1); __PYX_ERR(4, 74, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("flux", 1, 3, 3, 1); __PYX_ERR(4, 107, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_teuk)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("flux", 1, 3, 3, 2); __PYX_ERR(4, 74, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("flux", 1, 3, 3, 2); __PYX_ERR(4, 107, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "flux") < 0)) __PYX_ERR(4, 74, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "flux") < 0)) __PYX_ERR(4, 107, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -23313,20 +24005,20 @@ static PyObject *__pyx_pw_11cybhpt_full_41flux(PyObject *__pyx_self, PyObject *_
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_s = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_s == (int)-1) && PyErr_Occurred())) __PYX_ERR(4, 74, __pyx_L3_error)
+    __pyx_v_s = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_s == (int)-1) && PyErr_Occurred())) __PYX_ERR(4, 107, __pyx_L3_error)
     __pyx_v_geo = ((struct __pyx_obj_11cybhpt_full_KerrGeodesic *)values[1]);
     __pyx_v_teuk = ((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)values[2]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("flux", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 74, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("flux", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 107, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.flux", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_geo), __pyx_ptype_11cybhpt_full_KerrGeodesic, 1, "geo", 0))) __PYX_ERR(4, 74, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_teuk), __pyx_ptype_11cybhpt_full_TeukolskyMode, 1, "teuk", 0))) __PYX_ERR(4, 74, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_geo), __pyx_ptype_11cybhpt_full_KerrGeodesic, 1, "geo", 0))) __PYX_ERR(4, 107, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_teuk), __pyx_ptype_11cybhpt_full_TeukolskyMode, 1, "teuk", 0))) __PYX_ERR(4, 107, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_40flux(__pyx_self, __pyx_v_s, __pyx_v_geo, __pyx_v_teuk);
 
   /* function exit code */
@@ -23349,7 +24041,7 @@ static PyObject *__pyx_pf_11cybhpt_full_40flux(CYTHON_UNUSED PyObject *__pyx_sel
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("flux", 0);
 
-  /* "cython/flux_wrap.pyx":75
+  /* "cython/flux_wrap.pyx":108
  * 
  * def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):
  *     cdef FluxListCPP fluxescpp = flux_mode(s, dereference(geo.geocpp), dereference(teuk.teukcpp), include_minus_m = 0)             # <<<<<<<<<<<<<<
@@ -23358,29 +24050,29 @@ static PyObject *__pyx_pf_11cybhpt_full_40flux(CYTHON_UNUSED PyObject *__pyx_sel
  */
   __pyx_v_fluxescpp = flux_mode(__pyx_v_s, (*__pyx_v_geo->geocpp), (*__pyx_v_teuk->teukcpp), 0);
 
-  /* "cython/flux_wrap.pyx":76
+  /* "cython/flux_wrap.pyx":109
  * def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):
  *     cdef FluxListCPP fluxescpp = flux_mode(s, dereference(geo.geocpp), dereference(teuk.teukcpp), include_minus_m = 0)
  *     fluxes = FluxList()             # <<<<<<<<<<<<<<
  *     fluxes.set_fluxes(fluxescpp)
  *     return fluxes
  */
-  __pyx_t_1 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_11cybhpt_full_FluxList)); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 76, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_11cybhpt_full_FluxList)); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 109, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_fluxes = ((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "cython/flux_wrap.pyx":77
+  /* "cython/flux_wrap.pyx":110
  *     cdef FluxListCPP fluxescpp = flux_mode(s, dereference(geo.geocpp), dereference(teuk.teukcpp), include_minus_m = 0)
  *     fluxes = FluxList()
  *     fluxes.set_fluxes(fluxescpp)             # <<<<<<<<<<<<<<
  *     return fluxes
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_11cybhpt_full_FluxList *)__pyx_v_fluxes->__pyx_vtab)->set_fluxes(__pyx_v_fluxes, __pyx_v_fluxescpp); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 77, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_11cybhpt_full_FluxList *)__pyx_v_fluxes->__pyx_vtab)->set_fluxes(__pyx_v_fluxes, __pyx_v_fluxescpp); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 110, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/flux_wrap.pyx":78
+  /* "cython/flux_wrap.pyx":111
  *     fluxes = FluxList()
  *     fluxes.set_fluxes(fluxescpp)
  *     return fluxes             # <<<<<<<<<<<<<<
@@ -23390,7 +24082,7 @@ static PyObject *__pyx_pf_11cybhpt_full_40flux(CYTHON_UNUSED PyObject *__pyx_sel
   __pyx_r = ((PyObject *)__pyx_v_fluxes);
   goto __pyx_L0;
 
-  /* "cython/flux_wrap.pyx":74
+  /* "cython/flux_wrap.pyx":107
  * 
  * 
  * def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):             # <<<<<<<<<<<<<<
@@ -25444,7 +26136,7 @@ static PyObject *__pyx_f_11cybhpt_full___pyx_unpickle_MetricModeGenerator__set_s
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":735
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":735
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -25461,7 +26153,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew1", 0);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":736
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":736
  * 
  * cdef inline object PyArray_MultiIterNew1(a):
  *     return PyArray_MultiIterNew(1, <void*>a)             # <<<<<<<<<<<<<<
@@ -25475,7 +26167,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":735
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":735
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -25494,7 +26186,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":738
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":738
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -25511,7 +26203,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew2", 0);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":739
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":739
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)             # <<<<<<<<<<<<<<
@@ -25525,7 +26217,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":738
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":738
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -25544,7 +26236,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":741
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":741
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -25561,7 +26253,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew3", 0);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":742
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":742
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)             # <<<<<<<<<<<<<<
@@ -25575,7 +26267,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":741
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":741
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -25594,7 +26286,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":744
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":744
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -25611,7 +26303,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew4", 0);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":745
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":745
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)             # <<<<<<<<<<<<<<
@@ -25625,7 +26317,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":744
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":744
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -25644,7 +26336,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":747
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":747
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -25661,7 +26353,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew5", 0);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":748
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":748
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)             # <<<<<<<<<<<<<<
@@ -25675,7 +26367,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":747
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":747
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -25694,7 +26386,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":750
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":750
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):             # <<<<<<<<<<<<<<
@@ -25708,7 +26400,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("PyDataType_SHAPE", 0);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":751
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":751
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):             # <<<<<<<<<<<<<<
@@ -25718,7 +26410,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   __pyx_t_1 = (PyDataType_HASSUBARRAY(__pyx_v_d) != 0);
   if (__pyx_t_1) {
 
-    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":752
+    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":752
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):
  *         return <tuple>d.subarray.shape             # <<<<<<<<<<<<<<
@@ -25730,7 +26422,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
     __pyx_r = ((PyObject*)__pyx_v_d->subarray->shape);
     goto __pyx_L0;
 
-    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":751
+    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":751
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):             # <<<<<<<<<<<<<<
@@ -25739,7 +26431,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
  */
   }
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":754
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":754
  *         return <tuple>d.subarray.shape
  *     else:
  *         return ()             # <<<<<<<<<<<<<<
@@ -25753,7 +26445,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
     goto __pyx_L0;
   }
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":750
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":750
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):             # <<<<<<<<<<<<<<
@@ -25768,7 +26460,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":929
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":929
  *     int _import_umath() except -1
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -25780,7 +26472,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_array_base", 0);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":930
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":930
  * 
  * cdef inline void set_array_base(ndarray arr, object base):
  *     Py_INCREF(base) # important to do this before stealing the reference below!             # <<<<<<<<<<<<<<
@@ -25789,7 +26481,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   Py_INCREF(__pyx_v_base);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":931
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":931
  * cdef inline void set_array_base(ndarray arr, object base):
  *     Py_INCREF(base) # important to do this before stealing the reference below!
  *     PyArray_SetBaseObject(arr, base)             # <<<<<<<<<<<<<<
@@ -25798,7 +26490,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   (void)(PyArray_SetBaseObject(__pyx_v_arr, __pyx_v_base));
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":929
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":929
  *     int _import_umath() except -1
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -25810,7 +26502,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   __Pyx_RefNannyFinishContext();
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":933
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":933
  *     PyArray_SetBaseObject(arr, base)
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -25825,7 +26517,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("get_array_base", 0);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":934
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":934
  * 
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)             # <<<<<<<<<<<<<<
@@ -25834,7 +26526,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
  */
   __pyx_v_base = PyArray_BASE(__pyx_v_arr);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":935
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":935
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)
  *     if base is NULL:             # <<<<<<<<<<<<<<
@@ -25844,7 +26536,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_t_1 = ((__pyx_v_base == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":936
+    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":936
  *     base = PyArray_BASE(arr)
  *     if base is NULL:
  *         return None             # <<<<<<<<<<<<<<
@@ -25855,7 +26547,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":935
+    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":935
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)
  *     if base is NULL:             # <<<<<<<<<<<<<<
@@ -25864,7 +26556,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
  */
   }
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":937
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":937
  *     if base is NULL:
  *         return None
  *     return <object>base             # <<<<<<<<<<<<<<
@@ -25876,7 +26568,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_r = ((PyObject *)__pyx_v_base);
   goto __pyx_L0;
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":933
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":933
  *     PyArray_SetBaseObject(arr, base)
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -25891,7 +26583,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":941
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":941
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -25915,7 +26607,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_array", 0);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":942
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":942
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -25931,7 +26623,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":943
+      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":943
  * cdef inline int import_array() except -1:
  *     try:
  *         __pyx_import_array()             # <<<<<<<<<<<<<<
@@ -25940,7 +26632,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
  */
       __pyx_t_4 = _import_array(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(6, 943, __pyx_L3_error)
 
-      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":942
+      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":942
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -25954,7 +26646,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":944
+    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":944
  *     try:
  *         __pyx_import_array()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -25969,7 +26661,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":945
+      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":945
  *         __pyx_import_array()
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")             # <<<<<<<<<<<<<<
@@ -25985,7 +26677,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":942
+    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":942
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26000,7 +26692,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":941
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":941
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -26023,7 +26715,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":947
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":947
  *         raise ImportError("numpy.core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -26047,7 +26739,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_umath", 0);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":948
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":948
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26063,7 +26755,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":949
+      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":949
  * cdef inline int import_umath() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
@@ -26072,7 +26764,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
  */
       __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(6, 949, __pyx_L3_error)
 
-      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":948
+      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":948
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26086,7 +26778,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":950
+    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":950
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -26101,7 +26793,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":951
+      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":951
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -26117,7 +26809,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":948
+    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":948
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26132,7 +26824,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":947
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":947
  *         raise ImportError("numpy.core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -26155,7 +26847,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":953
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":953
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -26179,7 +26871,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_ufunc", 0);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":954
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":954
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26195,7 +26887,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":955
+      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":955
  * cdef inline int import_ufunc() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
@@ -26204,7 +26896,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
  */
       __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(6, 955, __pyx_L3_error)
 
-      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":954
+      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":954
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26218,7 +26910,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":956
+    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":956
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -26233,7 +26925,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":957
+      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":957
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -26249,7 +26941,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":954
+    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":954
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26264,7 +26956,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":953
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":953
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -26287,7 +26979,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":967
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":967
  * 
  * 
  * cdef inline bint is_timedelta64_object(object obj):             # <<<<<<<<<<<<<<
@@ -26300,7 +26992,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("is_timedelta64_object", 0);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":979
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":979
  *     bool
  *     """
  *     return PyObject_TypeCheck(obj, &PyTimedeltaArrType_Type)             # <<<<<<<<<<<<<<
@@ -26310,7 +27002,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   __pyx_r = PyObject_TypeCheck(__pyx_v_obj, (&PyTimedeltaArrType_Type));
   goto __pyx_L0;
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":967
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":967
  * 
  * 
  * cdef inline bint is_timedelta64_object(object obj):             # <<<<<<<<<<<<<<
@@ -26324,7 +27016,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":982
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":982
  * 
  * 
  * cdef inline bint is_datetime64_object(object obj):             # <<<<<<<<<<<<<<
@@ -26337,7 +27029,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("is_datetime64_object", 0);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":994
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":994
  *     bool
  *     """
  *     return PyObject_TypeCheck(obj, &PyDatetimeArrType_Type)             # <<<<<<<<<<<<<<
@@ -26347,7 +27039,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   __pyx_r = PyObject_TypeCheck(__pyx_v_obj, (&PyDatetimeArrType_Type));
   goto __pyx_L0;
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":982
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":982
  * 
  * 
  * cdef inline bint is_datetime64_object(object obj):             # <<<<<<<<<<<<<<
@@ -26361,7 +27053,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":997
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":997
  * 
  * 
  * cdef inline npy_datetime get_datetime64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -26372,7 +27064,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
 static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *__pyx_v_obj) {
   npy_datetime __pyx_r;
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1004
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1004
  *     also needed.  That can be found using `get_datetime64_unit`.
  *     """
  *     return (<PyDatetimeScalarObject*>obj).obval             # <<<<<<<<<<<<<<
@@ -26382,7 +27074,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
   __pyx_r = ((PyDatetimeScalarObject *)__pyx_v_obj)->obval;
   goto __pyx_L0;
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":997
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":997
  * 
  * 
  * cdef inline npy_datetime get_datetime64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -26395,7 +27087,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1007
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1007
  * 
  * 
  * cdef inline npy_timedelta get_timedelta64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -26406,7 +27098,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
 static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject *__pyx_v_obj) {
   npy_timedelta __pyx_r;
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1011
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1011
  *     returns the int64 value underlying scalar numpy timedelta64 object
  *     """
  *     return (<PyTimedeltaScalarObject*>obj).obval             # <<<<<<<<<<<<<<
@@ -26416,7 +27108,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
   __pyx_r = ((PyTimedeltaScalarObject *)__pyx_v_obj)->obval;
   goto __pyx_L0;
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1007
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1007
  * 
  * 
  * cdef inline npy_timedelta get_timedelta64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -26429,7 +27121,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
   return __pyx_r;
 }
 
-/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1014
+/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1014
  * 
  * 
  * cdef inline NPY_DATETIMEUNIT get_datetime64_unit(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -26440,7 +27132,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
 static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObject *__pyx_v_obj) {
   NPY_DATETIMEUNIT __pyx_r;
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1018
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1018
  *     returns the unit part of the dtype for a numpy datetime64 object.
  *     """
  *     return <NPY_DATETIMEUNIT>(<PyDatetimeScalarObject*>obj).obmeta.base             # <<<<<<<<<<<<<<
@@ -26448,7 +27140,7 @@ static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObjec
   __pyx_r = ((NPY_DATETIMEUNIT)((PyDatetimeScalarObject *)__pyx_v_obj)->obmeta.base);
   goto __pyx_L0;
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1014
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1014
  * 
  * 
  * cdef inline NPY_DATETIMEUNIT get_datetime64_unit(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -27833,30 +28525,35 @@ static void __pyx_tp_dealloc_11cybhpt_full_FluxList(PyObject *o) {
   (*Py_TYPE(o)->tp_free)(o);
 }
 
-static PyObject *__pyx_getprop_11cybhpt_full_8FluxList_energyflux(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_11cybhpt_full_8FluxList_10energyflux_1__get__(o);
+static PyObject *__pyx_getprop_11cybhpt_full_8FluxList_energy(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_11cybhpt_full_8FluxList_6energy_1__get__(o);
 }
 
-static PyObject *__pyx_getprop_11cybhpt_full_8FluxList_angularmomentumflux(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_11cybhpt_full_8FluxList_19angularmomentumflux_1__get__(o);
+static PyObject *__pyx_getprop_11cybhpt_full_8FluxList_angularmomentum(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_11cybhpt_full_8FluxList_15angularmomentum_1__get__(o);
 }
 
-static PyObject *__pyx_getprop_11cybhpt_full_8FluxList_carterflux(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_11cybhpt_full_8FluxList_10carterflux_1__get__(o);
+static PyObject *__pyx_getprop_11cybhpt_full_8FluxList_carterconstant(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_11cybhpt_full_8FluxList_14carterconstant_1__get__(o);
 }
 
 static PyMethodDef __pyx_methods_11cybhpt_full_FluxList[] = {
-  {"set_infinity_fluxes", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_8FluxList_5set_infinity_fluxes, METH_VARARGS|METH_KEYWORDS, 0},
-  {"set_horizon_fluxes", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_8FluxList_7set_horizon_fluxes, METH_VARARGS|METH_KEYWORDS, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_11cybhpt_full_8FluxList_9__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_11cybhpt_full_8FluxList_11__setstate_cython__, METH_O, 0},
+  {"zero_fluxes", (PyCFunction)__pyx_pw_11cybhpt_full_8FluxList_5zero_fluxes, METH_NOARGS, 0},
+  {"set_infinity_fluxes", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_8FluxList_7set_infinity_fluxes, METH_VARARGS|METH_KEYWORDS, 0},
+  {"set_horizon_fluxes", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_8FluxList_9set_horizon_fluxes, METH_VARARGS|METH_KEYWORDS, 0},
+  {"add_infinity_fluxes", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_8FluxList_11add_infinity_fluxes, METH_VARARGS|METH_KEYWORDS, 0},
+  {"add_horizon_fluxes", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_8FluxList_13add_horizon_fluxes, METH_VARARGS|METH_KEYWORDS, 0},
+  {"set_infinity_fluxes", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_8FluxList_15set_infinity_fluxes, METH_VARARGS|METH_KEYWORDS, 0},
+  {"add_fluxes", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_8FluxList_17add_fluxes, METH_VARARGS|METH_KEYWORDS, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_11cybhpt_full_8FluxList_19__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_11cybhpt_full_8FluxList_21__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
 static struct PyGetSetDef __pyx_getsets_11cybhpt_full_FluxList[] = {
-  {(char *)"energyflux", __pyx_getprop_11cybhpt_full_8FluxList_energyflux, 0, (char *)0, 0},
-  {(char *)"angularmomentumflux", __pyx_getprop_11cybhpt_full_8FluxList_angularmomentumflux, 0, (char *)0, 0},
-  {(char *)"carterflux", __pyx_getprop_11cybhpt_full_8FluxList_carterflux, 0, (char *)0, 0},
+  {(char *)"energy", __pyx_getprop_11cybhpt_full_8FluxList_energy, 0, (char *)0, 0},
+  {(char *)"angularmomentum", __pyx_getprop_11cybhpt_full_8FluxList_angularmomentum, 0, (char *)0, 0},
+  {(char *)"carterconstant", __pyx_getprop_11cybhpt_full_8FluxList_carterconstant, 0, (char *)0, 0},
   {0, 0, 0, 0, 0}
 };
 
@@ -28214,6 +28911,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_u_ASYM, __pyx_k_ASYM, sizeof(__pyx_k_ASYM), 0, 1, 0, 1},
   {&__pyx_n_u_AUTO, __pyx_k_AUTO, sizeof(__pyx_k_AUTO), 0, 1, 0, 1},
   {&__pyx_n_s_Edot, __pyx_k_Edot, sizeof(__pyx_k_Edot), 0, 0, 1, 1},
+  {&__pyx_n_s_EdotH, __pyx_k_EdotH, sizeof(__pyx_k_EdotH), 0, 0, 1, 1},
+  {&__pyx_n_s_EdotI, __pyx_k_EdotI, sizeof(__pyx_k_EdotI), 0, 0, 1, 1},
   {&__pyx_n_s_En, __pyx_k_En, sizeof(__pyx_k_En), 0, 0, 1, 1},
   {&__pyx_n_u_Error, __pyx_k_Error, sizeof(__pyx_k_Error), 0, 1, 0, 1},
   {&__pyx_n_s_FluxList, __pyx_k_FluxList, sizeof(__pyx_k_FluxList), 0, 0, 1, 1},
@@ -28230,6 +28929,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_Incompatible_checksums_0x_x_vs_0, __pyx_k_Incompatible_checksums_0x_x_vs_0, sizeof(__pyx_k_Incompatible_checksums_0x_x_vs_0), 0, 0, 1, 0},
   {&__pyx_n_s_KerrGeodesic, __pyx_k_KerrGeodesic, sizeof(__pyx_k_KerrGeodesic), 0, 0, 1, 1},
   {&__pyx_n_s_Ldot, __pyx_k_Ldot, sizeof(__pyx_k_Ldot), 0, 0, 1, 1},
+  {&__pyx_n_s_LdotH, __pyx_k_LdotH, sizeof(__pyx_k_LdotH), 0, 0, 1, 1},
+  {&__pyx_n_s_LdotI, __pyx_k_LdotI, sizeof(__pyx_k_LdotI), 0, 0, 1, 1},
   {&__pyx_n_s_Lz, __pyx_k_Lz, sizeof(__pyx_k_Lz), 0, 0, 1, 1},
   {&__pyx_n_u_MST, __pyx_k_MST, sizeof(__pyx_k_MST), 0, 1, 0, 1},
   {&__pyx_n_s_MemoryError, __pyx_k_MemoryError, sizeof(__pyx_k_MemoryError), 0, 0, 1, 1},
@@ -28244,6 +28945,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_Q, __pyx_k_Q, sizeof(__pyx_k_Q), 0, 0, 1, 1},
   {&__pyx_n_s_Qc, __pyx_k_Qc, sizeof(__pyx_k_Qc), 0, 0, 1, 1},
   {&__pyx_n_s_Qdot, __pyx_k_Qdot, sizeof(__pyx_k_Qdot), 0, 0, 1, 1},
+  {&__pyx_n_s_QdotH, __pyx_k_QdotH, sizeof(__pyx_k_QdotH), 0, 0, 1, 1},
+  {&__pyx_n_s_QdotI, __pyx_k_QdotI, sizeof(__pyx_k_QdotI), 0, 0, 1, 1},
   {&__pyx_n_s_R, __pyx_k_R, sizeof(__pyx_k_R), 0, 0, 1, 1},
   {&__pyx_n_s_R0, __pyx_k_R0, sizeof(__pyx_k_R0), 0, 0, 1, 1},
   {&__pyx_n_s_RP0, __pyx_k_RP0, sizeof(__pyx_k_RP0), 0, 0, 1, 1},
@@ -28626,7 +29329,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__20);
   __Pyx_GIVEREF(__pyx_tuple__20);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":945
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":945
  *         __pyx_import_array()
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")             # <<<<<<<<<<<<<<
@@ -28637,7 +29340,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__21);
   __Pyx_GIVEREF(__pyx_tuple__21);
 
-  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":951
+  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":951
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -28976,17 +29679,17 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__69);
   __pyx_codeobj__70 = (PyObject*)__Pyx_PyCode_New(9, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__69, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_metric_coefficient_S0, 540, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__70)) __PYX_ERR(3, 540, __pyx_L1_error)
 
-  /* "cython/flux_wrap.pyx":74
+  /* "cython/flux_wrap.pyx":107
  * 
  * 
  * def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):             # <<<<<<<<<<<<<<
  *     cdef FluxListCPP fluxescpp = flux_mode(s, dereference(geo.geocpp), dereference(teuk.teukcpp), include_minus_m = 0)
  *     fluxes = FluxList()
  */
-  __pyx_tuple__71 = PyTuple_Pack(5, __pyx_n_s_s, __pyx_n_s_geo, __pyx_n_s_teuk, __pyx_n_s_fluxescpp, __pyx_n_s_fluxes); if (unlikely(!__pyx_tuple__71)) __PYX_ERR(4, 74, __pyx_L1_error)
+  __pyx_tuple__71 = PyTuple_Pack(5, __pyx_n_s_s, __pyx_n_s_geo, __pyx_n_s_teuk, __pyx_n_s_fluxescpp, __pyx_n_s_fluxes); if (unlikely(!__pyx_tuple__71)) __PYX_ERR(4, 107, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__71);
   __Pyx_GIVEREF(__pyx_tuple__71);
-  __pyx_codeobj__72 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__71, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_flux_wrap_pyx, __pyx_n_s_flux, 74, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__72)) __PYX_ERR(4, 74, __pyx_L1_error)
+  __pyx_codeobj__72 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__71, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_flux_wrap_pyx, __pyx_n_s_flux, 107, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__72)) __PYX_ERR(4, 107, __pyx_L1_error)
 
   /* "cython/redshift_wrap.pyx":41
  * 
@@ -30313,16 +31016,16 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_metric_coefficient_S0, __pyx_t_1) < 0) __PYX_ERR(3, 540, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/flux_wrap.pyx":74
+  /* "cython/flux_wrap.pyx":107
  * 
  * 
  * def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):             # <<<<<<<<<<<<<<
  *     cdef FluxListCPP fluxescpp = flux_mode(s, dereference(geo.geocpp), dereference(teuk.teukcpp), include_minus_m = 0)
  *     fluxes = FluxList()
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_41flux, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 74, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_41flux, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 107, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_flux, __pyx_t_1) < 0) __PYX_ERR(4, 74, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_flux, __pyx_t_1) < 0) __PYX_ERR(4, 107, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "cython/redshift_wrap.pyx":41

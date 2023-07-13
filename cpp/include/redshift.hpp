@@ -45,4 +45,4 @@ Complex redshift_mode_circular(HertzMode &hertz, BoundaryCondition bc, int l, Ge
 double redshift_regularization_circular(GeodesicSource &geo);
 double redshift_completion_circular(GeodesicSource &geo);
 
-#endif REDSHIFT_HPP
+#endif //REDSHIFT_HPP
