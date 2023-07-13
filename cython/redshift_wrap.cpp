@@ -2910,9 +2910,9 @@ static int __pyx_pf_11cybhpt_full_8FluxList___cinit__(struct __pyx_obj_11cybhpt_
 static void __pyx_pf_11cybhpt_full_8FluxList_2__dealloc__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4set_infinity_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_horizon_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10energyflux___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_19angularmomentumflux___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10carterflux___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6energy___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_15angularmomentum___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14carterconstant___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_8FluxList_8__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_40flux(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_s, struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_geo, struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_teuk); /* proto */
@@ -22871,25 +22871,25 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_horizon_fluxes(struct __p
 /* "cython/flux_wrap.pyx":53
  * 
  *     @property
- *     def energyflux(self):             # <<<<<<<<<<<<<<
+ *     def energy(self):             # <<<<<<<<<<<<<<
  *         return {
  *             "I": self.fluxlistcpp.Edot.infinity,
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_10energyflux_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_10energyflux_1__get__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_6energy_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_6energy_1__get__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_10energyflux___get__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_6energy___get__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10energyflux___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6energy___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -22901,7 +22901,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10energyflux___get__(struct __
 
   /* "cython/flux_wrap.pyx":54
  *     @property
- *     def energyflux(self):
+ *     def energy(self):
  *         return {             # <<<<<<<<<<<<<<
  *             "I": self.fluxlistcpp.Edot.infinity,
  *             "H": self.fluxlistcpp.Edot.horizon
@@ -22909,7 +22909,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10energyflux___get__(struct __
   __Pyx_XDECREF(__pyx_r);
 
   /* "cython/flux_wrap.pyx":55
- *     def energyflux(self):
+ *     def energy(self):
  *         return {
  *             "I": self.fluxlistcpp.Edot.infinity,             # <<<<<<<<<<<<<<
  *             "H": self.fluxlistcpp.Edot.horizon
@@ -22940,7 +22940,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10energyflux___get__(struct __
   /* "cython/flux_wrap.pyx":53
  * 
  *     @property
- *     def energyflux(self):             # <<<<<<<<<<<<<<
+ *     def energy(self):             # <<<<<<<<<<<<<<
  *         return {
  *             "I": self.fluxlistcpp.Edot.infinity,
  */
@@ -22949,7 +22949,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10energyflux___get__(struct __
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("cybhpt_full.FluxList.energyflux.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cybhpt_full.FluxList.energy.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -22960,25 +22960,25 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10energyflux___get__(struct __
 /* "cython/flux_wrap.pyx":60
  * 
  *     @property
- *     def angularmomentumflux(self):             # <<<<<<<<<<<<<<
+ *     def angularmomentum(self):             # <<<<<<<<<<<<<<
  *         return {
  *             "I": self.fluxlistcpp.Ldot.infinity,
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_19angularmomentumflux_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_19angularmomentumflux_1__get__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_15angularmomentum_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_15angularmomentum_1__get__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_19angularmomentumflux___get__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_15angularmomentum___get__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_19angularmomentumflux___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_15angularmomentum___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -22990,7 +22990,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_19angularmomentumflux___get__(
 
   /* "cython/flux_wrap.pyx":61
  *     @property
- *     def angularmomentumflux(self):
+ *     def angularmomentum(self):
  *         return {             # <<<<<<<<<<<<<<
  *             "I": self.fluxlistcpp.Ldot.infinity,
  *             "H": self.fluxlistcpp.Ldot.horizon
@@ -22998,7 +22998,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_19angularmomentumflux___get__(
   __Pyx_XDECREF(__pyx_r);
 
   /* "cython/flux_wrap.pyx":62
- *     def angularmomentumflux(self):
+ *     def angularmomentum(self):
  *         return {
  *             "I": self.fluxlistcpp.Ldot.infinity,             # <<<<<<<<<<<<<<
  *             "H": self.fluxlistcpp.Ldot.horizon
@@ -23029,7 +23029,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_19angularmomentumflux___get__(
   /* "cython/flux_wrap.pyx":60
  * 
  *     @property
- *     def angularmomentumflux(self):             # <<<<<<<<<<<<<<
+ *     def angularmomentum(self):             # <<<<<<<<<<<<<<
  *         return {
  *             "I": self.fluxlistcpp.Ldot.infinity,
  */
@@ -23038,7 +23038,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_19angularmomentumflux___get__(
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("cybhpt_full.FluxList.angularmomentumflux.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cybhpt_full.FluxList.angularmomentum.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -23049,25 +23049,25 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_19angularmomentumflux___get__(
 /* "cython/flux_wrap.pyx":67
  * 
  *     @property
- *     def carterflux(self):             # <<<<<<<<<<<<<<
+ *     def carterconstant(self):             # <<<<<<<<<<<<<<
  *         return {
  *             "I": self.fluxlistcpp.Qdot.infinity,
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_10carterflux_1__get__(PyObject *__pyx_v_self); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_8FluxList_10carterflux_1__get__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_14carterconstant_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_8FluxList_14carterconstant_1__get__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_10carterflux___get__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cybhpt_full_8FluxList_14carterconstant___get__(((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10carterflux___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
+static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14carterconstant___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -23079,7 +23079,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10carterflux___get__(struct __
 
   /* "cython/flux_wrap.pyx":68
  *     @property
- *     def carterflux(self):
+ *     def carterconstant(self):
  *         return {             # <<<<<<<<<<<<<<
  *             "I": self.fluxlistcpp.Qdot.infinity,
  *             "H": self.fluxlistcpp.Qdot.horizon
@@ -23087,7 +23087,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10carterflux___get__(struct __
   __Pyx_XDECREF(__pyx_r);
 
   /* "cython/flux_wrap.pyx":69
- *     def carterflux(self):
+ *     def carterconstant(self):
  *         return {
  *             "I": self.fluxlistcpp.Qdot.infinity,             # <<<<<<<<<<<<<<
  *             "H": self.fluxlistcpp.Qdot.horizon
@@ -23118,7 +23118,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10carterflux___get__(struct __
   /* "cython/flux_wrap.pyx":67
  * 
  *     @property
- *     def carterflux(self):             # <<<<<<<<<<<<<<
+ *     def carterconstant(self):             # <<<<<<<<<<<<<<
  *         return {
  *             "I": self.fluxlistcpp.Qdot.infinity,
  */
@@ -23127,7 +23127,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10carterflux___get__(struct __
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("cybhpt_full.FluxList.carterflux.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cybhpt_full.FluxList.carterconstant.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -27833,16 +27833,16 @@ static void __pyx_tp_dealloc_11cybhpt_full_FluxList(PyObject *o) {
   (*Py_TYPE(o)->tp_free)(o);
 }
 
-static PyObject *__pyx_getprop_11cybhpt_full_8FluxList_energyflux(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_11cybhpt_full_8FluxList_10energyflux_1__get__(o);
+static PyObject *__pyx_getprop_11cybhpt_full_8FluxList_energy(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_11cybhpt_full_8FluxList_6energy_1__get__(o);
 }
 
-static PyObject *__pyx_getprop_11cybhpt_full_8FluxList_angularmomentumflux(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_11cybhpt_full_8FluxList_19angularmomentumflux_1__get__(o);
+static PyObject *__pyx_getprop_11cybhpt_full_8FluxList_angularmomentum(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_11cybhpt_full_8FluxList_15angularmomentum_1__get__(o);
 }
 
-static PyObject *__pyx_getprop_11cybhpt_full_8FluxList_carterflux(PyObject *o, CYTHON_UNUSED void *x) {
-  return __pyx_pw_11cybhpt_full_8FluxList_10carterflux_1__get__(o);
+static PyObject *__pyx_getprop_11cybhpt_full_8FluxList_carterconstant(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_11cybhpt_full_8FluxList_14carterconstant_1__get__(o);
 }
 
 static PyMethodDef __pyx_methods_11cybhpt_full_FluxList[] = {
@@ -27854,9 +27854,9 @@ static PyMethodDef __pyx_methods_11cybhpt_full_FluxList[] = {
 };
 
 static struct PyGetSetDef __pyx_getsets_11cybhpt_full_FluxList[] = {
-  {(char *)"energyflux", __pyx_getprop_11cybhpt_full_8FluxList_energyflux, 0, (char *)0, 0},
-  {(char *)"angularmomentumflux", __pyx_getprop_11cybhpt_full_8FluxList_angularmomentumflux, 0, (char *)0, 0},
-  {(char *)"carterflux", __pyx_getprop_11cybhpt_full_8FluxList_carterflux, 0, (char *)0, 0},
+  {(char *)"energy", __pyx_getprop_11cybhpt_full_8FluxList_energy, 0, (char *)0, 0},
+  {(char *)"angularmomentum", __pyx_getprop_11cybhpt_full_8FluxList_angularmomentum, 0, (char *)0, 0},
+  {(char *)"carterconstant", __pyx_getprop_11cybhpt_full_8FluxList_carterconstant, 0, (char *)0, 0},
   {0, 0, 0, 0, 0}
 };
 
