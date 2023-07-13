@@ -134,3 +134,5 @@ test/
 tests/
 test-temp/
 .vscode/
+dev_compile.sh
+setup_dev.py
