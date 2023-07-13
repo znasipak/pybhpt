@@ -60,8 +60,6 @@ full_dependence = [*geo_dependence, *teuk_dependence, *radial_dependence, *hertz
 cpu_extension = dict(
     libraries=libraries,
     language='c++',
-    # extra_compile_args=["-Xclang", "-fopenmp", "-O2"], 
-    # extra_compile_args=["-Xclang", "-fopenmp", "-O0", "-ggdb"], # use to speed up compilation during development
     include_dirs=["cpp/include", np.get_include()],
 )
 
@@ -81,7 +79,7 @@ setup(
     description = "Black Hole Perturbation Theory and Self-Force Algorithms in Python",
     ext_modules = cythonize(ext_modules, language_level = "3"),
     packages=["pybhpt"],
-    py_modules=["pybhpt.geo", "pybhpt.swsh", "pybhpt.radial", "pybhpt.teuk", "pybhpt.hertz", "pybhpt.metric"],
+    py_modules=["pybhpt.geo", "pybhpt.swsh", "pybhpt.radial", "pybhpt.teuk", "pybhpt.hertz", "pybhpt.metric", "pybhpt.flux"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License (GPL)",
