@@ -2,28 +2,33 @@ from cybhpt_full import FluxList as FluxListCython
 from cybhpt_full import flux as FluxCython
 
 class FluxList:
-    def __init__(self, fluxlist=None):
-        if fluxlist is None:
-            self.fluxlist = [{"I": 0., "H": 0}, {"I": 0., "H": 0}, {"I": 0., "H": 0}]
+    def __init__(self, fluxes=None):
+        if fluxes is None:
+            self.fluxes = [{"I": 0., "H": 0.}, {"I": 0., "H": 0.}, {"I": 0., "H": 0.}]
+        elif len(fluxes) != 3:
+            self.fluxes = [{"I": 0., "H": 0.}, {"I": 0., "H": 0.}, {"I": 0., "H": 0.}]
         else:
-            self.fluxlist = fluxlist
+            self.fluxes = fluxes
 
-    def __add__(self, fluxlist2):
-        for i in range(3):
-            for bc in ["H", "I"]:
-                self.fluxlist[0][bc] += fluxlist2[0][bc]
+    # def __add__(self, fluxlist2):
+    #     for i in range(3):
+    #         for bc in ["H", "I"]:
+    #             self.fluxes[i][bc] += fluxlist2.fluxes[i][bc]
     
     @property
     def energy(self):
-        return self.fluxlist.energy
+        return self.fluxes[0]
 
     @property
     def angularmomentum(self):
-        return self.fluxlist.angularmomentum
+        return self.fluxes[1]
 
     @property
     def carterconstant(self):
-        return self.fluxlist.carterconstant
+        return self.fluxes[2]
+    
+    def __call__(self):
+        return self.fluxes
 
     
 class FluxMode:
@@ -54,7 +59,7 @@ class FluxMode:
     
     @property
     def fluxes(self):
-        return [self.energy, self.angularmomentum, self.carterconstant]
+        return FluxList([self.energy, self.angularmomentum, self.carterconstant])
 
     @property
     def horizonfluxes(self):
