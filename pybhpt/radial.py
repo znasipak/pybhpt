@@ -15,6 +15,7 @@ class RadialTeukolsky:
     @property
     def spinweight(self):
         return self.base.spinweight
+    
     @property
     def s(self):
         return self.spinweight
@@ -86,7 +87,7 @@ class RadialTeukolsky:
     
     def radialderivative2(self, bc, pos):
         return self.base.derivative2(bc, pos)
-    
+
     def radialsolutions(self, bc):
         return np.array([self.base.solution(bc, i) for i in range(self.nsamples)])
     
