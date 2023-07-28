@@ -57,28 +57,15 @@ unit_dependence = ["cpp/src/unit_test.cpp", *fluxes_dependence]
 
 full_dependence = [*geo_dependence, *teuk_dependence, *radial_dependence, *hertz_dependence, *metriccoeffs_dependence, *fluxes_dependence, *redshift_dependence, *unit_dependence]
 
-# create library of all the c++ files that get linked at the end in setup so that we are
-# not duplicating c++ file compilation across the different extensions
-lib_extension = dict(
-    sources = [*set(full_dependence)],
-    libraries=libraries,
-    language='c++',
-    include_dirs = ["cpp/include", base_path + "/include"],
-)
-
-cppbhpt = ['cppbhpt', lib_extension]
-
 cpu_extension = dict(
     libraries=libraries,
     language='c++',
-    # extra_compile_args=["-Xclang", "-fopenmp", "-O2"], 
-    # extra_compile_args=["-Xclang", "-fopenmp", "-O0", "-ggdb"], # use to speed up compilation during development
     include_dirs=["cpp/include", np.get_include()],
 )
 
 teuk_ext = Extension(
     "cybhpt_full", 
-    sources=["cython/redshift_wrap.pyx"], 
+    sources=["cython/redshift_wrap.pyx", *set(full_dependence)], 
     **cpu_extension,
 )
 
@@ -92,7 +79,7 @@ setup(
     description = "Black Hole Perturbation Theory and Self-Force Algorithms in Python",
     ext_modules = cythonize(ext_modules, language_level = "3"),
     packages=["pybhpt"],
-    py_modules=["pybhpt.geo", "pybhpt.swsh", "pybhpt.radial", "pybhpt.teuk", "pybhpt.hertz", "pybhpt.metric"],
+    py_modules=["pybhpt.geo", "pybhpt.swsh", "pybhpt.radial", "pybhpt.teuk", "pybhpt.hertz", "pybhpt.metric", "pybhpt.flux"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License (GPL)",
@@ -100,7 +87,6 @@ setup(
         "Programming Language :: C++",
         "Programming Language :: Cython",
     ],
-    libraries = [cppbhpt],
     cmdclass = {'build_ext': build_ext},
     zip_safe=False
 )
