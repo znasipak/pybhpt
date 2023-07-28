@@ -55,4 +55,4 @@ ComplexMatrix tetrad_velocity_4(double a, double En, double Lz, double Qc, Vecto
 ComplexMatrix tetrad_velocity_4_dz(double a, double En, double Lz, double Qc, Vector r, Vector z);
 ComplexMatrix tetrad_velocity_4_dz2(double a, double En, double Lz, double Qc, Vector r, Vector z);
 
-#endif METRIC_COEFFS_HPP
+#endif //METRIC_COEFFS_HPP
