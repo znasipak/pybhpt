@@ -50,21 +50,21 @@ cdef class FluxList:
         self.fluxlistcpp.Qdot.horizon = Qdot
 
     @property
-    def energyflux(self):
+    def energy(self):
         return {
             "I": self.fluxlistcpp.Edot.infinity,
             "H": self.fluxlistcpp.Edot.horizon
         }
 
     @property
-    def angularmomentumflux(self):
+    def angularmomentum(self):
         return {
             "I": self.fluxlistcpp.Ldot.infinity,
             "H": self.fluxlistcpp.Ldot.horizon
         }
 
     @property
-    def carterflux(self):
+    def carterconstant(self):
         return {
             "I": self.fluxlistcpp.Qdot.infinity,
             "H": self.fluxlistcpp.Qdot.horizon
