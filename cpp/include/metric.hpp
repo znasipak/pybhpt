@@ -84,4 +84,4 @@ void save_metric_tetrad_data(std::string filename, Vector t, Vector r, Vector z,
 void save_metric_data(std::string filename, Vector t, Vector r, Vector z, Vector phi, Vector hab);
 void save_full_metric_data(std::string filename, Vector t, Vector r, Vector z, Vector phi, RealMatrix hab);
 
-#endif METRIC_HPP
+#endif //METRIC_HPP

@@ -1251,8 +1251,8 @@ TeukolskyAmplitudes teukolsky_amplitude_circeq(int s, int L, int m, GeodesicTraj
 	integrand(ZlmIn, ZlmUp, L, m, 0, 0, geoConstants, 0., 0., rp, thp, 0., 0., 0., 0.,
 		R0, Rp0, Rpp0, R1, Rp1, Rpp1, S, Sp, Spp);
 
-	ZlmUp *= 8.*M_PI/W/geoConstants.upsilonT;
-	ZlmIn *= 8.*M_PI/W/geoConstants.upsilonT;
+	ZlmUp *= -8.*M_PI/W/geoConstants.upsilonT;
+	ZlmIn *= -8.*M_PI/W/geoConstants.upsilonT;
 
 	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
 
