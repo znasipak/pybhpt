@@ -23,7 +23,7 @@ class TeukolskyMode:
 
     @property
     def polarmode(self):
-        return self.base.spipolarmodenweight
+        return self.base.polarmode
 
     @property
     def blackholespin(self):
