@@ -1,6 +1,7 @@
 from libcpp.vector cimport vector
 from libcpp.complex cimport complex as cpp_complex
 from cython.operator cimport dereference
+from libcpp.string cimport string as cpp_string
 import numpy as np
 cimport numpy as np
 
@@ -20,6 +21,17 @@ cdef extern from "fluxes.hpp":
         FluxesCPP Qdot
 
     FluxListCPP flux_mode(int s, GeodesicSource& geo, TeukolskyModeCPP& teukMode, int include_minus_m)
+
+    FluxListCPP fluxes(GeodesicSource& geo)
+    FluxListCPP fluxes(int s, GeodesicSource& geo)
+    FluxListCPP flux_l(int s, int L, GeodesicSource& geo)
+    FluxListCPP flux_lm(int s, int L, int m, GeodesicSource& geo)
+    FluxListCPP flux_lm_sum(int s, int L, int m, GeodesicSource& geo)
+    FluxListCPP flux_lmk(int s, int L, int m, int k, GeodesicSource& geo)
+    FluxListCPP flux_lmk_sum(int s, int L, int m, int k, GeodesicSource& geo)
+
+    void full_flux_parallel_l(int s, GeodesicSource geo, int modeMax, cpp_string dir)
+    void full_flux_parallel_lm(GeodesicSource geo, int lMax, cpp_string dir)
 
 cdef class FluxList:
     cdef FluxListCPP *fluxlistcpp
@@ -109,3 +121,9 @@ def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):
     fluxes = FluxList()
     fluxes.set_fluxes(fluxescpp)
     return fluxes
+
+def full_flux_parallel_l_py(int s, KerrGeodesic geo, int modeMax, unicode wdir):
+    full_flux_parallel_l(s, dereference(geo.geocpp), modeMax, wdir.encode())
+
+def full_flux_parallel_lm_py(KerrGeodesic geo, int lmax, unicode wdir):
+    full_flux_parallel_lm(dereference(geo.geocpp), lmax, wdir.encode())

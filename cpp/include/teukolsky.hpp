@@ -20,7 +20,7 @@ public:
 	int generateSolutions(double omega, GeodesicTrajectory &traj, GeodesicConstants &geoConst, Vector r, Vector theta, SolutionMethod method, int samplesize);
 	int generateSolutions(SpinWeightedHarmonic& swsh, RadialTeukolsky& teuk, GeodesicTrajectory& traj, GeodesicConstants &geoConst);
 
-	int extendSolutions(Vector theta, Vector r);
+	// int extendSolutions(Vector theta, Vector r);
 	int flipSpinWeightAndFrequency();
 	int flipSpinWeight();
 
@@ -44,6 +44,7 @@ public:
 	ComplexVector getHomogeneousRadialDerivative(BoundaryCondition bc);
 	ComplexVector getHomogeneousSecondRadialDerivative(BoundaryCondition bc);
 	Complex getTeukolskyAmplitude(BoundaryCondition bc);
+	double getTeukolskyAmplitudePrecision(BoundaryCondition bc);
 	ComplexVector getRadialSolution(BoundaryCondition bc);
 	ComplexVector getRadialDerivative(BoundaryCondition bc);
 
@@ -90,6 +91,8 @@ private:
 
 	Complex _ZlmIn;
 	Complex _ZlmUp;
+	double _ZlmInPrecision;
+	double _ZlmUpPrecision;
 };
 
 void flip_spin_of_coupling_coefficients(Vector &bslmo, int L, int m);

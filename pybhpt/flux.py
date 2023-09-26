@@ -1,31 +1,8 @@
 from cybhpt_full import FluxList as FluxListCython
 from cybhpt_full import flux as FluxCython
+from cybhpt_full import full_flux_parallel_l_py
 
 class FluxList:
-<<<<<<< HEAD
-    def __init__(self, fluxlist=None):
-        if fluxlist is None:
-            self.fluxlist = [{"I": 0., "H": 0}, {"I": 0., "H": 0}, {"I": 0., "H": 0}]
-        else:
-            self.fluxlist = fluxlist
-
-    def __add__(self, fluxlist2):
-        for i in range(3):
-            for bc in ["H", "I"]:
-                self.fluxlist[0][bc] += fluxlist2[0][bc]
-    
-    @property
-    def energy(self):
-        return self.fluxlist.energy
-
-    @property
-    def angularmomentum(self):
-        return self.fluxlist.angularmomentum
-
-    @property
-    def carterconstant(self):
-        return self.fluxlist.carterconstant
-=======
     def __init__(self, fluxes=None):
         if fluxes is None:
             self.fluxes = [{"I": 0., "H": 0.}, {"I": 0., "H": 0.}, {"I": 0., "H": 0.}]
@@ -53,7 +30,6 @@ class FluxList:
     
     def __call__(self):
         return self.fluxes
->>>>>>> e2354353061328e127ed9ca05c77018a631e6945
 
     
 class FluxMode:
@@ -84,11 +60,7 @@ class FluxMode:
     
     @property
     def fluxes(self):
-<<<<<<< HEAD
-        return [self.energy, self.angularmomentum, self.carterconstant]
-=======
         return FluxList([self.energy, self.angularmomentum, self.carterconstant])
->>>>>>> e2354353061328e127ed9ca05c77018a631e6945
 
     @property
     def horizonfluxes(self):
@@ -101,3 +73,9 @@ class FluxMode:
     @property
     def totalfluxes(self):
         return [self.energy["I"] + self.energy["H"], self.angularmomentum["I"] + self.angularmomentum["H"], self.carterconstant["I"] + self.carterconstant["H"]]
+
+def parallel_flux(s, geo, lMax = 16, dir = "temp/"):
+    if dir[-1] == "/":
+        full_flux_parallel_l_py(s, geo.base, lMax, dir)
+    else:
+        full_flux_parallel_l_py(s, geo.base, lMax, dir + "/")

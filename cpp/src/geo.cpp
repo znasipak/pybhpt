@@ -2,6 +2,8 @@
 
 #include "geo.hpp"
 
+#define FOURIER_EPS 1.e-13
+
 GeodesicTrajectory::GeodesicTrajectory(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta): tR(tR), tTheta(tTheta), r(r), theta(theta), phiR(phiR), phiTheta(phiTheta) {}
 double GeodesicTrajectory::getTimeAccumulationRadial(int pos){ return tR[pos]; }
 double GeodesicTrajectory::getTimeAccumulationPolar(int pos){ return tTheta[pos]; }
@@ -55,7 +57,7 @@ GeodesicSource::GeodesicSource(double a, double p, double e, double x, int Nsamp
 		En = kerr_geo_energy_circ(a*x, p);
 		Lz = kerr_geo_momentum_circ(a*x, p);
 		upT = kerr_geo_time_frequency_circ(a*x, p);
-		upPh = kerr_geo_azimuthal_frequency_circ(a*x, p);
+		upPh = x*kerr_geo_azimuthal_frequency_circ(a*x, p);
 	}else{
 		kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
 		kerr_geo_radial_roots(r1, r2, r3, r4, a, p, e, En, Lz, Qc);
@@ -1207,7 +1209,7 @@ Vector mino_of_psi_fourier(double const &a, double const &p, double const &e, do
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample);
 	double fourierCompare = 0;
-	while(abs(fourierCompare - fourierTest) > DBL_EPSILON && Nsample < pow(2, 12)){
+	while(abs(fourierCompare - fourierTest) > FOURIER_EPS && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*dmino_dpsi((M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)), a, p, e, En, r3, r4)*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
 		}
@@ -1219,15 +1221,23 @@ Vector mino_of_psi_fourier(double const &a, double const &p, double const &e, do
 	Nsample += 1;
 	Vector fourier(Nsample);
 
-	for(int i = 0; i < Nsample; i++){
+	int convergeFlag = 0;
+	int i = 0;
+	while(i < Nsample && convergeFlag < 2){
 		fourier[i] = dmino_dpsi(0., a, p, e, En, r3, r4) + pow(-1., i)*dmino_dpsi(M_PI, a, p, e, En, r3, r4);
 		for(int j = 1; j < Nsample - 1; j++){
 			fourier[i] += 2.*dmino_dpsi(M_PI*double(j)/double(Nsample - 1), a, p, e, En, r3, r4)*cos(M_PI*double(i*j)/double(Nsample - 1));
 		}
 		fourier[i] /= double(Nsample - 1);
-		if(abs(fourier[i]) < 5*DBL_EPSILON){
-			fourier[i] = 0.;
+		if(i > 0){
+			// std::cout << "f_" << i << " = " << abs(fourier[i])/i << "\n";
+			if(abs(fourier[i])/i < abs(fourier[1])*FOURIER_EPS){
+				convergeFlag += 1; // if two consecutive Fourier coefficients fall below threshold, cutoff construction of higher-frequency coefficients
+			}else{
+				convergeFlag = 0;
+			}
 		}
+		i++;
 	}
 
 	return fourier;
@@ -1245,7 +1255,7 @@ Vector mino_of_chi_schw_fourier(double const &Lz, double const &Qc){
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample);
 	double fourierCompare = 0;
-	while(abs(fourierCompare - fourierTest) > DBL_EPSILON && Nsample < pow(2, 11)){
+	while(abs(fourierCompare - fourierTest) > FOURIER_EPS && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*dminodchi*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
 		}
@@ -1258,15 +1268,22 @@ Vector mino_of_chi_schw_fourier(double const &Lz, double const &Qc){
 	Nsample += 1;
 	Vector fourier(Nsample);
 
-	for(int i = 0; i < Nsample; i++){
+	int convergeFlag = 0;
+	int i = 0;
+	while(i < Nsample && convergeFlag < 2){
 		fourier[i] = dminodchi + pow(-1., i)*dminodchi;
 		for(int j = 1; j < Nsample - 1; j++){
 			fourier[i] += 2.*dminodchi*cos(M_PI*double(i*j)/double(Nsample - 1));
 		}
 		fourier[i] /= double(Nsample - 1);
-		if(abs(fourier[i]) < 5*DBL_EPSILON){
-			fourier[i] = 0.;
+		if(i > 0){
+			if(abs(fourier[i])/i < abs(fourier[1])*FOURIER_EPS){
+				convergeFlag += 1; // if two consecutive Fourier coefficients fall below threshold, cutoff construction of higher-frequency coefficients
+			}else{
+				convergeFlag = 0;
+			}
 		}
+		i++;
 	}
 
 	return fourier;
@@ -1283,7 +1300,7 @@ Vector mino_of_chi_fourier(double const &a, double const &En, double const &z1, 
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample);
 	double fourierCompare = 0;
-	while(abs(fourierCompare - fourierTest) > DBL_EPSILON && Nsample < pow(2, 11)){
+	while(abs(fourierCompare - fourierTest) > FOURIER_EPS && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*dmino_dchi((M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)), a, En, z1, z2)*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
 		}
@@ -1296,15 +1313,22 @@ Vector mino_of_chi_fourier(double const &a, double const &En, double const &z1, 
 	Nsample += 1;
 	Vector fourier(Nsample);
 
-	for(int i = 0; i < Nsample; i++){
+	int convergeFlag = 0;
+	int i = 0;
+	while(i < Nsample && convergeFlag < 2){
 		fourier[i] = dmino_dchi(0., a, En, z1, z2) + pow(-1., i)*dmino_dchi(M_PI, a, En, z1, z2);
 		for(int j = 1; j < Nsample - 1; j++){
 			fourier[i] += 2.*dmino_dchi(M_PI*double(j)/double(Nsample - 1), a, En, z1, z2)*cos(M_PI*double(i*j)/double(Nsample - 1));
 		}
 		fourier[i] /= double(Nsample - 1);
-		if(abs(fourier[i]) < 5*DBL_EPSILON){
-			fourier[i] = 0.;
+		if(i > 0){
+			if(abs(fourier[i])/i < abs(fourier[1])*FOURIER_EPS){
+				convergeFlag += 1; // if two consecutive Fourier coefficients fall below threshold, cutoff construction of higher-frequency coefficients
+			}else{
+				convergeFlag = 0;
+			}
 		}
+		i++;
 	}
 
 	return fourier;
@@ -1336,7 +1360,7 @@ Vector kepler_phase_of_angle_fourier(Vector const &fourier){
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample);
 	double fourierCompare = 0;
-	while(abs(fourierCompare - fourierTest) > DBL_EPSILON && Nsample < pow(2, 11)){
+	while(abs(fourierCompare - fourierTest) > FOURIER_EPS && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*cos(nTest*freq*mino_of_kepler_phase(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample), fourier));
 		}
@@ -1360,7 +1384,8 @@ Vector kepler_phase_of_angle_fourier(Vector const &fourier){
 		// std::cout << "f_"<<i<<" = "<< 0.5*psi_fourier[i] << "\n";
 	}
 	int i = i0;
-	while(i < Nsample && (abs(psi_fourier[i - 1]) > 10*DBL_EPSILON || abs(psi_fourier[i - 2]) > 10*DBL_EPSILON)){
+	double tol = 1.e-14;
+	while(i < Nsample && (abs(0.5*psi_fourier[i - 1]/(i - 1)) > tol || abs(0.5*psi_fourier[i - 2]/(i - 2)) > tol)){
 		psi_fourier[i] = 1. + pow(-1., i);
 		for(int j = 1; j < Nsample - 1; j++){
 			psi_fourier[i] += 2.*cos(double(i)*freq*mino_of_kepler_phase(M_PI*double(j)/double(Nsample - 1), fourier));
@@ -1368,9 +1393,17 @@ Vector kepler_phase_of_angle_fourier(Vector const &fourier){
 		psi_fourier[i] /= double(Nsample - 1);
 		// std::cout << "f_"<<i<<" = "<< 0.5*psi_fourier[i] << "\n";
 		i++;
+		if(abs(psi_fourier[i - 2]/(i - 2)) < abs(psi_fourier[i]/(i)) && abs(psi_fourier[i - 3]/(i - 3)) < abs(psi_fourier[i - 1]/(i - 1))){
+			tol = 1.; // if the weighted (due to integration) fourier coefficients are not falling off, terminate
+		}
 	}
 
-	return psi_fourier;
+	Vector psi_fourier_return(i + 1);
+	for(int k = 0; k <= i; k++){
+		psi_fourier_return[k] = psi_fourier[k];
+	}
+
+	return psi_fourier_return;
 }
 
 // double kepler_phase_of_angle(double const &angle, Vector const &fourier){
@@ -1404,7 +1437,7 @@ Vector tp_radial_of_angle_fourier(double const &a, double const &p, double const
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample)/upR;
 	double fourierCompare = 0;
-	while((abs(fourierCompare - fourierTest) > DBL_EPSILON*100) && Nsample < pow(2, 11)){
+	while((abs(fourierCompare - fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*dVtrdMino(rp_of_angle((M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)), p, e, fourier), a, En, Lz, Qc)*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
 		}
@@ -1441,7 +1474,7 @@ Vector tp_polar_of_angle_fourier(double const &a, double const &x, double const 
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample)/upTh;
 	double fourierCompare = 0;
-	while((abs(fourierCompare - fourierTest) > DBL_EPSILON*100) && Nsample < pow(2, 11)){
+	while((abs(fourierCompare - fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*dVtzdMino(zp_of_angle((M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)), x, fourier), a, En, Lz, Qc)*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
 		}
@@ -1482,7 +1515,7 @@ Vector phip_radial_of_angle_fourier(double const &a, double const &p, double con
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample)/upR;
 	double fourierCompare = 0;
-	while((abs(fourierCompare - fourierTest) > DBL_EPSILON) && Nsample < pow(2, 11)){
+	while((abs(fourierCompare - fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*dVphirdMino(rp_of_angle((M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)), p, e, fourier), a, En, Lz, Qc)*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
 		}
@@ -1519,7 +1552,7 @@ Vector phip_polar_of_angle_fourier(double const &a, double const &x, double cons
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample)/upTh;
 	double fourierCompare = 0;
-	while((abs(fourierCompare - fourierTest) > DBL_EPSILON) && Nsample < pow(2, 11)){
+	while((abs(fourierCompare - fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*dVphizdMino(zp_of_angle((M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)), x, fourier), a, En, Lz, Qc)*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
 		}
@@ -1655,7 +1688,7 @@ GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsampl
 		En = kerr_geo_energy_circ(a*x, p);
 		Lz = kerr_geo_momentum_circ(a*x, p);
 		upT = kerr_geo_time_frequency_circ(a*x, p);
-		upPh = kerr_geo_azimuthal_frequency_circ(a*x, p);
+		upPh = x*kerr_geo_azimuthal_frequency_circ(a*x, p);
 	}else{
 		kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
 		kerr_geo_radial_roots(r1, r2, r3, r4, a, p, e, En, Lz, Qc);
@@ -1758,7 +1791,7 @@ GeodesicSource kerr_geo_circ(double a, double r, int sgnX){
 	double En = kerr_geo_energy_circ(sgnX*a, r);
 	double Lz = kerr_geo_momentum_circ(sgnX*a, r);
 	double upT = kerr_geo_time_frequency_circ(sgnX*a, r);
-	double upPhi = kerr_geo_azimuthal_frequency_circ(sgnX*a, r);
+	double upPhi = sgnX*kerr_geo_azimuthal_frequency_circ(sgnX*a, r);
 
 	Vector tp(1);
 	tp[0] = 0.;
@@ -1794,21 +1827,21 @@ double kerr_geo_time_frequency_circ(double a, double r){
 }
 double kerr_geo_azimuthal_frequency_circ(double a, double r){
 	double v = 1./sqrt(r);
-	if(a < 0){
-		return -pow(r, 2)*pow(v, 3)/sqrt(1. - 3.*pow(v, 2) + 2.*a*pow(v, 3));
-	}
+	// if(a < 0){
+	// 	return -pow(r, 2)*pow(v, 3)/sqrt(1. - 3.*pow(v, 2) + 2.*a*pow(v, 3));
+	// }
 	return pow(r, 2)*pow(v, 3)/sqrt(1. - 3.*pow(v, 2) + 2.*a*pow(v, 3));
 }
 
 double kerr_geo_azimuthal_frequency_circ_time(double a, double r){
 	double v = 1./sqrt(r);
-	if(a < 0){
-		return -pow(v, 3)/(1 + a*pow(v, 3));
-	}
+	// if(a < 0){
+	// 	return -pow(v, 3)/(1 + a*pow(v, 3));
+	// }
 	return pow(v, 3)/(1 + a*pow(v, 3));
 }
 double kerr_geo_azimuthal_frequency_circ_time(double a, double r, int sgnX){
-	return kerr_geo_azimuthal_frequency_circ_time(sgnX*a, r);
+	return sgnX*kerr_geo_azimuthal_frequency_circ_time(sgnX*a, r);
 }
 double kerr_geo_radius_circ(double a, double Omega){
 	double sgnOmega = Omega/abs(Omega);

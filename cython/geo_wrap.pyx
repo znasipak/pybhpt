@@ -271,6 +271,38 @@ cdef class KerrGeodesic:
     def mino_time(self, double t):
         return self.geocpp.getMinoTimeOfTime(t)
 
+    def get_time_coefficients(self, int j):
+        cdef vector[double] deltaX_cpp = self.geocpp.getTimeCoefficients(j)
+        cdef int n = deltaX_cpp.size()
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+        for i in range(n):
+            deltaX[i] = deltaX_cpp[i]
+        return deltaX
+
+    def get_radial_coefficients(self):
+        cdef vector[double] deltaX_cpp = self.geocpp.getRadialCoefficients()
+        cdef int n = deltaX_cpp.size()
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+        for i in range(n):
+            deltaX[i] = deltaX_cpp[i]
+        return deltaX
+
+    def get_polar_coefficients(self):
+        cdef vector[double] deltaX_cpp = self.geocpp.getPolarCoefficients()
+        cdef int n = deltaX_cpp.size()
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+        for i in range(n):
+            deltaX[i] = deltaX_cpp[i]
+        return deltaX
+    
+    def get_azimuthal_coefficients(self, int j):
+        cdef vector[double] deltaX_cpp = self.geocpp.getAzimuthalCoefficients(j)
+        cdef int n = deltaX_cpp.size()
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+        for i in range(n):
+            deltaX[i] = deltaX_cpp[i]
+        return deltaX
+
 
 def kerr_orbital_constants_wrapper(double a, double p, double e, double x):
     cdef double En, Lz, Qc
