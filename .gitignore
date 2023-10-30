@@ -130,6 +130,7 @@ dmypy.json
 
 # pybhpt
 .DS_Store
+dev/
 test/
 tests/
 test-temp/

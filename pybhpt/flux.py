@@ -60,6 +60,7 @@ class FluxMode:
     
     @property
     def fluxes(self):
+
         return FluxList([self.energy, self.angularmomentum, self.carterconstant])
 
     @property
