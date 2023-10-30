@@ -15,10 +15,12 @@ def fac(n):
     return float(np.math.factorial(n))
 
 def Yslm(s, l, m, th):
+    if np.abs(s) > l:
+        return 0.*th
     if s == 0:
         return np.real(sph_harm(m, l, 0., th))
     elif s + m < 0:
-        return (-1)**(s+m)*YslmBase(-s, l, -m, np.cos(th))
+        return (-1.)**(s+m)*YslmBase(-s, l, -m, np.cos(th))
 #     elif th > np.pi/2.:
 #         return (-1.)**(l + m)*YslmBase(-s, l, m, -np.cos(th))
     else:

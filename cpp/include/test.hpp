@@ -13,12 +13,7 @@ void test_special_functions();
 void test_teukolsky_mode(int s, int L, int m, int k, int n, GeodesicSource geo);
 void test_adiabatic_data_generation();
 
-void full_flux_parallel_l(int s, GeodesicSource geo, int modeMax, std::string dir);
-void full_flux_parallel_lm(GeodesicSource geo, int lMax, std::string dir);
-void flux_parallel_lm(GeodesicSource geo, int lMax = 16);
-void flux_parallel_l(int s, GeodesicSource geo, int modeMax = 16);
-
-void ssf_parallel_m(GeodesicSource geo, int lmax);
+// void ssf_parallel_m(GeodesicSource geo, int lmax);
 void ssf_components_parallel_m(GeodesicSource geo, int lmax, int mmin, int mmax, int sampleSSF, const std::string& dir);
 void ssf_components_parallel_m(GeodesicSource geo, int lmax, int sampleSSF, const std::string& dir);
 void ssf_components_m(GeodesicSource geo, int lmax, int m, int sampleSSF, const std::string& dir);

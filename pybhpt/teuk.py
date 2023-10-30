@@ -119,3 +119,6 @@ class TeukolskyMode:
     
     def amplitude(self, bc):
         return self.base.teukolsky_amplitude(bc)
+    
+    def precision(self, bc):
+        return self.base.teukolsky_amplitude_precision(bc)

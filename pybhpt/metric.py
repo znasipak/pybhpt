@@ -10,23 +10,23 @@ def gauge_check(gauge):
 S0_gauges = ["IRG", "ASAAB0", "SAAB0"]
 S4_gauges = ["ORG", "ASAAB4", "SAAB4"]
 
-def metric_coefficients_S4_ab(ai, bi, nt, nr, nz, np, a, r, z):
-    return metric_coefficients_cython_ORG(ai, bi, nt, nr, nz, np, a, r, z)
+def metric_coefficients_S4_ab(ai, bi, nt, nr, nz, nph, a, r, z):
+    return metric_coefficients_cython_ORG(ai, bi, nt, nr, nz, nph, a, r, z)
 
-def metric_coefficients_S0_ab(ai, bi, nt, nr, nz, np, a, r, z):
-    return metric_coefficients_cython_IRG(ai, bi, nt, nr, nz, np, a, r, z)
+def metric_coefficients_S0_ab(ai, bi, nt, nr, nz, nph, a, r, z):
+    return metric_coefficients_cython_IRG(ai, bi, nt, nr, nz, nph, a, r, z)
 
 def metric_coefficients_S0(a, b, c, d, q, rvals, zvals):
     h22 = np.array([[metric_coefficients_S0_ab(2, 2, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
     h24 = np.array([[metric_coefficients_S0_ab(2, 4, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
     h44 = np.array([[metric_coefficients_S0_ab(4, 4, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
-    return np.array([2.*h22.real, h24, h44])
+    return np.array([2.*h22, h24, h44])
 
 def metric_coefficients_S4(a, b, c, d, q, rvals, zvals):
     h11 = np.array([[metric_coefficients_S4_ab(1, 1, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
     h13 = np.array([[metric_coefficients_S4_ab(1, 3, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
     h33 = np.array([[metric_coefficients_S4_ab(3, 3, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
-    return np.array([2.*h11.real, h13, h33])
+    return np.array([2.*h11, h13, h33])
 
 def metric_coefficients(gauge, a, b, c, d, q, rvals, zvals):
     gauge_check(gauge)
