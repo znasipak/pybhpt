@@ -1,6 +1,5 @@
 from cybhpt_full import FluxList as FluxListCython
 from cybhpt_full import flux as FluxCython
-from cybhpt_full import full_flux_parallel_l_py
 
 class FluxList:
     def __init__(self, fluxes=None):
