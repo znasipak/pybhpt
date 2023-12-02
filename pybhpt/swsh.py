@@ -290,8 +290,10 @@ class SWSHSeriesBase(SWSHBase):
     def generate_eigs(self):
         las, eigs = self.eigs()
         pos = np.argsort(np.real(las))[self.l - self.lmin]
-        return (np.real(las[pos]), np.real(eigs[:, pos]))
-
+        eigs_temp = np.real(eigs[:, pos])
+        eigs_return = np.sign(eigs_temp[self.l - self.lmin])*eigs_temp
+        return (np.real(las[pos]), eigs_return)
+    
 class SWSH(SWSHSeriesBase):
     def __init__(self, s, l, m, g):
         SWSHSeriesBase.__init__(self, s, l, m, g)
