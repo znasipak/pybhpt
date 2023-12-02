@@ -115,39 +115,38 @@ int TeukolskyMode::generateSolutions(SpinWeightedHarmonic& swsh, RadialTeukolsky
 	}else{
 		swsh.generateDerivatives();
 		_SlmP = swsh.getDerivative();
-		ComplexDerivativesMatrixStruct RinMat = {.solution = _Rin, .derivative = _RinP, .secondDerivative = teuk.getSecondDerivative(In)};
-		ComplexDerivativesMatrixStruct RupMat = {.solution = _Rup, .derivative = _RupP, .secondDerivative = teuk.getSecondDerivative(Up)};
-		DerivativesMatrix SlmMat = {.solution = _Slm, .derivative = _SlmP, .secondDerivative = swsh.getSecondDerivative()};
 
 		if(geoConst.e == 0. && abs(geoConst.x) == 1.){
 			if(abs(_k) > 0 || abs(_n) > 0){
 				Zlm.in = 0.;
 				Zlm.up = 0.;
 			}else{
-				Zlm = field_amplitude_circeq(_s, _L, _m, traj, geoConst, RinMat, RupMat, SlmMat);
+				Zlm = field_amplitude_circeq(_s, _L, _m, traj, geoConst, teuk, swsh);
 			}
 		}else if(geoConst.e == 0.){
 			if(abs(_n) > 0){
 				Zlm.in = 0.;
 				Zlm.up = 0.;
 			}else{
-				Zlm = field_amplitude_sphinc(_s, _L, _m, _k, traj, geoConst, RinMat, RupMat, SlmMat);
+				Zlm = field_amplitude_sphinc(_s, _L, _m, _k, traj, geoConst, teuk, swsh);
 			}
 		}else if(abs(geoConst.x) == 1.){
 			if(abs(_k) > 0){
 				Zlm.in = 0.;
 				Zlm.up = 0.;
 			}else{
-				Zlm = field_amplitude_ecceq(_s, _L, _m, _n, traj, geoConst, RinMat, RupMat, SlmMat);
+				Zlm = field_amplitude_ecceq(_s, _L, _m, _n, traj, geoConst, teuk, swsh);
 			}
 		}else{
-			Zlm = field_amplitude(_s, _L, _m, _k, _n, traj, geoConst, RinMat, RupMat, SlmMat);
+			Zlm = field_amplitude(_s, _L, _m, _k, _n, traj, geoConst, teuk, swsh);
 		}
 	}
 
 	//std::cout << "(TEUKOLSKY) Zlm^up = " << Zlm.up << "\n";
 	_ZlmIn = Zlm.in;
 	_ZlmUp = Zlm.up;
+	_ZlmInPrecision = Zlm.inPrecision;
+	_ZlmUpPrecision = Zlm.upPrecision;
 	return 0;
 }
 
@@ -257,6 +256,13 @@ Complex TeukolskyMode::getTeukolskyAmplitude(BoundaryCondition bc){
 		return _ZlmIn;
 	}else{
 		return _ZlmUp;
+	}
+}
+double TeukolskyMode::getTeukolskyAmplitudePrecision(BoundaryCondition bc){
+	if(bc == In){
+		return _ZlmInPrecision;
+	}else{
+		return _ZlmUpPrecision;
 	}
 }
 ComplexVector TeukolskyMode::getRadialSolution(BoundaryCondition bc){

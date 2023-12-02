@@ -87,6 +87,30 @@ class KerrGeodesic:
     def carterfrequencies(self):
         return self.base.carterfrequencies
     
+    @property
+    def timeradialfourier(self):
+        return self.base.get_time_coefficients(1)
+    
+    @property
+    def timepolarfourier(self):
+        return self.base.get_time_coefficients(2)
+    
+    @property
+    def radialfourier(self):
+        return self.base.get_radial_coefficients()
+    
+    @property
+    def polarfourier(self):
+        return self.base.get_polar_coefficients()
+    
+    @property
+    def azimuthalradialfourier(self):
+        return self.base.get_azimuthal_coefficients(1)
+    
+    @property
+    def azimuthalpolarfourier(self):
+        return self.base.get_azimuthal_coefficients(2)
+    
     def mode_frequency(self, m, k, n):
         return np.dot(np.array([n, k, m]), (self.frequencies))
     

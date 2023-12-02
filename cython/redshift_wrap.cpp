@@ -4,11 +4,11 @@
 {
     "distutils": {
         "depends": [
-            "/Users/znasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/arrayobject.h",
-            "/Users/znasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/arrayscalars.h",
-            "/Users/znasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/ndarrayobject.h",
-            "/Users/znasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/ndarraytypes.h",
-            "/Users/znasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/ufuncobject.h",
+            "/Users/zachnasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/arrayobject.h",
+            "/Users/zachnasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/arrayscalars.h",
+            "/Users/zachnasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/ndarrayobject.h",
+            "/Users/zachnasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/ndarraytypes.h",
+            "/Users/zachnasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include/numpy/ufuncobject.h",
             "cpp/include/fluxes.hpp",
             "cpp/include/geo.hpp",
             "cpp/include/hertz.hpp",
@@ -21,7 +21,7 @@
         ],
         "include_dirs": [
             "cpp/include",
-            "/Users/znasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include"
+            "/Users/zachnasipak/opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/core/include"
         ],
         "language": "c++",
         "libraries": [
@@ -32,7 +32,29 @@
         ],
         "name": "cybhpt_full",
         "sources": [
-            "cython/redshift_wrap.pyx"
+            "cython/redshift_wrap.pyx",
+            "cpp/src/unit_test.cpp",
+            "cpp/src/redshift.cpp",
+            "cpp/src/mst.cpp",
+            "cpp/src/sourceintegration.cpp",
+            "cpp/src/bessel.cpp",
+            "cpp/src/utils.cpp",
+            "cpp/src/kerr.cpp",
+            "cpp/src/gsn_asymp.cpp",
+            "cpp/src/swsh.cpp",
+            "cpp/src/teukolsky.cpp",
+            "cpp/src/monodromy.cpp",
+            "cpp/src/metric.cpp",
+            "cpp/src/specialfunc.cpp",
+            "cpp/src/metriccoeffs.cpp",
+            "cpp/src/hertz.cpp",
+            "cpp/src/hypergeo_f.cpp",
+            "cpp/src/radialsolver.cpp",
+            "cpp/src/nusolver.cpp",
+            "cpp/src/cf.cpp",
+            "cpp/src/hypergeo_u.cpp",
+            "cpp/src/geo.cpp",
+            "cpp/src/fluxes.cpp"
         ]
     },
     "module_name": "cybhpt_full"
@@ -1097,7 +1119,7 @@ typedef struct {
 } __Pyx_BufFmt_Context;
 
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":690
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":690
  * # in Cython to enable them only on the right systems.
  * 
  * ctypedef npy_int8       int8_t             # <<<<<<<<<<<<<<
@@ -1106,7 +1128,7 @@ typedef struct {
  */
 typedef npy_int8 __pyx_t_5numpy_int8_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":691
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":691
  * 
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t             # <<<<<<<<<<<<<<
@@ -1115,7 +1137,7 @@ typedef npy_int8 __pyx_t_5numpy_int8_t;
  */
 typedef npy_int16 __pyx_t_5numpy_int16_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":692
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":692
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t             # <<<<<<<<<<<<<<
@@ -1124,7 +1146,7 @@ typedef npy_int16 __pyx_t_5numpy_int16_t;
  */
 typedef npy_int32 __pyx_t_5numpy_int32_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":693
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":693
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t
  * ctypedef npy_int64      int64_t             # <<<<<<<<<<<<<<
@@ -1133,7 +1155,7 @@ typedef npy_int32 __pyx_t_5numpy_int32_t;
  */
 typedef npy_int64 __pyx_t_5numpy_int64_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":697
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":697
  * #ctypedef npy_int128     int128_t
  * 
  * ctypedef npy_uint8      uint8_t             # <<<<<<<<<<<<<<
@@ -1142,7 +1164,7 @@ typedef npy_int64 __pyx_t_5numpy_int64_t;
  */
 typedef npy_uint8 __pyx_t_5numpy_uint8_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":698
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":698
  * 
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t             # <<<<<<<<<<<<<<
@@ -1151,7 +1173,7 @@ typedef npy_uint8 __pyx_t_5numpy_uint8_t;
  */
 typedef npy_uint16 __pyx_t_5numpy_uint16_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":699
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":699
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t             # <<<<<<<<<<<<<<
@@ -1160,7 +1182,7 @@ typedef npy_uint16 __pyx_t_5numpy_uint16_t;
  */
 typedef npy_uint32 __pyx_t_5numpy_uint32_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":700
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":700
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t
  * ctypedef npy_uint64     uint64_t             # <<<<<<<<<<<<<<
@@ -1169,7 +1191,7 @@ typedef npy_uint32 __pyx_t_5numpy_uint32_t;
  */
 typedef npy_uint64 __pyx_t_5numpy_uint64_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":704
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":704
  * #ctypedef npy_uint128    uint128_t
  * 
  * ctypedef npy_float32    float32_t             # <<<<<<<<<<<<<<
@@ -1178,7 +1200,7 @@ typedef npy_uint64 __pyx_t_5numpy_uint64_t;
  */
 typedef npy_float32 __pyx_t_5numpy_float32_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":705
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":705
  * 
  * ctypedef npy_float32    float32_t
  * ctypedef npy_float64    float64_t             # <<<<<<<<<<<<<<
@@ -1187,7 +1209,7 @@ typedef npy_float32 __pyx_t_5numpy_float32_t;
  */
 typedef npy_float64 __pyx_t_5numpy_float64_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":714
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":714
  * # The int types are mapped a bit surprising --
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t             # <<<<<<<<<<<<<<
@@ -1196,7 +1218,7 @@ typedef npy_float64 __pyx_t_5numpy_float64_t;
  */
 typedef npy_long __pyx_t_5numpy_int_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":715
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":715
  * # numpy.int corresponds to 'l' and numpy.long to 'q'
  * ctypedef npy_long       int_t
  * ctypedef npy_longlong   long_t             # <<<<<<<<<<<<<<
@@ -1205,7 +1227,7 @@ typedef npy_long __pyx_t_5numpy_int_t;
  */
 typedef npy_longlong __pyx_t_5numpy_long_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":716
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":716
  * ctypedef npy_long       int_t
  * ctypedef npy_longlong   long_t
  * ctypedef npy_longlong   longlong_t             # <<<<<<<<<<<<<<
@@ -1214,7 +1236,7 @@ typedef npy_longlong __pyx_t_5numpy_long_t;
  */
 typedef npy_longlong __pyx_t_5numpy_longlong_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":718
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":718
  * ctypedef npy_longlong   longlong_t
  * 
  * ctypedef npy_ulong      uint_t             # <<<<<<<<<<<<<<
@@ -1223,7 +1245,7 @@ typedef npy_longlong __pyx_t_5numpy_longlong_t;
  */
 typedef npy_ulong __pyx_t_5numpy_uint_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":719
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":719
  * 
  * ctypedef npy_ulong      uint_t
  * ctypedef npy_ulonglong  ulong_t             # <<<<<<<<<<<<<<
@@ -1232,7 +1254,7 @@ typedef npy_ulong __pyx_t_5numpy_uint_t;
  */
 typedef npy_ulonglong __pyx_t_5numpy_ulong_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":720
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":720
  * ctypedef npy_ulong      uint_t
  * ctypedef npy_ulonglong  ulong_t
  * ctypedef npy_ulonglong  ulonglong_t             # <<<<<<<<<<<<<<
@@ -1241,7 +1263,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulong_t;
  */
 typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":722
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":722
  * ctypedef npy_ulonglong  ulonglong_t
  * 
  * ctypedef npy_intp       intp_t             # <<<<<<<<<<<<<<
@@ -1250,7 +1272,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
  */
 typedef npy_intp __pyx_t_5numpy_intp_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":723
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":723
  * 
  * ctypedef npy_intp       intp_t
  * ctypedef npy_uintp      uintp_t             # <<<<<<<<<<<<<<
@@ -1259,7 +1281,7 @@ typedef npy_intp __pyx_t_5numpy_intp_t;
  */
 typedef npy_uintp __pyx_t_5numpy_uintp_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":725
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":725
  * ctypedef npy_uintp      uintp_t
  * 
  * ctypedef npy_double     float_t             # <<<<<<<<<<<<<<
@@ -1268,7 +1290,7 @@ typedef npy_uintp __pyx_t_5numpy_uintp_t;
  */
 typedef npy_double __pyx_t_5numpy_float_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":726
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":726
  * 
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t             # <<<<<<<<<<<<<<
@@ -1277,7 +1299,7 @@ typedef npy_double __pyx_t_5numpy_float_t;
  */
 typedef npy_double __pyx_t_5numpy_double_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":727
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":727
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t
  * ctypedef npy_longdouble longdouble_t             # <<<<<<<<<<<<<<
@@ -1320,7 +1342,7 @@ struct __pyx_obj_11cybhpt_full_FluxList;
 struct __pyx_obj_11cybhpt_full_RedshiftCoefficients;
 struct __pyx_obj_11cybhpt_full_SphericalHarmonicCoupling;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":729
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":729
  * ctypedef npy_longdouble longdouble_t
  * 
  * ctypedef npy_cfloat      cfloat_t             # <<<<<<<<<<<<<<
@@ -1329,7 +1351,7 @@ struct __pyx_obj_11cybhpt_full_SphericalHarmonicCoupling;
  */
 typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":730
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":730
  * 
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t             # <<<<<<<<<<<<<<
@@ -1338,7 +1360,7 @@ typedef npy_cfloat __pyx_t_5numpy_cfloat_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":731
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":731
  * ctypedef npy_cfloat      cfloat_t
  * ctypedef npy_cdouble     cdouble_t
  * ctypedef npy_clongdouble clongdouble_t             # <<<<<<<<<<<<<<
@@ -1347,7 +1369,7 @@ typedef npy_cdouble __pyx_t_5numpy_cdouble_t;
  */
 typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":733
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":733
  * ctypedef npy_clongdouble clongdouble_t
  * 
  * ctypedef npy_cdouble     complex_t             # <<<<<<<<<<<<<<
@@ -1384,7 +1406,7 @@ struct __pyx_obj_11cybhpt_full_RadialTeukolsky {
 };
 
 
-/* "cython/teukolsky_wrap.pyx":159
+/* "cython/teukolsky_wrap.pyx":160
  *         TypeError("{} is not a supported gauge.".format(gauge_str))
  * 
  * cdef class TeukolskyMode:             # <<<<<<<<<<<<<<
@@ -1399,7 +1421,7 @@ struct __pyx_obj_11cybhpt_full_TeukolskyMode {
 };
 
 
-/* "cython/teukolsky_wrap.pyx":287
+/* "cython/teukolsky_wrap.pyx":291
  *         self.teukcpp.flipSpinWeight()
  * 
  * cdef class HertzMode:             # <<<<<<<<<<<<<<
@@ -1416,7 +1438,7 @@ struct __pyx_obj_11cybhpt_full_HertzMode {
 };
 
 
-/* "cython/teukolsky_wrap.pyx":543
+/* "cython/teukolsky_wrap.pyx":547
  *     return metric_coefficient_IRG(alpha, beta, nt, nr, nz, np, a, r, z)
  * 
  * cdef class MetricModeGenerator:             # <<<<<<<<<<<<<<
@@ -1431,8 +1453,8 @@ struct __pyx_obj_11cybhpt_full_MetricModeGenerator {
 };
 
 
-/* "cython/flux_wrap.pyx":24
- *     FluxListCPP flux_mode(int s, GeodesicSource& geo, TeukolskyModeCPP& teukMode, int include_minus_m)
+/* "cython/flux_wrap.pyx":36
+ *     void full_flux_parallel_lm(GeodesicSource geo, int lMax, cpp_string dir)
  * 
  * cdef class FluxList:             # <<<<<<<<<<<<<<
  *     cdef FluxListCPP *fluxlistcpp
@@ -1445,7 +1467,7 @@ struct __pyx_obj_11cybhpt_full_FluxList {
 };
 
 
-/* "cython/redshift_wrap.pyx":53
+/* "cython/redshift_wrap.pyx":51
  *     run_unit_tests()
  * 
  * cdef class RedshiftCoefficients:             # <<<<<<<<<<<<<<
@@ -1458,7 +1480,7 @@ struct __pyx_obj_11cybhpt_full_RedshiftCoefficients {
 };
 
 
-/* "cython/redshift_wrap.pyx":65
+/* "cython/redshift_wrap.pyx":63
  *         return self.huucpp.getComponent(Ni, ai, bi, ci, di, jr, jz)
  * 
  * cdef class SphericalHarmonicCoupling:             # <<<<<<<<<<<<<<
@@ -1489,8 +1511,8 @@ struct __pyx_vtabstruct_11cybhpt_full_KerrGeodesic {
 static struct __pyx_vtabstruct_11cybhpt_full_KerrGeodesic *__pyx_vtabptr_11cybhpt_full_KerrGeodesic;
 
 
-/* "cython/flux_wrap.pyx":24
- *     FluxListCPP flux_mode(int s, GeodesicSource& geo, TeukolskyModeCPP& teukMode, int include_minus_m)
+/* "cython/flux_wrap.pyx":36
+ *     void full_flux_parallel_lm(GeodesicSource geo, int lMax, cpp_string dir)
  * 
  * cdef class FluxList:             # <<<<<<<<<<<<<<
  *     cdef FluxListCPP *fluxlistcpp
@@ -2392,6 +2414,7 @@ static const char __pyx_k_keys[] = "keys";
 static const char __pyx_k_lmax[] = "lmax";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
+static const char __pyx_k_nphi[] = "nphi";
 static const char __pyx_k_rvec[] = "rvec";
 static const char __pyx_k_sqrt[] = "sqrt";
 static const char __pyx_k_swsh[] = "swsh";
@@ -2679,6 +2702,7 @@ static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_new;
 static PyObject *__pyx_kp_s_no_default___reduce___due_to_non;
 static PyObject *__pyx_n_s_np;
+static PyObject *__pyx_n_s_nphi;
 static PyObject *__pyx_n_s_nr;
 static PyObject *__pyx_n_s_nsample;
 static PyObject *__pyx_n_s_nsamples;
@@ -2787,8 +2811,12 @@ static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_22get_azimuthal_accumulat
 static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_24position(struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self, double __pyx_v_la); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_26position_vec(struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self, PyArrayObject *__pyx_v_la); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_28mino_time(struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self, double __pyx_v_t); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_30__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_32__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_30get_time_coefficients(struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self, int __pyx_v_j); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_32get_radial_coefficients(struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_34get_polar_coefficients(struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_36get_azimuthal_coefficients(struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self, int __pyx_v_j); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_38__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_40__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_12kerr_orbital_constants_wrapper(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_a, double __pyx_v_p, double __pyx_v_e, double __pyx_v_x); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_14kerr_mino_frequencies_wrapper(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_a, double __pyx_v_p, double __pyx_v_e, double __pyx_v_x); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_16flip_spin_of_solutions(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_bc, int __pyx_v_s, double __pyx_v_a, int __pyx_v_m, double __pyx_v_omega, double __pyx_v_la, double __pyx_v_r, std::complex<double>  __pyx_v_R, std::complex<double>  __pyx_v_Rp); /* proto */
@@ -2845,23 +2873,24 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_12radialpoints___get__(s
 static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_11polarpoints___get__(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_15radialsolutions___get__(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_4teukolsky_amplitude(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_6couplingcoefficient(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_l); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_8radialpoint(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10radialsolution(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_12radialderivative(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative2(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_16homogeneousradialsolution(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_18homogeneousradialderivative(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_20homogeneousradialderivative2(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_22polarpoint(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_24polarsolution(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_26polarderivative(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_28polarderivative2(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_30solve(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_geo, PyObject *__pyx_v_method, int __pyx_v_nsample, CYTHON_UNUSED PyObject *__pyx_v_teuk, CYTHON_UNUSED PyObject *__pyx_v_swsh); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_32flip_spinweight_frequency(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_34flip_spinweight(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_36__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_38__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_6teukolsky_amplitude_precision(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_8couplingcoefficient(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_l); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10radialpoint(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_12radialsolution(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_16radialderivative2(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_18homogeneousradialsolution(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_20homogeneousradialderivative(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_22homogeneousradialderivative2(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_24polarpoint(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_26polarsolution(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_28polarderivative(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_30polarderivative2(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_32solve(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_geo, PyObject *__pyx_v_method, int __pyx_v_nsample, CYTHON_UNUSED PyObject *__pyx_v_teuk, CYTHON_UNUSED PyObject *__pyx_v_swsh); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_34flip_spinweight_frequency(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_36flip_spinweight(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_38__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_40__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_11cybhpt_full_9HertzMode___init__(struct __pyx_obj_11cybhpt_full_HertzMode *__pyx_v_self, struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_teuk, PyObject *__pyx_v_gauge); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_2solve(struct __pyx_obj_11cybhpt_full_HertzMode *__pyx_v_self); /* proto */
 static void __pyx_pf_11cybhpt_full_9HertzMode_4__dealloc__(struct __pyx_obj_11cybhpt_full_HertzMode *__pyx_v_self); /* proto */
@@ -2920,15 +2949,6 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_6__reduce_cython__
 static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_8__setstate_cython__(struct __pyx_obj_11cybhpt_full_MetricModeGenerator *__pyx_v_self, PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_11cybhpt_full_8FluxList___cinit__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
 static void __pyx_pf_11cybhpt_full_8FluxList_2__dealloc__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
-<<<<<<< HEAD
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4set_infinity_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_horizon_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6energy___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_15angularmomentum___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14carterconstant___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_8__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
-=======
 static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4zero_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_infinity_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_8FluxList_8set_horizon_fluxes(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, double __pyx_v_Edot, double __pyx_v_Ldot, double __pyx_v_Qdot); /* proto */
@@ -2941,10 +2961,9 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_15angularmomentum___get__(stru
 static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14carterconstant___get__(struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_8FluxList_18__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_8FluxList_20__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_FluxList *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
->>>>>>> e2354353061328e127ed9ca05c77018a631e6945
 static PyObject *__pyx_pf_11cybhpt_full_40flux(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_s, struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_geo, struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_teuk); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_42metric_coefficients_cython_ORG(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_ai, int __pyx_v_bi, int __pyx_v_nt, int __pyx_v_nr, int __pyx_v_nz, int __pyx_v_np, double __pyx_v_a, double __pyx_v_r, double __pyx_v_z); /* proto */
-static PyObject *__pyx_pf_11cybhpt_full_44metric_coefficients_cython_IRG(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_ai, int __pyx_v_bi, int __pyx_v_nt, int __pyx_v_nr, int __pyx_v_nz, int __pyx_v_np, double __pyx_v_a, double __pyx_v_r, double __pyx_v_z); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_42metric_coefficients_cython_ORG(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_ai, int __pyx_v_bi, int __pyx_v_nt, int __pyx_v_nr, int __pyx_v_nz, int __pyx_v_nphi, double __pyx_v_a, double __pyx_v_r, double __pyx_v_z); /* proto */
+static PyObject *__pyx_pf_11cybhpt_full_44metric_coefficients_cython_IRG(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_ai, int __pyx_v_bi, int __pyx_v_nt, int __pyx_v_nr, int __pyx_v_nz, int __pyx_v_nphi, double __pyx_v_a, double __pyx_v_r, double __pyx_v_z); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_46circular_redshift(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_filename, PyObject *__pyx_v_gauge, int __pyx_v_lmax, struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_geo); /* proto */
 static PyObject *__pyx_pf_11cybhpt_full_48run_tests(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
 static int __pyx_pf_11cybhpt_full_20RedshiftCoefficients___cinit__(struct __pyx_obj_11cybhpt_full_RedshiftCoefficients *__pyx_v_self, PyObject *__pyx_v_gauge, struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_geo); /* proto */
@@ -7715,7 +7734,7 @@ static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_28mino_time(struct __pyx_
  *     def mino_time(self, double t):
  *         return self.geocpp.getMinoTimeOfTime(t)             # <<<<<<<<<<<<<<
  * 
- * 
+ *     def get_time_coefficients(self, int j):
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->geocpp->getMinoTimeOfTime(__pyx_v_t)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 272, __pyx_L1_error)
@@ -7743,6 +7762,800 @@ static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_28mino_time(struct __pyx_
   return __pyx_r;
 }
 
+/* "cython/geo_wrap.pyx":274
+ *         return self.geocpp.getMinoTimeOfTime(t)
+ * 
+ *     def get_time_coefficients(self, int j):             # <<<<<<<<<<<<<<
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getTimeCoefficients(j)
+ *         cdef int n = deltaX_cpp.size()
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_31get_time_coefficients(PyObject *__pyx_v_self, PyObject *__pyx_arg_j); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_31get_time_coefficients(PyObject *__pyx_v_self, PyObject *__pyx_arg_j) {
+  int __pyx_v_j;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_time_coefficients (wrapper)", 0);
+  assert(__pyx_arg_j); {
+    __pyx_v_j = __Pyx_PyInt_As_int(__pyx_arg_j); if (unlikely((__pyx_v_j == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 274, __pyx_L3_error)
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("cybhpt_full.KerrGeodesic.get_time_coefficients", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_11cybhpt_full_12KerrGeodesic_30get_time_coefficients(((struct __pyx_obj_11cybhpt_full_KerrGeodesic *)__pyx_v_self), ((int)__pyx_v_j));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_30get_time_coefficients(struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self, int __pyx_v_j) {
+  std::vector<double>  __pyx_v_deltaX_cpp;
+  int __pyx_v_n;
+  PyArrayObject *__pyx_v_deltaX = 0;
+  int __pyx_v_i;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_deltaX;
+  __Pyx_Buffer __pyx_pybuffer_deltaX;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyArrayObject *__pyx_t_6 = NULL;
+  int __pyx_t_7;
+  int __pyx_t_8;
+  int __pyx_t_9;
+  Py_ssize_t __pyx_t_10;
+  int __pyx_t_11;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("get_time_coefficients", 0);
+  __pyx_pybuffer_deltaX.pybuffer.buf = NULL;
+  __pyx_pybuffer_deltaX.refcount = 0;
+  __pyx_pybuffernd_deltaX.data = NULL;
+  __pyx_pybuffernd_deltaX.rcbuffer = &__pyx_pybuffer_deltaX;
+
+  /* "cython/geo_wrap.pyx":275
+ * 
+ *     def get_time_coefficients(self, int j):
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getTimeCoefficients(j)             # <<<<<<<<<<<<<<
+ *         cdef int n = deltaX_cpp.size()
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ */
+  __pyx_v_deltaX_cpp = __pyx_v_self->geocpp->getTimeCoefficients(__pyx_v_j);
+
+  /* "cython/geo_wrap.pyx":276
+ *     def get_time_coefficients(self, int j):
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getTimeCoefficients(j)
+ *         cdef int n = deltaX_cpp.size()             # <<<<<<<<<<<<<<
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ *         for i in range(n):
+ */
+  __pyx_v_n = __pyx_v_deltaX_cpp.size();
+
+  /* "cython/geo_wrap.pyx":277
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getTimeCoefficients(j)
+ *         cdef int n = deltaX_cpp.size()
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)             # <<<<<<<<<<<<<<
+ *         for i in range(n):
+ *             deltaX[i] = deltaX_cpp[i]
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 277, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 277, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_n); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 277, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 277, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
+  __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 277, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 277, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_float64); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 277, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) __PYX_ERR(0, 277, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 277, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 277, __pyx_L1_error)
+  __pyx_t_6 = ((PyArrayObject *)__pyx_t_5);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_deltaX.rcbuffer->pybuffer, (PyObject*)__pyx_t_6, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float64_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
+      __pyx_v_deltaX = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.buf = NULL;
+      __PYX_ERR(0, 277, __pyx_L1_error)
+    } else {__pyx_pybuffernd_deltaX.diminfo[0].strides = __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_deltaX.diminfo[0].shape = __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.shape[0];
+    }
+  }
+  __pyx_t_6 = 0;
+  __pyx_v_deltaX = ((PyArrayObject *)__pyx_t_5);
+  __pyx_t_5 = 0;
+
+  /* "cython/geo_wrap.pyx":278
+ *         cdef int n = deltaX_cpp.size()
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ *         for i in range(n):             # <<<<<<<<<<<<<<
+ *             deltaX[i] = deltaX_cpp[i]
+ *         return deltaX
+ */
+  __pyx_t_7 = __pyx_v_n;
+  __pyx_t_8 = __pyx_t_7;
+  for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
+    __pyx_v_i = __pyx_t_9;
+
+    /* "cython/geo_wrap.pyx":279
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ *         for i in range(n):
+ *             deltaX[i] = deltaX_cpp[i]             # <<<<<<<<<<<<<<
+ *         return deltaX
+ * 
+ */
+    __pyx_t_10 = __pyx_v_i;
+    __pyx_t_11 = -1;
+    if (__pyx_t_10 < 0) {
+      __pyx_t_10 += __pyx_pybuffernd_deltaX.diminfo[0].shape;
+      if (unlikely(__pyx_t_10 < 0)) __pyx_t_11 = 0;
+    } else if (unlikely(__pyx_t_10 >= __pyx_pybuffernd_deltaX.diminfo[0].shape)) __pyx_t_11 = 0;
+    if (unlikely(__pyx_t_11 != -1)) {
+      __Pyx_RaiseBufferIndexError(__pyx_t_11);
+      __PYX_ERR(0, 279, __pyx_L1_error)
+    }
+    *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_float64_t *, __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_deltaX.diminfo[0].strides) = (__pyx_v_deltaX_cpp[__pyx_v_i]);
+  }
+
+  /* "cython/geo_wrap.pyx":280
+ *         for i in range(n):
+ *             deltaX[i] = deltaX_cpp[i]
+ *         return deltaX             # <<<<<<<<<<<<<<
+ * 
+ *     def get_radial_coefficients(self):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_deltaX));
+  __pyx_r = ((PyObject *)__pyx_v_deltaX);
+  goto __pyx_L0;
+
+  /* "cython/geo_wrap.pyx":274
+ *         return self.geocpp.getMinoTimeOfTime(t)
+ * 
+ *     def get_time_coefficients(self, int j):             # <<<<<<<<<<<<<<
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getTimeCoefficients(j)
+ *         cdef int n = deltaX_cpp.size()
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_deltaX.rcbuffer->pybuffer);
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+  __Pyx_AddTraceback("cybhpt_full.KerrGeodesic.get_time_coefficients", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  goto __pyx_L2;
+  __pyx_L0:;
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_deltaX.rcbuffer->pybuffer);
+  __pyx_L2:;
+  __Pyx_XDECREF((PyObject *)__pyx_v_deltaX);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cython/geo_wrap.pyx":282
+ *         return deltaX
+ * 
+ *     def get_radial_coefficients(self):             # <<<<<<<<<<<<<<
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getRadialCoefficients()
+ *         cdef int n = deltaX_cpp.size()
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_33get_radial_coefficients(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_33get_radial_coefficients(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_radial_coefficients (wrapper)", 0);
+  __pyx_r = __pyx_pf_11cybhpt_full_12KerrGeodesic_32get_radial_coefficients(((struct __pyx_obj_11cybhpt_full_KerrGeodesic *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_32get_radial_coefficients(struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self) {
+  std::vector<double>  __pyx_v_deltaX_cpp;
+  int __pyx_v_n;
+  PyArrayObject *__pyx_v_deltaX = 0;
+  int __pyx_v_i;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_deltaX;
+  __Pyx_Buffer __pyx_pybuffer_deltaX;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyArrayObject *__pyx_t_6 = NULL;
+  int __pyx_t_7;
+  int __pyx_t_8;
+  int __pyx_t_9;
+  Py_ssize_t __pyx_t_10;
+  int __pyx_t_11;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("get_radial_coefficients", 0);
+  __pyx_pybuffer_deltaX.pybuffer.buf = NULL;
+  __pyx_pybuffer_deltaX.refcount = 0;
+  __pyx_pybuffernd_deltaX.data = NULL;
+  __pyx_pybuffernd_deltaX.rcbuffer = &__pyx_pybuffer_deltaX;
+
+  /* "cython/geo_wrap.pyx":283
+ * 
+ *     def get_radial_coefficients(self):
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getRadialCoefficients()             # <<<<<<<<<<<<<<
+ *         cdef int n = deltaX_cpp.size()
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ */
+  __pyx_v_deltaX_cpp = __pyx_v_self->geocpp->getRadialCoefficients();
+
+  /* "cython/geo_wrap.pyx":284
+ *     def get_radial_coefficients(self):
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getRadialCoefficients()
+ *         cdef int n = deltaX_cpp.size()             # <<<<<<<<<<<<<<
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ *         for i in range(n):
+ */
+  __pyx_v_n = __pyx_v_deltaX_cpp.size();
+
+  /* "cython/geo_wrap.pyx":285
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getRadialCoefficients()
+ *         cdef int n = deltaX_cpp.size()
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)             # <<<<<<<<<<<<<<
+ *         for i in range(n):
+ *             deltaX[i] = deltaX_cpp[i]
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 285, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 285, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_n); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 285, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 285, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
+  __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 285, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 285, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_float64); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 285, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) __PYX_ERR(0, 285, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 285, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 285, __pyx_L1_error)
+  __pyx_t_6 = ((PyArrayObject *)__pyx_t_5);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_deltaX.rcbuffer->pybuffer, (PyObject*)__pyx_t_6, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float64_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
+      __pyx_v_deltaX = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.buf = NULL;
+      __PYX_ERR(0, 285, __pyx_L1_error)
+    } else {__pyx_pybuffernd_deltaX.diminfo[0].strides = __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_deltaX.diminfo[0].shape = __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.shape[0];
+    }
+  }
+  __pyx_t_6 = 0;
+  __pyx_v_deltaX = ((PyArrayObject *)__pyx_t_5);
+  __pyx_t_5 = 0;
+
+  /* "cython/geo_wrap.pyx":286
+ *         cdef int n = deltaX_cpp.size()
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ *         for i in range(n):             # <<<<<<<<<<<<<<
+ *             deltaX[i] = deltaX_cpp[i]
+ *         return deltaX
+ */
+  __pyx_t_7 = __pyx_v_n;
+  __pyx_t_8 = __pyx_t_7;
+  for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
+    __pyx_v_i = __pyx_t_9;
+
+    /* "cython/geo_wrap.pyx":287
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ *         for i in range(n):
+ *             deltaX[i] = deltaX_cpp[i]             # <<<<<<<<<<<<<<
+ *         return deltaX
+ * 
+ */
+    __pyx_t_10 = __pyx_v_i;
+    __pyx_t_11 = -1;
+    if (__pyx_t_10 < 0) {
+      __pyx_t_10 += __pyx_pybuffernd_deltaX.diminfo[0].shape;
+      if (unlikely(__pyx_t_10 < 0)) __pyx_t_11 = 0;
+    } else if (unlikely(__pyx_t_10 >= __pyx_pybuffernd_deltaX.diminfo[0].shape)) __pyx_t_11 = 0;
+    if (unlikely(__pyx_t_11 != -1)) {
+      __Pyx_RaiseBufferIndexError(__pyx_t_11);
+      __PYX_ERR(0, 287, __pyx_L1_error)
+    }
+    *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_float64_t *, __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_deltaX.diminfo[0].strides) = (__pyx_v_deltaX_cpp[__pyx_v_i]);
+  }
+
+  /* "cython/geo_wrap.pyx":288
+ *         for i in range(n):
+ *             deltaX[i] = deltaX_cpp[i]
+ *         return deltaX             # <<<<<<<<<<<<<<
+ * 
+ *     def get_polar_coefficients(self):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_deltaX));
+  __pyx_r = ((PyObject *)__pyx_v_deltaX);
+  goto __pyx_L0;
+
+  /* "cython/geo_wrap.pyx":282
+ *         return deltaX
+ * 
+ *     def get_radial_coefficients(self):             # <<<<<<<<<<<<<<
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getRadialCoefficients()
+ *         cdef int n = deltaX_cpp.size()
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_deltaX.rcbuffer->pybuffer);
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+  __Pyx_AddTraceback("cybhpt_full.KerrGeodesic.get_radial_coefficients", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  goto __pyx_L2;
+  __pyx_L0:;
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_deltaX.rcbuffer->pybuffer);
+  __pyx_L2:;
+  __Pyx_XDECREF((PyObject *)__pyx_v_deltaX);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cython/geo_wrap.pyx":290
+ *         return deltaX
+ * 
+ *     def get_polar_coefficients(self):             # <<<<<<<<<<<<<<
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getPolarCoefficients()
+ *         cdef int n = deltaX_cpp.size()
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_35get_polar_coefficients(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_35get_polar_coefficients(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_polar_coefficients (wrapper)", 0);
+  __pyx_r = __pyx_pf_11cybhpt_full_12KerrGeodesic_34get_polar_coefficients(((struct __pyx_obj_11cybhpt_full_KerrGeodesic *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_34get_polar_coefficients(struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self) {
+  std::vector<double>  __pyx_v_deltaX_cpp;
+  int __pyx_v_n;
+  PyArrayObject *__pyx_v_deltaX = 0;
+  int __pyx_v_i;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_deltaX;
+  __Pyx_Buffer __pyx_pybuffer_deltaX;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyArrayObject *__pyx_t_6 = NULL;
+  int __pyx_t_7;
+  int __pyx_t_8;
+  int __pyx_t_9;
+  Py_ssize_t __pyx_t_10;
+  int __pyx_t_11;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("get_polar_coefficients", 0);
+  __pyx_pybuffer_deltaX.pybuffer.buf = NULL;
+  __pyx_pybuffer_deltaX.refcount = 0;
+  __pyx_pybuffernd_deltaX.data = NULL;
+  __pyx_pybuffernd_deltaX.rcbuffer = &__pyx_pybuffer_deltaX;
+
+  /* "cython/geo_wrap.pyx":291
+ * 
+ *     def get_polar_coefficients(self):
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getPolarCoefficients()             # <<<<<<<<<<<<<<
+ *         cdef int n = deltaX_cpp.size()
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ */
+  __pyx_v_deltaX_cpp = __pyx_v_self->geocpp->getPolarCoefficients();
+
+  /* "cython/geo_wrap.pyx":292
+ *     def get_polar_coefficients(self):
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getPolarCoefficients()
+ *         cdef int n = deltaX_cpp.size()             # <<<<<<<<<<<<<<
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ *         for i in range(n):
+ */
+  __pyx_v_n = __pyx_v_deltaX_cpp.size();
+
+  /* "cython/geo_wrap.pyx":293
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getPolarCoefficients()
+ *         cdef int n = deltaX_cpp.size()
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)             # <<<<<<<<<<<<<<
+ *         for i in range(n):
+ *             deltaX[i] = deltaX_cpp[i]
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 293, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 293, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_n); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 293, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 293, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
+  __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 293, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 293, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_float64); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 293, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) __PYX_ERR(0, 293, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 293, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 293, __pyx_L1_error)
+  __pyx_t_6 = ((PyArrayObject *)__pyx_t_5);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_deltaX.rcbuffer->pybuffer, (PyObject*)__pyx_t_6, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float64_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
+      __pyx_v_deltaX = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.buf = NULL;
+      __PYX_ERR(0, 293, __pyx_L1_error)
+    } else {__pyx_pybuffernd_deltaX.diminfo[0].strides = __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_deltaX.diminfo[0].shape = __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.shape[0];
+    }
+  }
+  __pyx_t_6 = 0;
+  __pyx_v_deltaX = ((PyArrayObject *)__pyx_t_5);
+  __pyx_t_5 = 0;
+
+  /* "cython/geo_wrap.pyx":294
+ *         cdef int n = deltaX_cpp.size()
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ *         for i in range(n):             # <<<<<<<<<<<<<<
+ *             deltaX[i] = deltaX_cpp[i]
+ *         return deltaX
+ */
+  __pyx_t_7 = __pyx_v_n;
+  __pyx_t_8 = __pyx_t_7;
+  for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
+    __pyx_v_i = __pyx_t_9;
+
+    /* "cython/geo_wrap.pyx":295
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ *         for i in range(n):
+ *             deltaX[i] = deltaX_cpp[i]             # <<<<<<<<<<<<<<
+ *         return deltaX
+ * 
+ */
+    __pyx_t_10 = __pyx_v_i;
+    __pyx_t_11 = -1;
+    if (__pyx_t_10 < 0) {
+      __pyx_t_10 += __pyx_pybuffernd_deltaX.diminfo[0].shape;
+      if (unlikely(__pyx_t_10 < 0)) __pyx_t_11 = 0;
+    } else if (unlikely(__pyx_t_10 >= __pyx_pybuffernd_deltaX.diminfo[0].shape)) __pyx_t_11 = 0;
+    if (unlikely(__pyx_t_11 != -1)) {
+      __Pyx_RaiseBufferIndexError(__pyx_t_11);
+      __PYX_ERR(0, 295, __pyx_L1_error)
+    }
+    *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_float64_t *, __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_deltaX.diminfo[0].strides) = (__pyx_v_deltaX_cpp[__pyx_v_i]);
+  }
+
+  /* "cython/geo_wrap.pyx":296
+ *         for i in range(n):
+ *             deltaX[i] = deltaX_cpp[i]
+ *         return deltaX             # <<<<<<<<<<<<<<
+ * 
+ *     def get_azimuthal_coefficients(self, int j):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_deltaX));
+  __pyx_r = ((PyObject *)__pyx_v_deltaX);
+  goto __pyx_L0;
+
+  /* "cython/geo_wrap.pyx":290
+ *         return deltaX
+ * 
+ *     def get_polar_coefficients(self):             # <<<<<<<<<<<<<<
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getPolarCoefficients()
+ *         cdef int n = deltaX_cpp.size()
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_deltaX.rcbuffer->pybuffer);
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+  __Pyx_AddTraceback("cybhpt_full.KerrGeodesic.get_polar_coefficients", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  goto __pyx_L2;
+  __pyx_L0:;
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_deltaX.rcbuffer->pybuffer);
+  __pyx_L2:;
+  __Pyx_XDECREF((PyObject *)__pyx_v_deltaX);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cython/geo_wrap.pyx":298
+ *         return deltaX
+ * 
+ *     def get_azimuthal_coefficients(self, int j):             # <<<<<<<<<<<<<<
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getAzimuthalCoefficients(j)
+ *         cdef int n = deltaX_cpp.size()
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_37get_azimuthal_coefficients(PyObject *__pyx_v_self, PyObject *__pyx_arg_j); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_37get_azimuthal_coefficients(PyObject *__pyx_v_self, PyObject *__pyx_arg_j) {
+  int __pyx_v_j;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_azimuthal_coefficients (wrapper)", 0);
+  assert(__pyx_arg_j); {
+    __pyx_v_j = __Pyx_PyInt_As_int(__pyx_arg_j); if (unlikely((__pyx_v_j == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 298, __pyx_L3_error)
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("cybhpt_full.KerrGeodesic.get_azimuthal_coefficients", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_11cybhpt_full_12KerrGeodesic_36get_azimuthal_coefficients(((struct __pyx_obj_11cybhpt_full_KerrGeodesic *)__pyx_v_self), ((int)__pyx_v_j));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_36get_azimuthal_coefficients(struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self, int __pyx_v_j) {
+  std::vector<double>  __pyx_v_deltaX_cpp;
+  int __pyx_v_n;
+  PyArrayObject *__pyx_v_deltaX = 0;
+  int __pyx_v_i;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_deltaX;
+  __Pyx_Buffer __pyx_pybuffer_deltaX;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyArrayObject *__pyx_t_6 = NULL;
+  int __pyx_t_7;
+  int __pyx_t_8;
+  int __pyx_t_9;
+  Py_ssize_t __pyx_t_10;
+  int __pyx_t_11;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("get_azimuthal_coefficients", 0);
+  __pyx_pybuffer_deltaX.pybuffer.buf = NULL;
+  __pyx_pybuffer_deltaX.refcount = 0;
+  __pyx_pybuffernd_deltaX.data = NULL;
+  __pyx_pybuffernd_deltaX.rcbuffer = &__pyx_pybuffer_deltaX;
+
+  /* "cython/geo_wrap.pyx":299
+ * 
+ *     def get_azimuthal_coefficients(self, int j):
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getAzimuthalCoefficients(j)             # <<<<<<<<<<<<<<
+ *         cdef int n = deltaX_cpp.size()
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ */
+  __pyx_v_deltaX_cpp = __pyx_v_self->geocpp->getAzimuthalCoefficients(__pyx_v_j);
+
+  /* "cython/geo_wrap.pyx":300
+ *     def get_azimuthal_coefficients(self, int j):
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getAzimuthalCoefficients(j)
+ *         cdef int n = deltaX_cpp.size()             # <<<<<<<<<<<<<<
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ *         for i in range(n):
+ */
+  __pyx_v_n = __pyx_v_deltaX_cpp.size();
+
+  /* "cython/geo_wrap.pyx":301
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getAzimuthalCoefficients(j)
+ *         cdef int n = deltaX_cpp.size()
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)             # <<<<<<<<<<<<<<
+ *         for i in range(n):
+ *             deltaX[i] = deltaX_cpp[i]
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_n); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
+  __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_float64); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) __PYX_ERR(0, 301, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 301, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 301, __pyx_L1_error)
+  __pyx_t_6 = ((PyArrayObject *)__pyx_t_5);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_deltaX.rcbuffer->pybuffer, (PyObject*)__pyx_t_6, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float64_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
+      __pyx_v_deltaX = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.buf = NULL;
+      __PYX_ERR(0, 301, __pyx_L1_error)
+    } else {__pyx_pybuffernd_deltaX.diminfo[0].strides = __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_deltaX.diminfo[0].shape = __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.shape[0];
+    }
+  }
+  __pyx_t_6 = 0;
+  __pyx_v_deltaX = ((PyArrayObject *)__pyx_t_5);
+  __pyx_t_5 = 0;
+
+  /* "cython/geo_wrap.pyx":302
+ *         cdef int n = deltaX_cpp.size()
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ *         for i in range(n):             # <<<<<<<<<<<<<<
+ *             deltaX[i] = deltaX_cpp[i]
+ *         return deltaX
+ */
+  __pyx_t_7 = __pyx_v_n;
+  __pyx_t_8 = __pyx_t_7;
+  for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
+    __pyx_v_i = __pyx_t_9;
+
+    /* "cython/geo_wrap.pyx":303
+ *         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+ *         for i in range(n):
+ *             deltaX[i] = deltaX_cpp[i]             # <<<<<<<<<<<<<<
+ *         return deltaX
+ * 
+ */
+    __pyx_t_10 = __pyx_v_i;
+    __pyx_t_11 = -1;
+    if (__pyx_t_10 < 0) {
+      __pyx_t_10 += __pyx_pybuffernd_deltaX.diminfo[0].shape;
+      if (unlikely(__pyx_t_10 < 0)) __pyx_t_11 = 0;
+    } else if (unlikely(__pyx_t_10 >= __pyx_pybuffernd_deltaX.diminfo[0].shape)) __pyx_t_11 = 0;
+    if (unlikely(__pyx_t_11 != -1)) {
+      __Pyx_RaiseBufferIndexError(__pyx_t_11);
+      __PYX_ERR(0, 303, __pyx_L1_error)
+    }
+    *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_float64_t *, __pyx_pybuffernd_deltaX.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_deltaX.diminfo[0].strides) = (__pyx_v_deltaX_cpp[__pyx_v_i]);
+  }
+
+  /* "cython/geo_wrap.pyx":304
+ *         for i in range(n):
+ *             deltaX[i] = deltaX_cpp[i]
+ *         return deltaX             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_deltaX));
+  __pyx_r = ((PyObject *)__pyx_v_deltaX);
+  goto __pyx_L0;
+
+  /* "cython/geo_wrap.pyx":298
+ *         return deltaX
+ * 
+ *     def get_azimuthal_coefficients(self, int j):             # <<<<<<<<<<<<<<
+ *         cdef vector[double] deltaX_cpp = self.geocpp.getAzimuthalCoefficients(j)
+ *         cdef int n = deltaX_cpp.size()
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_deltaX.rcbuffer->pybuffer);
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+  __Pyx_AddTraceback("cybhpt_full.KerrGeodesic.get_azimuthal_coefficients", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  goto __pyx_L2;
+  __pyx_L0:;
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_deltaX.rcbuffer->pybuffer);
+  __pyx_L2:;
+  __Pyx_XDECREF((PyObject *)__pyx_v_deltaX);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
 /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     raise TypeError("self.geocpp cannot be converted to a Python object for pickling")
@@ -7750,19 +8563,19 @@ static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_28mino_time(struct __pyx_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_31__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_31__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_39__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_39__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11cybhpt_full_12KerrGeodesic_30__reduce_cython__(((struct __pyx_obj_11cybhpt_full_KerrGeodesic *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cybhpt_full_12KerrGeodesic_38__reduce_cython__(((struct __pyx_obj_11cybhpt_full_KerrGeodesic *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_30__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self) {
+static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_38__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -7807,19 +8620,19 @@ static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_30__reduce_cython__(CYTHO
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_33__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_33__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_41__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_12KerrGeodesic_41__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11cybhpt_full_12KerrGeodesic_32__setstate_cython__(((struct __pyx_obj_11cybhpt_full_KerrGeodesic *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_11cybhpt_full_12KerrGeodesic_40__setstate_cython__(((struct __pyx_obj_11cybhpt_full_KerrGeodesic *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_32__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_40__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -7856,7 +8669,7 @@ static PyObject *__pyx_pf_11cybhpt_full_12KerrGeodesic_32__setstate_cython__(CYT
   return __pyx_r;
 }
 
-/* "cython/geo_wrap.pyx":275
+/* "cython/geo_wrap.pyx":307
  * 
  * 
  * def kerr_orbital_constants_wrapper(double a, double p, double e, double x):             # <<<<<<<<<<<<<<
@@ -7905,23 +8718,23 @@ static PyObject *__pyx_pw_11cybhpt_full_13kerr_orbital_constants_wrapper(PyObjec
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_p)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("kerr_orbital_constants_wrapper", 1, 4, 4, 1); __PYX_ERR(0, 275, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("kerr_orbital_constants_wrapper", 1, 4, 4, 1); __PYX_ERR(0, 307, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_e)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("kerr_orbital_constants_wrapper", 1, 4, 4, 2); __PYX_ERR(0, 275, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("kerr_orbital_constants_wrapper", 1, 4, 4, 2); __PYX_ERR(0, 307, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_x)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("kerr_orbital_constants_wrapper", 1, 4, 4, 3); __PYX_ERR(0, 275, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("kerr_orbital_constants_wrapper", 1, 4, 4, 3); __PYX_ERR(0, 307, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "kerr_orbital_constants_wrapper") < 0)) __PYX_ERR(0, 275, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "kerr_orbital_constants_wrapper") < 0)) __PYX_ERR(0, 307, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
@@ -7931,14 +8744,14 @@ static PyObject *__pyx_pw_11cybhpt_full_13kerr_orbital_constants_wrapper(PyObjec
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
       values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
     }
-    __pyx_v_a = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 275, __pyx_L3_error)
-    __pyx_v_p = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_p == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 275, __pyx_L3_error)
-    __pyx_v_e = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_e == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 275, __pyx_L3_error)
-    __pyx_v_x = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 275, __pyx_L3_error)
+    __pyx_v_a = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 307, __pyx_L3_error)
+    __pyx_v_p = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_p == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 307, __pyx_L3_error)
+    __pyx_v_e = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_e == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 307, __pyx_L3_error)
+    __pyx_v_x = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 307, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("kerr_orbital_constants_wrapper", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 275, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("kerr_orbital_constants_wrapper", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 307, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.kerr_orbital_constants_wrapper", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -7968,7 +8781,7 @@ static PyObject *__pyx_pf_11cybhpt_full_12kerr_orbital_constants_wrapper(CYTHON_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("kerr_orbital_constants_wrapper", 0);
 
-  /* "cython/geo_wrap.pyx":277
+  /* "cython/geo_wrap.pyx":309
  * def kerr_orbital_constants_wrapper(double a, double p, double e, double x):
  *     cdef double En, Lz, Qc
  *     En = 0.             # <<<<<<<<<<<<<<
@@ -7977,7 +8790,7 @@ static PyObject *__pyx_pf_11cybhpt_full_12kerr_orbital_constants_wrapper(CYTHON_
  */
   __pyx_v_En = 0.;
 
-  /* "cython/geo_wrap.pyx":278
+  /* "cython/geo_wrap.pyx":310
  *     cdef double En, Lz, Qc
  *     En = 0.
  *     Lz = 0.             # <<<<<<<<<<<<<<
@@ -7986,7 +8799,7 @@ static PyObject *__pyx_pf_11cybhpt_full_12kerr_orbital_constants_wrapper(CYTHON_
  */
   __pyx_v_Lz = 0.;
 
-  /* "cython/geo_wrap.pyx":279
+  /* "cython/geo_wrap.pyx":311
  *     En = 0.
  *     Lz = 0.
  *     Qc = 0.             # <<<<<<<<<<<<<<
@@ -7995,7 +8808,7 @@ static PyObject *__pyx_pf_11cybhpt_full_12kerr_orbital_constants_wrapper(CYTHON_
  */
   __pyx_v_Qc = 0.;
 
-  /* "cython/geo_wrap.pyx":280
+  /* "cython/geo_wrap.pyx":312
  *     Lz = 0.
  *     Qc = 0.
  *     kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x)             # <<<<<<<<<<<<<<
@@ -8004,7 +8817,7 @@ static PyObject *__pyx_pf_11cybhpt_full_12kerr_orbital_constants_wrapper(CYTHON_
  */
   kerr_geo_orbital_constants(__pyx_v_En, __pyx_v_Lz, __pyx_v_Qc, __pyx_v_a, __pyx_v_p, __pyx_v_e, __pyx_v_x);
 
-  /* "cython/geo_wrap.pyx":281
+  /* "cython/geo_wrap.pyx":313
  *     Qc = 0.
  *     kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x)
  *     return np.array([En, Lz, Qc])             # <<<<<<<<<<<<<<
@@ -8012,18 +8825,18 @@ static PyObject *__pyx_pf_11cybhpt_full_12kerr_orbital_constants_wrapper(CYTHON_
  * def kerr_mino_frequencies_wrapper(double a, double p, double e, double x):
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 281, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 313, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 281, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 313, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_En); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 281, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_En); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 313, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_Lz); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 281, __pyx_L1_error)
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_Lz); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 313, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_Qc); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 281, __pyx_L1_error)
+  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_Qc); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 313, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = PyList_New(3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 281, __pyx_L1_error)
+  __pyx_t_6 = PyList_New(3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 313, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_2);
   PyList_SET_ITEM(__pyx_t_6, 0, __pyx_t_2);
@@ -8047,14 +8860,14 @@ static PyObject *__pyx_pf_11cybhpt_full_12kerr_orbital_constants_wrapper(CYTHON_
   __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_6);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 281, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 313, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/geo_wrap.pyx":275
+  /* "cython/geo_wrap.pyx":307
  * 
  * 
  * def kerr_orbital_constants_wrapper(double a, double p, double e, double x):             # <<<<<<<<<<<<<<
@@ -8078,7 +8891,7 @@ static PyObject *__pyx_pf_11cybhpt_full_12kerr_orbital_constants_wrapper(CYTHON_
   return __pyx_r;
 }
 
-/* "cython/geo_wrap.pyx":283
+/* "cython/geo_wrap.pyx":315
  *     return np.array([En, Lz, Qc])
  * 
  * def kerr_mino_frequencies_wrapper(double a, double p, double e, double x):             # <<<<<<<<<<<<<<
@@ -8127,23 +8940,23 @@ static PyObject *__pyx_pw_11cybhpt_full_15kerr_mino_frequencies_wrapper(PyObject
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_p)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("kerr_mino_frequencies_wrapper", 1, 4, 4, 1); __PYX_ERR(0, 283, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("kerr_mino_frequencies_wrapper", 1, 4, 4, 1); __PYX_ERR(0, 315, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_e)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("kerr_mino_frequencies_wrapper", 1, 4, 4, 2); __PYX_ERR(0, 283, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("kerr_mino_frequencies_wrapper", 1, 4, 4, 2); __PYX_ERR(0, 315, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_x)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("kerr_mino_frequencies_wrapper", 1, 4, 4, 3); __PYX_ERR(0, 283, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("kerr_mino_frequencies_wrapper", 1, 4, 4, 3); __PYX_ERR(0, 315, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "kerr_mino_frequencies_wrapper") < 0)) __PYX_ERR(0, 283, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "kerr_mino_frequencies_wrapper") < 0)) __PYX_ERR(0, 315, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
@@ -8153,14 +8966,14 @@ static PyObject *__pyx_pw_11cybhpt_full_15kerr_mino_frequencies_wrapper(PyObject
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
       values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
     }
-    __pyx_v_a = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 283, __pyx_L3_error)
-    __pyx_v_p = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_p == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 283, __pyx_L3_error)
-    __pyx_v_e = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_e == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 283, __pyx_L3_error)
-    __pyx_v_x = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 283, __pyx_L3_error)
+    __pyx_v_a = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 315, __pyx_L3_error)
+    __pyx_v_p = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_p == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 315, __pyx_L3_error)
+    __pyx_v_e = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_e == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 315, __pyx_L3_error)
+    __pyx_v_x = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_x == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 315, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("kerr_mino_frequencies_wrapper", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 283, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("kerr_mino_frequencies_wrapper", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 315, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.kerr_mino_frequencies_wrapper", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -8192,7 +9005,7 @@ static PyObject *__pyx_pf_11cybhpt_full_14kerr_mino_frequencies_wrapper(CYTHON_U
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("kerr_mino_frequencies_wrapper", 0);
 
-  /* "cython/geo_wrap.pyx":285
+  /* "cython/geo_wrap.pyx":317
  * def kerr_mino_frequencies_wrapper(double a, double p, double e, double x):
  *     cdef double upT, upR, upTh, upPhi
  *     upT = 0.             # <<<<<<<<<<<<<<
@@ -8201,7 +9014,7 @@ static PyObject *__pyx_pf_11cybhpt_full_14kerr_mino_frequencies_wrapper(CYTHON_U
  */
   __pyx_v_upT = 0.;
 
-  /* "cython/geo_wrap.pyx":286
+  /* "cython/geo_wrap.pyx":318
  *     cdef double upT, upR, upTh, upPhi
  *     upT = 0.
  *     upR = 0.             # <<<<<<<<<<<<<<
@@ -8210,7 +9023,7 @@ static PyObject *__pyx_pf_11cybhpt_full_14kerr_mino_frequencies_wrapper(CYTHON_U
  */
   __pyx_v_upR = 0.;
 
-  /* "cython/geo_wrap.pyx":287
+  /* "cython/geo_wrap.pyx":319
  *     upT = 0.
  *     upR = 0.
  *     upTh = 0.             # <<<<<<<<<<<<<<
@@ -8219,7 +9032,7 @@ static PyObject *__pyx_pf_11cybhpt_full_14kerr_mino_frequencies_wrapper(CYTHON_U
  */
   __pyx_v_upTh = 0.;
 
-  /* "cython/geo_wrap.pyx":288
+  /* "cython/geo_wrap.pyx":320
  *     upR = 0.
  *     upTh = 0.
  *     upPhi = 0.             # <<<<<<<<<<<<<<
@@ -8228,7 +9041,7 @@ static PyObject *__pyx_pf_11cybhpt_full_14kerr_mino_frequencies_wrapper(CYTHON_U
  */
   __pyx_v_upPhi = 0.;
 
-  /* "cython/geo_wrap.pyx":289
+  /* "cython/geo_wrap.pyx":321
  *     upTh = 0.
  *     upPhi = 0.
  *     kerr_geo_mino_frequencies(upT, upR, upTh, upPhi, a, p, e, x)             # <<<<<<<<<<<<<<
@@ -8237,27 +9050,27 @@ static PyObject *__pyx_pf_11cybhpt_full_14kerr_mino_frequencies_wrapper(CYTHON_U
  */
   kerr_geo_mino_frequencies(__pyx_v_upT, __pyx_v_upR, __pyx_v_upTh, __pyx_v_upPhi, __pyx_v_a, __pyx_v_p, __pyx_v_e, __pyx_v_x);
 
-  /* "cython/geo_wrap.pyx":290
+  /* "cython/geo_wrap.pyx":322
  *     upPhi = 0.
  *     kerr_geo_mino_frequencies(upT, upR, upTh, upPhi, a, p, e, x)
  *     return np.array([upT, upR, upTh, upPhi])             # <<<<<<<<<<<<<<
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 290, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 322, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 290, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 322, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_upT); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 290, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_upT); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 322, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_upR); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 290, __pyx_L1_error)
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_upR); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 322, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_upTh); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 290, __pyx_L1_error)
+  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_upTh); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 322, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = PyFloat_FromDouble(__pyx_v_upPhi); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 290, __pyx_L1_error)
+  __pyx_t_6 = PyFloat_FromDouble(__pyx_v_upPhi); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 322, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_7 = PyList_New(4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 290, __pyx_L1_error)
+  __pyx_t_7 = PyList_New(4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 322, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_GIVEREF(__pyx_t_2);
   PyList_SET_ITEM(__pyx_t_7, 0, __pyx_t_2);
@@ -8284,14 +9097,14 @@ static PyObject *__pyx_pf_11cybhpt_full_14kerr_mino_frequencies_wrapper(CYTHON_U
   __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_6, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_7);
   __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 290, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 322, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/geo_wrap.pyx":283
+  /* "cython/geo_wrap.pyx":315
  *     return np.array([En, Lz, Qc])
  * 
  * def kerr_mino_frequencies_wrapper(double a, double p, double e, double x):             # <<<<<<<<<<<<<<
@@ -11526,7 +12339,7 @@ static PyObject *__pyx_pf_11cybhpt_full_15RadialTeukolsky_30__setstate_cython__(
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":152
+/* "cython/teukolsky_wrap.pyx":153
  * }
  * 
  * cdef Gauge str_to_gauge(unicode gauge_str) except *:             # <<<<<<<<<<<<<<
@@ -11548,7 +12361,7 @@ static enum Gauge __pyx_f_11cybhpt_full_str_to_gauge(PyObject *__pyx_v_gauge_str
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("str_to_gauge", 0);
 
-  /* "cython/teukolsky_wrap.pyx":153
+  /* "cython/teukolsky_wrap.pyx":154
  * 
  * cdef Gauge str_to_gauge(unicode gauge_str) except *:
  *     if gauge_str in gauge_dict.keys():             # <<<<<<<<<<<<<<
@@ -11557,16 +12370,16 @@ static enum Gauge __pyx_f_11cybhpt_full_str_to_gauge(PyObject *__pyx_v_gauge_str
  */
   if (unlikely(__pyx_v_11cybhpt_full_gauge_dict == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "keys");
-    __PYX_ERR(3, 153, __pyx_L1_error)
+    __PYX_ERR(3, 154, __pyx_L1_error)
   }
-  __pyx_t_1 = __Pyx_PyDict_Keys(__pyx_v_11cybhpt_full_gauge_dict); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 153, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_Keys(__pyx_v_11cybhpt_full_gauge_dict); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 154, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(__pyx_v_gauge_str, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 153, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(__pyx_v_gauge_str, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 154, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "cython/teukolsky_wrap.pyx":154
+    /* "cython/teukolsky_wrap.pyx":155
  * cdef Gauge str_to_gauge(unicode gauge_str) except *:
  *     if gauge_str in gauge_dict.keys():
  *         return gauge_dict[gauge_str]             # <<<<<<<<<<<<<<
@@ -11575,16 +12388,16 @@ static enum Gauge __pyx_f_11cybhpt_full_str_to_gauge(PyObject *__pyx_v_gauge_str
  */
     if (unlikely(__pyx_v_11cybhpt_full_gauge_dict == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(3, 154, __pyx_L1_error)
+      __PYX_ERR(3, 155, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_11cybhpt_full_gauge_dict, __pyx_v_gauge_str); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 154, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_11cybhpt_full_gauge_dict, __pyx_v_gauge_str); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 155, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_4 = ((enum Gauge)__Pyx_PyInt_As_enum__Gauge(__pyx_t_1)); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 154, __pyx_L1_error)
+    __pyx_t_4 = ((enum Gauge)__Pyx_PyInt_As_enum__Gauge(__pyx_t_1)); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 155, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_r = __pyx_t_4;
     goto __pyx_L0;
 
-    /* "cython/teukolsky_wrap.pyx":153
+    /* "cython/teukolsky_wrap.pyx":154
  * 
  * cdef Gauge str_to_gauge(unicode gauge_str) except *:
  *     if gauge_str in gauge_dict.keys():             # <<<<<<<<<<<<<<
@@ -11593,7 +12406,7 @@ static enum Gauge __pyx_f_11cybhpt_full_str_to_gauge(PyObject *__pyx_v_gauge_str
  */
   }
 
-  /* "cython/teukolsky_wrap.pyx":156
+  /* "cython/teukolsky_wrap.pyx":157
  *         return gauge_dict[gauge_str]
  *     else:
  *         print("Error")             # <<<<<<<<<<<<<<
@@ -11601,18 +12414,18 @@ static enum Gauge __pyx_f_11cybhpt_full_str_to_gauge(PyObject *__pyx_v_gauge_str
  * 
  */
   /*else*/ {
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 156, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 157, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "cython/teukolsky_wrap.pyx":157
+    /* "cython/teukolsky_wrap.pyx":158
  *     else:
  *         print("Error")
  *         TypeError("{} is not a supported gauge.".format(gauge_str))             # <<<<<<<<<<<<<<
  * 
  * cdef class TeukolskyMode:
  */
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_u_is_not_a_supported_gauge, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 157, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_u_is_not_a_supported_gauge, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
@@ -11626,16 +12439,16 @@ static enum Gauge __pyx_f_11cybhpt_full_str_to_gauge(PyObject *__pyx_v_gauge_str
     }
     __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_v_gauge_str) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_gauge_str);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 157, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_builtin_TypeError, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 157, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_builtin_TypeError, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
 
-  /* "cython/teukolsky_wrap.pyx":152
+  /* "cython/teukolsky_wrap.pyx":153
  * }
  * 
  * cdef Gauge str_to_gauge(unicode gauge_str) except *:             # <<<<<<<<<<<<<<
@@ -11657,7 +12470,7 @@ static enum Gauge __pyx_f_11cybhpt_full_str_to_gauge(PyObject *__pyx_v_gauge_str
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":164
+/* "cython/teukolsky_wrap.pyx":165
  *     cdef int sampleTh
  * 
  *     def __cinit__(self, int s, int j, int m, int k, int n, KerrGeodesic geo):             # <<<<<<<<<<<<<<
@@ -11711,35 +12524,35 @@ static int __pyx_pw_11cybhpt_full_13TeukolskyMode_1__cinit__(PyObject *__pyx_v_s
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_j)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 1); __PYX_ERR(3, 164, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 1); __PYX_ERR(3, 165, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_m)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 2); __PYX_ERR(3, 164, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 2); __PYX_ERR(3, 165, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_k)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 3); __PYX_ERR(3, 164, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 3); __PYX_ERR(3, 165, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_n)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 4); __PYX_ERR(3, 164, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 4); __PYX_ERR(3, 165, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_geo)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 5); __PYX_ERR(3, 164, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, 5); __PYX_ERR(3, 165, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(3, 164, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(3, 165, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 6) {
       goto __pyx_L5_argtuple_error;
@@ -11751,22 +12564,22 @@ static int __pyx_pw_11cybhpt_full_13TeukolskyMode_1__cinit__(PyObject *__pyx_v_s
       values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
       values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
     }
-    __pyx_v_s = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_s == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 164, __pyx_L3_error)
-    __pyx_v_j = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_j == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 164, __pyx_L3_error)
-    __pyx_v_m = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_m == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 164, __pyx_L3_error)
-    __pyx_v_k = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_k == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 164, __pyx_L3_error)
-    __pyx_v_n = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 164, __pyx_L3_error)
+    __pyx_v_s = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_s == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 165, __pyx_L3_error)
+    __pyx_v_j = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_j == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 165, __pyx_L3_error)
+    __pyx_v_m = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_m == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 165, __pyx_L3_error)
+    __pyx_v_k = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_k == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 165, __pyx_L3_error)
+    __pyx_v_n = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 165, __pyx_L3_error)
     __pyx_v_geo = ((struct __pyx_obj_11cybhpt_full_KerrGeodesic *)values[5]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 164, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 6, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 165, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_geo), __pyx_ptype_11cybhpt_full_KerrGeodesic, 1, "geo", 0))) __PYX_ERR(3, 164, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_geo), __pyx_ptype_11cybhpt_full_KerrGeodesic, 1, "geo", 0))) __PYX_ERR(3, 165, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode___cinit__(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_s, __pyx_v_j, __pyx_v_m, __pyx_v_k, __pyx_v_n, __pyx_v_geo);
 
   /* function exit code */
@@ -11783,7 +12596,7 @@ static int __pyx_pf_11cybhpt_full_13TeukolskyMode___cinit__(struct __pyx_obj_11c
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":165
+  /* "cython/teukolsky_wrap.pyx":166
  * 
  *     def __cinit__(self, int s, int j, int m, int k, int n, KerrGeodesic geo):
  *         self.teukcpp = new TeukolskyModeCPP(s, j, m, k, n, dereference(geo.geocpp))             # <<<<<<<<<<<<<<
@@ -11792,7 +12605,7 @@ static int __pyx_pf_11cybhpt_full_13TeukolskyMode___cinit__(struct __pyx_obj_11c
  */
   __pyx_v_self->teukcpp = new TeukolskyMode(__pyx_v_s, __pyx_v_j, __pyx_v_m, __pyx_v_k, __pyx_v_n, (*__pyx_v_geo->geocpp));
 
-  /* "cython/teukolsky_wrap.pyx":166
+  /* "cython/teukolsky_wrap.pyx":167
  *     def __cinit__(self, int s, int j, int m, int k, int n, KerrGeodesic geo):
  *         self.teukcpp = new TeukolskyModeCPP(s, j, m, k, n, dereference(geo.geocpp))
  *         self.sampleR = 1             # <<<<<<<<<<<<<<
@@ -11801,7 +12614,7 @@ static int __pyx_pf_11cybhpt_full_13TeukolskyMode___cinit__(struct __pyx_obj_11c
  */
   __pyx_v_self->sampleR = 1;
 
-  /* "cython/teukolsky_wrap.pyx":167
+  /* "cython/teukolsky_wrap.pyx":168
  *         self.teukcpp = new TeukolskyModeCPP(s, j, m, k, n, dereference(geo.geocpp))
  *         self.sampleR = 1
  *         self.sampleTh = 1             # <<<<<<<<<<<<<<
@@ -11810,7 +12623,7 @@ static int __pyx_pf_11cybhpt_full_13TeukolskyMode___cinit__(struct __pyx_obj_11c
  */
   __pyx_v_self->sampleTh = 1;
 
-  /* "cython/teukolsky_wrap.pyx":164
+  /* "cython/teukolsky_wrap.pyx":165
  *     cdef int sampleTh
  * 
  *     def __cinit__(self, int s, int j, int m, int k, int n, KerrGeodesic geo):             # <<<<<<<<<<<<<<
@@ -11824,7 +12637,7 @@ static int __pyx_pf_11cybhpt_full_13TeukolskyMode___cinit__(struct __pyx_obj_11c
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":169
+/* "cython/teukolsky_wrap.pyx":170
  *         self.sampleTh = 1
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -11847,7 +12660,7 @@ static void __pyx_pf_11cybhpt_full_13TeukolskyMode_2__dealloc__(struct __pyx_obj
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":170
+  /* "cython/teukolsky_wrap.pyx":171
  * 
  *     def __dealloc__(self):
  *         del self.teukcpp             # <<<<<<<<<<<<<<
@@ -11856,7 +12669,7 @@ static void __pyx_pf_11cybhpt_full_13TeukolskyMode_2__dealloc__(struct __pyx_obj
  */
   delete __pyx_v_self->teukcpp;
 
-  /* "cython/teukolsky_wrap.pyx":169
+  /* "cython/teukolsky_wrap.pyx":170
  *         self.sampleTh = 1
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -11868,7 +12681,7 @@ static void __pyx_pf_11cybhpt_full_13TeukolskyMode_2__dealloc__(struct __pyx_obj
   __Pyx_RefNannyFinishContext();
 }
 
-/* "cython/teukolsky_wrap.pyx":173
+/* "cython/teukolsky_wrap.pyx":174
  * 
  *     @property
  *     def spinweight(self):             # <<<<<<<<<<<<<<
@@ -11898,7 +12711,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10spinweight___get__(str
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":174
+  /* "cython/teukolsky_wrap.pyx":175
  *     @property
  *     def spinweight(self):
  *         return self.teukcpp.getSpinWeight()             # <<<<<<<<<<<<<<
@@ -11906,13 +12719,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10spinweight___get__(str
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->teukcpp->getSpinWeight()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 174, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->teukcpp->getSpinWeight()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 175, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":173
+  /* "cython/teukolsky_wrap.pyx":174
  * 
  *     @property
  *     def spinweight(self):             # <<<<<<<<<<<<<<
@@ -11931,7 +12744,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10spinweight___get__(str
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":177
+/* "cython/teukolsky_wrap.pyx":178
  * 
  *     @property
  *     def spheroidalmode(self):             # <<<<<<<<<<<<<<
@@ -11961,7 +12774,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14spheroidalmode___get__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":178
+  /* "cython/teukolsky_wrap.pyx":179
  *     @property
  *     def spheroidalmode(self):
  *         return self.teukcpp.getSpheroidalModeNumber()             # <<<<<<<<<<<<<<
@@ -11969,13 +12782,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14spheroidalmode___get__
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->teukcpp->getSpheroidalModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 178, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->teukcpp->getSpheroidalModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 179, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":177
+  /* "cython/teukolsky_wrap.pyx":178
  * 
  *     @property
  *     def spheroidalmode(self):             # <<<<<<<<<<<<<<
@@ -11994,7 +12807,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14spheroidalmode___get__
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":181
+/* "cython/teukolsky_wrap.pyx":182
  * 
  *     @property
  *     def azimuthalmode(self):             # <<<<<<<<<<<<<<
@@ -12024,7 +12837,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_13azimuthalmode___get__(
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":182
+  /* "cython/teukolsky_wrap.pyx":183
  *     @property
  *     def azimuthalmode(self):
  *         return self.teukcpp.getAzimuthalModeNumber()             # <<<<<<<<<<<<<<
@@ -12032,13 +12845,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_13azimuthalmode___get__(
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->teukcpp->getAzimuthalModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 182, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->teukcpp->getAzimuthalModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 183, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":181
+  /* "cython/teukolsky_wrap.pyx":182
  * 
  *     @property
  *     def azimuthalmode(self):             # <<<<<<<<<<<<<<
@@ -12057,7 +12870,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_13azimuthalmode___get__(
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":185
+/* "cython/teukolsky_wrap.pyx":186
  * 
  *     @property
  *     def radialmode(self):             # <<<<<<<<<<<<<<
@@ -12087,7 +12900,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10radialmode___get__(str
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":186
+  /* "cython/teukolsky_wrap.pyx":187
  *     @property
  *     def radialmode(self):
  *         return self.teukcpp.getRadialModeNumber()             # <<<<<<<<<<<<<<
@@ -12095,13 +12908,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10radialmode___get__(str
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->teukcpp->getRadialModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 186, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->teukcpp->getRadialModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 187, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":185
+  /* "cython/teukolsky_wrap.pyx":186
  * 
  *     @property
  *     def radialmode(self):             # <<<<<<<<<<<<<<
@@ -12120,7 +12933,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10radialmode___get__(str
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":189
+/* "cython/teukolsky_wrap.pyx":190
  * 
  *     @property
  *     def polarmode(self):             # <<<<<<<<<<<<<<
@@ -12150,7 +12963,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_9polarmode___get__(struc
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":190
+  /* "cython/teukolsky_wrap.pyx":191
  *     @property
  *     def polarmode(self):
  *         return self.teukcpp.getPolarModeNumber()             # <<<<<<<<<<<<<<
@@ -12158,13 +12971,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_9polarmode___get__(struc
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->teukcpp->getPolarModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 190, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->teukcpp->getPolarModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 191, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":189
+  /* "cython/teukolsky_wrap.pyx":190
  * 
  *     @property
  *     def polarmode(self):             # <<<<<<<<<<<<<<
@@ -12183,7 +12996,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_9polarmode___get__(struc
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":193
+/* "cython/teukolsky_wrap.pyx":194
  * 
  *     @property
  *     def blackholespin(self):             # <<<<<<<<<<<<<<
@@ -12213,7 +13026,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_13blackholespin___get__(
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":194
+  /* "cython/teukolsky_wrap.pyx":195
  *     @property
  *     def blackholespin(self):
  *         return self.teukcpp.getBlackHoleSpin()             # <<<<<<<<<<<<<<
@@ -12221,13 +13034,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_13blackholespin___get__(
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getBlackHoleSpin()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 194, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getBlackHoleSpin()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 195, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":193
+  /* "cython/teukolsky_wrap.pyx":194
  * 
  *     @property
  *     def blackholespin(self):             # <<<<<<<<<<<<<<
@@ -12246,7 +13059,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_13blackholespin___get__(
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":197
+/* "cython/teukolsky_wrap.pyx":198
  * 
  *     @property
  *     def frequency(self):             # <<<<<<<<<<<<<<
@@ -12276,7 +13089,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_9frequency___get__(struc
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":198
+  /* "cython/teukolsky_wrap.pyx":199
  *     @property
  *     def frequency(self):
  *         return self.teukcpp.getFrequency()             # <<<<<<<<<<<<<<
@@ -12284,13 +13097,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_9frequency___get__(struc
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getFrequency()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 198, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getFrequency()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 199, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":197
+  /* "cython/teukolsky_wrap.pyx":198
  * 
  *     @property
  *     def frequency(self):             # <<<<<<<<<<<<<<
@@ -12309,7 +13122,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_9frequency___get__(struc
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":201
+/* "cython/teukolsky_wrap.pyx":202
  * 
  *     @property
  *     def horizonfrequency(self):             # <<<<<<<<<<<<<<
@@ -12339,7 +13152,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_16horizonfrequency___get
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":202
+  /* "cython/teukolsky_wrap.pyx":203
  *     @property
  *     def horizonfrequency(self):
  *         return self.teukcpp.getHorizonFrequency()             # <<<<<<<<<<<<<<
@@ -12347,13 +13160,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_16horizonfrequency___get
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getHorizonFrequency()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 202, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getHorizonFrequency()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 203, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":201
+  /* "cython/teukolsky_wrap.pyx":202
  * 
  *     @property
  *     def horizonfrequency(self):             # <<<<<<<<<<<<<<
@@ -12372,7 +13185,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_16horizonfrequency___get
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":205
+/* "cython/teukolsky_wrap.pyx":206
  * 
  *     @property
  *     def eigenvalue(self):             # <<<<<<<<<<<<<<
@@ -12402,7 +13215,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10eigenvalue___get__(str
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":206
+  /* "cython/teukolsky_wrap.pyx":207
  *     @property
  *     def eigenvalue(self):
  *         return self.teukcpp.getEigenvalue()             # <<<<<<<<<<<<<<
@@ -12410,13 +13223,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10eigenvalue___get__(str
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getEigenvalue()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 206, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getEigenvalue()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 207, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":205
+  /* "cython/teukolsky_wrap.pyx":206
  * 
  *     @property
  *     def eigenvalue(self):             # <<<<<<<<<<<<<<
@@ -12435,7 +13248,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10eigenvalue___get__(str
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":209
+/* "cython/teukolsky_wrap.pyx":210
  * 
  *     @property
  *     def mincouplingmode(self):             # <<<<<<<<<<<<<<
@@ -12465,7 +13278,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_15mincouplingmode___get_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":210
+  /* "cython/teukolsky_wrap.pyx":211
  *     @property
  *     def mincouplingmode(self):
  *         return self.teukcpp.getMinCouplingModeNumber()             # <<<<<<<<<<<<<<
@@ -12473,13 +13286,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_15mincouplingmode___get_
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->teukcpp->getMinCouplingModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 210, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->teukcpp->getMinCouplingModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 211, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":209
+  /* "cython/teukolsky_wrap.pyx":210
  * 
  *     @property
  *     def mincouplingmode(self):             # <<<<<<<<<<<<<<
@@ -12498,7 +13311,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_15mincouplingmode___get_
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":213
+/* "cython/teukolsky_wrap.pyx":214
  * 
  *     @property
  *     def maxcouplingmode(self):             # <<<<<<<<<<<<<<
@@ -12528,7 +13341,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_15maxcouplingmode___get_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":214
+  /* "cython/teukolsky_wrap.pyx":215
  *     @property
  *     def maxcouplingmode(self):
  *         return self.teukcpp.getMaxCouplingModeNumber()             # <<<<<<<<<<<<<<
@@ -12536,13 +13349,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_15maxcouplingmode___get_
  *     # some useful aliases
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->teukcpp->getMaxCouplingModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 214, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->teukcpp->getMaxCouplingModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 215, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":213
+  /* "cython/teukolsky_wrap.pyx":214
  * 
  *     @property
  *     def maxcouplingmode(self):             # <<<<<<<<<<<<<<
@@ -12561,7 +13374,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_15maxcouplingmode___get_
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":218
+/* "cython/teukolsky_wrap.pyx":219
  *     # some useful aliases
  *     @property
  *     def j(self):             # <<<<<<<<<<<<<<
@@ -12591,7 +13404,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1j___get__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":219
+  /* "cython/teukolsky_wrap.pyx":220
  *     @property
  *     def j(self):
  *         return self.spheroidalmode             # <<<<<<<<<<<<<<
@@ -12599,13 +13412,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1j___get__(struct __pyx_
  *     def m(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_spheroidalmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 219, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_spheroidalmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 220, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":218
+  /* "cython/teukolsky_wrap.pyx":219
  *     # some useful aliases
  *     @property
  *     def j(self):             # <<<<<<<<<<<<<<
@@ -12624,7 +13437,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1j___get__(struct __pyx_
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":221
+/* "cython/teukolsky_wrap.pyx":222
  *         return self.spheroidalmode
  *     @property
  *     def m(self):             # <<<<<<<<<<<<<<
@@ -12654,7 +13467,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1m___get__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":222
+  /* "cython/teukolsky_wrap.pyx":223
  *     @property
  *     def m(self):
  *         return self.azimuthalmode             # <<<<<<<<<<<<<<
@@ -12662,13 +13475,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1m___get__(struct __pyx_
  *     def k(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_azimuthalmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 222, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_azimuthalmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 223, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":221
+  /* "cython/teukolsky_wrap.pyx":222
  *         return self.spheroidalmode
  *     @property
  *     def m(self):             # <<<<<<<<<<<<<<
@@ -12687,7 +13500,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1m___get__(struct __pyx_
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":224
+/* "cython/teukolsky_wrap.pyx":225
  *         return self.azimuthalmode
  *     @property
  *     def k(self):             # <<<<<<<<<<<<<<
@@ -12717,7 +13530,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1k___get__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":225
+  /* "cython/teukolsky_wrap.pyx":226
  *     @property
  *     def k(self):
  *         return self.polarmode             # <<<<<<<<<<<<<<
@@ -12725,13 +13538,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1k___get__(struct __pyx_
  *     def n(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_polarmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 225, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_polarmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 226, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":224
+  /* "cython/teukolsky_wrap.pyx":225
  *         return self.azimuthalmode
  *     @property
  *     def k(self):             # <<<<<<<<<<<<<<
@@ -12750,7 +13563,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1k___get__(struct __pyx_
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":227
+/* "cython/teukolsky_wrap.pyx":228
  *         return self.polarmode
  *     @property
  *     def n(self):             # <<<<<<<<<<<<<<
@@ -12780,7 +13593,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1n___get__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":228
+  /* "cython/teukolsky_wrap.pyx":229
  *     @property
  *     def n(self):
  *         return self.radialmode             # <<<<<<<<<<<<<<
@@ -12788,13 +13601,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1n___get__(struct __pyx_
  *     def omega(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_radialmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 228, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_radialmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 229, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":227
+  /* "cython/teukolsky_wrap.pyx":228
  *         return self.polarmode
  *     @property
  *     def n(self):             # <<<<<<<<<<<<<<
@@ -12813,7 +13626,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1n___get__(struct __pyx_
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":230
+/* "cython/teukolsky_wrap.pyx":231
  *         return self.radialmode
  *     @property
  *     def omega(self):             # <<<<<<<<<<<<<<
@@ -12843,7 +13656,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_5omega___get__(struct __
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":231
+  /* "cython/teukolsky_wrap.pyx":232
  *     @property
  *     def omega(self):
  *         return self.frequency             # <<<<<<<<<<<<<<
@@ -12851,13 +13664,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_5omega___get__(struct __
  *     def a(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_frequency); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 231, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_frequency); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 232, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":230
+  /* "cython/teukolsky_wrap.pyx":231
  *         return self.radialmode
  *     @property
  *     def omega(self):             # <<<<<<<<<<<<<<
@@ -12876,7 +13689,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_5omega___get__(struct __
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":233
+/* "cython/teukolsky_wrap.pyx":234
  *         return self.frequency
  *     @property
  *     def a(self):             # <<<<<<<<<<<<<<
@@ -12906,7 +13719,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1a___get__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":234
+  /* "cython/teukolsky_wrap.pyx":235
  *     @property
  *     def a(self):
  *         return self.blackholespin             # <<<<<<<<<<<<<<
@@ -12914,13 +13727,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1a___get__(struct __pyx_
  *     def radialpoints(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_blackholespin); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 234, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_blackholespin); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 235, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":233
+  /* "cython/teukolsky_wrap.pyx":234
  *         return self.frequency
  *     @property
  *     def a(self):             # <<<<<<<<<<<<<<
@@ -12939,7 +13752,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_1a___get__(struct __pyx_
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":236
+/* "cython/teukolsky_wrap.pyx":237
  *         return self.blackholespin
  *     @property
  *     def radialpoints(self):             # <<<<<<<<<<<<<<
@@ -12976,7 +13789,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_12radialpoints___get__(s
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":237
+  /* "cython/teukolsky_wrap.pyx":238
  *     @property
  *     def radialpoints(self):
  *         return np.array([self.teukcpp.getRadialPoints(i) for i in range(self.sampleR)])             # <<<<<<<<<<<<<<
@@ -12984,21 +13797,21 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_12radialpoints___get__(s
  *     def polarpoints(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 237, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 238, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 237, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 238, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   { /* enter inner scope */
-    __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 237, __pyx_L1_error)
+    __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 238, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_4 = __pyx_v_self->sampleR;
     __pyx_t_5 = __pyx_t_4;
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
       __pyx_8genexpr5__pyx_v_i = __pyx_t_6;
-      __pyx_t_7 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getRadialPoints(__pyx_8genexpr5__pyx_v_i)); if (unlikely(!__pyx_t_7)) __PYX_ERR(3, 237, __pyx_L1_error)
+      __pyx_t_7 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getRadialPoints(__pyx_8genexpr5__pyx_v_i)); if (unlikely(!__pyx_t_7)) __PYX_ERR(3, 238, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_7))) __PYX_ERR(3, 237, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_7))) __PYX_ERR(3, 238, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     }
   } /* exit inner scope */
@@ -13015,14 +13828,14 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_12radialpoints___get__(s
   __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_7, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2);
   __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 237, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 238, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":236
+  /* "cython/teukolsky_wrap.pyx":237
  *         return self.blackholespin
  *     @property
  *     def radialpoints(self):             # <<<<<<<<<<<<<<
@@ -13044,7 +13857,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_12radialpoints___get__(s
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":239
+/* "cython/teukolsky_wrap.pyx":240
  *         return np.array([self.teukcpp.getRadialPoints(i) for i in range(self.sampleR)])
  *     @property
  *     def polarpoints(self):             # <<<<<<<<<<<<<<
@@ -13081,7 +13894,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_11polarpoints___get__(st
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":240
+  /* "cython/teukolsky_wrap.pyx":241
  *     @property
  *     def polarpoints(self):
  *         return np.array([self.teukcpp.getPolarPoints(i) for i in range(self.sampleTh)])             # <<<<<<<<<<<<<<
@@ -13089,21 +13902,21 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_11polarpoints___get__(st
  *     def radialsolutions(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 240, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 241, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 240, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 241, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   { /* enter inner scope */
-    __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 240, __pyx_L1_error)
+    __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 241, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_4 = __pyx_v_self->sampleTh;
     __pyx_t_5 = __pyx_t_4;
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
       __pyx_8genexpr6__pyx_v_i = __pyx_t_6;
-      __pyx_t_7 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getPolarPoints(__pyx_8genexpr6__pyx_v_i)); if (unlikely(!__pyx_t_7)) __PYX_ERR(3, 240, __pyx_L1_error)
+      __pyx_t_7 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getPolarPoints(__pyx_8genexpr6__pyx_v_i)); if (unlikely(!__pyx_t_7)) __PYX_ERR(3, 241, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_7))) __PYX_ERR(3, 240, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_7))) __PYX_ERR(3, 241, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     }
   } /* exit inner scope */
@@ -13120,14 +13933,14 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_11polarpoints___get__(st
   __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_7, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2);
   __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 240, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 241, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":239
+  /* "cython/teukolsky_wrap.pyx":240
  *         return np.array([self.teukcpp.getRadialPoints(i) for i in range(self.sampleR)])
  *     @property
  *     def polarpoints(self):             # <<<<<<<<<<<<<<
@@ -13149,7 +13962,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_11polarpoints___get__(st
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":242
+/* "cython/teukolsky_wrap.pyx":243
  *         return np.array([self.teukcpp.getPolarPoints(i) for i in range(self.sampleTh)])
  *     @property
  *     def radialsolutions(self):             # <<<<<<<<<<<<<<
@@ -13188,7 +14001,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_15radialsolutions___get_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":243
+  /* "cython/teukolsky_wrap.pyx":244
  *     @property
  *     def radialsolutions(self):
  *         return {             # <<<<<<<<<<<<<<
@@ -13197,30 +14010,30 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_15radialsolutions___get_
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "cython/teukolsky_wrap.pyx":244
+  /* "cython/teukolsky_wrap.pyx":245
  *     def radialsolutions(self):
  *         return {
  *                 "In":np.array([self.teukcpp.getHomogeneousRadialSolution(BoundaryCondition.In, i) for i in range(self.sampleR)]),             # <<<<<<<<<<<<<<
  *                 "Up":np.array([self.teukcpp.getHomogeneousRadialSolution(BoundaryCondition.Up, i) for i in range(self.sampleR)])
  *         }
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 244, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 245, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 244, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 245, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_array); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 244, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_array); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 245, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   { /* enter inner scope */
-    __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 244, __pyx_L1_error)
+    __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 245, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_5 = __pyx_v_self->sampleR;
     __pyx_t_6 = __pyx_t_5;
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
       __pyx_8genexpr7__pyx_v_i = __pyx_t_7;
-      __pyx_t_8 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getHomogeneousRadialSolution(In, __pyx_8genexpr7__pyx_v_i)); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 244, __pyx_L1_error)
+      __pyx_t_8 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getHomogeneousRadialSolution(In, __pyx_8genexpr7__pyx_v_i)); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 245, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_3, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 244, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_3, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 245, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     }
   } /* exit inner scope */
@@ -13237,34 +14050,34 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_15radialsolutions___get_
   __pyx_t_2 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_8, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 244, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 245, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_In, __pyx_t_2) < 0) __PYX_ERR(3, 244, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_In, __pyx_t_2) < 0) __PYX_ERR(3, 245, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":245
+  /* "cython/teukolsky_wrap.pyx":246
  *         return {
  *                 "In":np.array([self.teukcpp.getHomogeneousRadialSolution(BoundaryCondition.In, i) for i in range(self.sampleR)]),
  *                 "Up":np.array([self.teukcpp.getHomogeneousRadialSolution(BoundaryCondition.Up, i) for i in range(self.sampleR)])             # <<<<<<<<<<<<<<
  *         }
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 245, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 246, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 245, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 246, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   { /* enter inner scope */
-    __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 245, __pyx_L1_error)
+    __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 246, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = __pyx_v_self->sampleR;
     __pyx_t_6 = __pyx_t_5;
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
       __pyx_8genexpr8__pyx_v_i = __pyx_t_7;
-      __pyx_t_8 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getHomogeneousRadialSolution(Up, __pyx_8genexpr8__pyx_v_i)); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 245, __pyx_L1_error)
+      __pyx_t_8 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getHomogeneousRadialSolution(Up, __pyx_8genexpr8__pyx_v_i)); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 246, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 245, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 246, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     }
   } /* exit inner scope */
@@ -13281,16 +14094,16 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_15radialsolutions___get_
   __pyx_t_2 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_8, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 245, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 246, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_Up, __pyx_t_2) < 0) __PYX_ERR(3, 244, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_Up, __pyx_t_2) < 0) __PYX_ERR(3, 245, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":242
+  /* "cython/teukolsky_wrap.pyx":243
  *         return np.array([self.teukcpp.getPolarPoints(i) for i in range(self.sampleTh)])
  *     @property
  *     def radialsolutions(self):             # <<<<<<<<<<<<<<
@@ -13313,7 +14126,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_15radialsolutions___get_
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":248
+/* "cython/teukolsky_wrap.pyx":249
  *         }
  * 
  *     def teukolsky_amplitude(self, unicode bc):             # <<<<<<<<<<<<<<
@@ -13330,7 +14143,7 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_5teukolsky_amplitude(PyO
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("teukolsky_amplitude (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 248, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 249, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_4teukolsky_amplitude(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((PyObject*)__pyx_v_bc));
 
   /* function exit code */
@@ -13351,21 +14164,21 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_4teukolsky_amplitude(str
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("teukolsky_amplitude", 0);
 
-  /* "cython/teukolsky_wrap.pyx":249
+  /* "cython/teukolsky_wrap.pyx":250
  * 
  *     def teukolsky_amplitude(self, unicode bc):
  *         return self.teukcpp.getTeukolskyAmplitude(str_to_bc(bc))             # <<<<<<<<<<<<<<
  * 
- *     def couplingcoefficient(self, int l):
+ *     def teukolsky_amplitude_precision(self, unicode bc):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getTeukolskyAmplitude(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 249, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getTeukolskyAmplitude(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 250, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":248
+  /* "cython/teukolsky_wrap.pyx":249
  *         }
  * 
  *     def teukolsky_amplitude(self, unicode bc):             # <<<<<<<<<<<<<<
@@ -13384,151 +14197,70 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_4teukolsky_amplitude(str
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":251
+/* "cython/teukolsky_wrap.pyx":252
  *         return self.teukcpp.getTeukolskyAmplitude(str_to_bc(bc))
  * 
- *     def couplingcoefficient(self, int l):             # <<<<<<<<<<<<<<
- *         return self.teukcpp.getCouplingCoefficient(l)
- *     def radialpoint(self, int i):
+ *     def teukolsky_amplitude_precision(self, unicode bc):             # <<<<<<<<<<<<<<
+ *         return self.teukcpp.getTeukolskyAmplitudePrecision(str_to_bc(bc))
+ * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_7couplingcoefficient(PyObject *__pyx_v_self, PyObject *__pyx_arg_l); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_7couplingcoefficient(PyObject *__pyx_v_self, PyObject *__pyx_arg_l) {
-  int __pyx_v_l;
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_7teukolsky_amplitude_precision(PyObject *__pyx_v_self, PyObject *__pyx_v_bc); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_7teukolsky_amplitude_precision(PyObject *__pyx_v_self, PyObject *__pyx_v_bc) {
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("couplingcoefficient (wrapper)", 0);
-  assert(__pyx_arg_l); {
-    __pyx_v_l = __Pyx_PyInt_As_int(__pyx_arg_l); if (unlikely((__pyx_v_l == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 251, __pyx_L3_error)
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.couplingcoefficient", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_6couplingcoefficient(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((int)__pyx_v_l));
+  __Pyx_RefNannySetupContext("teukolsky_amplitude_precision (wrapper)", 0);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 252, __pyx_L1_error)
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_6teukolsky_amplitude_precision(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((PyObject*)__pyx_v_bc));
 
   /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_6couplingcoefficient(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_l) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("couplingcoefficient", 0);
-
-  /* "cython/teukolsky_wrap.pyx":252
- * 
- *     def couplingcoefficient(self, int l):
- *         return self.teukcpp.getCouplingCoefficient(l)             # <<<<<<<<<<<<<<
- *     def radialpoint(self, int i):
- *         return self.teukcpp.getRadialPoints(i)
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getCouplingCoefficient(__pyx_v_l)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 252, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
   goto __pyx_L0;
-
-  /* "cython/teukolsky_wrap.pyx":251
- *         return self.teukcpp.getTeukolskyAmplitude(str_to_bc(bc))
- * 
- *     def couplingcoefficient(self, int l):             # <<<<<<<<<<<<<<
- *         return self.teukcpp.getCouplingCoefficient(l)
- *     def radialpoint(self, int i):
- */
-
-  /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.couplingcoefficient", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":253
- *     def couplingcoefficient(self, int l):
- *         return self.teukcpp.getCouplingCoefficient(l)
- *     def radialpoint(self, int i):             # <<<<<<<<<<<<<<
- *         return self.teukcpp.getRadialPoints(i)
- *     def radialsolution(self, unicode bc, int i):
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_9radialpoint(PyObject *__pyx_v_self, PyObject *__pyx_arg_i); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_9radialpoint(PyObject *__pyx_v_self, PyObject *__pyx_arg_i) {
-  int __pyx_v_i;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("radialpoint (wrapper)", 0);
-  assert(__pyx_arg_i); {
-    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 253, __pyx_L3_error)
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.radialpoint", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_8radialpoint(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((int)__pyx_v_i));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_8radialpoint(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_6teukolsky_amplitude_precision(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("radialpoint", 0);
+  __Pyx_RefNannySetupContext("teukolsky_amplitude_precision", 0);
 
-  /* "cython/teukolsky_wrap.pyx":254
- *         return self.teukcpp.getCouplingCoefficient(l)
- *     def radialpoint(self, int i):
- *         return self.teukcpp.getRadialPoints(i)             # <<<<<<<<<<<<<<
- *     def radialsolution(self, unicode bc, int i):
- *         return self.teukcpp.getRadialSolution(str_to_bc(bc), i)
+  /* "cython/teukolsky_wrap.pyx":253
+ * 
+ *     def teukolsky_amplitude_precision(self, unicode bc):
+ *         return self.teukcpp.getTeukolskyAmplitudePrecision(str_to_bc(bc))             # <<<<<<<<<<<<<<
+ * 
+ *     def couplingcoefficient(self, int l):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getRadialPoints(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 254, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getTeukolskyAmplitudePrecision(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 253, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":253
- *     def couplingcoefficient(self, int l):
- *         return self.teukcpp.getCouplingCoefficient(l)
- *     def radialpoint(self, int i):             # <<<<<<<<<<<<<<
- *         return self.teukcpp.getRadialPoints(i)
- *     def radialsolution(self, unicode bc, int i):
+  /* "cython/teukolsky_wrap.pyx":252
+ *         return self.teukcpp.getTeukolskyAmplitude(str_to_bc(bc))
+ * 
+ *     def teukolsky_amplitude_precision(self, unicode bc):             # <<<<<<<<<<<<<<
+ *         return self.teukcpp.getTeukolskyAmplitudePrecision(str_to_bc(bc))
+ * 
  */
 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.radialpoint", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.teukolsky_amplitude_precision", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -13537,6 +14269,158 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_8radialpoint(struct __py
 }
 
 /* "cython/teukolsky_wrap.pyx":255
+ *         return self.teukcpp.getTeukolskyAmplitudePrecision(str_to_bc(bc))
+ * 
+ *     def couplingcoefficient(self, int l):             # <<<<<<<<<<<<<<
+ *         return self.teukcpp.getCouplingCoefficient(l)
+ *     def radialpoint(self, int i):
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_9couplingcoefficient(PyObject *__pyx_v_self, PyObject *__pyx_arg_l); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_9couplingcoefficient(PyObject *__pyx_v_self, PyObject *__pyx_arg_l) {
+  int __pyx_v_l;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("couplingcoefficient (wrapper)", 0);
+  assert(__pyx_arg_l); {
+    __pyx_v_l = __Pyx_PyInt_As_int(__pyx_arg_l); if (unlikely((__pyx_v_l == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 255, __pyx_L3_error)
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.couplingcoefficient", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_8couplingcoefficient(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((int)__pyx_v_l));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_8couplingcoefficient(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_l) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("couplingcoefficient", 0);
+
+  /* "cython/teukolsky_wrap.pyx":256
+ * 
+ *     def couplingcoefficient(self, int l):
+ *         return self.teukcpp.getCouplingCoefficient(l)             # <<<<<<<<<<<<<<
+ *     def radialpoint(self, int i):
+ *         return self.teukcpp.getRadialPoints(i)
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getCouplingCoefficient(__pyx_v_l)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 256, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "cython/teukolsky_wrap.pyx":255
+ *         return self.teukcpp.getTeukolskyAmplitudePrecision(str_to_bc(bc))
+ * 
+ *     def couplingcoefficient(self, int l):             # <<<<<<<<<<<<<<
+ *         return self.teukcpp.getCouplingCoefficient(l)
+ *     def radialpoint(self, int i):
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.couplingcoefficient", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cython/teukolsky_wrap.pyx":257
+ *     def couplingcoefficient(self, int l):
+ *         return self.teukcpp.getCouplingCoefficient(l)
+ *     def radialpoint(self, int i):             # <<<<<<<<<<<<<<
+ *         return self.teukcpp.getRadialPoints(i)
+ *     def radialsolution(self, unicode bc, int i):
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_11radialpoint(PyObject *__pyx_v_self, PyObject *__pyx_arg_i); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_11radialpoint(PyObject *__pyx_v_self, PyObject *__pyx_arg_i) {
+  int __pyx_v_i;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("radialpoint (wrapper)", 0);
+  assert(__pyx_arg_i); {
+    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 257, __pyx_L3_error)
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.radialpoint", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_10radialpoint(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((int)__pyx_v_i));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10radialpoint(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("radialpoint", 0);
+
+  /* "cython/teukolsky_wrap.pyx":258
+ *         return self.teukcpp.getCouplingCoefficient(l)
+ *     def radialpoint(self, int i):
+ *         return self.teukcpp.getRadialPoints(i)             # <<<<<<<<<<<<<<
+ *     def radialsolution(self, unicode bc, int i):
+ *         return self.teukcpp.getRadialSolution(str_to_bc(bc), i)
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getRadialPoints(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 258, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "cython/teukolsky_wrap.pyx":257
+ *     def couplingcoefficient(self, int l):
+ *         return self.teukcpp.getCouplingCoefficient(l)
+ *     def radialpoint(self, int i):             # <<<<<<<<<<<<<<
+ *         return self.teukcpp.getRadialPoints(i)
+ *     def radialsolution(self, unicode bc, int i):
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.radialpoint", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cython/teukolsky_wrap.pyx":259
  *     def radialpoint(self, int i):
  *         return self.teukcpp.getRadialPoints(i)
  *     def radialsolution(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -13545,8 +14429,8 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_8radialpoint(struct __py
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_11radialsolution(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_11radialsolution(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_13radialsolution(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_13radialsolution(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_bc = 0;
   int __pyx_v_i;
   int __pyx_lineno = 0;
@@ -13578,11 +14462,11 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_11radialsolution(PyObjec
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("radialsolution", 1, 2, 2, 1); __PYX_ERR(3, 255, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("radialsolution", 1, 2, 2, 1); __PYX_ERR(3, 259, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "radialsolution") < 0)) __PYX_ERR(3, 255, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "radialsolution") < 0)) __PYX_ERR(3, 259, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -13591,18 +14475,18 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_11radialsolution(PyObjec
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_bc = ((PyObject*)values[0]);
-    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 255, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 259, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("radialsolution", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 255, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("radialsolution", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 259, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.radialsolution", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 255, __pyx_L1_error)
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_10radialsolution(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 259, __pyx_L1_error)
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_12radialsolution(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
 
   /* function exit code */
   goto __pyx_L0;
@@ -13613,7 +14497,7 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_11radialsolution(PyObjec
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10radialsolution(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_12radialsolution(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -13622,7 +14506,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10radialsolution(struct 
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("radialsolution", 0);
 
-  /* "cython/teukolsky_wrap.pyx":256
+  /* "cython/teukolsky_wrap.pyx":260
  *         return self.teukcpp.getRadialPoints(i)
  *     def radialsolution(self, unicode bc, int i):
  *         return self.teukcpp.getRadialSolution(str_to_bc(bc), i)             # <<<<<<<<<<<<<<
@@ -13630,13 +14514,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10radialsolution(struct 
  *         return self.teukcpp.getRadialDerivative(str_to_bc(bc), i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getRadialSolution(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 256, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getRadialSolution(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 260, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":255
+  /* "cython/teukolsky_wrap.pyx":259
  *     def radialpoint(self, int i):
  *         return self.teukcpp.getRadialPoints(i)
  *     def radialsolution(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -13655,7 +14539,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10radialsolution(struct 
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":257
+/* "cython/teukolsky_wrap.pyx":261
  *     def radialsolution(self, unicode bc, int i):
  *         return self.teukcpp.getRadialSolution(str_to_bc(bc), i)
  *     def radialderivative(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -13664,8 +14548,8 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_10radialsolution(struct 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_13radialderivative(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_13radialderivative(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_15radialderivative(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_15radialderivative(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_bc = 0;
   int __pyx_v_i;
   int __pyx_lineno = 0;
@@ -13697,11 +14581,11 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_13radialderivative(PyObj
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("radialderivative", 1, 2, 2, 1); __PYX_ERR(3, 257, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("radialderivative", 1, 2, 2, 1); __PYX_ERR(3, 261, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "radialderivative") < 0)) __PYX_ERR(3, 257, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "radialderivative") < 0)) __PYX_ERR(3, 261, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -13710,18 +14594,18 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_13radialderivative(PyObj
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_bc = ((PyObject*)values[0]);
-    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 257, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 261, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("radialderivative", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 257, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("radialderivative", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 261, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.radialderivative", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 257, __pyx_L1_error)
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_12radialderivative(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 261, __pyx_L1_error)
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
 
   /* function exit code */
   goto __pyx_L0;
@@ -13732,7 +14616,7 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_13radialderivative(PyObj
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_12radialderivative(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -13741,7 +14625,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_12radialderivative(struc
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("radialderivative", 0);
 
-  /* "cython/teukolsky_wrap.pyx":258
+  /* "cython/teukolsky_wrap.pyx":262
  *         return self.teukcpp.getRadialSolution(str_to_bc(bc), i)
  *     def radialderivative(self, unicode bc, int i):
  *         return self.teukcpp.getRadialDerivative(str_to_bc(bc), i)             # <<<<<<<<<<<<<<
@@ -13749,13 +14633,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_12radialderivative(struc
  *         return self.teukolsky_amplitude(bc)*self.homogeneousradialderivative2(bc, i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getRadialDerivative(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 258, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getRadialDerivative(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 262, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":257
+  /* "cython/teukolsky_wrap.pyx":261
  *     def radialsolution(self, unicode bc, int i):
  *         return self.teukcpp.getRadialSolution(str_to_bc(bc), i)
  *     def radialderivative(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -13774,7 +14658,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_12radialderivative(struc
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":259
+/* "cython/teukolsky_wrap.pyx":263
  *     def radialderivative(self, unicode bc, int i):
  *         return self.teukcpp.getRadialDerivative(str_to_bc(bc), i)
  *     def radialderivative2(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -13783,8 +14667,8 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_12radialderivative(struc
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_15radialderivative2(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_15radialderivative2(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_17radialderivative2(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_17radialderivative2(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_bc = 0;
   int __pyx_v_i;
   int __pyx_lineno = 0;
@@ -13816,11 +14700,11 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_15radialderivative2(PyOb
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("radialderivative2", 1, 2, 2, 1); __PYX_ERR(3, 259, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("radialderivative2", 1, 2, 2, 1); __PYX_ERR(3, 263, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "radialderivative2") < 0)) __PYX_ERR(3, 259, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "radialderivative2") < 0)) __PYX_ERR(3, 263, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -13829,18 +14713,18 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_15radialderivative2(PyOb
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_bc = ((PyObject*)values[0]);
-    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 259, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 263, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("radialderivative2", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 259, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("radialderivative2", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 263, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.radialderivative2", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 259, __pyx_L1_error)
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative2(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 263, __pyx_L1_error)
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_16radialderivative2(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
 
   /* function exit code */
   goto __pyx_L0;
@@ -13851,7 +14735,7 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_15radialderivative2(PyOb
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative2(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_16radialderivative2(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -13866,7 +14750,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative2(stru
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("radialderivative2", 0);
 
-  /* "cython/teukolsky_wrap.pyx":260
+  /* "cython/teukolsky_wrap.pyx":264
  *         return self.teukcpp.getRadialDerivative(str_to_bc(bc), i)
  *     def radialderivative2(self, unicode bc, int i):
  *         return self.teukolsky_amplitude(bc)*self.homogeneousradialderivative2(bc, i)             # <<<<<<<<<<<<<<
@@ -13874,7 +14758,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative2(stru
  *         return self.teukcpp.getHomogeneousRadialSolution(str_to_bc(bc), i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_teukolsky_amplitude); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 260, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_teukolsky_amplitude); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 264, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -13888,12 +14772,12 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative2(stru
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_v_bc) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_bc);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 260, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 264, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_homogeneousradialderivative2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 260, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_homogeneousradialderivative2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 264, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 260, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 264, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   __pyx_t_6 = 0;
@@ -13910,7 +14794,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative2(stru
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_v_bc, __pyx_t_4};
-    __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 260, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 264, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -13919,14 +14803,14 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative2(stru
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_v_bc, __pyx_t_4};
-    __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 260, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 264, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   } else
   #endif
   {
-    __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(3, 260, __pyx_L1_error)
+    __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(3, 264, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     if (__pyx_t_5) {
       __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_5); __pyx_t_5 = NULL;
@@ -13937,12 +14821,12 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative2(stru
     __Pyx_GIVEREF(__pyx_t_4);
     PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, __pyx_t_4);
     __pyx_t_4 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 260, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 264, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 260, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 264, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -13950,7 +14834,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative2(stru
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":259
+  /* "cython/teukolsky_wrap.pyx":263
  *     def radialderivative(self, unicode bc, int i):
  *         return self.teukcpp.getRadialDerivative(str_to_bc(bc), i)
  *     def radialderivative2(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -13974,7 +14858,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative2(stru
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":261
+/* "cython/teukolsky_wrap.pyx":265
  *     def radialderivative2(self, unicode bc, int i):
  *         return self.teukolsky_amplitude(bc)*self.homogeneousradialderivative2(bc, i)
  *     def homogeneousradialsolution(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -13983,8 +14867,8 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_14radialderivative2(stru
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_17homogeneousradialsolution(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_17homogeneousradialsolution(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_19homogeneousradialsolution(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_19homogeneousradialsolution(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_bc = 0;
   int __pyx_v_i;
   int __pyx_lineno = 0;
@@ -14016,11 +14900,11 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_17homogeneousradialsolut
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("homogeneousradialsolution", 1, 2, 2, 1); __PYX_ERR(3, 261, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("homogeneousradialsolution", 1, 2, 2, 1); __PYX_ERR(3, 265, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "homogeneousradialsolution") < 0)) __PYX_ERR(3, 261, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "homogeneousradialsolution") < 0)) __PYX_ERR(3, 265, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -14029,18 +14913,18 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_17homogeneousradialsolut
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_bc = ((PyObject*)values[0]);
-    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 261, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 265, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("homogeneousradialsolution", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 261, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("homogeneousradialsolution", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 265, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.homogeneousradialsolution", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 261, __pyx_L1_error)
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_16homogeneousradialsolution(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 265, __pyx_L1_error)
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_18homogeneousradialsolution(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
 
   /* function exit code */
   goto __pyx_L0;
@@ -14051,7 +14935,7 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_17homogeneousradialsolut
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_16homogeneousradialsolution(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_18homogeneousradialsolution(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -14060,7 +14944,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_16homogeneousradialsolut
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("homogeneousradialsolution", 0);
 
-  /* "cython/teukolsky_wrap.pyx":262
+  /* "cython/teukolsky_wrap.pyx":266
  *         return self.teukolsky_amplitude(bc)*self.homogeneousradialderivative2(bc, i)
  *     def homogeneousradialsolution(self, unicode bc, int i):
  *         return self.teukcpp.getHomogeneousRadialSolution(str_to_bc(bc), i)             # <<<<<<<<<<<<<<
@@ -14068,13 +14952,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_16homogeneousradialsolut
  *         return self.teukcpp.getHomogeneousRadialDerivative(str_to_bc(bc), i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getHomogeneousRadialSolution(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 262, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getHomogeneousRadialSolution(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 266, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":261
+  /* "cython/teukolsky_wrap.pyx":265
  *     def radialderivative2(self, unicode bc, int i):
  *         return self.teukolsky_amplitude(bc)*self.homogeneousradialderivative2(bc, i)
  *     def homogeneousradialsolution(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -14093,7 +14977,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_16homogeneousradialsolut
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":263
+/* "cython/teukolsky_wrap.pyx":267
  *     def homogeneousradialsolution(self, unicode bc, int i):
  *         return self.teukcpp.getHomogeneousRadialSolution(str_to_bc(bc), i)
  *     def homogeneousradialderivative(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -14102,8 +14986,8 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_16homogeneousradialsolut
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_19homogeneousradialderivative(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_19homogeneousradialderivative(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_21homogeneousradialderivative(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_21homogeneousradialderivative(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_bc = 0;
   int __pyx_v_i;
   int __pyx_lineno = 0;
@@ -14135,11 +15019,11 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_19homogeneousradialderiv
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative", 1, 2, 2, 1); __PYX_ERR(3, 263, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative", 1, 2, 2, 1); __PYX_ERR(3, 267, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "homogeneousradialderivative") < 0)) __PYX_ERR(3, 263, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "homogeneousradialderivative") < 0)) __PYX_ERR(3, 267, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -14148,18 +15032,18 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_19homogeneousradialderiv
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_bc = ((PyObject*)values[0]);
-    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 263, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 267, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 263, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 267, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.homogeneousradialderivative", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 263, __pyx_L1_error)
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_18homogeneousradialderivative(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 267, __pyx_L1_error)
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_20homogeneousradialderivative(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
 
   /* function exit code */
   goto __pyx_L0;
@@ -14170,7 +15054,7 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_19homogeneousradialderiv
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_18homogeneousradialderivative(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_20homogeneousradialderivative(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -14179,7 +15063,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_18homogeneousradialderiv
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("homogeneousradialderivative", 0);
 
-  /* "cython/teukolsky_wrap.pyx":264
+  /* "cython/teukolsky_wrap.pyx":268
  *         return self.teukcpp.getHomogeneousRadialSolution(str_to_bc(bc), i)
  *     def homogeneousradialderivative(self, unicode bc, int i):
  *         return self.teukcpp.getHomogeneousRadialDerivative(str_to_bc(bc), i)             # <<<<<<<<<<<<<<
@@ -14187,13 +15071,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_18homogeneousradialderiv
  *         return self.teukcpp.getHomogeneousSecondRadialDerivative(str_to_bc(bc), i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getHomogeneousRadialDerivative(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 264, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getHomogeneousRadialDerivative(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 268, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":263
+  /* "cython/teukolsky_wrap.pyx":267
  *     def homogeneousradialsolution(self, unicode bc, int i):
  *         return self.teukcpp.getHomogeneousRadialSolution(str_to_bc(bc), i)
  *     def homogeneousradialderivative(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -14212,7 +15096,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_18homogeneousradialderiv
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":265
+/* "cython/teukolsky_wrap.pyx":269
  *     def homogeneousradialderivative(self, unicode bc, int i):
  *         return self.teukcpp.getHomogeneousRadialDerivative(str_to_bc(bc), i)
  *     def homogeneousradialderivative2(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -14221,8 +15105,8 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_18homogeneousradialderiv
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_21homogeneousradialderivative2(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_21homogeneousradialderivative2(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_23homogeneousradialderivative2(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_23homogeneousradialderivative2(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_bc = 0;
   int __pyx_v_i;
   int __pyx_lineno = 0;
@@ -14254,11 +15138,11 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_21homogeneousradialderiv
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative2", 1, 2, 2, 1); __PYX_ERR(3, 265, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative2", 1, 2, 2, 1); __PYX_ERR(3, 269, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "homogeneousradialderivative2") < 0)) __PYX_ERR(3, 265, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "homogeneousradialderivative2") < 0)) __PYX_ERR(3, 269, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -14267,18 +15151,18 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_21homogeneousradialderiv
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_bc = ((PyObject*)values[0]);
-    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 265, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 269, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative2", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 265, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative2", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 269, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.homogeneousradialderivative2", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 265, __pyx_L1_error)
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_20homogeneousradialderivative2(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 269, __pyx_L1_error)
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_22homogeneousradialderivative2(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
 
   /* function exit code */
   goto __pyx_L0;
@@ -14289,7 +15173,7 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_21homogeneousradialderiv
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_20homogeneousradialderivative2(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_22homogeneousradialderivative2(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, PyObject *__pyx_v_bc, int __pyx_v_i) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -14298,7 +15182,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_20homogeneousradialderiv
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("homogeneousradialderivative2", 0);
 
-  /* "cython/teukolsky_wrap.pyx":266
+  /* "cython/teukolsky_wrap.pyx":270
  *         return self.teukcpp.getHomogeneousRadialDerivative(str_to_bc(bc), i)
  *     def homogeneousradialderivative2(self, unicode bc, int i):
  *         return self.teukcpp.getHomogeneousSecondRadialDerivative(str_to_bc(bc), i)             # <<<<<<<<<<<<<<
@@ -14306,13 +15190,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_20homogeneousradialderiv
  *         return self.teukcpp.getPolarPoints(i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getHomogeneousSecondRadialDerivative(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 266, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->teukcpp->getHomogeneousSecondRadialDerivative(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 270, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":265
+  /* "cython/teukolsky_wrap.pyx":269
  *     def homogeneousradialderivative(self, unicode bc, int i):
  *         return self.teukcpp.getHomogeneousRadialDerivative(str_to_bc(bc), i)
  *     def homogeneousradialderivative2(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -14331,7 +15215,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_20homogeneousradialderiv
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":267
+/* "cython/teukolsky_wrap.pyx":271
  *     def homogeneousradialderivative2(self, unicode bc, int i):
  *         return self.teukcpp.getHomogeneousSecondRadialDerivative(str_to_bc(bc), i)
  *     def polarpoint(self, int i):             # <<<<<<<<<<<<<<
@@ -14340,8 +15224,8 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_20homogeneousradialderiv
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_23polarpoint(PyObject *__pyx_v_self, PyObject *__pyx_arg_i); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_23polarpoint(PyObject *__pyx_v_self, PyObject *__pyx_arg_i) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_25polarpoint(PyObject *__pyx_v_self, PyObject *__pyx_arg_i); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_25polarpoint(PyObject *__pyx_v_self, PyObject *__pyx_arg_i) {
   int __pyx_v_i;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -14350,7 +15234,7 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_23polarpoint(PyObject *_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("polarpoint (wrapper)", 0);
   assert(__pyx_arg_i); {
-    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 267, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 271, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -14358,14 +15242,14 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_23polarpoint(PyObject *_
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_22polarpoint(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((int)__pyx_v_i));
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_24polarpoint(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((int)__pyx_v_i));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_22polarpoint(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_24polarpoint(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -14374,7 +15258,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_22polarpoint(struct __py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("polarpoint", 0);
 
-  /* "cython/teukolsky_wrap.pyx":268
+  /* "cython/teukolsky_wrap.pyx":272
  *         return self.teukcpp.getHomogeneousSecondRadialDerivative(str_to_bc(bc), i)
  *     def polarpoint(self, int i):
  *         return self.teukcpp.getPolarPoints(i)             # <<<<<<<<<<<<<<
@@ -14382,13 +15266,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_22polarpoint(struct __py
  *         return self.teukcpp.getPolarSolution(i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getPolarPoints(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 268, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getPolarPoints(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":267
+  /* "cython/teukolsky_wrap.pyx":271
  *     def homogeneousradialderivative2(self, unicode bc, int i):
  *         return self.teukcpp.getHomogeneousSecondRadialDerivative(str_to_bc(bc), i)
  *     def polarpoint(self, int i):             # <<<<<<<<<<<<<<
@@ -14407,7 +15291,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_22polarpoint(struct __py
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":269
+/* "cython/teukolsky_wrap.pyx":273
  *     def polarpoint(self, int i):
  *         return self.teukcpp.getPolarPoints(i)
  *     def polarsolution(self, int i):             # <<<<<<<<<<<<<<
@@ -14416,8 +15300,8 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_22polarpoint(struct __py
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_25polarsolution(PyObject *__pyx_v_self, PyObject *__pyx_arg_i); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_25polarsolution(PyObject *__pyx_v_self, PyObject *__pyx_arg_i) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_27polarsolution(PyObject *__pyx_v_self, PyObject *__pyx_arg_i); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_27polarsolution(PyObject *__pyx_v_self, PyObject *__pyx_arg_i) {
   int __pyx_v_i;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -14426,7 +15310,7 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_25polarsolution(PyObject
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("polarsolution (wrapper)", 0);
   assert(__pyx_arg_i); {
-    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 269, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 273, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -14434,14 +15318,14 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_25polarsolution(PyObject
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_24polarsolution(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((int)__pyx_v_i));
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_26polarsolution(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((int)__pyx_v_i));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_24polarsolution(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_26polarsolution(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -14450,7 +15334,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_24polarsolution(struct _
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("polarsolution", 0);
 
-  /* "cython/teukolsky_wrap.pyx":270
+  /* "cython/teukolsky_wrap.pyx":274
  *         return self.teukcpp.getPolarPoints(i)
  *     def polarsolution(self, int i):
  *         return self.teukcpp.getPolarSolution(i)             # <<<<<<<<<<<<<<
@@ -14458,13 +15342,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_24polarsolution(struct _
  *         return self.teukcpp.getPolarDerivative(i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getPolarSolution(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 270, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getPolarSolution(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 274, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":269
+  /* "cython/teukolsky_wrap.pyx":273
  *     def polarpoint(self, int i):
  *         return self.teukcpp.getPolarPoints(i)
  *     def polarsolution(self, int i):             # <<<<<<<<<<<<<<
@@ -14483,7 +15367,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_24polarsolution(struct _
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":271
+/* "cython/teukolsky_wrap.pyx":275
  *     def polarsolution(self, int i):
  *         return self.teukcpp.getPolarSolution(i)
  *     def polarderivative(self, int i):             # <<<<<<<<<<<<<<
@@ -14492,8 +15376,8 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_24polarsolution(struct _
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_27polarderivative(PyObject *__pyx_v_self, PyObject *__pyx_arg_i); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_27polarderivative(PyObject *__pyx_v_self, PyObject *__pyx_arg_i) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_29polarderivative(PyObject *__pyx_v_self, PyObject *__pyx_arg_i); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_29polarderivative(PyObject *__pyx_v_self, PyObject *__pyx_arg_i) {
   int __pyx_v_i;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -14502,7 +15386,7 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_27polarderivative(PyObje
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("polarderivative (wrapper)", 0);
   assert(__pyx_arg_i); {
-    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 271, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 275, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -14510,14 +15394,14 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_27polarderivative(PyObje
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_26polarderivative(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((int)__pyx_v_i));
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_28polarderivative(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((int)__pyx_v_i));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_26polarderivative(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_28polarderivative(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -14526,7 +15410,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_26polarderivative(struct
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("polarderivative", 0);
 
-  /* "cython/teukolsky_wrap.pyx":272
+  /* "cython/teukolsky_wrap.pyx":276
  *         return self.teukcpp.getPolarSolution(i)
  *     def polarderivative(self, int i):
  *         return self.teukcpp.getPolarDerivative(i)             # <<<<<<<<<<<<<<
@@ -14534,13 +15418,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_26polarderivative(struct
  *         return self.teukcpp.getPolarSecondDerivative(i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getPolarDerivative(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 272, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getPolarDerivative(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 276, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":271
+  /* "cython/teukolsky_wrap.pyx":275
  *     def polarsolution(self, int i):
  *         return self.teukcpp.getPolarSolution(i)
  *     def polarderivative(self, int i):             # <<<<<<<<<<<<<<
@@ -14559,7 +15443,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_26polarderivative(struct
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":273
+/* "cython/teukolsky_wrap.pyx":277
  *     def polarderivative(self, int i):
  *         return self.teukcpp.getPolarDerivative(i)
  *     def polarderivative2(self, int i):             # <<<<<<<<<<<<<<
@@ -14568,8 +15452,8 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_26polarderivative(struct
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_29polarderivative2(PyObject *__pyx_v_self, PyObject *__pyx_arg_i); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_29polarderivative2(PyObject *__pyx_v_self, PyObject *__pyx_arg_i) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_31polarderivative2(PyObject *__pyx_v_self, PyObject *__pyx_arg_i); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_31polarderivative2(PyObject *__pyx_v_self, PyObject *__pyx_arg_i) {
   int __pyx_v_i;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -14578,7 +15462,7 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_29polarderivative2(PyObj
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("polarderivative2 (wrapper)", 0);
   assert(__pyx_arg_i); {
-    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 273, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 277, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -14586,14 +15470,14 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_29polarderivative2(PyObj
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_28polarderivative2(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((int)__pyx_v_i));
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_30polarderivative2(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((int)__pyx_v_i));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_28polarderivative2(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_30polarderivative2(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, int __pyx_v_i) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -14602,7 +15486,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_28polarderivative2(struc
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("polarderivative2", 0);
 
-  /* "cython/teukolsky_wrap.pyx":274
+  /* "cython/teukolsky_wrap.pyx":278
  *         return self.teukcpp.getPolarDerivative(i)
  *     def polarderivative2(self, int i):
  *         return self.teukcpp.getPolarSecondDerivative(i)             # <<<<<<<<<<<<<<
@@ -14610,13 +15494,13 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_28polarderivative2(struc
  *     def solve(self, KerrGeodesic geo, unicode method = "AUTO", int nsample = 256, teuk=None, swsh=None):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getPolarSecondDerivative(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 274, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->teukcpp->getPolarSecondDerivative(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 278, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":273
+  /* "cython/teukolsky_wrap.pyx":277
  *     def polarderivative(self, int i):
  *         return self.teukcpp.getPolarDerivative(i)
  *     def polarderivative2(self, int i):             # <<<<<<<<<<<<<<
@@ -14635,7 +15519,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_28polarderivative2(struc
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":276
+/* "cython/teukolsky_wrap.pyx":280
  *         return self.teukcpp.getPolarSecondDerivative(i)
  * 
  *     def solve(self, KerrGeodesic geo, unicode method = "AUTO", int nsample = 256, teuk=None, swsh=None):             # <<<<<<<<<<<<<<
@@ -14644,8 +15528,8 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_28polarderivative2(struc
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_31solve(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_31solve(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_33solve(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_33solve(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_geo = 0;
   PyObject *__pyx_v_method = 0;
   int __pyx_v_nsample;
@@ -14711,7 +15595,7 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_31solve(PyObject *__pyx_
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "solve") < 0)) __PYX_ERR(3, 276, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "solve") < 0)) __PYX_ERR(3, 280, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -14731,7 +15615,7 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_31solve(PyObject *__pyx_
     __pyx_v_geo = ((struct __pyx_obj_11cybhpt_full_KerrGeodesic *)values[0]);
     __pyx_v_method = ((PyObject*)values[1]);
     if (values[2]) {
-      __pyx_v_nsample = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_nsample == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 276, __pyx_L3_error)
+      __pyx_v_nsample = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_nsample == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 280, __pyx_L3_error)
     } else {
       __pyx_v_nsample = ((int)0x100);
     }
@@ -14740,15 +15624,15 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_31solve(PyObject *__pyx_
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("solve", 0, 1, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 276, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("solve", 0, 1, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 280, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.TeukolskyMode.solve", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_geo), __pyx_ptype_11cybhpt_full_KerrGeodesic, 1, "geo", 0))) __PYX_ERR(3, 276, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_method), (&PyUnicode_Type), 1, "method", 1))) __PYX_ERR(3, 276, __pyx_L1_error)
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_30solve(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_geo, __pyx_v_method, __pyx_v_nsample, __pyx_v_teuk, __pyx_v_swsh);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_geo), __pyx_ptype_11cybhpt_full_KerrGeodesic, 1, "geo", 0))) __PYX_ERR(3, 280, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_method), (&PyUnicode_Type), 1, "method", 1))) __PYX_ERR(3, 280, __pyx_L1_error)
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_32solve(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), __pyx_v_geo, __pyx_v_method, __pyx_v_nsample, __pyx_v_teuk, __pyx_v_swsh);
 
   /* function exit code */
   goto __pyx_L0;
@@ -14759,12 +15643,12 @@ static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_31solve(PyObject *__pyx_
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_30solve(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_geo, PyObject *__pyx_v_method, int __pyx_v_nsample, CYTHON_UNUSED PyObject *__pyx_v_teuk, CYTHON_UNUSED PyObject *__pyx_v_swsh) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_32solve(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, struct __pyx_obj_11cybhpt_full_KerrGeodesic *__pyx_v_geo, PyObject *__pyx_v_method, int __pyx_v_nsample, CYTHON_UNUSED PyObject *__pyx_v_teuk, CYTHON_UNUSED PyObject *__pyx_v_swsh) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("solve", 0);
 
-  /* "cython/teukolsky_wrap.pyx":277
+  /* "cython/teukolsky_wrap.pyx":281
  * 
  *     def solve(self, KerrGeodesic geo, unicode method = "AUTO", int nsample = 256, teuk=None, swsh=None):
  *         self.teukcpp.generateSolutions(dereference(geo.geocpp), str_to_method(method), nsample)             # <<<<<<<<<<<<<<
@@ -14773,7 +15657,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_30solve(struct __pyx_obj
  */
   (void)(__pyx_v_self->teukcpp->generateSolutions((*__pyx_v_geo->geocpp), __pyx_f_11cybhpt_full_str_to_method(__pyx_v_method), __pyx_v_nsample));
 
-  /* "cython/teukolsky_wrap.pyx":278
+  /* "cython/teukolsky_wrap.pyx":282
  *     def solve(self, KerrGeodesic geo, unicode method = "AUTO", int nsample = 256, teuk=None, swsh=None):
  *         self.teukcpp.generateSolutions(dereference(geo.geocpp), str_to_method(method), nsample)
  *         self.sampleR = self.teukcpp.getRadialSampleNumber()             # <<<<<<<<<<<<<<
@@ -14782,7 +15666,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_30solve(struct __pyx_obj
  */
   __pyx_v_self->sampleR = __pyx_v_self->teukcpp->getRadialSampleNumber();
 
-  /* "cython/teukolsky_wrap.pyx":279
+  /* "cython/teukolsky_wrap.pyx":283
  *         self.teukcpp.generateSolutions(dereference(geo.geocpp), str_to_method(method), nsample)
  *         self.sampleR = self.teukcpp.getRadialSampleNumber()
  *         self.sampleTh = self.teukcpp.getPolarSampleNumber()             # <<<<<<<<<<<<<<
@@ -14791,7 +15675,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_30solve(struct __pyx_obj
  */
   __pyx_v_self->sampleTh = __pyx_v_self->teukcpp->getPolarSampleNumber();
 
-  /* "cython/teukolsky_wrap.pyx":276
+  /* "cython/teukolsky_wrap.pyx":280
  *         return self.teukcpp.getPolarSecondDerivative(i)
  * 
  *     def solve(self, KerrGeodesic geo, unicode method = "AUTO", int nsample = 256, teuk=None, swsh=None):             # <<<<<<<<<<<<<<
@@ -14806,7 +15690,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_30solve(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":281
+/* "cython/teukolsky_wrap.pyx":285
  *         self.sampleTh = self.teukcpp.getPolarSampleNumber()
  * 
  *     def flip_spinweight_frequency(self):             # <<<<<<<<<<<<<<
@@ -14815,24 +15699,24 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_30solve(struct __pyx_obj
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_33flip_spinweight_frequency(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_33flip_spinweight_frequency(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_35flip_spinweight_frequency(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_35flip_spinweight_frequency(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("flip_spinweight_frequency (wrapper)", 0);
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_32flip_spinweight_frequency(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_34flip_spinweight_frequency(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_32flip_spinweight_frequency(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_34flip_spinweight_frequency(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("flip_spinweight_frequency", 0);
 
-  /* "cython/teukolsky_wrap.pyx":282
+  /* "cython/teukolsky_wrap.pyx":286
  * 
  *     def flip_spinweight_frequency(self):
  *         self.teukcpp.flipSpinWeightAndFrequency()             # <<<<<<<<<<<<<<
@@ -14841,7 +15725,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_32flip_spinweight_freque
  */
   (void)(__pyx_v_self->teukcpp->flipSpinWeightAndFrequency());
 
-  /* "cython/teukolsky_wrap.pyx":281
+  /* "cython/teukolsky_wrap.pyx":285
  *         self.sampleTh = self.teukcpp.getPolarSampleNumber()
  * 
  *     def flip_spinweight_frequency(self):             # <<<<<<<<<<<<<<
@@ -14856,7 +15740,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_32flip_spinweight_freque
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":284
+/* "cython/teukolsky_wrap.pyx":288
  *         self.teukcpp.flipSpinWeightAndFrequency()
  * 
  *     def flip_spinweight(self):             # <<<<<<<<<<<<<<
@@ -14865,24 +15749,24 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_32flip_spinweight_freque
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_35flip_spinweight(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_35flip_spinweight(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_37flip_spinweight(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_37flip_spinweight(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("flip_spinweight (wrapper)", 0);
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_34flip_spinweight(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_36flip_spinweight(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_34flip_spinweight(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_36flip_spinweight(struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("flip_spinweight", 0);
 
-  /* "cython/teukolsky_wrap.pyx":285
+  /* "cython/teukolsky_wrap.pyx":289
  * 
  *     def flip_spinweight(self):
  *         self.teukcpp.flipSpinWeight()             # <<<<<<<<<<<<<<
@@ -14891,7 +15775,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_34flip_spinweight(struct
  */
   (void)(__pyx_v_self->teukcpp->flipSpinWeight());
 
-  /* "cython/teukolsky_wrap.pyx":284
+  /* "cython/teukolsky_wrap.pyx":288
  *         self.teukcpp.flipSpinWeightAndFrequency()
  * 
  *     def flip_spinweight(self):             # <<<<<<<<<<<<<<
@@ -14913,19 +15797,19 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_34flip_spinweight(struct
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_37__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_37__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_39__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_39__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_36__reduce_cython__(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_38__reduce_cython__(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_36__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_38__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -14970,19 +15854,19 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_36__reduce_cython__(CYTH
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_39__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_39__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_41__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_11cybhpt_full_13TeukolskyMode_41__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_38__setstate_cython__(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_11cybhpt_full_13TeukolskyMode_40__setstate_cython__(((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_38__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_40__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11cybhpt_full_TeukolskyMode *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -15019,7 +15903,7 @@ static PyObject *__pyx_pf_11cybhpt_full_13TeukolskyMode_38__setstate_cython__(CY
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":294
+/* "cython/teukolsky_wrap.pyx":298
  *     cdef int sampleTh
  * 
  *     def __init__(self, TeukolskyMode teuk, unicode gauge):             # <<<<<<<<<<<<<<
@@ -15061,11 +15945,11 @@ static int __pyx_pw_11cybhpt_full_9HertzMode_1__init__(PyObject *__pyx_v_self, P
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_gauge)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 2, 2, 1); __PYX_ERR(3, 294, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 2, 2, 1); __PYX_ERR(3, 298, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(3, 294, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(3, 298, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -15078,14 +15962,14 @@ static int __pyx_pw_11cybhpt_full_9HertzMode_1__init__(PyObject *__pyx_v_self, P
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 294, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 298, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.HertzMode.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_teuk), __pyx_ptype_11cybhpt_full_TeukolskyMode, 1, "teuk", 0))) __PYX_ERR(3, 294, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_gauge), (&PyUnicode_Type), 1, "gauge", 1))) __PYX_ERR(3, 294, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_teuk), __pyx_ptype_11cybhpt_full_TeukolskyMode, 1, "teuk", 0))) __PYX_ERR(3, 298, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_gauge), (&PyUnicode_Type), 1, "gauge", 1))) __PYX_ERR(3, 298, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_9HertzMode___init__(((struct __pyx_obj_11cybhpt_full_HertzMode *)__pyx_v_self), __pyx_v_teuk, __pyx_v_gauge);
 
   /* function exit code */
@@ -15112,19 +15996,19 @@ static int __pyx_pf_11cybhpt_full_9HertzMode___init__(struct __pyx_obj_11cybhpt_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":295
+  /* "cython/teukolsky_wrap.pyx":299
  * 
  *     def __init__(self, TeukolskyMode teuk, unicode gauge):
  *         if np.abs(teuk.spinweight) != 2:             # <<<<<<<<<<<<<<
  *             raise ValueError("Hertz mode only accepts Teukolsky solutions with spin-weight -2,+2.")
  *         self.gauge_cpp = str_to_gauge(gauge)
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 295, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 299, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_abs); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 295, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_abs); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 299, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_teuk), __pyx_n_s_spinweight); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 295, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_teuk), __pyx_n_s_spinweight); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 299, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -15139,30 +16023,30 @@ static int __pyx_pf_11cybhpt_full_9HertzMode___init__(struct __pyx_obj_11cybhpt_
   __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_4, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 295, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 299, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyInt_NeObjC(__pyx_t_1, __pyx_int_2, 2, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 295, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_NeObjC(__pyx_t_1, __pyx_int_2, 2, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 299, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(3, 295, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(3, 299, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (unlikely(__pyx_t_5)) {
 
-    /* "cython/teukolsky_wrap.pyx":296
+    /* "cython/teukolsky_wrap.pyx":300
  *     def __init__(self, TeukolskyMode teuk, unicode gauge):
  *         if np.abs(teuk.spinweight) != 2:
  *             raise ValueError("Hertz mode only accepts Teukolsky solutions with spin-weight -2,+2.")             # <<<<<<<<<<<<<<
  *         self.gauge_cpp = str_to_gauge(gauge)
  *         self.gauge_str = gauge
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 296, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 300, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(3, 296, __pyx_L1_error)
+    __PYX_ERR(3, 300, __pyx_L1_error)
 
-    /* "cython/teukolsky_wrap.pyx":295
+    /* "cython/teukolsky_wrap.pyx":299
  * 
  *     def __init__(self, TeukolskyMode teuk, unicode gauge):
  *         if np.abs(teuk.spinweight) != 2:             # <<<<<<<<<<<<<<
@@ -15171,17 +16055,17 @@ static int __pyx_pf_11cybhpt_full_9HertzMode___init__(struct __pyx_obj_11cybhpt_
  */
   }
 
-  /* "cython/teukolsky_wrap.pyx":297
+  /* "cython/teukolsky_wrap.pyx":301
  *         if np.abs(teuk.spinweight) != 2:
  *             raise ValueError("Hertz mode only accepts Teukolsky solutions with spin-weight -2,+2.")
  *         self.gauge_cpp = str_to_gauge(gauge)             # <<<<<<<<<<<<<<
  *         self.gauge_str = gauge
  *         self.hertzcpp = new HertzModeCPP(dereference(teuk.teukcpp), self.gauge_cpp)
  */
-  __pyx_t_6 = __pyx_f_11cybhpt_full_str_to_gauge(__pyx_v_gauge); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 297, __pyx_L1_error)
+  __pyx_t_6 = __pyx_f_11cybhpt_full_str_to_gauge(__pyx_v_gauge); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 301, __pyx_L1_error)
   __pyx_v_self->gauge_cpp = __pyx_t_6;
 
-  /* "cython/teukolsky_wrap.pyx":298
+  /* "cython/teukolsky_wrap.pyx":302
  *             raise ValueError("Hertz mode only accepts Teukolsky solutions with spin-weight -2,+2.")
  *         self.gauge_cpp = str_to_gauge(gauge)
  *         self.gauge_str = gauge             # <<<<<<<<<<<<<<
@@ -15194,7 +16078,7 @@ static int __pyx_pf_11cybhpt_full_9HertzMode___init__(struct __pyx_obj_11cybhpt_
   __Pyx_DECREF(__pyx_v_self->gauge_str);
   __pyx_v_self->gauge_str = __pyx_v_gauge;
 
-  /* "cython/teukolsky_wrap.pyx":299
+  /* "cython/teukolsky_wrap.pyx":303
  *         self.gauge_cpp = str_to_gauge(gauge)
  *         self.gauge_str = gauge
  *         self.hertzcpp = new HertzModeCPP(dereference(teuk.teukcpp), self.gauge_cpp)             # <<<<<<<<<<<<<<
@@ -15203,7 +16087,7 @@ static int __pyx_pf_11cybhpt_full_9HertzMode___init__(struct __pyx_obj_11cybhpt_
  */
   __pyx_v_self->hertzcpp = new HertzMode((*__pyx_v_teuk->teukcpp), __pyx_v_self->gauge_cpp);
 
-  /* "cython/teukolsky_wrap.pyx":300
+  /* "cython/teukolsky_wrap.pyx":304
  *         self.gauge_str = gauge
  *         self.hertzcpp = new HertzModeCPP(dereference(teuk.teukcpp), self.gauge_cpp)
  *         self.sampleR = teuk.sampleR             # <<<<<<<<<<<<<<
@@ -15213,7 +16097,7 @@ static int __pyx_pf_11cybhpt_full_9HertzMode___init__(struct __pyx_obj_11cybhpt_
   __pyx_t_7 = __pyx_v_teuk->sampleR;
   __pyx_v_self->sampleR = __pyx_t_7;
 
-  /* "cython/teukolsky_wrap.pyx":301
+  /* "cython/teukolsky_wrap.pyx":305
  *         self.hertzcpp = new HertzModeCPP(dereference(teuk.teukcpp), self.gauge_cpp)
  *         self.sampleR = teuk.sampleR
  *         self.sampleTh = teuk.sampleTh             # <<<<<<<<<<<<<<
@@ -15223,7 +16107,7 @@ static int __pyx_pf_11cybhpt_full_9HertzMode___init__(struct __pyx_obj_11cybhpt_
   __pyx_t_7 = __pyx_v_teuk->sampleTh;
   __pyx_v_self->sampleTh = __pyx_t_7;
 
-  /* "cython/teukolsky_wrap.pyx":294
+  /* "cython/teukolsky_wrap.pyx":298
  *     cdef int sampleTh
  * 
  *     def __init__(self, TeukolskyMode teuk, unicode gauge):             # <<<<<<<<<<<<<<
@@ -15246,7 +16130,7 @@ static int __pyx_pf_11cybhpt_full_9HertzMode___init__(struct __pyx_obj_11cybhpt_
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":303
+/* "cython/teukolsky_wrap.pyx":307
  *         self.sampleTh = teuk.sampleTh
  * 
  *     def solve(self):             # <<<<<<<<<<<<<<
@@ -15272,7 +16156,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_2solve(struct __pyx_obj_11cyb
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("solve", 0);
 
-  /* "cython/teukolsky_wrap.pyx":304
+  /* "cython/teukolsky_wrap.pyx":308
  * 
  *     def solve(self):
  *         self.hertzcpp.generateSolutions()             # <<<<<<<<<<<<<<
@@ -15281,7 +16165,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_2solve(struct __pyx_obj_11cyb
  */
   (void)(__pyx_v_self->hertzcpp->generateSolutions());
 
-  /* "cython/teukolsky_wrap.pyx":303
+  /* "cython/teukolsky_wrap.pyx":307
  *         self.sampleTh = teuk.sampleTh
  * 
  *     def solve(self):             # <<<<<<<<<<<<<<
@@ -15296,7 +16180,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_2solve(struct __pyx_obj_11cyb
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":306
+/* "cython/teukolsky_wrap.pyx":310
  *         self.hertzcpp.generateSolutions()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -15319,7 +16203,7 @@ static void __pyx_pf_11cybhpt_full_9HertzMode_4__dealloc__(struct __pyx_obj_11cy
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":307
+  /* "cython/teukolsky_wrap.pyx":311
  * 
  *     def __dealloc__(self):
  *         del self.hertzcpp             # <<<<<<<<<<<<<<
@@ -15328,7 +16212,7 @@ static void __pyx_pf_11cybhpt_full_9HertzMode_4__dealloc__(struct __pyx_obj_11cy
  */
   delete __pyx_v_self->hertzcpp;
 
-  /* "cython/teukolsky_wrap.pyx":306
+  /* "cython/teukolsky_wrap.pyx":310
  *         self.hertzcpp.generateSolutions()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -15340,7 +16224,7 @@ static void __pyx_pf_11cybhpt_full_9HertzMode_4__dealloc__(struct __pyx_obj_11cy
   __Pyx_RefNannyFinishContext();
 }
 
-/* "cython/teukolsky_wrap.pyx":310
+/* "cython/teukolsky_wrap.pyx":314
  * 
  *     @property
  *     def gauge(self):             # <<<<<<<<<<<<<<
@@ -15366,7 +16250,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_5gauge___get__(struct __pyx_o
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":311
+  /* "cython/teukolsky_wrap.pyx":315
  *     @property
  *     def gauge(self):
  *         return self.gauge_str             # <<<<<<<<<<<<<<
@@ -15378,7 +16262,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_5gauge___get__(struct __pyx_o
   __pyx_r = __pyx_v_self->gauge_str;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":310
+  /* "cython/teukolsky_wrap.pyx":314
  * 
  *     @property
  *     def gauge(self):             # <<<<<<<<<<<<<<
@@ -15393,7 +16277,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_5gauge___get__(struct __pyx_o
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":314
+/* "cython/teukolsky_wrap.pyx":318
  * 
  *     @property
  *     def spinweight(self):             # <<<<<<<<<<<<<<
@@ -15423,7 +16307,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_10spinweight___get__(struct _
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":315
+  /* "cython/teukolsky_wrap.pyx":319
  *     @property
  *     def spinweight(self):
  *         return self.hertzcpp.getSpinWeight()             # <<<<<<<<<<<<<<
@@ -15431,13 +16315,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_10spinweight___get__(struct _
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getSpinWeight()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 315, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getSpinWeight()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 319, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":314
+  /* "cython/teukolsky_wrap.pyx":318
  * 
  *     @property
  *     def spinweight(self):             # <<<<<<<<<<<<<<
@@ -15456,7 +16340,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_10spinweight___get__(struct _
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":318
+/* "cython/teukolsky_wrap.pyx":322
  * 
  *     @property
  *     def spheroidalmode(self):             # <<<<<<<<<<<<<<
@@ -15486,7 +16370,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_14spheroidalmode___get__(stru
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":319
+  /* "cython/teukolsky_wrap.pyx":323
  *     @property
  *     def spheroidalmode(self):
  *         return self.hertzcpp.getSpheroidalModeNumber()             # <<<<<<<<<<<<<<
@@ -15494,13 +16378,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_14spheroidalmode___get__(stru
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getSpheroidalModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 319, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getSpheroidalModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 323, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":318
+  /* "cython/teukolsky_wrap.pyx":322
  * 
  *     @property
  *     def spheroidalmode(self):             # <<<<<<<<<<<<<<
@@ -15519,7 +16403,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_14spheroidalmode___get__(stru
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":322
+/* "cython/teukolsky_wrap.pyx":326
  * 
  *     @property
  *     def azimuthalmode(self):             # <<<<<<<<<<<<<<
@@ -15549,7 +16433,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_13azimuthalmode___get__(struc
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":323
+  /* "cython/teukolsky_wrap.pyx":327
  *     @property
  *     def azimuthalmode(self):
  *         return self.hertzcpp.getAzimuthalModeNumber()             # <<<<<<<<<<<<<<
@@ -15557,13 +16441,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_13azimuthalmode___get__(struc
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getAzimuthalModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 323, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getAzimuthalModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 327, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":322
+  /* "cython/teukolsky_wrap.pyx":326
  * 
  *     @property
  *     def azimuthalmode(self):             # <<<<<<<<<<<<<<
@@ -15582,7 +16466,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_13azimuthalmode___get__(struc
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":326
+/* "cython/teukolsky_wrap.pyx":330
  * 
  *     @property
  *     def radialmode(self):             # <<<<<<<<<<<<<<
@@ -15612,7 +16496,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_10radialmode___get__(struct _
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":327
+  /* "cython/teukolsky_wrap.pyx":331
  *     @property
  *     def radialmode(self):
  *         return self.hertzcpp.getRadialModeNumber()             # <<<<<<<<<<<<<<
@@ -15620,13 +16504,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_10radialmode___get__(struct _
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getRadialModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 327, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getRadialModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 331, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":326
+  /* "cython/teukolsky_wrap.pyx":330
  * 
  *     @property
  *     def radialmode(self):             # <<<<<<<<<<<<<<
@@ -15645,7 +16529,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_10radialmode___get__(struct _
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":330
+/* "cython/teukolsky_wrap.pyx":334
  * 
  *     @property
  *     def polarmode(self):             # <<<<<<<<<<<<<<
@@ -15675,7 +16559,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_9polarmode___get__(struct __p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":331
+  /* "cython/teukolsky_wrap.pyx":335
  *     @property
  *     def polarmode(self):
  *         return self.hertzcpp.getPolarModeNumber()             # <<<<<<<<<<<<<<
@@ -15683,13 +16567,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_9polarmode___get__(struct __p
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getPolarModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 331, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getPolarModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 335, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":330
+  /* "cython/teukolsky_wrap.pyx":334
  * 
  *     @property
  *     def polarmode(self):             # <<<<<<<<<<<<<<
@@ -15708,7 +16592,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_9polarmode___get__(struct __p
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":334
+/* "cython/teukolsky_wrap.pyx":338
  * 
  *     @property
  *     def blackholespin(self):             # <<<<<<<<<<<<<<
@@ -15738,7 +16622,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_13blackholespin___get__(struc
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":335
+  /* "cython/teukolsky_wrap.pyx":339
  *     @property
  *     def blackholespin(self):
  *         return self.hertzcpp.getBlackHoleSpin()             # <<<<<<<<<<<<<<
@@ -15746,13 +16630,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_13blackholespin___get__(struc
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getBlackHoleSpin()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 335, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getBlackHoleSpin()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 339, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":334
+  /* "cython/teukolsky_wrap.pyx":338
  * 
  *     @property
  *     def blackholespin(self):             # <<<<<<<<<<<<<<
@@ -15771,7 +16655,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_13blackholespin___get__(struc
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":338
+/* "cython/teukolsky_wrap.pyx":342
  * 
  *     @property
  *     def frequency(self):             # <<<<<<<<<<<<<<
@@ -15801,7 +16685,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_9frequency___get__(struct __p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":339
+  /* "cython/teukolsky_wrap.pyx":343
  *     @property
  *     def frequency(self):
  *         return self.hertzcpp.getFrequency()             # <<<<<<<<<<<<<<
@@ -15809,13 +16693,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_9frequency___get__(struct __p
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getFrequency()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 339, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getFrequency()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 343, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":338
+  /* "cython/teukolsky_wrap.pyx":342
  * 
  *     @property
  *     def frequency(self):             # <<<<<<<<<<<<<<
@@ -15834,7 +16718,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_9frequency___get__(struct __p
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":342
+/* "cython/teukolsky_wrap.pyx":346
  * 
  *     @property
  *     def horizonfrequency(self):             # <<<<<<<<<<<<<<
@@ -15864,7 +16748,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_16horizonfrequency___get__(st
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":343
+  /* "cython/teukolsky_wrap.pyx":347
  *     @property
  *     def horizonfrequency(self):
  *         return self.hertzcpp.getHorizonFrequency()             # <<<<<<<<<<<<<<
@@ -15872,13 +16756,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_16horizonfrequency___get__(st
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getHorizonFrequency()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 343, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getHorizonFrequency()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 347, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":342
+  /* "cython/teukolsky_wrap.pyx":346
  * 
  *     @property
  *     def horizonfrequency(self):             # <<<<<<<<<<<<<<
@@ -15897,7 +16781,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_16horizonfrequency___get__(st
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":346
+/* "cython/teukolsky_wrap.pyx":350
  * 
  *     @property
  *     def eigenvalue(self):             # <<<<<<<<<<<<<<
@@ -15927,7 +16811,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_10eigenvalue___get__(struct _
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":347
+  /* "cython/teukolsky_wrap.pyx":351
  *     @property
  *     def eigenvalue(self):
  *         return self.hertzcpp.getEigenvalue()             # <<<<<<<<<<<<<<
@@ -15935,13 +16819,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_10eigenvalue___get__(struct _
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getEigenvalue()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 347, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getEigenvalue()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 351, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":346
+  /* "cython/teukolsky_wrap.pyx":350
  * 
  *     @property
  *     def eigenvalue(self):             # <<<<<<<<<<<<<<
@@ -15960,7 +16844,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_10eigenvalue___get__(struct _
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":350
+/* "cython/teukolsky_wrap.pyx":354
  * 
  *     @property
  *     def mincouplingmode(self):             # <<<<<<<<<<<<<<
@@ -15990,7 +16874,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_15mincouplingmode___get__(str
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":351
+  /* "cython/teukolsky_wrap.pyx":355
  *     @property
  *     def mincouplingmode(self):
  *         return self.hertzcpp.getMinCouplingModeNumber()             # <<<<<<<<<<<<<<
@@ -15998,13 +16882,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_15mincouplingmode___get__(str
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getMinCouplingModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 351, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getMinCouplingModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 355, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":350
+  /* "cython/teukolsky_wrap.pyx":354
  * 
  *     @property
  *     def mincouplingmode(self):             # <<<<<<<<<<<<<<
@@ -16023,7 +16907,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_15mincouplingmode___get__(str
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":354
+/* "cython/teukolsky_wrap.pyx":358
  * 
  *     @property
  *     def maxcouplingmode(self):             # <<<<<<<<<<<<<<
@@ -16053,7 +16937,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_15maxcouplingmode___get__(str
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":355
+  /* "cython/teukolsky_wrap.pyx":359
  *     @property
  *     def maxcouplingmode(self):
  *         return self.hertzcpp.getMaxCouplingModeNumber()             # <<<<<<<<<<<<<<
@@ -16061,13 +16945,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_15maxcouplingmode___get__(str
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getMaxCouplingModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 355, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getMaxCouplingModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 359, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":354
+  /* "cython/teukolsky_wrap.pyx":358
  * 
  *     @property
  *     def maxcouplingmode(self):             # <<<<<<<<<<<<<<
@@ -16086,7 +16970,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_15maxcouplingmode___get__(str
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":358
+/* "cython/teukolsky_wrap.pyx":362
  * 
  *     @property
  *     def minscalarcouplingmode(self):             # <<<<<<<<<<<<<<
@@ -16116,7 +17000,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_21minscalarcouplingmode___get
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":359
+  /* "cython/teukolsky_wrap.pyx":363
  *     @property
  *     def minscalarcouplingmode(self):
  *         return self.hertzcpp.getMinScalarCouplingModeNumber()             # <<<<<<<<<<<<<<
@@ -16124,13 +17008,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_21minscalarcouplingmode___get
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getMinScalarCouplingModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 359, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getMinScalarCouplingModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 363, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":358
+  /* "cython/teukolsky_wrap.pyx":362
  * 
  *     @property
  *     def minscalarcouplingmode(self):             # <<<<<<<<<<<<<<
@@ -16149,7 +17033,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_21minscalarcouplingmode___get
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":362
+/* "cython/teukolsky_wrap.pyx":366
  * 
  *     @property
  *     def maxscalarcouplingmode(self):             # <<<<<<<<<<<<<<
@@ -16179,7 +17063,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_21maxscalarcouplingmode___get
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":363
+  /* "cython/teukolsky_wrap.pyx":367
  *     @property
  *     def maxscalarcouplingmode(self):
  *         return self.hertzcpp.getMaxScalarCouplingModeNumber()             # <<<<<<<<<<<<<<
@@ -16187,13 +17071,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_21maxscalarcouplingmode___get
  *     # some useful aliases
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getMaxScalarCouplingModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 363, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->hertzcpp->getMaxScalarCouplingModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 367, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":362
+  /* "cython/teukolsky_wrap.pyx":366
  * 
  *     @property
  *     def maxscalarcouplingmode(self):             # <<<<<<<<<<<<<<
@@ -16212,7 +17096,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_21maxscalarcouplingmode___get
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":367
+/* "cython/teukolsky_wrap.pyx":371
  *     # some useful aliases
  *     @property
  *     def j(self):             # <<<<<<<<<<<<<<
@@ -16242,7 +17126,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1j___get__(struct __pyx_obj_1
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":368
+  /* "cython/teukolsky_wrap.pyx":372
  *     @property
  *     def j(self):
  *         return self.spheroidalmode             # <<<<<<<<<<<<<<
@@ -16250,13 +17134,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1j___get__(struct __pyx_obj_1
  *     def m(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_spheroidalmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 368, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_spheroidalmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 372, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":367
+  /* "cython/teukolsky_wrap.pyx":371
  *     # some useful aliases
  *     @property
  *     def j(self):             # <<<<<<<<<<<<<<
@@ -16275,7 +17159,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1j___get__(struct __pyx_obj_1
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":370
+/* "cython/teukolsky_wrap.pyx":374
  *         return self.spheroidalmode
  *     @property
  *     def m(self):             # <<<<<<<<<<<<<<
@@ -16305,7 +17189,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1m___get__(struct __pyx_obj_1
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":371
+  /* "cython/teukolsky_wrap.pyx":375
  *     @property
  *     def m(self):
  *         return self.azimuthalmode             # <<<<<<<<<<<<<<
@@ -16313,13 +17197,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1m___get__(struct __pyx_obj_1
  *     def k(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_azimuthalmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 371, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_azimuthalmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 375, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":370
+  /* "cython/teukolsky_wrap.pyx":374
  *         return self.spheroidalmode
  *     @property
  *     def m(self):             # <<<<<<<<<<<<<<
@@ -16338,7 +17222,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1m___get__(struct __pyx_obj_1
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":373
+/* "cython/teukolsky_wrap.pyx":377
  *         return self.azimuthalmode
  *     @property
  *     def k(self):             # <<<<<<<<<<<<<<
@@ -16368,7 +17252,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1k___get__(struct __pyx_obj_1
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":374
+  /* "cython/teukolsky_wrap.pyx":378
  *     @property
  *     def k(self):
  *         return self.polarmode             # <<<<<<<<<<<<<<
@@ -16376,13 +17260,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1k___get__(struct __pyx_obj_1
  *     def n(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_polarmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 374, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_polarmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 378, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":373
+  /* "cython/teukolsky_wrap.pyx":377
  *         return self.azimuthalmode
  *     @property
  *     def k(self):             # <<<<<<<<<<<<<<
@@ -16401,7 +17285,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1k___get__(struct __pyx_obj_1
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":376
+/* "cython/teukolsky_wrap.pyx":380
  *         return self.polarmode
  *     @property
  *     def n(self):             # <<<<<<<<<<<<<<
@@ -16431,7 +17315,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1n___get__(struct __pyx_obj_1
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":377
+  /* "cython/teukolsky_wrap.pyx":381
  *     @property
  *     def n(self):
  *         return self.radialmode             # <<<<<<<<<<<<<<
@@ -16439,13 +17323,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1n___get__(struct __pyx_obj_1
  *     def omega(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_radialmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 377, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_radialmode); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 381, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":376
+  /* "cython/teukolsky_wrap.pyx":380
  *         return self.polarmode
  *     @property
  *     def n(self):             # <<<<<<<<<<<<<<
@@ -16464,7 +17348,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1n___get__(struct __pyx_obj_1
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":379
+/* "cython/teukolsky_wrap.pyx":383
  *         return self.radialmode
  *     @property
  *     def omega(self):             # <<<<<<<<<<<<<<
@@ -16494,7 +17378,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_5omega___get__(struct __pyx_o
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":380
+  /* "cython/teukolsky_wrap.pyx":384
  *     @property
  *     def omega(self):
  *         return self.frequency             # <<<<<<<<<<<<<<
@@ -16502,13 +17386,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_5omega___get__(struct __pyx_o
  *     def a(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_frequency); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 380, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_frequency); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 384, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":379
+  /* "cython/teukolsky_wrap.pyx":383
  *         return self.radialmode
  *     @property
  *     def omega(self):             # <<<<<<<<<<<<<<
@@ -16527,7 +17411,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_5omega___get__(struct __pyx_o
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":382
+/* "cython/teukolsky_wrap.pyx":386
  *         return self.frequency
  *     @property
  *     def a(self):             # <<<<<<<<<<<<<<
@@ -16557,7 +17441,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1a___get__(struct __pyx_obj_1
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":383
+  /* "cython/teukolsky_wrap.pyx":387
  *     @property
  *     def a(self):
  *         return self.blackholespin             # <<<<<<<<<<<<<<
@@ -16565,13 +17449,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1a___get__(struct __pyx_obj_1
  *     def hertz_amplitude(self, unicode bc):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_blackholespin); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 383, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_blackholespin); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 387, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":382
+  /* "cython/teukolsky_wrap.pyx":386
  *         return self.frequency
  *     @property
  *     def a(self):             # <<<<<<<<<<<<<<
@@ -16590,7 +17474,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_1a___get__(struct __pyx_obj_1
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":385
+/* "cython/teukolsky_wrap.pyx":389
  *         return self.blackholespin
  * 
  *     def hertz_amplitude(self, unicode bc):             # <<<<<<<<<<<<<<
@@ -16607,7 +17491,7 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_7hertz_amplitude(PyObject *__
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("hertz_amplitude (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 385, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 389, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_9HertzMode_6hertz_amplitude(((struct __pyx_obj_11cybhpt_full_HertzMode *)__pyx_v_self), ((PyObject*)__pyx_v_bc));
 
   /* function exit code */
@@ -16628,7 +17512,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_6hertz_amplitude(struct __pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("hertz_amplitude", 0);
 
-  /* "cython/teukolsky_wrap.pyx":386
+  /* "cython/teukolsky_wrap.pyx":390
  * 
  *     def hertz_amplitude(self, unicode bc):
  *         return self.hertzcpp.getHertzAmplitude(str_to_bc(bc))             # <<<<<<<<<<<<<<
@@ -16636,13 +17520,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_6hertz_amplitude(struct __pyx
  *     def couplingcoefficient(self, int l):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getHertzAmplitude(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 386, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getHertzAmplitude(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 390, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":385
+  /* "cython/teukolsky_wrap.pyx":389
  *         return self.blackholespin
  * 
  *     def hertz_amplitude(self, unicode bc):             # <<<<<<<<<<<<<<
@@ -16661,7 +17545,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_6hertz_amplitude(struct __pyx
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":388
+/* "cython/teukolsky_wrap.pyx":392
  *         return self.hertzcpp.getHertzAmplitude(str_to_bc(bc))
  * 
  *     def couplingcoefficient(self, int l):             # <<<<<<<<<<<<<<
@@ -16680,7 +17564,7 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_9couplingcoefficient(PyObject
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("couplingcoefficient (wrapper)", 0);
   assert(__pyx_arg_l); {
-    __pyx_v_l = __Pyx_PyInt_As_int(__pyx_arg_l); if (unlikely((__pyx_v_l == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 388, __pyx_L3_error)
+    __pyx_v_l = __Pyx_PyInt_As_int(__pyx_arg_l); if (unlikely((__pyx_v_l == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 392, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -16704,7 +17588,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_8couplingcoefficient(struct _
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("couplingcoefficient", 0);
 
-  /* "cython/teukolsky_wrap.pyx":389
+  /* "cython/teukolsky_wrap.pyx":393
  * 
  *     def couplingcoefficient(self, int l):
  *         return self.hertzcpp.getCouplingCoefficient(l)             # <<<<<<<<<<<<<<
@@ -16712,13 +17596,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_8couplingcoefficient(struct _
  *         return self.hertzcpp.getScalarCouplingCoefficient(l)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getCouplingCoefficient(__pyx_v_l)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 389, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getCouplingCoefficient(__pyx_v_l)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 393, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":388
+  /* "cython/teukolsky_wrap.pyx":392
  *         return self.hertzcpp.getHertzAmplitude(str_to_bc(bc))
  * 
  *     def couplingcoefficient(self, int l):             # <<<<<<<<<<<<<<
@@ -16737,7 +17621,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_8couplingcoefficient(struct _
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":390
+/* "cython/teukolsky_wrap.pyx":394
  *     def couplingcoefficient(self, int l):
  *         return self.hertzcpp.getCouplingCoefficient(l)
  *     def scalarcouplingcoefficient(self, int l):             # <<<<<<<<<<<<<<
@@ -16756,7 +17640,7 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_11scalarcouplingcoefficient(P
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("scalarcouplingcoefficient (wrapper)", 0);
   assert(__pyx_arg_l); {
-    __pyx_v_l = __Pyx_PyInt_As_int(__pyx_arg_l); if (unlikely((__pyx_v_l == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 390, __pyx_L3_error)
+    __pyx_v_l = __Pyx_PyInt_As_int(__pyx_arg_l); if (unlikely((__pyx_v_l == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 394, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -16780,7 +17664,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_10scalarcouplingcoefficient(s
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("scalarcouplingcoefficient", 0);
 
-  /* "cython/teukolsky_wrap.pyx":391
+  /* "cython/teukolsky_wrap.pyx":395
  *         return self.hertzcpp.getCouplingCoefficient(l)
  *     def scalarcouplingcoefficient(self, int l):
  *         return self.hertzcpp.getScalarCouplingCoefficient(l)             # <<<<<<<<<<<<<<
@@ -16788,13 +17672,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_10scalarcouplingcoefficient(s
  *         return self.hertzcpp.getRadialPoints(i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getScalarCouplingCoefficient(__pyx_v_l)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 391, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getScalarCouplingCoefficient(__pyx_v_l)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 395, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":390
+  /* "cython/teukolsky_wrap.pyx":394
  *     def couplingcoefficient(self, int l):
  *         return self.hertzcpp.getCouplingCoefficient(l)
  *     def scalarcouplingcoefficient(self, int l):             # <<<<<<<<<<<<<<
@@ -16813,7 +17697,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_10scalarcouplingcoefficient(s
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":392
+/* "cython/teukolsky_wrap.pyx":396
  *     def scalarcouplingcoefficient(self, int l):
  *         return self.hertzcpp.getScalarCouplingCoefficient(l)
  *     def radialpoint(self, int i):             # <<<<<<<<<<<<<<
@@ -16832,7 +17716,7 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_13radialpoint(PyObject *__pyx
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("radialpoint (wrapper)", 0);
   assert(__pyx_arg_i); {
-    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 392, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 396, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -16856,7 +17740,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_12radialpoint(struct __pyx_ob
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("radialpoint", 0);
 
-  /* "cython/teukolsky_wrap.pyx":393
+  /* "cython/teukolsky_wrap.pyx":397
  *         return self.hertzcpp.getScalarCouplingCoefficient(l)
  *     def radialpoint(self, int i):
  *         return self.hertzcpp.getRadialPoints(i)             # <<<<<<<<<<<<<<
@@ -16864,13 +17748,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_12radialpoint(struct __pyx_ob
  *         return self.hertzcpp.getRadialSolution(str_to_bc(bc), i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getRadialPoints(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 393, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getRadialPoints(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 397, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":392
+  /* "cython/teukolsky_wrap.pyx":396
  *     def scalarcouplingcoefficient(self, int l):
  *         return self.hertzcpp.getScalarCouplingCoefficient(l)
  *     def radialpoint(self, int i):             # <<<<<<<<<<<<<<
@@ -16889,7 +17773,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_12radialpoint(struct __pyx_ob
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":394
+/* "cython/teukolsky_wrap.pyx":398
  *     def radialpoint(self, int i):
  *         return self.hertzcpp.getRadialPoints(i)
  *     def radialsolution(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -16931,11 +17815,11 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_15radialsolution(PyObject *__
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("radialsolution", 1, 2, 2, 1); __PYX_ERR(3, 394, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("radialsolution", 1, 2, 2, 1); __PYX_ERR(3, 398, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "radialsolution") < 0)) __PYX_ERR(3, 394, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "radialsolution") < 0)) __PYX_ERR(3, 398, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -16944,17 +17828,17 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_15radialsolution(PyObject *__
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_bc = ((PyObject*)values[0]);
-    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 394, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 398, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("radialsolution", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 394, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("radialsolution", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 398, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.HertzMode.radialsolution", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 394, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 398, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_9HertzMode_14radialsolution(((struct __pyx_obj_11cybhpt_full_HertzMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
 
   /* function exit code */
@@ -16975,7 +17859,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_14radialsolution(struct __pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("radialsolution", 0);
 
-  /* "cython/teukolsky_wrap.pyx":395
+  /* "cython/teukolsky_wrap.pyx":399
  *         return self.hertzcpp.getRadialPoints(i)
  *     def radialsolution(self, unicode bc, int i):
  *         return self.hertzcpp.getRadialSolution(str_to_bc(bc), i)             # <<<<<<<<<<<<<<
@@ -16983,13 +17867,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_14radialsolution(struct __pyx
  *         return self.hertzcpp.getRadialDerivative(str_to_bc(bc), i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getRadialSolution(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 395, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getRadialSolution(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 399, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":394
+  /* "cython/teukolsky_wrap.pyx":398
  *     def radialpoint(self, int i):
  *         return self.hertzcpp.getRadialPoints(i)
  *     def radialsolution(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -17008,7 +17892,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_14radialsolution(struct __pyx
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":396
+/* "cython/teukolsky_wrap.pyx":400
  *     def radialsolution(self, unicode bc, int i):
  *         return self.hertzcpp.getRadialSolution(str_to_bc(bc), i)
  *     def radialderivative(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -17050,11 +17934,11 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_17radialderivative(PyObject *
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("radialderivative", 1, 2, 2, 1); __PYX_ERR(3, 396, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("radialderivative", 1, 2, 2, 1); __PYX_ERR(3, 400, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "radialderivative") < 0)) __PYX_ERR(3, 396, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "radialderivative") < 0)) __PYX_ERR(3, 400, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -17063,17 +17947,17 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_17radialderivative(PyObject *
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_bc = ((PyObject*)values[0]);
-    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 396, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 400, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("radialderivative", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 396, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("radialderivative", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 400, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.HertzMode.radialderivative", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 396, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 400, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_9HertzMode_16radialderivative(((struct __pyx_obj_11cybhpt_full_HertzMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
 
   /* function exit code */
@@ -17094,7 +17978,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_16radialderivative(struct __p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("radialderivative", 0);
 
-  /* "cython/teukolsky_wrap.pyx":397
+  /* "cython/teukolsky_wrap.pyx":401
  *         return self.hertzcpp.getRadialSolution(str_to_bc(bc), i)
  *     def radialderivative(self, unicode bc, int i):
  *         return self.hertzcpp.getRadialDerivative(str_to_bc(bc), i)             # <<<<<<<<<<<<<<
@@ -17102,13 +17986,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_16radialderivative(struct __p
  *         return self.hertz_amplitude(bc)*self.homogeneousradialderivative2(bc, i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getRadialDerivative(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 397, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getRadialDerivative(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 401, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":396
+  /* "cython/teukolsky_wrap.pyx":400
  *     def radialsolution(self, unicode bc, int i):
  *         return self.hertzcpp.getRadialSolution(str_to_bc(bc), i)
  *     def radialderivative(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -17127,7 +18011,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_16radialderivative(struct __p
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":398
+/* "cython/teukolsky_wrap.pyx":402
  *     def radialderivative(self, unicode bc, int i):
  *         return self.hertzcpp.getRadialDerivative(str_to_bc(bc), i)
  *     def radialderivative2(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -17169,11 +18053,11 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_19radialderivative2(PyObject 
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("radialderivative2", 1, 2, 2, 1); __PYX_ERR(3, 398, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("radialderivative2", 1, 2, 2, 1); __PYX_ERR(3, 402, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "radialderivative2") < 0)) __PYX_ERR(3, 398, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "radialderivative2") < 0)) __PYX_ERR(3, 402, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -17182,17 +18066,17 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_19radialderivative2(PyObject 
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_bc = ((PyObject*)values[0]);
-    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 398, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 402, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("radialderivative2", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 398, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("radialderivative2", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 402, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.HertzMode.radialderivative2", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 398, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 402, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_9HertzMode_18radialderivative2(((struct __pyx_obj_11cybhpt_full_HertzMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
 
   /* function exit code */
@@ -17219,7 +18103,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivative2(struct __
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("radialderivative2", 0);
 
-  /* "cython/teukolsky_wrap.pyx":399
+  /* "cython/teukolsky_wrap.pyx":403
  *         return self.hertzcpp.getRadialDerivative(str_to_bc(bc), i)
  *     def radialderivative2(self, unicode bc, int i):
  *         return self.hertz_amplitude(bc)*self.homogeneousradialderivative2(bc, i)             # <<<<<<<<<<<<<<
@@ -17227,7 +18111,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivative2(struct __
  *         return self.hertzcpp.getHomogeneousRadialSolution(str_to_bc(bc), i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_hertz_amplitude); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 399, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_hertz_amplitude); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 403, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -17241,12 +18125,12 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivative2(struct __
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_v_bc) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_bc);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 399, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 403, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_homogeneousradialderivative2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 399, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_homogeneousradialderivative2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 403, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 399, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 403, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   __pyx_t_6 = 0;
@@ -17263,7 +18147,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivative2(struct __
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_v_bc, __pyx_t_4};
-    __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 399, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 403, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -17272,14 +18156,14 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivative2(struct __
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_v_bc, __pyx_t_4};
-    __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 399, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_6, 2+__pyx_t_6); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 403, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   } else
   #endif
   {
-    __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(3, 399, __pyx_L1_error)
+    __pyx_t_7 = PyTuple_New(2+__pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(3, 403, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     if (__pyx_t_5) {
       __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_5); __pyx_t_5 = NULL;
@@ -17290,12 +18174,12 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivative2(struct __
     __Pyx_GIVEREF(__pyx_t_4);
     PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_6, __pyx_t_4);
     __pyx_t_4 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 399, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 403, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 399, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 403, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -17303,7 +18187,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivative2(struct __
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":398
+  /* "cython/teukolsky_wrap.pyx":402
  *     def radialderivative(self, unicode bc, int i):
  *         return self.hertzcpp.getRadialDerivative(str_to_bc(bc), i)
  *     def radialderivative2(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -17327,7 +18211,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivative2(struct __
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":400
+/* "cython/teukolsky_wrap.pyx":404
  *     def radialderivative2(self, unicode bc, int i):
  *         return self.hertz_amplitude(bc)*self.homogeneousradialderivative2(bc, i)
  *     def homogeneousradialsolution(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -17369,11 +18253,11 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_21homogeneousradialsolution(P
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("homogeneousradialsolution", 1, 2, 2, 1); __PYX_ERR(3, 400, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("homogeneousradialsolution", 1, 2, 2, 1); __PYX_ERR(3, 404, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "homogeneousradialsolution") < 0)) __PYX_ERR(3, 400, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "homogeneousradialsolution") < 0)) __PYX_ERR(3, 404, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -17382,17 +18266,17 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_21homogeneousradialsolution(P
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_bc = ((PyObject*)values[0]);
-    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 400, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 404, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("homogeneousradialsolution", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 400, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("homogeneousradialsolution", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 404, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.HertzMode.homogeneousradialsolution", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 400, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 404, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_9HertzMode_20homogeneousradialsolution(((struct __pyx_obj_11cybhpt_full_HertzMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
 
   /* function exit code */
@@ -17413,7 +18297,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_20homogeneousradialsolution(s
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("homogeneousradialsolution", 0);
 
-  /* "cython/teukolsky_wrap.pyx":401
+  /* "cython/teukolsky_wrap.pyx":405
  *         return self.hertz_amplitude(bc)*self.homogeneousradialderivative2(bc, i)
  *     def homogeneousradialsolution(self, unicode bc, int i):
  *         return self.hertzcpp.getHomogeneousRadialSolution(str_to_bc(bc), i)             # <<<<<<<<<<<<<<
@@ -17421,13 +18305,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_20homogeneousradialsolution(s
  *         return self.hertzcpp.getHomogeneousRadialDerivative(str_to_bc(bc), i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getHomogeneousRadialSolution(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 401, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getHomogeneousRadialSolution(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 405, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":400
+  /* "cython/teukolsky_wrap.pyx":404
  *     def radialderivative2(self, unicode bc, int i):
  *         return self.hertz_amplitude(bc)*self.homogeneousradialderivative2(bc, i)
  *     def homogeneousradialsolution(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -17446,7 +18330,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_20homogeneousradialsolution(s
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":402
+/* "cython/teukolsky_wrap.pyx":406
  *     def homogeneousradialsolution(self, unicode bc, int i):
  *         return self.hertzcpp.getHomogeneousRadialSolution(str_to_bc(bc), i)
  *     def homogeneousradialderivative(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -17488,11 +18372,11 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_23homogeneousradialderivative
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative", 1, 2, 2, 1); __PYX_ERR(3, 402, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative", 1, 2, 2, 1); __PYX_ERR(3, 406, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "homogeneousradialderivative") < 0)) __PYX_ERR(3, 402, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "homogeneousradialderivative") < 0)) __PYX_ERR(3, 406, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -17501,17 +18385,17 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_23homogeneousradialderivative
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_bc = ((PyObject*)values[0]);
-    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 402, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 406, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 402, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 406, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.HertzMode.homogeneousradialderivative", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 402, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 406, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_9HertzMode_22homogeneousradialderivative(((struct __pyx_obj_11cybhpt_full_HertzMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
 
   /* function exit code */
@@ -17532,7 +18416,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_22homogeneousradialderivative
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("homogeneousradialderivative", 0);
 
-  /* "cython/teukolsky_wrap.pyx":403
+  /* "cython/teukolsky_wrap.pyx":407
  *         return self.hertzcpp.getHomogeneousRadialSolution(str_to_bc(bc), i)
  *     def homogeneousradialderivative(self, unicode bc, int i):
  *         return self.hertzcpp.getHomogeneousRadialDerivative(str_to_bc(bc), i)             # <<<<<<<<<<<<<<
@@ -17540,13 +18424,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_22homogeneousradialderivative
  *         return self.hertzcpp.getHomogeneousRadialSecondDerivative(str_to_bc(bc), i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getHomogeneousRadialDerivative(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 403, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getHomogeneousRadialDerivative(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 407, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":402
+  /* "cython/teukolsky_wrap.pyx":406
  *     def homogeneousradialsolution(self, unicode bc, int i):
  *         return self.hertzcpp.getHomogeneousRadialSolution(str_to_bc(bc), i)
  *     def homogeneousradialderivative(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -17565,7 +18449,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_22homogeneousradialderivative
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":404
+/* "cython/teukolsky_wrap.pyx":408
  *     def homogeneousradialderivative(self, unicode bc, int i):
  *         return self.hertzcpp.getHomogeneousRadialDerivative(str_to_bc(bc), i)
  *     def homogeneousradialderivative2(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -17607,11 +18491,11 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_25homogeneousradialderivative
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative2", 1, 2, 2, 1); __PYX_ERR(3, 404, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative2", 1, 2, 2, 1); __PYX_ERR(3, 408, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "homogeneousradialderivative2") < 0)) __PYX_ERR(3, 404, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "homogeneousradialderivative2") < 0)) __PYX_ERR(3, 408, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -17620,17 +18504,17 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_25homogeneousradialderivative
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_bc = ((PyObject*)values[0]);
-    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 404, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 408, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative2", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 404, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("homogeneousradialderivative2", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 408, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.HertzMode.homogeneousradialderivative2", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 404, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bc), (&PyUnicode_Type), 1, "bc", 1))) __PYX_ERR(3, 408, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_9HertzMode_24homogeneousradialderivative2(((struct __pyx_obj_11cybhpt_full_HertzMode *)__pyx_v_self), __pyx_v_bc, __pyx_v_i);
 
   /* function exit code */
@@ -17651,7 +18535,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_24homogeneousradialderivative
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("homogeneousradialderivative2", 0);
 
-  /* "cython/teukolsky_wrap.pyx":405
+  /* "cython/teukolsky_wrap.pyx":409
  *         return self.hertzcpp.getHomogeneousRadialDerivative(str_to_bc(bc), i)
  *     def homogeneousradialderivative2(self, unicode bc, int i):
  *         return self.hertzcpp.getHomogeneousRadialSecondDerivative(str_to_bc(bc), i)             # <<<<<<<<<<<<<<
@@ -17659,13 +18543,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_24homogeneousradialderivative
  *         return self.hertzcpp.getPolarPoints(i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getHomogeneousRadialSecondDerivative(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 405, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getHomogeneousRadialSecondDerivative(__pyx_f_11cybhpt_full_str_to_bc(__pyx_v_bc), __pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 409, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":404
+  /* "cython/teukolsky_wrap.pyx":408
  *     def homogeneousradialderivative(self, unicode bc, int i):
  *         return self.hertzcpp.getHomogeneousRadialDerivative(str_to_bc(bc), i)
  *     def homogeneousradialderivative2(self, unicode bc, int i):             # <<<<<<<<<<<<<<
@@ -17684,7 +18568,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_24homogeneousradialderivative
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":406
+/* "cython/teukolsky_wrap.pyx":410
  *     def homogeneousradialderivative2(self, unicode bc, int i):
  *         return self.hertzcpp.getHomogeneousRadialSecondDerivative(str_to_bc(bc), i)
  *     def polarpoint(self, int i):             # <<<<<<<<<<<<<<
@@ -17703,7 +18587,7 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_27polarpoint(PyObject *__pyx_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("polarpoint (wrapper)", 0);
   assert(__pyx_arg_i); {
-    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 406, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 410, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -17727,7 +18611,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_26polarpoint(struct __pyx_obj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("polarpoint", 0);
 
-  /* "cython/teukolsky_wrap.pyx":407
+  /* "cython/teukolsky_wrap.pyx":411
  *         return self.hertzcpp.getHomogeneousRadialSecondDerivative(str_to_bc(bc), i)
  *     def polarpoint(self, int i):
  *         return self.hertzcpp.getPolarPoints(i)             # <<<<<<<<<<<<<<
@@ -17735,13 +18619,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_26polarpoint(struct __pyx_obj
  *         return self.hertzcpp.getPolarSolution(i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getPolarPoints(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 407, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getPolarPoints(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 411, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":406
+  /* "cython/teukolsky_wrap.pyx":410
  *     def homogeneousradialderivative2(self, unicode bc, int i):
  *         return self.hertzcpp.getHomogeneousRadialSecondDerivative(str_to_bc(bc), i)
  *     def polarpoint(self, int i):             # <<<<<<<<<<<<<<
@@ -17760,7 +18644,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_26polarpoint(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":408
+/* "cython/teukolsky_wrap.pyx":412
  *     def polarpoint(self, int i):
  *         return self.hertzcpp.getPolarPoints(i)
  *     def polarsolution(self, int i):             # <<<<<<<<<<<<<<
@@ -17779,7 +18663,7 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_29polarsolution(PyObject *__p
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("polarsolution (wrapper)", 0);
   assert(__pyx_arg_i); {
-    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 408, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 412, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -17803,7 +18687,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_28polarsolution(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("polarsolution", 0);
 
-  /* "cython/teukolsky_wrap.pyx":409
+  /* "cython/teukolsky_wrap.pyx":413
  *         return self.hertzcpp.getPolarPoints(i)
  *     def polarsolution(self, int i):
  *         return self.hertzcpp.getPolarSolution(i)             # <<<<<<<<<<<<<<
@@ -17811,13 +18695,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_28polarsolution(struct __pyx_
  *         return self.hertzcpp.getPolarDerivative(i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getPolarSolution(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 409, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getPolarSolution(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 413, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":408
+  /* "cython/teukolsky_wrap.pyx":412
  *     def polarpoint(self, int i):
  *         return self.hertzcpp.getPolarPoints(i)
  *     def polarsolution(self, int i):             # <<<<<<<<<<<<<<
@@ -17836,7 +18720,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_28polarsolution(struct __pyx_
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":410
+/* "cython/teukolsky_wrap.pyx":414
  *     def polarsolution(self, int i):
  *         return self.hertzcpp.getPolarSolution(i)
  *     def polarderivative(self, int i):             # <<<<<<<<<<<<<<
@@ -17855,7 +18739,7 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_31polarderivative(PyObject *_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("polarderivative (wrapper)", 0);
   assert(__pyx_arg_i); {
-    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 410, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 414, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -17879,7 +18763,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_30polarderivative(struct __py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("polarderivative", 0);
 
-  /* "cython/teukolsky_wrap.pyx":411
+  /* "cython/teukolsky_wrap.pyx":415
  *         return self.hertzcpp.getPolarSolution(i)
  *     def polarderivative(self, int i):
  *         return self.hertzcpp.getPolarDerivative(i)             # <<<<<<<<<<<<<<
@@ -17887,13 +18771,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_30polarderivative(struct __py
  *         return self.hertzcpp.getPolarSecondDerivative(i)
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getPolarDerivative(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 411, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getPolarDerivative(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 415, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":410
+  /* "cython/teukolsky_wrap.pyx":414
  *     def polarsolution(self, int i):
  *         return self.hertzcpp.getPolarSolution(i)
  *     def polarderivative(self, int i):             # <<<<<<<<<<<<<<
@@ -17912,7 +18796,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_30polarderivative(struct __py
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":412
+/* "cython/teukolsky_wrap.pyx":416
  *     def polarderivative(self, int i):
  *         return self.hertzcpp.getPolarDerivative(i)
  *     def polarderivative2(self, int i):             # <<<<<<<<<<<<<<
@@ -17931,7 +18815,7 @@ static PyObject *__pyx_pw_11cybhpt_full_9HertzMode_33polarderivative2(PyObject *
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("polarderivative2 (wrapper)", 0);
   assert(__pyx_arg_i); {
-    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 412, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(__pyx_arg_i); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 416, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -17955,7 +18839,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_32polarderivative2(struct __p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("polarderivative2", 0);
 
-  /* "cython/teukolsky_wrap.pyx":413
+  /* "cython/teukolsky_wrap.pyx":417
  *         return self.hertzcpp.getPolarDerivative(i)
  *     def polarderivative2(self, int i):
  *         return self.hertzcpp.getPolarSecondDerivative(i)             # <<<<<<<<<<<<<<
@@ -17963,13 +18847,13 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_32polarderivative2(struct __p
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getPolarSecondDerivative(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 413, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->hertzcpp->getPolarSecondDerivative(__pyx_v_i)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 417, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":412
+  /* "cython/teukolsky_wrap.pyx":416
  *     def polarderivative(self, int i):
  *         return self.hertzcpp.getPolarDerivative(i)
  *     def polarderivative2(self, int i):             # <<<<<<<<<<<<<<
@@ -17988,7 +18872,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_32polarderivative2(struct __p
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":416
+/* "cython/teukolsky_wrap.pyx":420
  * 
  *     @property
  *     def radialpoints(self):             # <<<<<<<<<<<<<<
@@ -18028,7 +18912,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_12radialpoints___get__(struct
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":417
+  /* "cython/teukolsky_wrap.pyx":421
  *     @property
  *     def radialpoints(self):
  *         return np.array([self.radialpoint(i) for i in range(self.sampleR)])             # <<<<<<<<<<<<<<
@@ -18036,21 +18920,21 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_12radialpoints___get__(struct
  *     def radialsolutions(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 417, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 421, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 417, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 421, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   { /* enter inner scope */
-    __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 417, __pyx_L1_error)
+    __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 421, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_4 = __pyx_v_self->sampleR;
     __pyx_t_5 = __pyx_t_4;
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
       __pyx_8genexpr9__pyx_v_i = __pyx_t_6;
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_radialpoint); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 417, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_radialpoint); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 421, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_8genexpr9__pyx_v_i); if (unlikely(!__pyx_t_9)) __PYX_ERR(3, 417, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_8genexpr9__pyx_v_i); if (unlikely(!__pyx_t_9)) __PYX_ERR(3, 421, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
       __pyx_t_10 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
@@ -18065,10 +18949,10 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_12radialpoints___get__(struct
       __pyx_t_7 = (__pyx_t_10) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_10, __pyx_t_9) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_t_9);
       __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      if (unlikely(!__pyx_t_7)) __PYX_ERR(3, 417, __pyx_L1_error)
+      if (unlikely(!__pyx_t_7)) __PYX_ERR(3, 421, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_7))) __PYX_ERR(3, 417, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_7))) __PYX_ERR(3, 421, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     }
   } /* exit inner scope */
@@ -18085,14 +18969,14 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_12radialpoints___get__(struct
   __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_7, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2);
   __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 417, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 421, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":416
+  /* "cython/teukolsky_wrap.pyx":420
  * 
  *     @property
  *     def radialpoints(self):             # <<<<<<<<<<<<<<
@@ -18117,7 +19001,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_12radialpoints___get__(struct
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":419
+/* "cython/teukolsky_wrap.pyx":423
  *         return np.array([self.radialpoint(i) for i in range(self.sampleR)])
  *     @property
  *     def radialsolutions(self):             # <<<<<<<<<<<<<<
@@ -18156,7 +19040,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_15radialsolutions___get__(str
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":420
+  /* "cython/teukolsky_wrap.pyx":424
  *     @property
  *     def radialsolutions(self):
  *         return {             # <<<<<<<<<<<<<<
@@ -18165,30 +19049,30 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_15radialsolutions___get__(str
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "cython/teukolsky_wrap.pyx":421
+  /* "cython/teukolsky_wrap.pyx":425
  *     def radialsolutions(self):
  *         return {
  *                 "In":np.array([self.hertzcpp.getRadialSolution(BoundaryCondition.In, i) for i in range(self.sampleR)]),             # <<<<<<<<<<<<<<
  *                 "Up":np.array([self.hertzcpp.getRadialSolution(BoundaryCondition.Up, i) for i in range(self.sampleR)])
  *         }
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 421, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 425, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 421, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 425, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_array); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 421, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_array); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 425, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   { /* enter inner scope */
-    __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 421, __pyx_L1_error)
+    __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 425, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_5 = __pyx_v_self->sampleR;
     __pyx_t_6 = __pyx_t_5;
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
       __pyx_9genexpr10__pyx_v_i = __pyx_t_7;
-      __pyx_t_8 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getRadialSolution(In, __pyx_9genexpr10__pyx_v_i)); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 421, __pyx_L1_error)
+      __pyx_t_8 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getRadialSolution(In, __pyx_9genexpr10__pyx_v_i)); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 425, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_3, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 421, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_3, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 425, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     }
   } /* exit inner scope */
@@ -18205,34 +19089,34 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_15radialsolutions___get__(str
   __pyx_t_2 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_8, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 421, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 425, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_In, __pyx_t_2) < 0) __PYX_ERR(3, 421, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_In, __pyx_t_2) < 0) __PYX_ERR(3, 425, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":422
+  /* "cython/teukolsky_wrap.pyx":426
  *         return {
  *                 "In":np.array([self.hertzcpp.getRadialSolution(BoundaryCondition.In, i) for i in range(self.sampleR)]),
  *                 "Up":np.array([self.hertzcpp.getRadialSolution(BoundaryCondition.Up, i) for i in range(self.sampleR)])             # <<<<<<<<<<<<<<
  *         }
  *     @property
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 422, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 422, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   { /* enter inner scope */
-    __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 422, __pyx_L1_error)
+    __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 426, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = __pyx_v_self->sampleR;
     __pyx_t_6 = __pyx_t_5;
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
       __pyx_9genexpr11__pyx_v_i = __pyx_t_7;
-      __pyx_t_8 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getRadialSolution(Up, __pyx_9genexpr11__pyx_v_i)); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 422, __pyx_L1_error)
+      __pyx_t_8 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getRadialSolution(Up, __pyx_9genexpr11__pyx_v_i)); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 426, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 422, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 426, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     }
   } /* exit inner scope */
@@ -18249,16 +19133,16 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_15radialsolutions___get__(str
   __pyx_t_2 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_8, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 422, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 426, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_Up, __pyx_t_2) < 0) __PYX_ERR(3, 421, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_Up, __pyx_t_2) < 0) __PYX_ERR(3, 425, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":419
+  /* "cython/teukolsky_wrap.pyx":423
  *         return np.array([self.radialpoint(i) for i in range(self.sampleR)])
  *     @property
  *     def radialsolutions(self):             # <<<<<<<<<<<<<<
@@ -18281,7 +19165,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_15radialsolutions___get__(str
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":425
+/* "cython/teukolsky_wrap.pyx":429
  *         }
  *     @property
  *     def radialderivatives(self):             # <<<<<<<<<<<<<<
@@ -18320,7 +19204,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_17radialderivatives___get__(s
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":426
+  /* "cython/teukolsky_wrap.pyx":430
  *     @property
  *     def radialderivatives(self):
  *         return {             # <<<<<<<<<<<<<<
@@ -18329,30 +19213,30 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_17radialderivatives___get__(s
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "cython/teukolsky_wrap.pyx":427
+  /* "cython/teukolsky_wrap.pyx":431
  *     def radialderivatives(self):
  *         return {
  *                 "In":np.array([self.hertzcpp.getRadialDerivative(BoundaryCondition.In, i) for i in range(self.sampleR)]),             # <<<<<<<<<<<<<<
  *                 "Up":np.array([self.hertzcpp.getRadialDerivative(BoundaryCondition.Up, i) for i in range(self.sampleR)])
  *         }
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 427, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 431, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 427, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 431, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_array); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 427, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_array); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 431, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   { /* enter inner scope */
-    __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 427, __pyx_L1_error)
+    __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 431, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_5 = __pyx_v_self->sampleR;
     __pyx_t_6 = __pyx_t_5;
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
       __pyx_9genexpr12__pyx_v_i = __pyx_t_7;
-      __pyx_t_8 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getRadialDerivative(In, __pyx_9genexpr12__pyx_v_i)); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 427, __pyx_L1_error)
+      __pyx_t_8 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getRadialDerivative(In, __pyx_9genexpr12__pyx_v_i)); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 431, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_3, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 427, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_3, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 431, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     }
   } /* exit inner scope */
@@ -18369,34 +19253,34 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_17radialderivatives___get__(s
   __pyx_t_2 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_8, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 427, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 431, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_In, __pyx_t_2) < 0) __PYX_ERR(3, 427, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_In, __pyx_t_2) < 0) __PYX_ERR(3, 431, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":428
+  /* "cython/teukolsky_wrap.pyx":432
  *         return {
  *                 "In":np.array([self.hertzcpp.getRadialDerivative(BoundaryCondition.In, i) for i in range(self.sampleR)]),
  *                 "Up":np.array([self.hertzcpp.getRadialDerivative(BoundaryCondition.Up, i) for i in range(self.sampleR)])             # <<<<<<<<<<<<<<
  *         }
  *     @property
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 428, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 432, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 428, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 432, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   { /* enter inner scope */
-    __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 428, __pyx_L1_error)
+    __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 432, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = __pyx_v_self->sampleR;
     __pyx_t_6 = __pyx_t_5;
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
       __pyx_9genexpr13__pyx_v_i = __pyx_t_7;
-      __pyx_t_8 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getRadialDerivative(Up, __pyx_9genexpr13__pyx_v_i)); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 428, __pyx_L1_error)
+      __pyx_t_8 = __pyx_convert_complex_to_py_double(__pyx_v_self->hertzcpp->getRadialDerivative(Up, __pyx_9genexpr13__pyx_v_i)); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 432, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 428, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 432, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     }
   } /* exit inner scope */
@@ -18413,16 +19297,16 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_17radialderivatives___get__(s
   __pyx_t_2 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_8, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 428, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 432, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_Up, __pyx_t_2) < 0) __PYX_ERR(3, 427, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_Up, __pyx_t_2) < 0) __PYX_ERR(3, 431, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":425
+  /* "cython/teukolsky_wrap.pyx":429
  *         }
  *     @property
  *     def radialderivatives(self):             # <<<<<<<<<<<<<<
@@ -18445,7 +19329,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_17radialderivatives___get__(s
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":431
+/* "cython/teukolsky_wrap.pyx":435
  *         }
  *     @property
  *     def radialderivatives2(self):             # <<<<<<<<<<<<<<
@@ -18489,7 +19373,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivatives2___get__(
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":432
+  /* "cython/teukolsky_wrap.pyx":436
  *     @property
  *     def radialderivatives2(self):
  *         return {             # <<<<<<<<<<<<<<
@@ -18498,30 +19382,30 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivatives2___get__(
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "cython/teukolsky_wrap.pyx":433
+  /* "cython/teukolsky_wrap.pyx":437
  *     def radialderivatives2(self):
  *         return {
  *                 "In":np.array([self.radialderivative2('In', i) for i in range(self.sampleR)]),             # <<<<<<<<<<<<<<
  *                 "Up":np.array([self.radialderivative2('Up', i) for i in range(self.sampleR)])
  *         }
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 433, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 437, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 433, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 437, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_array); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 433, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_array); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 437, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   { /* enter inner scope */
-    __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 433, __pyx_L1_error)
+    __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 437, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_5 = __pyx_v_self->sampleR;
     __pyx_t_6 = __pyx_t_5;
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
       __pyx_9genexpr14__pyx_v_i = __pyx_t_7;
-      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_radialderivative2); if (unlikely(!__pyx_t_9)) __PYX_ERR(3, 433, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_radialderivative2); if (unlikely(!__pyx_t_9)) __PYX_ERR(3, 437, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_9genexpr14__pyx_v_i); if (unlikely(!__pyx_t_10)) __PYX_ERR(3, 433, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_9genexpr14__pyx_v_i); if (unlikely(!__pyx_t_10)) __PYX_ERR(3, 437, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
       __pyx_t_11 = NULL;
       __pyx_t_12 = 0;
@@ -18538,7 +19422,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivatives2___get__(
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_9)) {
         PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_n_u_In, __pyx_t_10};
-        __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_12, 2+__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 433, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_12, 2+__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 437, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
@@ -18547,14 +19431,14 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivatives2___get__(
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_9)) {
         PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_n_u_In, __pyx_t_10};
-        __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_12, 2+__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 433, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_12, 2+__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 437, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
       } else
       #endif
       {
-        __pyx_t_13 = PyTuple_New(2+__pyx_t_12); if (unlikely(!__pyx_t_13)) __PYX_ERR(3, 433, __pyx_L1_error)
+        __pyx_t_13 = PyTuple_New(2+__pyx_t_12); if (unlikely(!__pyx_t_13)) __PYX_ERR(3, 437, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
         if (__pyx_t_11) {
           __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_11); __pyx_t_11 = NULL;
@@ -18565,12 +19449,12 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivatives2___get__(
         __Pyx_GIVEREF(__pyx_t_10);
         PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_12, __pyx_t_10);
         __pyx_t_10 = 0;
-        __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_13, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 433, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_13, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 437, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       }
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_3, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 433, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_3, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 437, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     }
   } /* exit inner scope */
@@ -18587,34 +19471,34 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivatives2___get__(
   __pyx_t_2 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_8, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 433, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 437, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_In, __pyx_t_2) < 0) __PYX_ERR(3, 433, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_In, __pyx_t_2) < 0) __PYX_ERR(3, 437, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":434
+  /* "cython/teukolsky_wrap.pyx":438
  *         return {
  *                 "In":np.array([self.radialderivative2('In', i) for i in range(self.sampleR)]),
  *                 "Up":np.array([self.radialderivative2('Up', i) for i in range(self.sampleR)])             # <<<<<<<<<<<<<<
  *         }
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 434, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 438, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 434, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 438, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   { /* enter inner scope */
-    __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 434, __pyx_L1_error)
+    __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 438, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = __pyx_v_self->sampleR;
     __pyx_t_6 = __pyx_t_5;
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
       __pyx_9genexpr15__pyx_v_i = __pyx_t_7;
-      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_radialderivative2); if (unlikely(!__pyx_t_9)) __PYX_ERR(3, 434, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_radialderivative2); if (unlikely(!__pyx_t_9)) __PYX_ERR(3, 438, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_9genexpr15__pyx_v_i); if (unlikely(!__pyx_t_13)) __PYX_ERR(3, 434, __pyx_L1_error)
+      __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_9genexpr15__pyx_v_i); if (unlikely(!__pyx_t_13)) __PYX_ERR(3, 438, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_13);
       __pyx_t_10 = NULL;
       __pyx_t_12 = 0;
@@ -18631,7 +19515,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivatives2___get__(
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_9)) {
         PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_n_u_Up, __pyx_t_13};
-        __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_12, 2+__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 434, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_12, 2+__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 438, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
@@ -18640,14 +19524,14 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivatives2___get__(
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_9)) {
         PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_n_u_Up, __pyx_t_13};
-        __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_12, 2+__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 434, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_12, 2+__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 438, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       } else
       #endif
       {
-        __pyx_t_11 = PyTuple_New(2+__pyx_t_12); if (unlikely(!__pyx_t_11)) __PYX_ERR(3, 434, __pyx_L1_error)
+        __pyx_t_11 = PyTuple_New(2+__pyx_t_12); if (unlikely(!__pyx_t_11)) __PYX_ERR(3, 438, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_11);
         if (__pyx_t_10) {
           __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_10); __pyx_t_10 = NULL;
@@ -18658,12 +19542,12 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivatives2___get__(
         __Pyx_GIVEREF(__pyx_t_13);
         PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_12, __pyx_t_13);
         __pyx_t_13 = 0;
-        __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_11, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 434, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_11, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 438, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       }
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 434, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_8))) __PYX_ERR(3, 438, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     }
   } /* exit inner scope */
@@ -18680,16 +19564,16 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_18radialderivatives2___get__(
   __pyx_t_2 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_8, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 434, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 438, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_Up, __pyx_t_2) < 0) __PYX_ERR(3, 433, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_Up, __pyx_t_2) < 0) __PYX_ERR(3, 437, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":431
+  /* "cython/teukolsky_wrap.pyx":435
  *         }
  *     @property
  *     def radialderivatives2(self):             # <<<<<<<<<<<<<<
@@ -18829,7 +19713,7 @@ static PyObject *__pyx_pf_11cybhpt_full_9HertzMode_36__setstate_cython__(CYTHON_
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":437
+/* "cython/teukolsky_wrap.pyx":441
  *         }
  * 
  * def test_hertz_mode_cython(int j, int m, int k, int n, KerrGeodesic geo):             # <<<<<<<<<<<<<<
@@ -18881,29 +19765,29 @@ static PyObject *__pyx_pw_11cybhpt_full_25test_hertz_mode_cython(PyObject *__pyx
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_m)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("test_hertz_mode_cython", 1, 5, 5, 1); __PYX_ERR(3, 437, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("test_hertz_mode_cython", 1, 5, 5, 1); __PYX_ERR(3, 441, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_k)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("test_hertz_mode_cython", 1, 5, 5, 2); __PYX_ERR(3, 437, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("test_hertz_mode_cython", 1, 5, 5, 2); __PYX_ERR(3, 441, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_n)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("test_hertz_mode_cython", 1, 5, 5, 3); __PYX_ERR(3, 437, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("test_hertz_mode_cython", 1, 5, 5, 3); __PYX_ERR(3, 441, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_geo)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("test_hertz_mode_cython", 1, 5, 5, 4); __PYX_ERR(3, 437, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("test_hertz_mode_cython", 1, 5, 5, 4); __PYX_ERR(3, 441, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "test_hertz_mode_cython") < 0)) __PYX_ERR(3, 437, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "test_hertz_mode_cython") < 0)) __PYX_ERR(3, 441, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 5) {
       goto __pyx_L5_argtuple_error;
@@ -18914,21 +19798,21 @@ static PyObject *__pyx_pw_11cybhpt_full_25test_hertz_mode_cython(PyObject *__pyx
       values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
       values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
     }
-    __pyx_v_j = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_j == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 437, __pyx_L3_error)
-    __pyx_v_m = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_m == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 437, __pyx_L3_error)
-    __pyx_v_k = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_k == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 437, __pyx_L3_error)
-    __pyx_v_n = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 437, __pyx_L3_error)
+    __pyx_v_j = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_j == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 441, __pyx_L3_error)
+    __pyx_v_m = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_m == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 441, __pyx_L3_error)
+    __pyx_v_k = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_k == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 441, __pyx_L3_error)
+    __pyx_v_n = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 441, __pyx_L3_error)
     __pyx_v_geo = ((struct __pyx_obj_11cybhpt_full_KerrGeodesic *)values[4]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("test_hertz_mode_cython", 1, 5, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 437, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("test_hertz_mode_cython", 1, 5, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 441, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.test_hertz_mode_cython", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_geo), __pyx_ptype_11cybhpt_full_KerrGeodesic, 1, "geo", 0))) __PYX_ERR(3, 437, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_geo), __pyx_ptype_11cybhpt_full_KerrGeodesic, 1, "geo", 0))) __PYX_ERR(3, 441, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_24test_hertz_mode_cython(__pyx_self, __pyx_v_j, __pyx_v_m, __pyx_v_k, __pyx_v_n, __pyx_v_geo);
 
   /* function exit code */
@@ -18945,7 +19829,7 @@ static PyObject *__pyx_pf_11cybhpt_full_24test_hertz_mode_cython(CYTHON_UNUSED P
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("test_hertz_mode_cython", 0);
 
-  /* "cython/teukolsky_wrap.pyx":438
+  /* "cython/teukolsky_wrap.pyx":442
  * 
  * def test_hertz_mode_cython(int j, int m, int k, int n, KerrGeodesic geo):
  *     test_hertz_mode(j, m, k, n, dereference(geo.geocpp))             # <<<<<<<<<<<<<<
@@ -18954,7 +19838,7 @@ static PyObject *__pyx_pf_11cybhpt_full_24test_hertz_mode_cython(CYTHON_UNUSED P
  */
   test_hertz_mode(__pyx_v_j, __pyx_v_m, __pyx_v_k, __pyx_v_n, (*__pyx_v_geo->geocpp));
 
-  /* "cython/teukolsky_wrap.pyx":437
+  /* "cython/teukolsky_wrap.pyx":441
  *         }
  * 
  * def test_hertz_mode_cython(int j, int m, int k, int n, KerrGeodesic geo):             # <<<<<<<<<<<<<<
@@ -18969,7 +19853,7 @@ static PyObject *__pyx_pf_11cybhpt_full_24test_hertz_mode_cython(CYTHON_UNUSED P
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":445
+/* "cython/teukolsky_wrap.pyx":449
  * }
  * 
  * def teuk_to_hertz_ORG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
@@ -19030,47 +19914,47 @@ static PyObject *__pyx_pw_11cybhpt_full_27teuk_to_hertz_ORG(PyObject *__pyx_self
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ZUp)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, 1); __PYX_ERR(3, 445, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, 1); __PYX_ERR(3, 449, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_j)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, 2); __PYX_ERR(3, 445, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, 2); __PYX_ERR(3, 449, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_m)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, 3); __PYX_ERR(3, 445, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, 3); __PYX_ERR(3, 449, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_k)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, 4); __PYX_ERR(3, 445, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, 4); __PYX_ERR(3, 449, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_a)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, 5); __PYX_ERR(3, 445, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, 5); __PYX_ERR(3, 449, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_omega)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, 6); __PYX_ERR(3, 445, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, 6); __PYX_ERR(3, 449, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (likely((values[7] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_lambdaCH)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, 7); __PYX_ERR(3, 445, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, 7); __PYX_ERR(3, 449, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "teuk_to_hertz_ORG") < 0)) __PYX_ERR(3, 445, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "teuk_to_hertz_ORG") < 0)) __PYX_ERR(3, 449, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 8) {
       goto __pyx_L5_argtuple_error;
@@ -19084,18 +19968,18 @@ static PyObject *__pyx_pw_11cybhpt_full_27teuk_to_hertz_ORG(PyObject *__pyx_self
       values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
       values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
     }
-    __pyx_v_ZIn = __pyx_convert_complex_from_py_double(values[0]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 445, __pyx_L3_error)
-    __pyx_v_ZUp = __pyx_convert_complex_from_py_double(values[1]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 445, __pyx_L3_error)
-    __pyx_v_j = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_j == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 445, __pyx_L3_error)
-    __pyx_v_m = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_m == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 445, __pyx_L3_error)
-    __pyx_v_k = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_k == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 445, __pyx_L3_error)
-    __pyx_v_a = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 445, __pyx_L3_error)
-    __pyx_v_omega = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_omega == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 445, __pyx_L3_error)
-    __pyx_v_lambdaCH = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_lambdaCH == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 445, __pyx_L3_error)
+    __pyx_v_ZIn = __pyx_convert_complex_from_py_double(values[0]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 449, __pyx_L3_error)
+    __pyx_v_ZUp = __pyx_convert_complex_from_py_double(values[1]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 449, __pyx_L3_error)
+    __pyx_v_j = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_j == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 449, __pyx_L3_error)
+    __pyx_v_m = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_m == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 449, __pyx_L3_error)
+    __pyx_v_k = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_k == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 449, __pyx_L3_error)
+    __pyx_v_a = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 449, __pyx_L3_error)
+    __pyx_v_omega = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_omega == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 449, __pyx_L3_error)
+    __pyx_v_lambdaCH = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_lambdaCH == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 449, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 445, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ORG", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 449, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.teuk_to_hertz_ORG", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -19121,7 +20005,7 @@ static PyObject *__pyx_pf_11cybhpt_full_26teuk_to_hertz_ORG(CYTHON_UNUSED PyObje
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("teuk_to_hertz_ORG", 0);
 
-  /* "cython/teukolsky_wrap.pyx":448
+  /* "cython/teukolsky_wrap.pyx":452
  *     cdef cpp_complex[double] PsiIn
  *     cdef cpp_complex[double] PsiUp
  *     teukolsky_to_hertz_ORG(PsiIn, PsiUp, ZIn, ZUp, j, m, k, a, omega, lambdaCH)             # <<<<<<<<<<<<<<
@@ -19130,7 +20014,7 @@ static PyObject *__pyx_pf_11cybhpt_full_26teuk_to_hertz_ORG(CYTHON_UNUSED PyObje
  */
   teukolsky_to_hertz_ORG(__pyx_v_PsiIn, __pyx_v_PsiUp, __pyx_v_ZIn, __pyx_v_ZUp, __pyx_v_j, __pyx_v_m, __pyx_v_k, __pyx_v_a, __pyx_v_omega, __pyx_v_lambdaCH);
 
-  /* "cython/teukolsky_wrap.pyx":449
+  /* "cython/teukolsky_wrap.pyx":453
  *     cdef cpp_complex[double] PsiUp
  *     teukolsky_to_hertz_ORG(PsiIn, PsiUp, ZIn, ZUp, j, m, k, a, omega, lambdaCH)
  *     return (PsiIn, PsiUp)             # <<<<<<<<<<<<<<
@@ -19138,11 +20022,11 @@ static PyObject *__pyx_pf_11cybhpt_full_26teuk_to_hertz_ORG(CYTHON_UNUSED PyObje
  * def teuk_to_hertz_IRG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_PsiIn); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 449, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_PsiIn); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 453, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_convert_complex_to_py_double(__pyx_v_PsiUp); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 449, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_complex_to_py_double(__pyx_v_PsiUp); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 453, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 449, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 453, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
@@ -19154,7 +20038,7 @@ static PyObject *__pyx_pf_11cybhpt_full_26teuk_to_hertz_ORG(CYTHON_UNUSED PyObje
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":445
+  /* "cython/teukolsky_wrap.pyx":449
  * }
  * 
  * def teuk_to_hertz_ORG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
@@ -19175,7 +20059,7 @@ static PyObject *__pyx_pf_11cybhpt_full_26teuk_to_hertz_ORG(CYTHON_UNUSED PyObje
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":451
+/* "cython/teukolsky_wrap.pyx":455
  *     return (PsiIn, PsiUp)
  * 
  * def teuk_to_hertz_IRG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
@@ -19236,47 +20120,47 @@ static PyObject *__pyx_pw_11cybhpt_full_29teuk_to_hertz_IRG(PyObject *__pyx_self
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ZUp)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, 1); __PYX_ERR(3, 451, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, 1); __PYX_ERR(3, 455, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_j)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, 2); __PYX_ERR(3, 451, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, 2); __PYX_ERR(3, 455, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_m)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, 3); __PYX_ERR(3, 451, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, 3); __PYX_ERR(3, 455, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_k)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, 4); __PYX_ERR(3, 451, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, 4); __PYX_ERR(3, 455, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_a)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, 5); __PYX_ERR(3, 451, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, 5); __PYX_ERR(3, 455, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_omega)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, 6); __PYX_ERR(3, 451, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, 6); __PYX_ERR(3, 455, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (likely((values[7] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_lambdaCH)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, 7); __PYX_ERR(3, 451, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, 7); __PYX_ERR(3, 455, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "teuk_to_hertz_IRG") < 0)) __PYX_ERR(3, 451, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "teuk_to_hertz_IRG") < 0)) __PYX_ERR(3, 455, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 8) {
       goto __pyx_L5_argtuple_error;
@@ -19290,18 +20174,18 @@ static PyObject *__pyx_pw_11cybhpt_full_29teuk_to_hertz_IRG(PyObject *__pyx_self
       values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
       values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
     }
-    __pyx_v_ZIn = __pyx_convert_complex_from_py_double(values[0]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 451, __pyx_L3_error)
-    __pyx_v_ZUp = __pyx_convert_complex_from_py_double(values[1]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 451, __pyx_L3_error)
-    __pyx_v_j = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_j == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 451, __pyx_L3_error)
-    __pyx_v_m = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_m == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 451, __pyx_L3_error)
-    __pyx_v_k = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_k == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 451, __pyx_L3_error)
-    __pyx_v_a = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 451, __pyx_L3_error)
-    __pyx_v_omega = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_omega == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 451, __pyx_L3_error)
-    __pyx_v_lambdaCH = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_lambdaCH == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 451, __pyx_L3_error)
+    __pyx_v_ZIn = __pyx_convert_complex_from_py_double(values[0]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 455, __pyx_L3_error)
+    __pyx_v_ZUp = __pyx_convert_complex_from_py_double(values[1]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 455, __pyx_L3_error)
+    __pyx_v_j = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_j == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 455, __pyx_L3_error)
+    __pyx_v_m = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_m == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 455, __pyx_L3_error)
+    __pyx_v_k = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_k == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 455, __pyx_L3_error)
+    __pyx_v_a = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 455, __pyx_L3_error)
+    __pyx_v_omega = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_omega == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 455, __pyx_L3_error)
+    __pyx_v_lambdaCH = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_lambdaCH == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 455, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 451, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_IRG", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 455, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.teuk_to_hertz_IRG", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -19327,7 +20211,7 @@ static PyObject *__pyx_pf_11cybhpt_full_28teuk_to_hertz_IRG(CYTHON_UNUSED PyObje
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("teuk_to_hertz_IRG", 0);
 
-  /* "cython/teukolsky_wrap.pyx":454
+  /* "cython/teukolsky_wrap.pyx":458
  *     cdef cpp_complex[double] PsiIn
  *     cdef cpp_complex[double] PsiUp
  *     teukolsky_to_hertz_IRG(PsiIn, PsiUp, ZIn, ZUp, j, m, k, a, omega, lambdaCH)             # <<<<<<<<<<<<<<
@@ -19336,7 +20220,7 @@ static PyObject *__pyx_pf_11cybhpt_full_28teuk_to_hertz_IRG(CYTHON_UNUSED PyObje
  */
   teukolsky_to_hertz_IRG(__pyx_v_PsiIn, __pyx_v_PsiUp, __pyx_v_ZIn, __pyx_v_ZUp, __pyx_v_j, __pyx_v_m, __pyx_v_k, __pyx_v_a, __pyx_v_omega, __pyx_v_lambdaCH);
 
-  /* "cython/teukolsky_wrap.pyx":455
+  /* "cython/teukolsky_wrap.pyx":459
  *     cdef cpp_complex[double] PsiUp
  *     teukolsky_to_hertz_IRG(PsiIn, PsiUp, ZIn, ZUp, j, m, k, a, omega, lambdaCH)
  *     return (PsiIn, PsiUp)             # <<<<<<<<<<<<<<
@@ -19344,11 +20228,11 @@ static PyObject *__pyx_pf_11cybhpt_full_28teuk_to_hertz_IRG(CYTHON_UNUSED PyObje
  * def teuk_to_hertz_SAAB(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_PsiIn); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 455, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_PsiIn); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 459, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_convert_complex_to_py_double(__pyx_v_PsiUp); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 455, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_complex_to_py_double(__pyx_v_PsiUp); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 459, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 455, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 459, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
@@ -19360,7 +20244,7 @@ static PyObject *__pyx_pf_11cybhpt_full_28teuk_to_hertz_IRG(CYTHON_UNUSED PyObje
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":451
+  /* "cython/teukolsky_wrap.pyx":455
  *     return (PsiIn, PsiUp)
  * 
  * def teuk_to_hertz_IRG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
@@ -19381,7 +20265,7 @@ static PyObject *__pyx_pf_11cybhpt_full_28teuk_to_hertz_IRG(CYTHON_UNUSED PyObje
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":457
+/* "cython/teukolsky_wrap.pyx":461
  *     return (PsiIn, PsiUp)
  * 
  * def teuk_to_hertz_SAAB(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
@@ -19442,47 +20326,47 @@ static PyObject *__pyx_pw_11cybhpt_full_31teuk_to_hertz_SAAB(PyObject *__pyx_sel
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ZUp)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, 1); __PYX_ERR(3, 457, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, 1); __PYX_ERR(3, 461, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_j)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, 2); __PYX_ERR(3, 457, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, 2); __PYX_ERR(3, 461, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_m)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, 3); __PYX_ERR(3, 457, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, 3); __PYX_ERR(3, 461, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_k)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, 4); __PYX_ERR(3, 457, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, 4); __PYX_ERR(3, 461, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_a)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, 5); __PYX_ERR(3, 457, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, 5); __PYX_ERR(3, 461, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_omega)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, 6); __PYX_ERR(3, 457, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, 6); __PYX_ERR(3, 461, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (likely((values[7] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_lambdaCH)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, 7); __PYX_ERR(3, 457, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, 7); __PYX_ERR(3, 461, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "teuk_to_hertz_SAAB") < 0)) __PYX_ERR(3, 457, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "teuk_to_hertz_SAAB") < 0)) __PYX_ERR(3, 461, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 8) {
       goto __pyx_L5_argtuple_error;
@@ -19496,18 +20380,18 @@ static PyObject *__pyx_pw_11cybhpt_full_31teuk_to_hertz_SAAB(PyObject *__pyx_sel
       values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
       values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
     }
-    __pyx_v_ZIn = __pyx_convert_complex_from_py_double(values[0]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 457, __pyx_L3_error)
-    __pyx_v_ZUp = __pyx_convert_complex_from_py_double(values[1]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 457, __pyx_L3_error)
-    __pyx_v_j = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_j == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 457, __pyx_L3_error)
-    __pyx_v_m = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_m == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 457, __pyx_L3_error)
-    __pyx_v_k = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_k == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 457, __pyx_L3_error)
-    __pyx_v_a = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 457, __pyx_L3_error)
-    __pyx_v_omega = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_omega == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 457, __pyx_L3_error)
-    __pyx_v_lambdaCH = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_lambdaCH == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 457, __pyx_L3_error)
+    __pyx_v_ZIn = __pyx_convert_complex_from_py_double(values[0]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 461, __pyx_L3_error)
+    __pyx_v_ZUp = __pyx_convert_complex_from_py_double(values[1]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 461, __pyx_L3_error)
+    __pyx_v_j = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_j == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 461, __pyx_L3_error)
+    __pyx_v_m = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_m == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 461, __pyx_L3_error)
+    __pyx_v_k = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_k == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 461, __pyx_L3_error)
+    __pyx_v_a = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 461, __pyx_L3_error)
+    __pyx_v_omega = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_omega == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 461, __pyx_L3_error)
+    __pyx_v_lambdaCH = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_lambdaCH == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 461, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 457, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_SAAB", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 461, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.teuk_to_hertz_SAAB", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -19533,7 +20417,7 @@ static PyObject *__pyx_pf_11cybhpt_full_30teuk_to_hertz_SAAB(CYTHON_UNUSED PyObj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("teuk_to_hertz_SAAB", 0);
 
-  /* "cython/teukolsky_wrap.pyx":460
+  /* "cython/teukolsky_wrap.pyx":464
  *     cdef cpp_complex[double] PsiIn
  *     cdef cpp_complex[double] PsiUp
  *     teukolsky_to_hertz_SAAB(PsiIn, PsiUp, ZIn, ZUp, j, m, k, a, omega, lambdaCH)             # <<<<<<<<<<<<<<
@@ -19542,7 +20426,7 @@ static PyObject *__pyx_pf_11cybhpt_full_30teuk_to_hertz_SAAB(CYTHON_UNUSED PyObj
  */
   teukolsky_to_hertz_SAAB(__pyx_v_PsiIn, __pyx_v_PsiUp, __pyx_v_ZIn, __pyx_v_ZUp, __pyx_v_j, __pyx_v_m, __pyx_v_k, __pyx_v_a, __pyx_v_omega, __pyx_v_lambdaCH);
 
-  /* "cython/teukolsky_wrap.pyx":461
+  /* "cython/teukolsky_wrap.pyx":465
  *     cdef cpp_complex[double] PsiUp
  *     teukolsky_to_hertz_SAAB(PsiIn, PsiUp, ZIn, ZUp, j, m, k, a, omega, lambdaCH)
  *     return (PsiIn, PsiUp)             # <<<<<<<<<<<<<<
@@ -19550,11 +20434,11 @@ static PyObject *__pyx_pf_11cybhpt_full_30teuk_to_hertz_SAAB(CYTHON_UNUSED PyObj
  * def teuk_to_hertz_ASAAB(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_PsiIn); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 461, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_PsiIn); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 465, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_convert_complex_to_py_double(__pyx_v_PsiUp); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 461, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_complex_to_py_double(__pyx_v_PsiUp); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 465, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 461, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 465, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
@@ -19566,7 +20450,7 @@ static PyObject *__pyx_pf_11cybhpt_full_30teuk_to_hertz_SAAB(CYTHON_UNUSED PyObj
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":457
+  /* "cython/teukolsky_wrap.pyx":461
  *     return (PsiIn, PsiUp)
  * 
  * def teuk_to_hertz_SAAB(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
@@ -19587,7 +20471,7 @@ static PyObject *__pyx_pf_11cybhpt_full_30teuk_to_hertz_SAAB(CYTHON_UNUSED PyObj
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":463
+/* "cython/teukolsky_wrap.pyx":467
  *     return (PsiIn, PsiUp)
  * 
  * def teuk_to_hertz_ASAAB(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
@@ -19648,47 +20532,47 @@ static PyObject *__pyx_pw_11cybhpt_full_33teuk_to_hertz_ASAAB(PyObject *__pyx_se
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ZUp)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, 1); __PYX_ERR(3, 463, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, 1); __PYX_ERR(3, 467, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_j)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, 2); __PYX_ERR(3, 463, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, 2); __PYX_ERR(3, 467, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_m)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, 3); __PYX_ERR(3, 463, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, 3); __PYX_ERR(3, 467, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_k)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, 4); __PYX_ERR(3, 463, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, 4); __PYX_ERR(3, 467, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_a)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, 5); __PYX_ERR(3, 463, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, 5); __PYX_ERR(3, 467, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_omega)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, 6); __PYX_ERR(3, 463, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, 6); __PYX_ERR(3, 467, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (likely((values[7] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_lambdaCH)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, 7); __PYX_ERR(3, 463, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, 7); __PYX_ERR(3, 467, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "teuk_to_hertz_ASAAB") < 0)) __PYX_ERR(3, 463, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "teuk_to_hertz_ASAAB") < 0)) __PYX_ERR(3, 467, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 8) {
       goto __pyx_L5_argtuple_error;
@@ -19702,18 +20586,18 @@ static PyObject *__pyx_pw_11cybhpt_full_33teuk_to_hertz_ASAAB(PyObject *__pyx_se
       values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
       values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
     }
-    __pyx_v_ZIn = __pyx_convert_complex_from_py_double(values[0]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 463, __pyx_L3_error)
-    __pyx_v_ZUp = __pyx_convert_complex_from_py_double(values[1]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 463, __pyx_L3_error)
-    __pyx_v_j = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_j == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 463, __pyx_L3_error)
-    __pyx_v_m = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_m == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 463, __pyx_L3_error)
-    __pyx_v_k = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_k == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 463, __pyx_L3_error)
-    __pyx_v_a = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 463, __pyx_L3_error)
-    __pyx_v_omega = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_omega == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 463, __pyx_L3_error)
-    __pyx_v_lambdaCH = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_lambdaCH == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 463, __pyx_L3_error)
+    __pyx_v_ZIn = __pyx_convert_complex_from_py_double(values[0]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 467, __pyx_L3_error)
+    __pyx_v_ZUp = __pyx_convert_complex_from_py_double(values[1]); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 467, __pyx_L3_error)
+    __pyx_v_j = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_j == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 467, __pyx_L3_error)
+    __pyx_v_m = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_m == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 467, __pyx_L3_error)
+    __pyx_v_k = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_k == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 467, __pyx_L3_error)
+    __pyx_v_a = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 467, __pyx_L3_error)
+    __pyx_v_omega = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_omega == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 467, __pyx_L3_error)
+    __pyx_v_lambdaCH = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_lambdaCH == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 467, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 463, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("teuk_to_hertz_ASAAB", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 467, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.teuk_to_hertz_ASAAB", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -19739,7 +20623,7 @@ static PyObject *__pyx_pf_11cybhpt_full_32teuk_to_hertz_ASAAB(CYTHON_UNUSED PyOb
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("teuk_to_hertz_ASAAB", 0);
 
-  /* "cython/teukolsky_wrap.pyx":466
+  /* "cython/teukolsky_wrap.pyx":470
  *     cdef cpp_complex[double] PsiIn
  *     cdef cpp_complex[double] PsiUp
  *     teukolsky_to_hertz_ASAAB(PsiIn, PsiUp, ZIn, ZUp, j, m, a, omega, lambdaCH)             # <<<<<<<<<<<<<<
@@ -19748,7 +20632,7 @@ static PyObject *__pyx_pf_11cybhpt_full_32teuk_to_hertz_ASAAB(CYTHON_UNUSED PyOb
  */
   teukolsky_to_hertz_ASAAB(__pyx_v_PsiIn, __pyx_v_PsiUp, __pyx_v_ZIn, __pyx_v_ZUp, __pyx_v_j, __pyx_v_m, __pyx_v_a, __pyx_v_omega, __pyx_v_lambdaCH);
 
-  /* "cython/teukolsky_wrap.pyx":467
+  /* "cython/teukolsky_wrap.pyx":471
  *     cdef cpp_complex[double] PsiUp
  *     teukolsky_to_hertz_ASAAB(PsiIn, PsiUp, ZIn, ZUp, j, m, a, omega, lambdaCH)
  *     return (PsiIn, PsiUp)             # <<<<<<<<<<<<<<
@@ -19756,11 +20640,11 @@ static PyObject *__pyx_pf_11cybhpt_full_32teuk_to_hertz_ASAAB(CYTHON_UNUSED PyOb
  * cdef dict metric_component_gauge_dict = {
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_PsiIn); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 467, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_PsiIn); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 471, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_convert_complex_to_py_double(__pyx_v_PsiUp); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 467, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_complex_to_py_double(__pyx_v_PsiUp); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 471, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 467, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 471, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
@@ -19772,7 +20656,7 @@ static PyObject *__pyx_pf_11cybhpt_full_32teuk_to_hertz_ASAAB(CYTHON_UNUSED PyOb
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":463
+  /* "cython/teukolsky_wrap.pyx":467
  *     return (PsiIn, PsiUp)
  * 
  * def teuk_to_hertz_ASAAB(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
@@ -19793,7 +20677,7 @@ static PyObject *__pyx_pf_11cybhpt_full_32teuk_to_hertz_ASAAB(CYTHON_UNUSED PyOb
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":526
+/* "cython/teukolsky_wrap.pyx":530
  * }
  * 
  * def metric_11(double a, double r, double z):             # <<<<<<<<<<<<<<
@@ -19839,17 +20723,17 @@ static PyObject *__pyx_pw_11cybhpt_full_35metric_11(PyObject *__pyx_self, PyObje
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_r)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_11", 1, 3, 3, 1); __PYX_ERR(3, 526, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_11", 1, 3, 3, 1); __PYX_ERR(3, 530, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_z)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_11", 1, 3, 3, 2); __PYX_ERR(3, 526, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_11", 1, 3, 3, 2); __PYX_ERR(3, 530, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "metric_11") < 0)) __PYX_ERR(3, 526, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "metric_11") < 0)) __PYX_ERR(3, 530, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -19858,13 +20742,13 @@ static PyObject *__pyx_pw_11cybhpt_full_35metric_11(PyObject *__pyx_self, PyObje
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_a = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 526, __pyx_L3_error)
-    __pyx_v_r = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_r == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 526, __pyx_L3_error)
-    __pyx_v_z = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_z == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 526, __pyx_L3_error)
+    __pyx_v_a = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 530, __pyx_L3_error)
+    __pyx_v_r = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_r == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 530, __pyx_L3_error)
+    __pyx_v_z = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_z == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 530, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("metric_11", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 526, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("metric_11", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 530, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.metric_11", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -19894,7 +20778,7 @@ static PyObject *__pyx_pf_11cybhpt_full_34metric_11(CYTHON_UNUSED PyObject *__py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("metric_11", 0);
 
-  /* "cython/teukolsky_wrap.pyx":527
+  /* "cython/teukolsky_wrap.pyx":531
  * 
  * def metric_11(double a, double r, double z):
  *     cdef vector[double] rvec = vector[double](1)             # <<<<<<<<<<<<<<
@@ -19905,11 +20789,11 @@ static PyObject *__pyx_pf_11cybhpt_full_34metric_11(CYTHON_UNUSED PyObject *__py
     __pyx_t_1 = std::vector<double> (1);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(3, 527, __pyx_L1_error)
+    __PYX_ERR(3, 531, __pyx_L1_error)
   }
   __pyx_v_rvec = __pyx_t_1;
 
-  /* "cython/teukolsky_wrap.pyx":528
+  /* "cython/teukolsky_wrap.pyx":532
  * def metric_11(double a, double r, double z):
  *     cdef vector[double] rvec = vector[double](1)
  *     cdef vector[double] zvec = vector[double](1)             # <<<<<<<<<<<<<<
@@ -19920,11 +20804,11 @@ static PyObject *__pyx_pf_11cybhpt_full_34metric_11(CYTHON_UNUSED PyObject *__py
     __pyx_t_1 = std::vector<double> (1);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(3, 528, __pyx_L1_error)
+    __PYX_ERR(3, 532, __pyx_L1_error)
   }
   __pyx_v_zvec = __pyx_t_1;
 
-  /* "cython/teukolsky_wrap.pyx":529
+  /* "cython/teukolsky_wrap.pyx":533
  *     cdef vector[double] rvec = vector[double](1)
  *     cdef vector[double] zvec = vector[double](1)
  *     rvec[0] = r             # <<<<<<<<<<<<<<
@@ -19933,7 +20817,7 @@ static PyObject *__pyx_pf_11cybhpt_full_34metric_11(CYTHON_UNUSED PyObject *__py
  */
   (__pyx_v_rvec[0]) = __pyx_v_r;
 
-  /* "cython/teukolsky_wrap.pyx":530
+  /* "cython/teukolsky_wrap.pyx":534
  *     cdef vector[double] zvec = vector[double](1)
  *     rvec[0] = r
  *     zvec[0] = z             # <<<<<<<<<<<<<<
@@ -19942,7 +20826,7 @@ static PyObject *__pyx_pf_11cybhpt_full_34metric_11(CYTHON_UNUSED PyObject *__py
  */
   (__pyx_v_zvec[0]) = __pyx_v_z;
 
-  /* "cython/teukolsky_wrap.pyx":533
+  /* "cython/teukolsky_wrap.pyx":537
  *     cdef cpp_complex[double] temp
  * 
  *     cdef vector[vector[vector[cpp_complex[double]]]] coeffs = metric_coefficients_ORG_11(a, rvec, zvec)             # <<<<<<<<<<<<<<
@@ -19951,7 +20835,7 @@ static PyObject *__pyx_pf_11cybhpt_full_34metric_11(CYTHON_UNUSED PyObject *__py
  */
   __pyx_v_coeffs = metric_coefficients_ORG_11(__pyx_v_a, __pyx_v_rvec, __pyx_v_zvec);
 
-  /* "cython/teukolsky_wrap.pyx":535
+  /* "cython/teukolsky_wrap.pyx":539
  *     cdef vector[vector[vector[cpp_complex[double]]]] coeffs = metric_coefficients_ORG_11(a, rvec, zvec)
  * 
  *     return np.array(coeffs).squeeze()             # <<<<<<<<<<<<<<
@@ -19959,12 +20843,12 @@ static PyObject *__pyx_pf_11cybhpt_full_34metric_11(CYTHON_UNUSED PyObject *__py
  * def metric_coefficient_S4(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 535, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 539, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 535, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 539, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __pyx_convert_vector_to_py_std_3a__3a_vector_3c_std_3a__3a_vector_3c_std_3a__3a_complex_3c_double_3e____3e____3e___(__pyx_v_coeffs); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 535, __pyx_L1_error)
+  __pyx_t_4 = __pyx_convert_vector_to_py_std_3a__3a_vector_3c_std_3a__3a_vector_3c_std_3a__3a_complex_3c_double_3e____3e____3e___(__pyx_v_coeffs); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 539, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_6 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
@@ -19979,10 +20863,10 @@ static PyObject *__pyx_pf_11cybhpt_full_34metric_11(CYTHON_UNUSED PyObject *__py
   __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 535, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 539, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_squeeze); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 535, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_squeeze); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 539, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -19997,14 +20881,14 @@ static PyObject *__pyx_pf_11cybhpt_full_34metric_11(CYTHON_UNUSED PyObject *__py
   }
   __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 535, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 539, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":526
+  /* "cython/teukolsky_wrap.pyx":530
  * }
  * 
  * def metric_11(double a, double r, double z):             # <<<<<<<<<<<<<<
@@ -20027,7 +20911,7 @@ static PyObject *__pyx_pf_11cybhpt_full_34metric_11(CYTHON_UNUSED PyObject *__py
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":537
+/* "cython/teukolsky_wrap.pyx":541
  *     return np.array(coeffs).squeeze()
  * 
  * def metric_coefficient_S4(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
@@ -20091,53 +20975,53 @@ static PyObject *__pyx_pw_11cybhpt_full_37metric_coefficient_S4(PyObject *__pyx_
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_beta)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 1); __PYX_ERR(3, 537, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 1); __PYX_ERR(3, 541, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nt)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 2); __PYX_ERR(3, 537, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 2); __PYX_ERR(3, 541, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nr)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 3); __PYX_ERR(3, 537, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 3); __PYX_ERR(3, 541, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nz)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 4); __PYX_ERR(3, 537, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 4); __PYX_ERR(3, 541, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_np)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 5); __PYX_ERR(3, 537, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 5); __PYX_ERR(3, 541, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_a)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 6); __PYX_ERR(3, 537, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 6); __PYX_ERR(3, 541, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (likely((values[7] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_r)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 7); __PYX_ERR(3, 537, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 7); __PYX_ERR(3, 541, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  8:
         if (likely((values[8] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_z)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 8); __PYX_ERR(3, 537, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, 8); __PYX_ERR(3, 541, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "metric_coefficient_S4") < 0)) __PYX_ERR(3, 537, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "metric_coefficient_S4") < 0)) __PYX_ERR(3, 541, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 9) {
       goto __pyx_L5_argtuple_error;
@@ -20152,19 +21036,19 @@ static PyObject *__pyx_pw_11cybhpt_full_37metric_coefficient_S4(PyObject *__pyx_
       values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
       values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
     }
-    __pyx_v_alpha = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_alpha == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 537, __pyx_L3_error)
-    __pyx_v_beta = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_beta == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 537, __pyx_L3_error)
-    __pyx_v_nt = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_nt == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 537, __pyx_L3_error)
-    __pyx_v_nr = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_nr == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 537, __pyx_L3_error)
-    __pyx_v_nz = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_nz == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 537, __pyx_L3_error)
-    __pyx_v_np = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_np == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 537, __pyx_L3_error)
-    __pyx_v_a = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 537, __pyx_L3_error)
-    __pyx_v_r = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_r == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 537, __pyx_L3_error)
-    __pyx_v_z = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_z == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 537, __pyx_L3_error)
+    __pyx_v_alpha = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_alpha == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 541, __pyx_L3_error)
+    __pyx_v_beta = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_beta == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 541, __pyx_L3_error)
+    __pyx_v_nt = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_nt == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 541, __pyx_L3_error)
+    __pyx_v_nr = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_nr == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 541, __pyx_L3_error)
+    __pyx_v_nz = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_nz == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 541, __pyx_L3_error)
+    __pyx_v_np = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_np == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 541, __pyx_L3_error)
+    __pyx_v_a = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 541, __pyx_L3_error)
+    __pyx_v_r = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_r == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 541, __pyx_L3_error)
+    __pyx_v_z = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_z == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 541, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 537, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("metric_coefficient_S4", 1, 9, 9, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 541, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.metric_coefficient_S4", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -20186,7 +21070,7 @@ static PyObject *__pyx_pf_11cybhpt_full_36metric_coefficient_S4(CYTHON_UNUSED Py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("metric_coefficient_S4", 0);
 
-  /* "cython/teukolsky_wrap.pyx":538
+  /* "cython/teukolsky_wrap.pyx":542
  * 
  * def metric_coefficient_S4(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):
  *     return metric_coefficient_ORG(alpha, beta, nt, nr, nz, np, a, r, z)             # <<<<<<<<<<<<<<
@@ -20194,13 +21078,13 @@ static PyObject *__pyx_pf_11cybhpt_full_36metric_coefficient_S4(CYTHON_UNUSED Py
  * def metric_coefficient_S0(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(metric_coefficient_ORG(__pyx_v_alpha, __pyx_v_beta, __pyx_v_nt, __pyx_v_nr, __pyx_v_nz, __pyx_v_np, __pyx_v_a, __pyx_v_r, __pyx_v_z)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 538, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(metric_coefficient_ORG(__pyx_v_alpha, __pyx_v_beta, __pyx_v_nt, __pyx_v_nr, __pyx_v_nz, __pyx_v_np, __pyx_v_a, __pyx_v_r, __pyx_v_z)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 542, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":537
+  /* "cython/teukolsky_wrap.pyx":541
  *     return np.array(coeffs).squeeze()
  * 
  * def metric_coefficient_S4(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
@@ -20219,7 +21103,7 @@ static PyObject *__pyx_pf_11cybhpt_full_36metric_coefficient_S4(CYTHON_UNUSED Py
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":540
+/* "cython/teukolsky_wrap.pyx":544
  *     return metric_coefficient_ORG(alpha, beta, nt, nr, nz, np, a, r, z)
  * 
  * def metric_coefficient_S0(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
@@ -20283,53 +21167,53 @@ static PyObject *__pyx_pw_11cybhpt_full_39metric_coefficient_S0(PyObject *__pyx_
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_beta)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 1); __PYX_ERR(3, 540, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 1); __PYX_ERR(3, 544, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nt)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 2); __PYX_ERR(3, 540, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 2); __PYX_ERR(3, 544, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nr)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 3); __PYX_ERR(3, 540, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 3); __PYX_ERR(3, 544, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nz)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 4); __PYX_ERR(3, 540, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 4); __PYX_ERR(3, 544, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_np)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 5); __PYX_ERR(3, 540, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 5); __PYX_ERR(3, 544, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_a)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 6); __PYX_ERR(3, 540, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 6); __PYX_ERR(3, 544, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (likely((values[7] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_r)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 7); __PYX_ERR(3, 540, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 7); __PYX_ERR(3, 544, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  8:
         if (likely((values[8] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_z)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 8); __PYX_ERR(3, 540, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, 8); __PYX_ERR(3, 544, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "metric_coefficient_S0") < 0)) __PYX_ERR(3, 540, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "metric_coefficient_S0") < 0)) __PYX_ERR(3, 544, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 9) {
       goto __pyx_L5_argtuple_error;
@@ -20344,19 +21228,19 @@ static PyObject *__pyx_pw_11cybhpt_full_39metric_coefficient_S0(PyObject *__pyx_
       values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
       values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
     }
-    __pyx_v_alpha = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_alpha == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 540, __pyx_L3_error)
-    __pyx_v_beta = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_beta == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 540, __pyx_L3_error)
-    __pyx_v_nt = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_nt == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 540, __pyx_L3_error)
-    __pyx_v_nr = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_nr == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 540, __pyx_L3_error)
-    __pyx_v_nz = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_nz == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 540, __pyx_L3_error)
-    __pyx_v_np = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_np == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 540, __pyx_L3_error)
-    __pyx_v_a = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 540, __pyx_L3_error)
-    __pyx_v_r = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_r == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 540, __pyx_L3_error)
-    __pyx_v_z = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_z == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 540, __pyx_L3_error)
+    __pyx_v_alpha = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_alpha == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 544, __pyx_L3_error)
+    __pyx_v_beta = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_beta == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 544, __pyx_L3_error)
+    __pyx_v_nt = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_nt == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 544, __pyx_L3_error)
+    __pyx_v_nr = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_nr == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 544, __pyx_L3_error)
+    __pyx_v_nz = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_nz == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 544, __pyx_L3_error)
+    __pyx_v_np = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_np == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 544, __pyx_L3_error)
+    __pyx_v_a = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 544, __pyx_L3_error)
+    __pyx_v_r = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_r == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 544, __pyx_L3_error)
+    __pyx_v_z = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_z == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 544, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 540, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("metric_coefficient_S0", 1, 9, 9, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 544, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.metric_coefficient_S0", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -20378,7 +21262,7 @@ static PyObject *__pyx_pf_11cybhpt_full_38metric_coefficient_S0(CYTHON_UNUSED Py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("metric_coefficient_S0", 0);
 
-  /* "cython/teukolsky_wrap.pyx":541
+  /* "cython/teukolsky_wrap.pyx":545
  * 
  * def metric_coefficient_S0(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):
  *     return metric_coefficient_IRG(alpha, beta, nt, nr, nz, np, a, r, z)             # <<<<<<<<<<<<<<
@@ -20386,13 +21270,13 @@ static PyObject *__pyx_pf_11cybhpt_full_38metric_coefficient_S0(CYTHON_UNUSED Py
  * cdef class MetricModeGenerator:
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(metric_coefficient_IRG(__pyx_v_alpha, __pyx_v_beta, __pyx_v_nt, __pyx_v_nr, __pyx_v_nz, __pyx_v_np, __pyx_v_a, __pyx_v_r, __pyx_v_z)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 541, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(metric_coefficient_IRG(__pyx_v_alpha, __pyx_v_beta, __pyx_v_nt, __pyx_v_nr, __pyx_v_nz, __pyx_v_np, __pyx_v_a, __pyx_v_r, __pyx_v_z)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 545, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/teukolsky_wrap.pyx":540
+  /* "cython/teukolsky_wrap.pyx":544
  *     return metric_coefficient_ORG(alpha, beta, nt, nr, nz, np, a, r, z)
  * 
  * def metric_coefficient_S0(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
@@ -20411,7 +21295,7 @@ static PyObject *__pyx_pf_11cybhpt_full_38metric_coefficient_S0(CYTHON_UNUSED Py
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":548
+/* "cython/teukolsky_wrap.pyx":552
  *     cdef unicode basis
  * 
  *     def __init__(self, unicode gauge, unicode basis="tetrad"):             # <<<<<<<<<<<<<<
@@ -20458,7 +21342,7 @@ static int __pyx_pw_11cybhpt_full_19MetricModeGenerator_1__init__(PyObject *__py
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(3, 548, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(3, 552, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -20474,14 +21358,14 @@ static int __pyx_pw_11cybhpt_full_19MetricModeGenerator_1__init__(PyObject *__py
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 548, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 552, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.MetricModeGenerator.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_gauge), (&PyUnicode_Type), 1, "gauge", 1))) __PYX_ERR(3, 548, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_basis), (&PyUnicode_Type), 1, "basis", 1))) __PYX_ERR(3, 548, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_gauge), (&PyUnicode_Type), 1, "gauge", 1))) __PYX_ERR(3, 552, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_basis), (&PyUnicode_Type), 1, "basis", 1))) __PYX_ERR(3, 552, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_19MetricModeGenerator___init__(((struct __pyx_obj_11cybhpt_full_MetricModeGenerator *)__pyx_v_self), __pyx_v_gauge, __pyx_v_basis);
 
   /* function exit code */
@@ -20507,7 +21391,7 @@ static int __pyx_pf_11cybhpt_full_19MetricModeGenerator___init__(struct __pyx_ob
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":549
+  /* "cython/teukolsky_wrap.pyx":553
  * 
  *     def __init__(self, unicode gauge, unicode basis="tetrad"):
  *         self.gauge_str = gauge             # <<<<<<<<<<<<<<
@@ -20520,17 +21404,17 @@ static int __pyx_pf_11cybhpt_full_19MetricModeGenerator___init__(struct __pyx_ob
   __Pyx_DECREF(__pyx_v_self->gauge_str);
   __pyx_v_self->gauge_str = __pyx_v_gauge;
 
-  /* "cython/teukolsky_wrap.pyx":550
+  /* "cython/teukolsky_wrap.pyx":554
  *     def __init__(self, unicode gauge, unicode basis="tetrad"):
  *         self.gauge_str = gauge
  *         self.gauge_cpp = str_to_gauge(gauge)             # <<<<<<<<<<<<<<
  *         if basis in basis_dict.keys():
  *             self.basis = basis
  */
-  __pyx_t_1 = __pyx_f_11cybhpt_full_str_to_gauge(__pyx_v_gauge); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 550, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_11cybhpt_full_str_to_gauge(__pyx_v_gauge); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 554, __pyx_L1_error)
   __pyx_v_self->gauge_cpp = __pyx_t_1;
 
-  /* "cython/teukolsky_wrap.pyx":551
+  /* "cython/teukolsky_wrap.pyx":555
  *         self.gauge_str = gauge
  *         self.gauge_cpp = str_to_gauge(gauge)
  *         if basis in basis_dict.keys():             # <<<<<<<<<<<<<<
@@ -20539,16 +21423,16 @@ static int __pyx_pf_11cybhpt_full_19MetricModeGenerator___init__(struct __pyx_ob
  */
   if (unlikely(__pyx_v_11cybhpt_full_basis_dict == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "keys");
-    __PYX_ERR(3, 551, __pyx_L1_error)
+    __PYX_ERR(3, 555, __pyx_L1_error)
   }
-  __pyx_t_2 = __Pyx_PyDict_Keys(__pyx_v_11cybhpt_full_basis_dict); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 551, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_Keys(__pyx_v_11cybhpt_full_basis_dict); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 555, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_v_basis, __pyx_t_2, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(3, 551, __pyx_L1_error)
+  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_v_basis, __pyx_t_2, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(3, 555, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_4 = (__pyx_t_3 != 0);
   if (likely(__pyx_t_4)) {
 
-    /* "cython/teukolsky_wrap.pyx":552
+    /* "cython/teukolsky_wrap.pyx":556
  *         self.gauge_cpp = str_to_gauge(gauge)
  *         if basis in basis_dict.keys():
  *             self.basis = basis             # <<<<<<<<<<<<<<
@@ -20561,7 +21445,7 @@ static int __pyx_pf_11cybhpt_full_19MetricModeGenerator___init__(struct __pyx_ob
     __Pyx_DECREF(__pyx_v_self->basis);
     __pyx_v_self->basis = __pyx_v_basis;
 
-    /* "cython/teukolsky_wrap.pyx":551
+    /* "cython/teukolsky_wrap.pyx":555
  *         self.gauge_str = gauge
  *         self.gauge_cpp = str_to_gauge(gauge)
  *         if basis in basis_dict.keys():             # <<<<<<<<<<<<<<
@@ -20571,7 +21455,7 @@ static int __pyx_pf_11cybhpt_full_19MetricModeGenerator___init__(struct __pyx_ob
     goto __pyx_L3;
   }
 
-  /* "cython/teukolsky_wrap.pyx":554
+  /* "cython/teukolsky_wrap.pyx":558
  *             self.basis = basis
  *         else:
  *             raise TypeError('{} is not a valid basis. Must be tetrad or coordinate.'.format(basis))             # <<<<<<<<<<<<<<
@@ -20579,7 +21463,7 @@ static int __pyx_pf_11cybhpt_full_19MetricModeGenerator___init__(struct __pyx_ob
  *     def __call__(self, HertzMode hertz, int ai, int bi):
  */
   /*else*/ {
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_u_is_not_a_valid_basis_Must_be_te, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 554, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_u_is_not_a_valid_basis_Must_be_te, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 558, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
@@ -20593,19 +21477,19 @@ static int __pyx_pf_11cybhpt_full_19MetricModeGenerator___init__(struct __pyx_ob
     }
     __pyx_t_2 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_v_basis) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_basis);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 554, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 558, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_builtin_TypeError, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 554, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_builtin_TypeError, __pyx_t_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 558, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_Raise(__pyx_t_5, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __PYX_ERR(3, 554, __pyx_L1_error)
+    __PYX_ERR(3, 558, __pyx_L1_error)
   }
   __pyx_L3:;
 
-  /* "cython/teukolsky_wrap.pyx":548
+  /* "cython/teukolsky_wrap.pyx":552
  *     cdef unicode basis
  * 
  *     def __init__(self, unicode gauge, unicode basis="tetrad"):             # <<<<<<<<<<<<<<
@@ -20627,7 +21511,7 @@ static int __pyx_pf_11cybhpt_full_19MetricModeGenerator___init__(struct __pyx_ob
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":556
+/* "cython/teukolsky_wrap.pyx":560
  *             raise TypeError('{} is not a valid basis. Must be tetrad or coordinate.'.format(basis))
  * 
  *     def __call__(self, HertzMode hertz, int ai, int bi):             # <<<<<<<<<<<<<<
@@ -20672,17 +21556,17 @@ static PyObject *__pyx_pw_11cybhpt_full_19MetricModeGenerator_3__call__(PyObject
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ai)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__call__", 1, 3, 3, 1); __PYX_ERR(3, 556, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__call__", 1, 3, 3, 1); __PYX_ERR(3, 560, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_bi)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__call__", 1, 3, 3, 2); __PYX_ERR(3, 556, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__call__", 1, 3, 3, 2); __PYX_ERR(3, 560, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__call__") < 0)) __PYX_ERR(3, 556, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__call__") < 0)) __PYX_ERR(3, 560, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -20692,18 +21576,18 @@ static PyObject *__pyx_pw_11cybhpt_full_19MetricModeGenerator_3__call__(PyObject
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
     __pyx_v_hertz = ((struct __pyx_obj_11cybhpt_full_HertzMode *)values[0]);
-    __pyx_v_ai = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_ai == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 556, __pyx_L3_error)
-    __pyx_v_bi = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_bi == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 556, __pyx_L3_error)
+    __pyx_v_ai = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_ai == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 560, __pyx_L3_error)
+    __pyx_v_bi = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_bi == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 560, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__call__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 556, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__call__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 560, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.MetricModeGenerator.__call__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_hertz), __pyx_ptype_11cybhpt_full_HertzMode, 1, "hertz", 0))) __PYX_ERR(3, 556, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_hertz), __pyx_ptype_11cybhpt_full_HertzMode, 1, "hertz", 0))) __PYX_ERR(3, 560, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(((struct __pyx_obj_11cybhpt_full_MetricModeGenerator *)__pyx_v_self), __pyx_v_hertz, __pyx_v_ai, __pyx_v_bi);
 
   /* function exit code */
@@ -20732,18 +21616,18 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__call__", 0);
 
-  /* "cython/teukolsky_wrap.pyx":557
+  /* "cython/teukolsky_wrap.pyx":561
  * 
  *     def __call__(self, HertzMode hertz, int ai, int bi):
  *         if self.basis == "tetrad":             # <<<<<<<<<<<<<<
  *             return self.tetradcomponent(hertz, ai, bi)
  *         else:
  */
-  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_self->basis, __pyx_n_u_tetrad, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(3, 557, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyUnicode_Equals(__pyx_v_self->basis, __pyx_n_u_tetrad, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(3, 561, __pyx_L1_error)
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "cython/teukolsky_wrap.pyx":558
+    /* "cython/teukolsky_wrap.pyx":562
  *     def __call__(self, HertzMode hertz, int ai, int bi):
  *         if self.basis == "tetrad":
  *             return self.tetradcomponent(hertz, ai, bi)             # <<<<<<<<<<<<<<
@@ -20751,11 +21635,11 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
  *             return self.tetradcomponent(hertz, ai, bi)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_tetradcomponent); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 558, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_tetradcomponent); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 562, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_ai); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 558, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_ai); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 562, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_bi); if (unlikely(!__pyx_t_6)) __PYX_ERR(3, 558, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_bi); if (unlikely(!__pyx_t_6)) __PYX_ERR(3, 562, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_7 = NULL;
     __pyx_t_8 = 0;
@@ -20772,7 +21656,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[4] = {__pyx_t_7, ((PyObject *)__pyx_v_hertz), __pyx_t_5, __pyx_t_6};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 558, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 562, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -20782,7 +21666,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[4] = {__pyx_t_7, ((PyObject *)__pyx_v_hertz), __pyx_t_5, __pyx_t_6};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 558, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 562, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -20790,7 +21674,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
     } else
     #endif
     {
-      __pyx_t_9 = PyTuple_New(3+__pyx_t_8); if (unlikely(!__pyx_t_9)) __PYX_ERR(3, 558, __pyx_L1_error)
+      __pyx_t_9 = PyTuple_New(3+__pyx_t_8); if (unlikely(!__pyx_t_9)) __PYX_ERR(3, 562, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
       if (__pyx_t_7) {
         __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_7); __pyx_t_7 = NULL;
@@ -20804,7 +21688,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
       PyTuple_SET_ITEM(__pyx_t_9, 2+__pyx_t_8, __pyx_t_6);
       __pyx_t_5 = 0;
       __pyx_t_6 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 558, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 562, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
     }
@@ -20813,7 +21697,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
     __pyx_t_3 = 0;
     goto __pyx_L0;
 
-    /* "cython/teukolsky_wrap.pyx":557
+    /* "cython/teukolsky_wrap.pyx":561
  * 
  *     def __call__(self, HertzMode hertz, int ai, int bi):
  *         if self.basis == "tetrad":             # <<<<<<<<<<<<<<
@@ -20822,7 +21706,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
  */
   }
 
-  /* "cython/teukolsky_wrap.pyx":560
+  /* "cython/teukolsky_wrap.pyx":564
  *             return self.tetradcomponent(hertz, ai, bi)
  *         else:
  *             return self.tetradcomponent(hertz, ai, bi)             # <<<<<<<<<<<<<<
@@ -20831,11 +21715,11 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
  */
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_tetradcomponent); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 560, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_tetradcomponent); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 564, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_ai); if (unlikely(!__pyx_t_9)) __PYX_ERR(3, 560, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_ai); if (unlikely(!__pyx_t_9)) __PYX_ERR(3, 564, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
-    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_bi); if (unlikely(!__pyx_t_6)) __PYX_ERR(3, 560, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_bi); if (unlikely(!__pyx_t_6)) __PYX_ERR(3, 564, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_5 = NULL;
     __pyx_t_8 = 0;
@@ -20852,7 +21736,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[4] = {__pyx_t_5, ((PyObject *)__pyx_v_hertz), __pyx_t_9, __pyx_t_6};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 560, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 564, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
@@ -20862,7 +21746,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[4] = {__pyx_t_5, ((PyObject *)__pyx_v_hertz), __pyx_t_9, __pyx_t_6};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 560, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 564, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
@@ -20870,7 +21754,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
     } else
     #endif
     {
-      __pyx_t_7 = PyTuple_New(3+__pyx_t_8); if (unlikely(!__pyx_t_7)) __PYX_ERR(3, 560, __pyx_L1_error)
+      __pyx_t_7 = PyTuple_New(3+__pyx_t_8); if (unlikely(!__pyx_t_7)) __PYX_ERR(3, 564, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       if (__pyx_t_5) {
         __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_5); __pyx_t_5 = NULL;
@@ -20884,7 +21768,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
       PyTuple_SET_ITEM(__pyx_t_7, 2+__pyx_t_8, __pyx_t_6);
       __pyx_t_9 = 0;
       __pyx_t_6 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 560, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(3, 564, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     }
@@ -20894,7 +21778,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
     goto __pyx_L0;
   }
 
-  /* "cython/teukolsky_wrap.pyx":556
+  /* "cython/teukolsky_wrap.pyx":560
  *             raise TypeError('{} is not a valid basis. Must be tetrad or coordinate.'.format(basis))
  * 
  *     def __call__(self, HertzMode hertz, int ai, int bi):             # <<<<<<<<<<<<<<
@@ -20918,7 +21802,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_2__call__(struct _
   return __pyx_r;
 }
 
-/* "cython/teukolsky_wrap.pyx":562
+/* "cython/teukolsky_wrap.pyx":566
  *             return self.tetradcomponent(hertz, ai, bi)
  * 
  *     def tetradcomponent(self, HertzMode hertz, int ai, int bi):             # <<<<<<<<<<<<<<
@@ -20963,17 +21847,17 @@ static PyObject *__pyx_pw_11cybhpt_full_19MetricModeGenerator_5tetradcomponent(P
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ai)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("tetradcomponent", 1, 3, 3, 1); __PYX_ERR(3, 562, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("tetradcomponent", 1, 3, 3, 1); __PYX_ERR(3, 566, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_bi)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("tetradcomponent", 1, 3, 3, 2); __PYX_ERR(3, 562, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("tetradcomponent", 1, 3, 3, 2); __PYX_ERR(3, 566, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "tetradcomponent") < 0)) __PYX_ERR(3, 562, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "tetradcomponent") < 0)) __PYX_ERR(3, 566, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -20983,18 +21867,18 @@ static PyObject *__pyx_pw_11cybhpt_full_19MetricModeGenerator_5tetradcomponent(P
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
     __pyx_v_hertz = ((struct __pyx_obj_11cybhpt_full_HertzMode *)values[0]);
-    __pyx_v_ai = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_ai == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 562, __pyx_L3_error)
-    __pyx_v_bi = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_bi == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 562, __pyx_L3_error)
+    __pyx_v_ai = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_ai == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 566, __pyx_L3_error)
+    __pyx_v_bi = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_bi == (int)-1) && PyErr_Occurred())) __PYX_ERR(3, 566, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("tetradcomponent", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 562, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("tetradcomponent", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 566, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.MetricModeGenerator.tetradcomponent", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_hertz), __pyx_ptype_11cybhpt_full_HertzMode, 1, "hertz", 0))) __PYX_ERR(3, 562, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_hertz), __pyx_ptype_11cybhpt_full_HertzMode, 1, "hertz", 0))) __PYX_ERR(3, 566, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(((struct __pyx_obj_11cybhpt_full_MetricModeGenerator *)__pyx_v_self), __pyx_v_hertz, __pyx_v_ai, __pyx_v_bi);
 
   /* function exit code */
@@ -21048,30 +21932,30 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("tetradcomponent", 0);
 
-  /* "cython/teukolsky_wrap.pyx":563
+  /* "cython/teukolsky_wrap.pyx":567
  * 
  *     def tetradcomponent(self, HertzMode hertz, int ai, int bi):
  *         if hertz.gauge is not self.gauge_str:             # <<<<<<<<<<<<<<
  *             raise TypeError("Hertz potential in {} gauge. Must be in {} gauge".format(hertz.gauge, self.gauge_str))
  *         cdef cpp_complex[double] habIn = cpp_complex[double](0., 0.)
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_gauge); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 563, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_gauge); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 567, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = (__pyx_t_1 != __pyx_v_self->gauge_str);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (unlikely(__pyx_t_3)) {
 
-    /* "cython/teukolsky_wrap.pyx":564
+    /* "cython/teukolsky_wrap.pyx":568
  *     def tetradcomponent(self, HertzMode hertz, int ai, int bi):
  *         if hertz.gauge is not self.gauge_str:
  *             raise TypeError("Hertz potential in {} gauge. Must be in {} gauge".format(hertz.gauge, self.gauge_str))             # <<<<<<<<<<<<<<
  *         cdef cpp_complex[double] habIn = cpp_complex[double](0., 0.)
  *         cdef cpp_complex[double] habUp = cpp_complex[double](0., 0.)
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_u_Hertz_potential_in_gauge_Must_be, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 564, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_u_Hertz_potential_in_gauge_Must_be, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 568, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_gauge); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 564, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_gauge); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 568, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     __pyx_t_7 = 0;
@@ -21088,7 +21972,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_t_5, __pyx_v_self->gauge_str};
-      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 564, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 568, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -21097,14 +21981,14 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_t_5, __pyx_v_self->gauge_str};
-      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 564, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 568, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     } else
     #endif
     {
-      __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 564, __pyx_L1_error)
+      __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 568, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       if (__pyx_t_6) {
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
@@ -21115,19 +21999,19 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
       __Pyx_GIVEREF(__pyx_v_self->gauge_str);
       PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_7, __pyx_v_self->gauge_str);
       __pyx_t_5 = 0;
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 564, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 568, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     }
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_TypeError, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 564, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_TypeError, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 568, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(3, 564, __pyx_L1_error)
+    __PYX_ERR(3, 568, __pyx_L1_error)
 
-    /* "cython/teukolsky_wrap.pyx":563
+    /* "cython/teukolsky_wrap.pyx":567
  * 
  *     def tetradcomponent(self, HertzMode hertz, int ai, int bi):
  *         if hertz.gauge is not self.gauge_str:             # <<<<<<<<<<<<<<
@@ -21136,7 +22020,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
  */
   }
 
-  /* "cython/teukolsky_wrap.pyx":565
+  /* "cython/teukolsky_wrap.pyx":569
  *         if hertz.gauge is not self.gauge_str:
  *             raise TypeError("Hertz potential in {} gauge. Must be in {} gauge".format(hertz.gauge, self.gauge_str))
  *         cdef cpp_complex[double] habIn = cpp_complex[double](0., 0.)             # <<<<<<<<<<<<<<
@@ -21147,11 +22031,11 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
     __pyx_t_9 = std::complex<double> (0., 0.);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(3, 565, __pyx_L1_error)
+    __PYX_ERR(3, 569, __pyx_L1_error)
   }
   __pyx_v_habIn = __pyx_t_9;
 
-  /* "cython/teukolsky_wrap.pyx":566
+  /* "cython/teukolsky_wrap.pyx":570
  *             raise TypeError("Hertz potential in {} gauge. Must be in {} gauge".format(hertz.gauge, self.gauge_str))
  *         cdef cpp_complex[double] habIn = cpp_complex[double](0., 0.)
  *         cdef cpp_complex[double] habUp = cpp_complex[double](0., 0.)             # <<<<<<<<<<<<<<
@@ -21162,69 +22046,69 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
     __pyx_t_9 = std::complex<double> (0., 0.);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(3, 566, __pyx_L1_error)
+    __PYX_ERR(3, 570, __pyx_L1_error)
   }
   __pyx_v_habUp = __pyx_t_9;
 
-  /* "cython/teukolsky_wrap.pyx":570
+  /* "cython/teukolsky_wrap.pyx":574
  *         cdef int atemp
  *         cdef double a, r, z
  *         cdef cpp_complex[double] im = cpp_complex[double](0., hertz.azimuthalmode)             # <<<<<<<<<<<<<<
  *         cdef cpp_complex[double] iomega = cpp_complex[double](0., hertz.frequency)
  *         a = hertz.blackholespin
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_azimuthalmode); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 570, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_azimuthalmode); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 574, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 570, __pyx_L1_error)
+  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 574, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   try {
     __pyx_t_9 = std::complex<double> (0., __pyx_t_10);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(3, 570, __pyx_L1_error)
+    __PYX_ERR(3, 574, __pyx_L1_error)
   }
   __pyx_v_im = __pyx_t_9;
 
-  /* "cython/teukolsky_wrap.pyx":571
+  /* "cython/teukolsky_wrap.pyx":575
  *         cdef double a, r, z
  *         cdef cpp_complex[double] im = cpp_complex[double](0., hertz.azimuthalmode)
  *         cdef cpp_complex[double] iomega = cpp_complex[double](0., hertz.frequency)             # <<<<<<<<<<<<<<
  *         a = hertz.blackholespin
  *         r = hertz.radialpoint(0)
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_frequency); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 571, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_frequency); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 575, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 571, __pyx_L1_error)
+  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 575, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   try {
     __pyx_t_9 = std::complex<double> (0., __pyx_t_10);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(3, 571, __pyx_L1_error)
+    __PYX_ERR(3, 575, __pyx_L1_error)
   }
   __pyx_v_iomega = __pyx_t_9;
 
-  /* "cython/teukolsky_wrap.pyx":572
+  /* "cython/teukolsky_wrap.pyx":576
  *         cdef cpp_complex[double] im = cpp_complex[double](0., hertz.azimuthalmode)
  *         cdef cpp_complex[double] iomega = cpp_complex[double](0., hertz.frequency)
  *         a = hertz.blackholespin             # <<<<<<<<<<<<<<
  *         r = hertz.radialpoint(0)
  *         z = np.cos(hertz.polarpoint(0))
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_blackholespin); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 572, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_blackholespin); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 576, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 572, __pyx_L1_error)
+  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 576, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_a = __pyx_t_10;
 
-  /* "cython/teukolsky_wrap.pyx":573
+  /* "cython/teukolsky_wrap.pyx":577
  *         cdef cpp_complex[double] iomega = cpp_complex[double](0., hertz.frequency)
  *         a = hertz.blackholespin
  *         r = hertz.radialpoint(0)             # <<<<<<<<<<<<<<
  *         z = np.cos(hertz.polarpoint(0))
  *         if(ai < bi):
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_radialpoint); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 573, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_radialpoint); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 577, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_8 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -21238,26 +22122,26 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
   }
   __pyx_t_4 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_8, __pyx_int_0) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_int_0);
   __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 573, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 577, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 573, __pyx_L1_error)
+  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 577, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_r = __pyx_t_10;
 
-  /* "cython/teukolsky_wrap.pyx":574
+  /* "cython/teukolsky_wrap.pyx":578
  *         a = hertz.blackholespin
  *         r = hertz.radialpoint(0)
  *         z = np.cos(hertz.polarpoint(0))             # <<<<<<<<<<<<<<
  *         if(ai < bi):
  *             atemp = ai
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 574, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 578, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_cos); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 574, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_cos); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 578, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_polarpoint); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 574, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_polarpoint); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 578, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_6 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
@@ -21271,7 +22155,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
   }
   __pyx_t_1 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_int_0) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_int_0);
   __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 574, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 578, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_t_5 = NULL;
@@ -21287,14 +22171,14 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
   __pyx_t_4 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_5, __pyx_t_1) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_t_1);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 574, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 578, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 574, __pyx_L1_error)
+  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_4); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 578, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_z = __pyx_t_10;
 
-  /* "cython/teukolsky_wrap.pyx":575
+  /* "cython/teukolsky_wrap.pyx":579
  *         r = hertz.radialpoint(0)
  *         z = np.cos(hertz.polarpoint(0))
  *         if(ai < bi):             # <<<<<<<<<<<<<<
@@ -21304,7 +22188,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
   __pyx_t_3 = ((__pyx_v_ai < __pyx_v_bi) != 0);
   if (__pyx_t_3) {
 
-    /* "cython/teukolsky_wrap.pyx":576
+    /* "cython/teukolsky_wrap.pyx":580
  *         z = np.cos(hertz.polarpoint(0))
  *         if(ai < bi):
  *             atemp = ai             # <<<<<<<<<<<<<<
@@ -21313,7 +22197,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
  */
     __pyx_v_atemp = __pyx_v_ai;
 
-    /* "cython/teukolsky_wrap.pyx":577
+    /* "cython/teukolsky_wrap.pyx":581
  *         if(ai < bi):
  *             atemp = ai
  *             ai = bi             # <<<<<<<<<<<<<<
@@ -21322,7 +22206,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
  */
     __pyx_v_ai = __pyx_v_bi;
 
-    /* "cython/teukolsky_wrap.pyx":578
+    /* "cython/teukolsky_wrap.pyx":582
  *             atemp = ai
  *             ai = bi
  *             bi = atemp             # <<<<<<<<<<<<<<
@@ -21331,7 +22215,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
  */
     __pyx_v_bi = __pyx_v_atemp;
 
-    /* "cython/teukolsky_wrap.pyx":575
+    /* "cython/teukolsky_wrap.pyx":579
  *         r = hertz.radialpoint(0)
  *         z = np.cos(hertz.polarpoint(0))
  *         if(ai < bi):             # <<<<<<<<<<<<<<
@@ -21340,18 +22224,18 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
  */
   }
 
-  /* "cython/teukolsky_wrap.pyx":579
+  /* "cython/teukolsky_wrap.pyx":583
  *             ai = bi
  *             bi = atemp
  *         if (ai, bi) in metric_component_gauge_dict[self.gauge_str].keys():             # <<<<<<<<<<<<<<
  *             for nt in range(3):
  *                 for nr in range(3):
  */
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_ai); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 579, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_ai); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 583, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_bi); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 579, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_bi); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 583, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 579, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 583, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_4);
   PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_4);
@@ -21361,11 +22245,11 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
   __pyx_t_8 = 0;
   if (unlikely(__pyx_v_11cybhpt_full_metric_component_gauge_dict == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(3, 579, __pyx_L1_error)
+    __PYX_ERR(3, 583, __pyx_L1_error)
   }
-  __pyx_t_4 = __Pyx_PyDict_GetItem(__pyx_v_11cybhpt_full_metric_component_gauge_dict, __pyx_v_self->gauge_str); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 579, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_GetItem(__pyx_v_11cybhpt_full_metric_component_gauge_dict, __pyx_v_self->gauge_str); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 583, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_keys); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 579, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_keys); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 583, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -21380,16 +22264,16 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
   }
   __pyx_t_8 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 579, __pyx_L1_error)
+  if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 583, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_t_1, __pyx_t_8, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(3, 579, __pyx_L1_error)
+  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_t_1, __pyx_t_8, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(3, 583, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "cython/teukolsky_wrap.pyx":580
+    /* "cython/teukolsky_wrap.pyx":584
  *             bi = atemp
  *         if (ai, bi) in metric_component_gauge_dict[self.gauge_str].keys():
  *             for nt in range(3):             # <<<<<<<<<<<<<<
@@ -21397,12 +22281,12 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
  *                     if nr == 0:
  */
     for (__pyx_t_11 = 0; __pyx_t_11 < 3; __pyx_t_11+=1) {
-      __pyx_t_8 = __Pyx_PyInt_From_long(__pyx_t_11); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 580, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyInt_From_long(__pyx_t_11); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 584, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_XDECREF_SET(__pyx_v_nt, __pyx_t_8);
       __pyx_t_8 = 0;
 
-      /* "cython/teukolsky_wrap.pyx":581
+      /* "cython/teukolsky_wrap.pyx":585
  *         if (ai, bi) in metric_component_gauge_dict[self.gauge_str].keys():
  *             for nt in range(3):
  *                 for nr in range(3):             # <<<<<<<<<<<<<<
@@ -21410,57 +22294,57 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
  *                         dPsiIn = hertz.radialsolution("In", 0)
  */
       for (__pyx_t_12 = 0; __pyx_t_12 < 3; __pyx_t_12+=1) {
-        __pyx_t_8 = __Pyx_PyInt_From_long(__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 581, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyInt_From_long(__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 585, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_XDECREF_SET(__pyx_v_nr, __pyx_t_8);
         __pyx_t_8 = 0;
 
-        /* "cython/teukolsky_wrap.pyx":582
+        /* "cython/teukolsky_wrap.pyx":586
  *             for nt in range(3):
  *                 for nr in range(3):
  *                     if nr == 0:             # <<<<<<<<<<<<<<
  *                         dPsiIn = hertz.radialsolution("In", 0)
  *                         dPsiUp = hertz.radialsolution("Up", 0)
  */
-        __pyx_t_8 = __Pyx_PyInt_EqObjC(__pyx_v_nr, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 582, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyInt_EqObjC(__pyx_v_nr, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 586, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
-        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 582, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 586, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         if (__pyx_t_2) {
 
-          /* "cython/teukolsky_wrap.pyx":583
+          /* "cython/teukolsky_wrap.pyx":587
  *                 for nr in range(3):
  *                     if nr == 0:
  *                         dPsiIn = hertz.radialsolution("In", 0)             # <<<<<<<<<<<<<<
  *                         dPsiUp = hertz.radialsolution("Up", 0)
  *                     elif nr == 1:
  */
-          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_radialsolution); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 583, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_radialsolution); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 587, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 583, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 587, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 583, __pyx_L1_error)
+          __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 587, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __pyx_v_dPsiIn = __pyx_t_9;
 
-          /* "cython/teukolsky_wrap.pyx":584
+          /* "cython/teukolsky_wrap.pyx":588
  *                     if nr == 0:
  *                         dPsiIn = hertz.radialsolution("In", 0)
  *                         dPsiUp = hertz.radialsolution("Up", 0)             # <<<<<<<<<<<<<<
  *                     elif nr == 1:
  *                         dPsiIn = hertz.radialderivative("In", 0)
  */
-          __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_radialsolution); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 584, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_radialsolution); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 588, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 584, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 588, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_8); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 584, __pyx_L1_error)
+          __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_8); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 588, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
           __pyx_v_dPsiUp = __pyx_t_9;
 
-          /* "cython/teukolsky_wrap.pyx":582
+          /* "cython/teukolsky_wrap.pyx":586
  *             for nt in range(3):
  *                 for nr in range(3):
  *                     if nr == 0:             # <<<<<<<<<<<<<<
@@ -21470,52 +22354,52 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
           goto __pyx_L10;
         }
 
-        /* "cython/teukolsky_wrap.pyx":585
+        /* "cython/teukolsky_wrap.pyx":589
  *                         dPsiIn = hertz.radialsolution("In", 0)
  *                         dPsiUp = hertz.radialsolution("Up", 0)
  *                     elif nr == 1:             # <<<<<<<<<<<<<<
  *                         dPsiIn = hertz.radialderivative("In", 0)
  *                         dPsiUp = hertz.radialderivative("Up", 0)
  */
-        __pyx_t_8 = __Pyx_PyInt_EqObjC(__pyx_v_nr, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 585, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyInt_EqObjC(__pyx_v_nr, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 589, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
-        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 585, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 589, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         if (__pyx_t_2) {
 
-          /* "cython/teukolsky_wrap.pyx":586
+          /* "cython/teukolsky_wrap.pyx":590
  *                         dPsiUp = hertz.radialsolution("Up", 0)
  *                     elif nr == 1:
  *                         dPsiIn = hertz.radialderivative("In", 0)             # <<<<<<<<<<<<<<
  *                         dPsiUp = hertz.radialderivative("Up", 0)
  *                     elif nr == 2:
  */
-          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_radialderivative); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 586, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_radialderivative); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 590, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 586, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 590, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 586, __pyx_L1_error)
+          __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 590, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __pyx_v_dPsiIn = __pyx_t_9;
 
-          /* "cython/teukolsky_wrap.pyx":587
+          /* "cython/teukolsky_wrap.pyx":591
  *                     elif nr == 1:
  *                         dPsiIn = hertz.radialderivative("In", 0)
  *                         dPsiUp = hertz.radialderivative("Up", 0)             # <<<<<<<<<<<<<<
  *                     elif nr == 2:
  *                         dPsiIn = hertz.radialderivative2("In", 0)
  */
-          __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_radialderivative); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 587, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_radialderivative); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 591, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 587, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 591, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_8); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 587, __pyx_L1_error)
+          __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_8); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 591, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
           __pyx_v_dPsiUp = __pyx_t_9;
 
-          /* "cython/teukolsky_wrap.pyx":585
+          /* "cython/teukolsky_wrap.pyx":589
  *                         dPsiIn = hertz.radialsolution("In", 0)
  *                         dPsiUp = hertz.radialsolution("Up", 0)
  *                     elif nr == 1:             # <<<<<<<<<<<<<<
@@ -21525,52 +22409,52 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
           goto __pyx_L10;
         }
 
-        /* "cython/teukolsky_wrap.pyx":588
+        /* "cython/teukolsky_wrap.pyx":592
  *                         dPsiIn = hertz.radialderivative("In", 0)
  *                         dPsiUp = hertz.radialderivative("Up", 0)
  *                     elif nr == 2:             # <<<<<<<<<<<<<<
  *                         dPsiIn = hertz.radialderivative2("In", 0)
  *                         dPsiUp = hertz.radialderivative2("Up", 0)
  */
-        __pyx_t_8 = __Pyx_PyInt_EqObjC(__pyx_v_nr, __pyx_int_2, 2, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 588, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyInt_EqObjC(__pyx_v_nr, __pyx_int_2, 2, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 592, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
-        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 588, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 592, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         if (__pyx_t_2) {
 
-          /* "cython/teukolsky_wrap.pyx":589
+          /* "cython/teukolsky_wrap.pyx":593
  *                         dPsiUp = hertz.radialderivative("Up", 0)
  *                     elif nr == 2:
  *                         dPsiIn = hertz.radialderivative2("In", 0)             # <<<<<<<<<<<<<<
  *                         dPsiUp = hertz.radialderivative2("Up", 0)
  *                     else:
  */
-          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_radialderivative2); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 589, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_radialderivative2); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 593, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 589, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 593, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 589, __pyx_L1_error)
+          __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 593, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __pyx_v_dPsiIn = __pyx_t_9;
 
-          /* "cython/teukolsky_wrap.pyx":590
+          /* "cython/teukolsky_wrap.pyx":594
  *                     elif nr == 2:
  *                         dPsiIn = hertz.radialderivative2("In", 0)
  *                         dPsiUp = hertz.radialderivative2("Up", 0)             # <<<<<<<<<<<<<<
  *                     else:
  *                         dPsiIn = cpp_complex[double](0., 0.)
  */
-          __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_radialderivative2); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 590, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_radialderivative2); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 594, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 590, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 594, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_8); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 590, __pyx_L1_error)
+          __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_8); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 594, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
           __pyx_v_dPsiUp = __pyx_t_9;
 
-          /* "cython/teukolsky_wrap.pyx":588
+          /* "cython/teukolsky_wrap.pyx":592
  *                         dPsiIn = hertz.radialderivative("In", 0)
  *                         dPsiUp = hertz.radialderivative("Up", 0)
  *                     elif nr == 2:             # <<<<<<<<<<<<<<
@@ -21580,7 +22464,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
           goto __pyx_L10;
         }
 
-        /* "cython/teukolsky_wrap.pyx":592
+        /* "cython/teukolsky_wrap.pyx":596
  *                         dPsiUp = hertz.radialderivative2("Up", 0)
  *                     else:
  *                         dPsiIn = cpp_complex[double](0., 0.)             # <<<<<<<<<<<<<<
@@ -21592,11 +22476,11 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
             __pyx_t_9 = std::complex<double> (0., 0.);
           } catch(...) {
             __Pyx_CppExn2PyErr();
-            __PYX_ERR(3, 592, __pyx_L1_error)
+            __PYX_ERR(3, 596, __pyx_L1_error)
           }
           __pyx_v_dPsiIn = __pyx_t_9;
 
-          /* "cython/teukolsky_wrap.pyx":593
+          /* "cython/teukolsky_wrap.pyx":597
  *                     else:
  *                         dPsiIn = cpp_complex[double](0., 0.)
  *                         dPsiUp = cpp_complex[double](0., 0.)             # <<<<<<<<<<<<<<
@@ -21607,13 +22491,13 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
             __pyx_t_9 = std::complex<double> (0., 0.);
           } catch(...) {
             __Pyx_CppExn2PyErr();
-            __PYX_ERR(3, 593, __pyx_L1_error)
+            __PYX_ERR(3, 597, __pyx_L1_error)
           }
           __pyx_v_dPsiUp = __pyx_t_9;
         }
         __pyx_L10:;
 
-        /* "cython/teukolsky_wrap.pyx":594
+        /* "cython/teukolsky_wrap.pyx":598
  *                         dPsiIn = cpp_complex[double](0., 0.)
  *                         dPsiUp = cpp_complex[double](0., 0.)
  *                     for nz in range(3):             # <<<<<<<<<<<<<<
@@ -21621,32 +22505,32 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
  *                             dS = hertz.polarsolution(0)
  */
         for (__pyx_t_13 = 0; __pyx_t_13 < 3; __pyx_t_13+=1) {
-          __pyx_t_8 = __Pyx_PyInt_From_long(__pyx_t_13); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 594, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyInt_From_long(__pyx_t_13); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 598, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
           __Pyx_XDECREF_SET(__pyx_v_nz, __pyx_t_8);
           __pyx_t_8 = 0;
 
-          /* "cython/teukolsky_wrap.pyx":595
+          /* "cython/teukolsky_wrap.pyx":599
  *                         dPsiUp = cpp_complex[double](0., 0.)
  *                     for nz in range(3):
  *                         if nz == 0:             # <<<<<<<<<<<<<<
  *                             dS = hertz.polarsolution(0)
  *                         elif nz == 1: # SWSH are functions of theta but the metric coefficients are organized wrt to d/dz
  */
-          __pyx_t_8 = __Pyx_PyInt_EqObjC(__pyx_v_nz, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 595, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyInt_EqObjC(__pyx_v_nz, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 599, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 595, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 599, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
           if (__pyx_t_2) {
 
-            /* "cython/teukolsky_wrap.pyx":596
+            /* "cython/teukolsky_wrap.pyx":600
  *                     for nz in range(3):
  *                         if nz == 0:
  *                             dS = hertz.polarsolution(0)             # <<<<<<<<<<<<<<
  *                         elif nz == 1: # SWSH are functions of theta but the metric coefficients are organized wrt to d/dz
  *                             dS = -hertz.polarderivative(0)/np.sqrt(1. - z**2)
  */
-            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_polarsolution); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 596, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_polarsolution); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 600, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_5 = NULL;
             if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -21660,14 +22544,14 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
             }
             __pyx_t_8 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_5, __pyx_int_0) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_int_0);
             __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-            if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 596, __pyx_L1_error)
+            if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 600, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_8);
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_8); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 596, __pyx_L1_error)
+            __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_8); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 600, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
             __pyx_v_dS = __pyx_t_9;
 
-            /* "cython/teukolsky_wrap.pyx":595
+            /* "cython/teukolsky_wrap.pyx":599
  *                         dPsiUp = cpp_complex[double](0., 0.)
  *                     for nz in range(3):
  *                         if nz == 0:             # <<<<<<<<<<<<<<
@@ -21677,27 +22561,27 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
             goto __pyx_L13;
           }
 
-          /* "cython/teukolsky_wrap.pyx":597
+          /* "cython/teukolsky_wrap.pyx":601
  *                         if nz == 0:
  *                             dS = hertz.polarsolution(0)
  *                         elif nz == 1: # SWSH are functions of theta but the metric coefficients are organized wrt to d/dz             # <<<<<<<<<<<<<<
  *                             dS = -hertz.polarderivative(0)/np.sqrt(1. - z**2)
  *                         elif nz == 2:
  */
-          __pyx_t_8 = __Pyx_PyInt_EqObjC(__pyx_v_nz, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 597, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyInt_EqObjC(__pyx_v_nz, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 601, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 597, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 601, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
           if (__pyx_t_2) {
 
-            /* "cython/teukolsky_wrap.pyx":598
+            /* "cython/teukolsky_wrap.pyx":602
  *                             dS = hertz.polarsolution(0)
  *                         elif nz == 1: # SWSH are functions of theta but the metric coefficients are organized wrt to d/dz
  *                             dS = -hertz.polarderivative(0)/np.sqrt(1. - z**2)             # <<<<<<<<<<<<<<
  *                         elif nz == 2:
  *                             dS = hertz.polarderivative2(0)/(1. - z**2) - z*hertz.polarderivative(0)/(1. - z**2)**(1.5)
  */
-            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_polarderivative); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 598, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_polarderivative); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 602, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_5 = NULL;
             if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -21711,18 +22595,18 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
             }
             __pyx_t_8 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_5, __pyx_int_0) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_int_0);
             __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-            if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 598, __pyx_L1_error)
+            if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 602, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_8);
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_1 = PyNumber_Negative(__pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 598, __pyx_L1_error)
+            __pyx_t_1 = PyNumber_Negative(__pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 602, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 598, __pyx_L1_error)
+            __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 602, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_5);
-            __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_sqrt); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 598, __pyx_L1_error)
+            __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_sqrt); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 602, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_4);
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-            __pyx_t_5 = PyFloat_FromDouble((1. - pow(__pyx_v_z, 2.0))); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 598, __pyx_L1_error)
+            __pyx_t_5 = PyFloat_FromDouble((1. - pow(__pyx_v_z, 2.0))); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 602, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_5);
             __pyx_t_6 = NULL;
             if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -21737,18 +22621,18 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
             __pyx_t_8 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5);
             __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-            if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 598, __pyx_L1_error)
+            if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 602, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_8);
             __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-            __pyx_t_4 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_8); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 598, __pyx_L1_error)
+            __pyx_t_4 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_8); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 602, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_4);
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_4); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 598, __pyx_L1_error)
+            __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_4); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 602, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
             __pyx_v_dS = __pyx_t_9;
 
-            /* "cython/teukolsky_wrap.pyx":597
+            /* "cython/teukolsky_wrap.pyx":601
  *                         if nz == 0:
  *                             dS = hertz.polarsolution(0)
  *                         elif nz == 1: # SWSH are functions of theta but the metric coefficients are organized wrt to d/dz             # <<<<<<<<<<<<<<
@@ -21758,27 +22642,27 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
             goto __pyx_L13;
           }
 
-          /* "cython/teukolsky_wrap.pyx":599
+          /* "cython/teukolsky_wrap.pyx":603
  *                         elif nz == 1: # SWSH are functions of theta but the metric coefficients are organized wrt to d/dz
  *                             dS = -hertz.polarderivative(0)/np.sqrt(1. - z**2)
  *                         elif nz == 2:             # <<<<<<<<<<<<<<
  *                             dS = hertz.polarderivative2(0)/(1. - z**2) - z*hertz.polarderivative(0)/(1. - z**2)**(1.5)
  *                         else:
  */
-          __pyx_t_4 = __Pyx_PyInt_EqObjC(__pyx_v_nz, __pyx_int_2, 2, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 599, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyInt_EqObjC(__pyx_v_nz, __pyx_int_2, 2, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 603, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_4);
-          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 599, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 603, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
           if (__pyx_t_2) {
 
-            /* "cython/teukolsky_wrap.pyx":600
+            /* "cython/teukolsky_wrap.pyx":604
  *                             dS = -hertz.polarderivative(0)/np.sqrt(1. - z**2)
  *                         elif nz == 2:
  *                             dS = hertz.polarderivative2(0)/(1. - z**2) - z*hertz.polarderivative(0)/(1. - z**2)**(1.5)             # <<<<<<<<<<<<<<
  *                         else:
  *                             dS = cpp_complex[double](0., 0.)
  */
-            __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_polarderivative2); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 600, __pyx_L1_error)
+            __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_polarderivative2); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 604, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_8);
             __pyx_t_1 = NULL;
             if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
@@ -21792,18 +22676,18 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
             }
             __pyx_t_4 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_8, __pyx_t_1, __pyx_int_0) : __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_int_0);
             __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-            if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 600, __pyx_L1_error)
+            if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 604, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_4);
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_8 = PyFloat_FromDouble((1. - pow(__pyx_v_z, 2.0))); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 600, __pyx_L1_error)
+            __pyx_t_8 = PyFloat_FromDouble((1. - pow(__pyx_v_z, 2.0))); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 604, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_1 = __Pyx_PyNumber_Divide(__pyx_t_4, __pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 600, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyNumber_Divide(__pyx_t_4, __pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 604, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_8 = PyFloat_FromDouble(__pyx_v_z); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 600, __pyx_L1_error)
+            __pyx_t_8 = PyFloat_FromDouble(__pyx_v_z); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 604, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_polarderivative); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 600, __pyx_L1_error)
+            __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_hertz), __pyx_n_s_polarderivative); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 604, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_5);
             __pyx_t_6 = NULL;
             if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
@@ -21817,28 +22701,28 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
             }
             __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_6, __pyx_int_0) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_int_0);
             __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-            if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 600, __pyx_L1_error)
+            if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 604, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_4);
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-            __pyx_t_5 = PyNumber_Multiply(__pyx_t_8, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 600, __pyx_L1_error)
+            __pyx_t_5 = PyNumber_Multiply(__pyx_t_8, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 604, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_5);
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
             __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-            __pyx_t_4 = PyFloat_FromDouble(pow((1. - pow(__pyx_v_z, 2.0)), 1.5)); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 600, __pyx_L1_error)
+            __pyx_t_4 = PyFloat_FromDouble(pow((1. - pow(__pyx_v_z, 2.0)), 1.5)); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 604, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_4);
-            __pyx_t_8 = __Pyx_PyNumber_Divide(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 600, __pyx_L1_error)
+            __pyx_t_8 = __Pyx_PyNumber_Divide(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 604, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_8);
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
             __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-            __pyx_t_4 = PyNumber_Subtract(__pyx_t_1, __pyx_t_8); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 600, __pyx_L1_error)
+            __pyx_t_4 = PyNumber_Subtract(__pyx_t_1, __pyx_t_8); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 604, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_4);
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_4); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 600, __pyx_L1_error)
+            __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_4); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 604, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
             __pyx_v_dS = __pyx_t_9;
 
-            /* "cython/teukolsky_wrap.pyx":599
+            /* "cython/teukolsky_wrap.pyx":603
  *                         elif nz == 1: # SWSH are functions of theta but the metric coefficients are organized wrt to d/dz
  *                             dS = -hertz.polarderivative(0)/np.sqrt(1. - z**2)
  *                         elif nz == 2:             # <<<<<<<<<<<<<<
@@ -21848,7 +22732,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
             goto __pyx_L13;
           }
 
-          /* "cython/teukolsky_wrap.pyx":602
+          /* "cython/teukolsky_wrap.pyx":606
  *                             dS = hertz.polarderivative2(0)/(1. - z**2) - z*hertz.polarderivative(0)/(1. - z**2)**(1.5)
  *                         else:
  *                             dS = cpp_complex[double](0., 0.)             # <<<<<<<<<<<<<<
@@ -21860,13 +22744,13 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
               __pyx_t_9 = std::complex<double> (0., 0.);
             } catch(...) {
               __Pyx_CppExn2PyErr();
-              __PYX_ERR(3, 602, __pyx_L1_error)
+              __PYX_ERR(3, 606, __pyx_L1_error)
             }
             __pyx_v_dS = __pyx_t_9;
           }
           __pyx_L13:;
 
-          /* "cython/teukolsky_wrap.pyx":603
+          /* "cython/teukolsky_wrap.pyx":607
  *                         else:
  *                             dS = cpp_complex[double](0., 0.)
  *                         for nph in range(3):             # <<<<<<<<<<<<<<
@@ -21874,50 +22758,50 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
  *                                 habbase = metric_coefficient_S0(ai, bi, nt, nr, nz, nph, a, r, z)*dS*(im)**nph*(-1.*iomega)**nt
  */
           for (__pyx_t_14 = 0; __pyx_t_14 < 3; __pyx_t_14+=1) {
-            __pyx_t_4 = __Pyx_PyInt_From_long(__pyx_t_14); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 603, __pyx_L1_error)
+            __pyx_t_4 = __Pyx_PyInt_From_long(__pyx_t_14); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 607, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_4);
             __Pyx_XDECREF_SET(__pyx_v_nph, __pyx_t_4);
             __pyx_t_4 = 0;
 
-            /* "cython/teukolsky_wrap.pyx":604
+            /* "cython/teukolsky_wrap.pyx":608
  *                             dS = cpp_complex[double](0., 0.)
  *                         for nph in range(3):
  *                             if nt + nr + nz + nph <= 2:             # <<<<<<<<<<<<<<
  *                                 habbase = metric_coefficient_S0(ai, bi, nt, nr, nz, nph, a, r, z)*dS*(im)**nph*(-1.*iomega)**nt
  *                                 habIn += habbase*dPsiIn
  */
-            __pyx_t_4 = PyNumber_Add(__pyx_v_nt, __pyx_v_nr); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 604, __pyx_L1_error)
+            __pyx_t_4 = PyNumber_Add(__pyx_v_nt, __pyx_v_nr); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 608, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_4);
-            __pyx_t_8 = PyNumber_Add(__pyx_t_4, __pyx_v_nz); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 604, __pyx_L1_error)
+            __pyx_t_8 = PyNumber_Add(__pyx_t_4, __pyx_v_nz); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 608, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_8);
             __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-            __pyx_t_4 = PyNumber_Add(__pyx_t_8, __pyx_v_nph); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 604, __pyx_L1_error)
+            __pyx_t_4 = PyNumber_Add(__pyx_t_8, __pyx_v_nph); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 608, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_4);
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_8 = PyObject_RichCompare(__pyx_t_4, __pyx_int_2, Py_LE); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 604, __pyx_L1_error)
+            __pyx_t_8 = PyObject_RichCompare(__pyx_t_4, __pyx_int_2, Py_LE); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 608, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 604, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 608, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
             if (__pyx_t_2) {
 
-              /* "cython/teukolsky_wrap.pyx":605
+              /* "cython/teukolsky_wrap.pyx":609
  *                         for nph in range(3):
  *                             if nt + nr + nz + nph <= 2:
  *                                 habbase = metric_coefficient_S0(ai, bi, nt, nr, nz, nph, a, r, z)*dS*(im)**nph*(-1.*iomega)**nt             # <<<<<<<<<<<<<<
  *                                 habIn += habbase*dPsiIn
  *                                 habUp += habbase*dPsiUp
  */
-              __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_metric_coefficient_S0); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 605, __pyx_L1_error)
+              __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_metric_coefficient_S0); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_4);
-              __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_ai); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 605, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_ai); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
-              __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_bi); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 605, __pyx_L1_error)
+              __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_bi); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_5);
-              __pyx_t_6 = PyFloat_FromDouble(__pyx_v_a); if (unlikely(!__pyx_t_6)) __PYX_ERR(3, 605, __pyx_L1_error)
+              __pyx_t_6 = PyFloat_FromDouble(__pyx_v_a); if (unlikely(!__pyx_t_6)) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_6);
-              __pyx_t_15 = PyFloat_FromDouble(__pyx_v_r); if (unlikely(!__pyx_t_15)) __PYX_ERR(3, 605, __pyx_L1_error)
+              __pyx_t_15 = PyFloat_FromDouble(__pyx_v_r); if (unlikely(!__pyx_t_15)) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_15);
-              __pyx_t_16 = PyFloat_FromDouble(__pyx_v_z); if (unlikely(!__pyx_t_16)) __PYX_ERR(3, 605, __pyx_L1_error)
+              __pyx_t_16 = PyFloat_FromDouble(__pyx_v_z); if (unlikely(!__pyx_t_16)) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_16);
               __pyx_t_17 = NULL;
               __pyx_t_7 = 0;
@@ -21934,7 +22818,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
               #if CYTHON_FAST_PYCALL
               if (PyFunction_Check(__pyx_t_4)) {
                 PyObject *__pyx_temp[10] = {__pyx_t_17, __pyx_t_1, __pyx_t_5, __pyx_v_nt, __pyx_v_nr, __pyx_v_nz, __pyx_v_nph, __pyx_t_6, __pyx_t_15, __pyx_t_16};
-                __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_7, 9+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 605, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_7, 9+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 609, __pyx_L1_error)
                 __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
                 __Pyx_GOTREF(__pyx_t_8);
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -21947,7 +22831,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
               #if CYTHON_FAST_PYCCALL
               if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
                 PyObject *__pyx_temp[10] = {__pyx_t_17, __pyx_t_1, __pyx_t_5, __pyx_v_nt, __pyx_v_nr, __pyx_v_nz, __pyx_v_nph, __pyx_t_6, __pyx_t_15, __pyx_t_16};
-                __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_7, 9+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 605, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_7, 9+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 609, __pyx_L1_error)
                 __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
                 __Pyx_GOTREF(__pyx_t_8);
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -21958,7 +22842,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
               } else
               #endif
               {
-                __pyx_t_18 = PyTuple_New(9+__pyx_t_7); if (unlikely(!__pyx_t_18)) __PYX_ERR(3, 605, __pyx_L1_error)
+                __pyx_t_18 = PyTuple_New(9+__pyx_t_7); if (unlikely(!__pyx_t_18)) __PYX_ERR(3, 609, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_18);
                 if (__pyx_t_17) {
                   __Pyx_GIVEREF(__pyx_t_17); PyTuple_SET_ITEM(__pyx_t_18, 0, __pyx_t_17); __pyx_t_17 = NULL;
@@ -21990,40 +22874,40 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
                 __pyx_t_6 = 0;
                 __pyx_t_15 = 0;
                 __pyx_t_16 = 0;
-                __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_18, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 605, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_18, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 609, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_8);
                 __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
               }
               __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-              __pyx_t_4 = __pyx_convert_complex_to_py_double(__pyx_v_dS); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 605, __pyx_L1_error)
+              __pyx_t_4 = __pyx_convert_complex_to_py_double(__pyx_v_dS); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_4);
-              __pyx_t_18 = PyNumber_Multiply(__pyx_t_8, __pyx_t_4); if (unlikely(!__pyx_t_18)) __PYX_ERR(3, 605, __pyx_L1_error)
+              __pyx_t_18 = PyNumber_Multiply(__pyx_t_8, __pyx_t_4); if (unlikely(!__pyx_t_18)) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_18);
               __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
               __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-              __pyx_t_4 = __pyx_convert_complex_to_py_double(__pyx_v_im); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 605, __pyx_L1_error)
+              __pyx_t_4 = __pyx_convert_complex_to_py_double(__pyx_v_im); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_4);
-              __pyx_t_8 = PyNumber_Power(__pyx_t_4, __pyx_v_nph, Py_None); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 605, __pyx_L1_error)
+              __pyx_t_8 = PyNumber_Power(__pyx_t_4, __pyx_v_nph, Py_None); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_8);
               __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-              __pyx_t_4 = PyNumber_Multiply(__pyx_t_18, __pyx_t_8); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 605, __pyx_L1_error)
+              __pyx_t_4 = PyNumber_Multiply(__pyx_t_18, __pyx_t_8); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_4);
               __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
               __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-              __pyx_t_8 = __pyx_convert_complex_to_py_double((-1. * __pyx_v_iomega)); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 605, __pyx_L1_error)
+              __pyx_t_8 = __pyx_convert_complex_to_py_double((-1. * __pyx_v_iomega)); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_8);
-              __pyx_t_18 = PyNumber_Power(__pyx_t_8, __pyx_v_nt, Py_None); if (unlikely(!__pyx_t_18)) __PYX_ERR(3, 605, __pyx_L1_error)
+              __pyx_t_18 = PyNumber_Power(__pyx_t_8, __pyx_v_nt, Py_None); if (unlikely(!__pyx_t_18)) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_18);
               __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-              __pyx_t_8 = PyNumber_Multiply(__pyx_t_4, __pyx_t_18); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 605, __pyx_L1_error)
+              __pyx_t_8 = PyNumber_Multiply(__pyx_t_4, __pyx_t_18); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_8);
               __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
               __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-              __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_8); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 605, __pyx_L1_error)
+              __pyx_t_9 = __pyx_convert_complex_from_py_double(__pyx_t_8); if (unlikely(PyErr_Occurred())) __PYX_ERR(3, 609, __pyx_L1_error)
               __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
               __pyx_v_habbase = __pyx_t_9;
 
-              /* "cython/teukolsky_wrap.pyx":606
+              /* "cython/teukolsky_wrap.pyx":610
  *                             if nt + nr + nz + nph <= 2:
  *                                 habbase = metric_coefficient_S0(ai, bi, nt, nr, nz, nph, a, r, z)*dS*(im)**nph*(-1.*iomega)**nt
  *                                 habIn += habbase*dPsiIn             # <<<<<<<<<<<<<<
@@ -22032,7 +22916,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
  */
               __pyx_v_habIn += (__pyx_v_habbase * __pyx_v_dPsiIn);
 
-              /* "cython/teukolsky_wrap.pyx":607
+              /* "cython/teukolsky_wrap.pyx":611
  *                                 habbase = metric_coefficient_S0(ai, bi, nt, nr, nz, nph, a, r, z)*dS*(im)**nph*(-1.*iomega)**nt
  *                                 habIn += habbase*dPsiIn
  *                                 habUp += habbase*dPsiUp             # <<<<<<<<<<<<<<
@@ -22041,7 +22925,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
  */
               __pyx_v_habUp += (__pyx_v_habbase * __pyx_v_dPsiUp);
 
-              /* "cython/teukolsky_wrap.pyx":604
+              /* "cython/teukolsky_wrap.pyx":608
  *                             dS = cpp_complex[double](0., 0.)
  *                         for nph in range(3):
  *                             if nt + nr + nz + nph <= 2:             # <<<<<<<<<<<<<<
@@ -22054,7 +22938,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
       }
     }
 
-    /* "cython/teukolsky_wrap.pyx":608
+    /* "cython/teukolsky_wrap.pyx":612
  *                                 habIn += habbase*dPsiIn
  *                                 habUp += habbase*dPsiUp
  *             return {"In": habIn, "Up": habUp}             # <<<<<<<<<<<<<<
@@ -22062,21 +22946,21 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
  *             return {"In": habIn, "Up": habUp}
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_8 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 608, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 612, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_18 = __pyx_convert_complex_to_py_double(__pyx_v_habIn); if (unlikely(!__pyx_t_18)) __PYX_ERR(3, 608, __pyx_L1_error)
+    __pyx_t_18 = __pyx_convert_complex_to_py_double(__pyx_v_habIn); if (unlikely(!__pyx_t_18)) __PYX_ERR(3, 612, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_18);
-    if (PyDict_SetItem(__pyx_t_8, __pyx_n_u_In, __pyx_t_18) < 0) __PYX_ERR(3, 608, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_8, __pyx_n_u_In, __pyx_t_18) < 0) __PYX_ERR(3, 612, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-    __pyx_t_18 = __pyx_convert_complex_to_py_double(__pyx_v_habUp); if (unlikely(!__pyx_t_18)) __PYX_ERR(3, 608, __pyx_L1_error)
+    __pyx_t_18 = __pyx_convert_complex_to_py_double(__pyx_v_habUp); if (unlikely(!__pyx_t_18)) __PYX_ERR(3, 612, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_18);
-    if (PyDict_SetItem(__pyx_t_8, __pyx_n_u_Up, __pyx_t_18) < 0) __PYX_ERR(3, 608, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_8, __pyx_n_u_Up, __pyx_t_18) < 0) __PYX_ERR(3, 612, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
     __pyx_r = __pyx_t_8;
     __pyx_t_8 = 0;
     goto __pyx_L0;
 
-    /* "cython/teukolsky_wrap.pyx":579
+    /* "cython/teukolsky_wrap.pyx":583
  *             ai = bi
  *             bi = atemp
  *         if (ai, bi) in metric_component_gauge_dict[self.gauge_str].keys():             # <<<<<<<<<<<<<<
@@ -22085,29 +22969,29 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_4tetradcomponent(s
  */
   }
 
-  /* "cython/teukolsky_wrap.pyx":610
+  /* "cython/teukolsky_wrap.pyx":614
  *             return {"In": habIn, "Up": habUp}
  *         else:
  *             return {"In": habIn, "Up": habUp}             # <<<<<<<<<<<<<<
  */
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_8 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 610, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(3, 614, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_18 = __pyx_convert_complex_to_py_double(__pyx_v_habIn); if (unlikely(!__pyx_t_18)) __PYX_ERR(3, 610, __pyx_L1_error)
+    __pyx_t_18 = __pyx_convert_complex_to_py_double(__pyx_v_habIn); if (unlikely(!__pyx_t_18)) __PYX_ERR(3, 614, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_18);
-    if (PyDict_SetItem(__pyx_t_8, __pyx_n_u_In, __pyx_t_18) < 0) __PYX_ERR(3, 610, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_8, __pyx_n_u_In, __pyx_t_18) < 0) __PYX_ERR(3, 614, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
-    __pyx_t_18 = __pyx_convert_complex_to_py_double(__pyx_v_habUp); if (unlikely(!__pyx_t_18)) __PYX_ERR(3, 610, __pyx_L1_error)
+    __pyx_t_18 = __pyx_convert_complex_to_py_double(__pyx_v_habUp); if (unlikely(!__pyx_t_18)) __PYX_ERR(3, 614, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_18);
-    if (PyDict_SetItem(__pyx_t_8, __pyx_n_u_Up, __pyx_t_18) < 0) __PYX_ERR(3, 610, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_8, __pyx_n_u_Up, __pyx_t_18) < 0) __PYX_ERR(3, 614, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_18); __pyx_t_18 = 0;
     __pyx_r = __pyx_t_8;
     __pyx_t_8 = 0;
     goto __pyx_L0;
   }
 
-  /* "cython/teukolsky_wrap.pyx":562
+  /* "cython/teukolsky_wrap.pyx":566
  *             return self.tetradcomponent(hertz, ai, bi)
  * 
  *     def tetradcomponent(self, HertzMode hertz, int ai, int bi):             # <<<<<<<<<<<<<<
@@ -22450,7 +23334,7 @@ static PyObject *__pyx_pf_11cybhpt_full_19MetricModeGenerator_8__setstate_cython
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":27
+/* "cython/flux_wrap.pyx":39
  *     cdef FluxListCPP *fluxlistcpp
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -22479,7 +23363,7 @@ static int __pyx_pf_11cybhpt_full_8FluxList___cinit__(struct __pyx_obj_11cybhpt_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "cython/flux_wrap.pyx":28
+  /* "cython/flux_wrap.pyx":40
  * 
  *     def __cinit__(self):
  *         self.fluxlistcpp = new FluxListCPP()             # <<<<<<<<<<<<<<
@@ -22488,7 +23372,7 @@ static int __pyx_pf_11cybhpt_full_8FluxList___cinit__(struct __pyx_obj_11cybhpt_
  */
   __pyx_v_self->fluxlistcpp = new FluxList();
 
-  /* "cython/flux_wrap.pyx":27
+  /* "cython/flux_wrap.pyx":39
  *     cdef FluxListCPP *fluxlistcpp
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -22502,7 +23386,7 @@ static int __pyx_pf_11cybhpt_full_8FluxList___cinit__(struct __pyx_obj_11cybhpt_
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":30
+/* "cython/flux_wrap.pyx":42
  *         self.fluxlistcpp = new FluxListCPP()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -22525,7 +23409,7 @@ static void __pyx_pf_11cybhpt_full_8FluxList_2__dealloc__(struct __pyx_obj_11cyb
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "cython/flux_wrap.pyx":31
+  /* "cython/flux_wrap.pyx":43
  * 
  *     def __dealloc__(self):
  *         del self.fluxlistcpp             # <<<<<<<<<<<<<<
@@ -22534,7 +23418,7 @@ static void __pyx_pf_11cybhpt_full_8FluxList_2__dealloc__(struct __pyx_obj_11cyb
  */
   delete __pyx_v_self->fluxlistcpp;
 
-  /* "cython/flux_wrap.pyx":30
+  /* "cython/flux_wrap.pyx":42
  *         self.fluxlistcpp = new FluxListCPP()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -22546,7 +23430,7 @@ static void __pyx_pf_11cybhpt_full_8FluxList_2__dealloc__(struct __pyx_obj_11cyb
   __Pyx_RefNannyFinishContext();
 }
 
-/* "cython/flux_wrap.pyx":33
+/* "cython/flux_wrap.pyx":45
  *         del self.fluxlistcpp
  * 
  *     def zero_fluxes(self):             # <<<<<<<<<<<<<<
@@ -22572,7 +23456,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4zero_fluxes(struct __pyx_obj_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("zero_fluxes", 0);
 
-  /* "cython/flux_wrap.pyx":34
+  /* "cython/flux_wrap.pyx":46
  * 
  *     def zero_fluxes(self):
  *         self.fluxlistcpp.Edot.infinity = 0.             # <<<<<<<<<<<<<<
@@ -22581,7 +23465,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4zero_fluxes(struct __pyx_obj_
  */
   __pyx_v_self->fluxlistcpp->Edot.infinity = 0.;
 
-  /* "cython/flux_wrap.pyx":35
+  /* "cython/flux_wrap.pyx":47
  *     def zero_fluxes(self):
  *         self.fluxlistcpp.Edot.infinity = 0.
  *         self.fluxlistcpp.Ldot.infinity = 0.             # <<<<<<<<<<<<<<
@@ -22590,7 +23474,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4zero_fluxes(struct __pyx_obj_
  */
   __pyx_v_self->fluxlistcpp->Ldot.infinity = 0.;
 
-  /* "cython/flux_wrap.pyx":36
+  /* "cython/flux_wrap.pyx":48
  *         self.fluxlistcpp.Edot.infinity = 0.
  *         self.fluxlistcpp.Ldot.infinity = 0.
  *         self.fluxlistcpp.Qdot.infinity = 0.             # <<<<<<<<<<<<<<
@@ -22599,7 +23483,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4zero_fluxes(struct __pyx_obj_
  */
   __pyx_v_self->fluxlistcpp->Qdot.infinity = 0.;
 
-  /* "cython/flux_wrap.pyx":38
+  /* "cython/flux_wrap.pyx":50
  *         self.fluxlistcpp.Qdot.infinity = 0.
  * 
  *         self.fluxlistcpp.Edot.horizon = 0.             # <<<<<<<<<<<<<<
@@ -22608,7 +23492,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4zero_fluxes(struct __pyx_obj_
  */
   __pyx_v_self->fluxlistcpp->Edot.horizon = 0.;
 
-  /* "cython/flux_wrap.pyx":39
+  /* "cython/flux_wrap.pyx":51
  * 
  *         self.fluxlistcpp.Edot.horizon = 0.
  *         self.fluxlistcpp.Ldot.horizon = 0.             # <<<<<<<<<<<<<<
@@ -22617,7 +23501,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4zero_fluxes(struct __pyx_obj_
  */
   __pyx_v_self->fluxlistcpp->Ldot.horizon = 0.;
 
-  /* "cython/flux_wrap.pyx":40
+  /* "cython/flux_wrap.pyx":52
  *         self.fluxlistcpp.Edot.horizon = 0.
  *         self.fluxlistcpp.Ldot.horizon = 0.
  *         self.fluxlistcpp.Qdot.horizon = 0.             # <<<<<<<<<<<<<<
@@ -22626,7 +23510,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4zero_fluxes(struct __pyx_obj_
  */
   __pyx_v_self->fluxlistcpp->Qdot.horizon = 0.;
 
-  /* "cython/flux_wrap.pyx":33
+  /* "cython/flux_wrap.pyx":45
  *         del self.fluxlistcpp
  * 
  *     def zero_fluxes(self):             # <<<<<<<<<<<<<<
@@ -22641,7 +23525,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_4zero_fluxes(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":42
+/* "cython/flux_wrap.pyx":54
  *         self.fluxlistcpp.Qdot.horizon = 0.
  * 
  *     cdef set_fluxes(self, FluxListCPP fluxes):             # <<<<<<<<<<<<<<
@@ -22655,7 +23539,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   double __pyx_t_1;
   __Pyx_RefNannySetupContext("set_fluxes", 0);
 
-  /* "cython/flux_wrap.pyx":43
+  /* "cython/flux_wrap.pyx":55
  * 
  *     cdef set_fluxes(self, FluxListCPP fluxes):
  *         self.fluxlistcpp.Edot.infinity = fluxes.Edot.infinity             # <<<<<<<<<<<<<<
@@ -22665,7 +23549,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   __pyx_t_1 = __pyx_v_fluxes.Edot.infinity;
   __pyx_v_self->fluxlistcpp->Edot.infinity = __pyx_t_1;
 
-  /* "cython/flux_wrap.pyx":44
+  /* "cython/flux_wrap.pyx":56
  *     cdef set_fluxes(self, FluxListCPP fluxes):
  *         self.fluxlistcpp.Edot.infinity = fluxes.Edot.infinity
  *         self.fluxlistcpp.Ldot.infinity = fluxes.Ldot.infinity             # <<<<<<<<<<<<<<
@@ -22675,7 +23559,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   __pyx_t_1 = __pyx_v_fluxes.Ldot.infinity;
   __pyx_v_self->fluxlistcpp->Ldot.infinity = __pyx_t_1;
 
-  /* "cython/flux_wrap.pyx":45
+  /* "cython/flux_wrap.pyx":57
  *         self.fluxlistcpp.Edot.infinity = fluxes.Edot.infinity
  *         self.fluxlistcpp.Ldot.infinity = fluxes.Ldot.infinity
  *         self.fluxlistcpp.Qdot.infinity = fluxes.Qdot.infinity             # <<<<<<<<<<<<<<
@@ -22685,7 +23569,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   __pyx_t_1 = __pyx_v_fluxes.Qdot.infinity;
   __pyx_v_self->fluxlistcpp->Qdot.infinity = __pyx_t_1;
 
-  /* "cython/flux_wrap.pyx":47
+  /* "cython/flux_wrap.pyx":59
  *         self.fluxlistcpp.Qdot.infinity = fluxes.Qdot.infinity
  * 
  *         self.fluxlistcpp.Edot.horizon = fluxes.Edot.horizon             # <<<<<<<<<<<<<<
@@ -22695,7 +23579,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   __pyx_t_1 = __pyx_v_fluxes.Edot.horizon;
   __pyx_v_self->fluxlistcpp->Edot.horizon = __pyx_t_1;
 
-  /* "cython/flux_wrap.pyx":48
+  /* "cython/flux_wrap.pyx":60
  * 
  *         self.fluxlistcpp.Edot.horizon = fluxes.Edot.horizon
  *         self.fluxlistcpp.Ldot.horizon = fluxes.Ldot.horizon             # <<<<<<<<<<<<<<
@@ -22705,7 +23589,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   __pyx_t_1 = __pyx_v_fluxes.Ldot.horizon;
   __pyx_v_self->fluxlistcpp->Ldot.horizon = __pyx_t_1;
 
-  /* "cython/flux_wrap.pyx":49
+  /* "cython/flux_wrap.pyx":61
  *         self.fluxlistcpp.Edot.horizon = fluxes.Edot.horizon
  *         self.fluxlistcpp.Ldot.horizon = fluxes.Ldot.horizon
  *         self.fluxlistcpp.Qdot.horizon = fluxes.Qdot.horizon             # <<<<<<<<<<<<<<
@@ -22715,7 +23599,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   __pyx_t_1 = __pyx_v_fluxes.Qdot.horizon;
   __pyx_v_self->fluxlistcpp->Qdot.horizon = __pyx_t_1;
 
-  /* "cython/flux_wrap.pyx":42
+  /* "cython/flux_wrap.pyx":54
  *         self.fluxlistcpp.Qdot.horizon = 0.
  * 
  *     cdef set_fluxes(self, FluxListCPP fluxes):             # <<<<<<<<<<<<<<
@@ -22730,7 +23614,7 @@ static PyObject *__pyx_f_11cybhpt_full_8FluxList_set_fluxes(struct __pyx_obj_11c
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":51
+/* "cython/flux_wrap.pyx":63
  *         self.fluxlistcpp.Qdot.horizon = fluxes.Qdot.horizon
  * 
  *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
@@ -22775,17 +23659,17 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_7set_infinity_fluxes(PyObject 
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Ldot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 51, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 63, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Qdot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 51, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 63, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_infinity_fluxes") < 0)) __PYX_ERR(4, 51, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_infinity_fluxes") < 0)) __PYX_ERR(4, 63, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -22794,13 +23678,13 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_7set_infinity_fluxes(PyObject 
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 51, __pyx_L3_error)
-    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 51, __pyx_L3_error)
-    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 51, __pyx_L3_error)
+    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 63, __pyx_L3_error)
+    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 63, __pyx_L3_error)
+    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 63, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 51, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 63, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.FluxList.set_infinity_fluxes", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -22818,7 +23702,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_infinity_fluxes(struct __
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_infinity_fluxes", 0);
 
-  /* "cython/flux_wrap.pyx":52
+  /* "cython/flux_wrap.pyx":64
  * 
  *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
  *         self.fluxlistcpp.Edot.infinity = Edot             # <<<<<<<<<<<<<<
@@ -22827,7 +23711,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_infinity_fluxes(struct __
  */
   __pyx_v_self->fluxlistcpp->Edot.infinity = __pyx_v_Edot;
 
-  /* "cython/flux_wrap.pyx":53
+  /* "cython/flux_wrap.pyx":65
  *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
  *         self.fluxlistcpp.Edot.infinity = Edot
  *         self.fluxlistcpp.Ldot.infinity = Ldot             # <<<<<<<<<<<<<<
@@ -22836,7 +23720,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_infinity_fluxes(struct __
  */
   __pyx_v_self->fluxlistcpp->Ldot.infinity = __pyx_v_Ldot;
 
-  /* "cython/flux_wrap.pyx":54
+  /* "cython/flux_wrap.pyx":66
  *         self.fluxlistcpp.Edot.infinity = Edot
  *         self.fluxlistcpp.Ldot.infinity = Ldot
  *         self.fluxlistcpp.Qdot.infinity = Qdot             # <<<<<<<<<<<<<<
@@ -22845,7 +23729,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_infinity_fluxes(struct __
  */
   __pyx_v_self->fluxlistcpp->Qdot.infinity = __pyx_v_Qdot;
 
-  /* "cython/flux_wrap.pyx":51
+  /* "cython/flux_wrap.pyx":63
  *         self.fluxlistcpp.Qdot.horizon = fluxes.Qdot.horizon
  * 
  *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
@@ -22860,7 +23744,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6set_infinity_fluxes(struct __
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":56
+/* "cython/flux_wrap.pyx":68
  *         self.fluxlistcpp.Qdot.infinity = Qdot
  * 
  *     def set_horizon_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
@@ -22905,17 +23789,17 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_9set_horizon_fluxes(PyObject *
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Ldot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("set_horizon_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 56, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("set_horizon_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 68, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Qdot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("set_horizon_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 56, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("set_horizon_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 68, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_horizon_fluxes") < 0)) __PYX_ERR(4, 56, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_horizon_fluxes") < 0)) __PYX_ERR(4, 68, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -22924,13 +23808,13 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_9set_horizon_fluxes(PyObject *
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 56, __pyx_L3_error)
-    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 56, __pyx_L3_error)
-    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 56, __pyx_L3_error)
+    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 68, __pyx_L3_error)
+    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 68, __pyx_L3_error)
+    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 68, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("set_horizon_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 56, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("set_horizon_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 68, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.FluxList.set_horizon_fluxes", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -22948,7 +23832,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_8set_horizon_fluxes(struct __p
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_horizon_fluxes", 0);
 
-  /* "cython/flux_wrap.pyx":57
+  /* "cython/flux_wrap.pyx":69
  * 
  *     def set_horizon_fluxes(self, double Edot, double Ldot, double Qdot):
  *         self.fluxlistcpp.Edot.horizon = Edot             # <<<<<<<<<<<<<<
@@ -22957,7 +23841,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_8set_horizon_fluxes(struct __p
  */
   __pyx_v_self->fluxlistcpp->Edot.horizon = __pyx_v_Edot;
 
-  /* "cython/flux_wrap.pyx":58
+  /* "cython/flux_wrap.pyx":70
  *     def set_horizon_fluxes(self, double Edot, double Ldot, double Qdot):
  *         self.fluxlistcpp.Edot.horizon = Edot
  *         self.fluxlistcpp.Ldot.horizon = Ldot             # <<<<<<<<<<<<<<
@@ -22966,7 +23850,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_8set_horizon_fluxes(struct __p
  */
   __pyx_v_self->fluxlistcpp->Ldot.horizon = __pyx_v_Ldot;
 
-  /* "cython/flux_wrap.pyx":59
+  /* "cython/flux_wrap.pyx":71
  *         self.fluxlistcpp.Edot.horizon = Edot
  *         self.fluxlistcpp.Ldot.horizon = Ldot
  *         self.fluxlistcpp.Qdot.horizon = Qdot             # <<<<<<<<<<<<<<
@@ -22975,7 +23859,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_8set_horizon_fluxes(struct __p
  */
   __pyx_v_self->fluxlistcpp->Qdot.horizon = __pyx_v_Qdot;
 
-  /* "cython/flux_wrap.pyx":56
+  /* "cython/flux_wrap.pyx":68
  *         self.fluxlistcpp.Qdot.infinity = Qdot
  * 
  *     def set_horizon_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
@@ -22990,7 +23874,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_8set_horizon_fluxes(struct __p
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":61
+/* "cython/flux_wrap.pyx":73
  *         self.fluxlistcpp.Qdot.horizon = Qdot
  * 
  *     def add_infinity_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
@@ -23035,17 +23919,17 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_11add_infinity_fluxes(PyObject
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Ldot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("add_infinity_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 61, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("add_infinity_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 73, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Qdot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("add_infinity_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 61, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("add_infinity_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 73, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "add_infinity_fluxes") < 0)) __PYX_ERR(4, 61, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "add_infinity_fluxes") < 0)) __PYX_ERR(4, 73, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -23054,13 +23938,13 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_11add_infinity_fluxes(PyObject
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 61, __pyx_L3_error)
-    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 61, __pyx_L3_error)
-    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 61, __pyx_L3_error)
+    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 73, __pyx_L3_error)
+    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 73, __pyx_L3_error)
+    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 73, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("add_infinity_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 61, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("add_infinity_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 73, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.FluxList.add_infinity_fluxes", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -23078,7 +23962,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10add_infinity_fluxes(struct _
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("add_infinity_fluxes", 0);
 
-  /* "cython/flux_wrap.pyx":62
+  /* "cython/flux_wrap.pyx":74
  * 
  *     def add_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
  *         self.fluxlistcpp.Edot.infinity += Edot             # <<<<<<<<<<<<<<
@@ -23087,7 +23971,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10add_infinity_fluxes(struct _
  */
   __pyx_v_self->fluxlistcpp->Edot.infinity = (__pyx_v_self->fluxlistcpp->Edot.infinity + __pyx_v_Edot);
 
-  /* "cython/flux_wrap.pyx":63
+  /* "cython/flux_wrap.pyx":75
  *     def add_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
  *         self.fluxlistcpp.Edot.infinity += Edot
  *         self.fluxlistcpp.Ldot.infinity += Ldot             # <<<<<<<<<<<<<<
@@ -23096,7 +23980,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10add_infinity_fluxes(struct _
  */
   __pyx_v_self->fluxlistcpp->Ldot.infinity = (__pyx_v_self->fluxlistcpp->Ldot.infinity + __pyx_v_Ldot);
 
-  /* "cython/flux_wrap.pyx":64
+  /* "cython/flux_wrap.pyx":76
  *         self.fluxlistcpp.Edot.infinity += Edot
  *         self.fluxlistcpp.Ldot.infinity += Ldot
  *         self.fluxlistcpp.Qdot.infinity += Qdot             # <<<<<<<<<<<<<<
@@ -23105,7 +23989,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10add_infinity_fluxes(struct _
  */
   __pyx_v_self->fluxlistcpp->Qdot.infinity = (__pyx_v_self->fluxlistcpp->Qdot.infinity + __pyx_v_Qdot);
 
-  /* "cython/flux_wrap.pyx":61
+  /* "cython/flux_wrap.pyx":73
  *         self.fluxlistcpp.Qdot.horizon = Qdot
  * 
  *     def add_infinity_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
@@ -23120,7 +24004,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_10add_infinity_fluxes(struct _
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":66
+/* "cython/flux_wrap.pyx":78
  *         self.fluxlistcpp.Qdot.infinity += Qdot
  * 
  *     def add_horizon_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
@@ -23165,17 +24049,17 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_13add_horizon_fluxes(PyObject 
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Ldot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("add_horizon_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 66, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("add_horizon_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 78, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Qdot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("add_horizon_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 66, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("add_horizon_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 78, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "add_horizon_fluxes") < 0)) __PYX_ERR(4, 66, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "add_horizon_fluxes") < 0)) __PYX_ERR(4, 78, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -23184,13 +24068,13 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_13add_horizon_fluxes(PyObject 
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 66, __pyx_L3_error)
-    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 66, __pyx_L3_error)
-    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 66, __pyx_L3_error)
+    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 78, __pyx_L3_error)
+    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 78, __pyx_L3_error)
+    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 78, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("add_horizon_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 66, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("add_horizon_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 78, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.FluxList.add_horizon_fluxes", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -23208,7 +24092,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_12add_horizon_fluxes(struct __
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("add_horizon_fluxes", 0);
 
-  /* "cython/flux_wrap.pyx":67
+  /* "cython/flux_wrap.pyx":79
  * 
  *     def add_horizon_fluxes(self, double Edot, double Ldot, double Qdot):
  *         self.fluxlistcpp.Edot.horizon += Edot             # <<<<<<<<<<<<<<
@@ -23217,7 +24101,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_12add_horizon_fluxes(struct __
  */
   __pyx_v_self->fluxlistcpp->Edot.horizon = (__pyx_v_self->fluxlistcpp->Edot.horizon + __pyx_v_Edot);
 
-  /* "cython/flux_wrap.pyx":68
+  /* "cython/flux_wrap.pyx":80
  *     def add_horizon_fluxes(self, double Edot, double Ldot, double Qdot):
  *         self.fluxlistcpp.Edot.horizon += Edot
  *         self.fluxlistcpp.Ldot.horizon += Ldot             # <<<<<<<<<<<<<<
@@ -23226,7 +24110,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_12add_horizon_fluxes(struct __
  */
   __pyx_v_self->fluxlistcpp->Ldot.horizon = (__pyx_v_self->fluxlistcpp->Ldot.horizon + __pyx_v_Ldot);
 
-  /* "cython/flux_wrap.pyx":69
+  /* "cython/flux_wrap.pyx":81
  *         self.fluxlistcpp.Edot.horizon += Edot
  *         self.fluxlistcpp.Ldot.horizon += Ldot
  *         self.fluxlistcpp.Qdot.horizon += Qdot             # <<<<<<<<<<<<<<
@@ -23235,7 +24119,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_12add_horizon_fluxes(struct __
  */
   __pyx_v_self->fluxlistcpp->Qdot.horizon = (__pyx_v_self->fluxlistcpp->Qdot.horizon + __pyx_v_Qdot);
 
-  /* "cython/flux_wrap.pyx":66
+  /* "cython/flux_wrap.pyx":78
  *         self.fluxlistcpp.Qdot.infinity += Qdot
  * 
  *     def add_horizon_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
@@ -23250,7 +24134,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_12add_horizon_fluxes(struct __
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":71
+/* "cython/flux_wrap.pyx":83
  *         self.fluxlistcpp.Qdot.horizon += Qdot
  * 
  *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
@@ -23295,17 +24179,17 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_15set_infinity_fluxes(PyObject
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Ldot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 71, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, 1); __PYX_ERR(4, 83, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Qdot)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 71, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, 2); __PYX_ERR(4, 83, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_infinity_fluxes") < 0)) __PYX_ERR(4, 71, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_infinity_fluxes") < 0)) __PYX_ERR(4, 83, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -23314,13 +24198,13 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_15set_infinity_fluxes(PyObject
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 71, __pyx_L3_error)
-    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 71, __pyx_L3_error)
-    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 71, __pyx_L3_error)
+    __pyx_v_Edot = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Edot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 83, __pyx_L3_error)
+    __pyx_v_Ldot = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Ldot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 83, __pyx_L3_error)
+    __pyx_v_Qdot = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_Qdot == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 83, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 71, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("set_infinity_fluxes", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 83, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.FluxList.set_infinity_fluxes", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -23338,7 +24222,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14set_infinity_fluxes(struct _
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_infinity_fluxes", 0);
 
-  /* "cython/flux_wrap.pyx":72
+  /* "cython/flux_wrap.pyx":84
  * 
  *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
  *         self.fluxlistcpp.Edot.infinity += Edot             # <<<<<<<<<<<<<<
@@ -23347,7 +24231,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14set_infinity_fluxes(struct _
  */
   __pyx_v_self->fluxlistcpp->Edot.infinity = (__pyx_v_self->fluxlistcpp->Edot.infinity + __pyx_v_Edot);
 
-  /* "cython/flux_wrap.pyx":73
+  /* "cython/flux_wrap.pyx":85
  *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
  *         self.fluxlistcpp.Edot.infinity += Edot
  *         self.fluxlistcpp.Ldot.infinity += Ldot             # <<<<<<<<<<<<<<
@@ -23356,7 +24240,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14set_infinity_fluxes(struct _
  */
   __pyx_v_self->fluxlistcpp->Ldot.infinity = (__pyx_v_self->fluxlistcpp->Ldot.infinity + __pyx_v_Ldot);
 
-  /* "cython/flux_wrap.pyx":74
+  /* "cython/flux_wrap.pyx":86
  *         self.fluxlistcpp.Edot.infinity += Edot
  *         self.fluxlistcpp.Ldot.infinity += Ldot
  *         self.fluxlistcpp.Qdot.infinity += Qdot             # <<<<<<<<<<<<<<
@@ -23365,7 +24249,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14set_infinity_fluxes(struct _
  */
   __pyx_v_self->fluxlistcpp->Qdot.infinity = (__pyx_v_self->fluxlistcpp->Qdot.infinity + __pyx_v_Qdot);
 
-  /* "cython/flux_wrap.pyx":71
+  /* "cython/flux_wrap.pyx":83
  *         self.fluxlistcpp.Qdot.horizon += Qdot
  * 
  *     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):             # <<<<<<<<<<<<<<
@@ -23380,7 +24264,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14set_infinity_fluxes(struct _
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":76
+/* "cython/flux_wrap.pyx":88
  *         self.fluxlistcpp.Qdot.infinity += Qdot
  * 
  *     def add_fluxes(self, double EdotH, double LdotH, double QdotH, double EdotI, double LdotI, double QdotI):             # <<<<<<<<<<<<<<
@@ -23434,35 +24318,35 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_17add_fluxes(PyObject *__pyx_v
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_LdotH)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 1); __PYX_ERR(4, 76, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 1); __PYX_ERR(4, 88, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_QdotH)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 2); __PYX_ERR(4, 76, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 2); __PYX_ERR(4, 88, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_EdotI)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 3); __PYX_ERR(4, 76, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 3); __PYX_ERR(4, 88, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_LdotI)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 4); __PYX_ERR(4, 76, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 4); __PYX_ERR(4, 88, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_QdotI)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 5); __PYX_ERR(4, 76, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, 5); __PYX_ERR(4, 88, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "add_fluxes") < 0)) __PYX_ERR(4, 76, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "add_fluxes") < 0)) __PYX_ERR(4, 88, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 6) {
       goto __pyx_L5_argtuple_error;
@@ -23474,16 +24358,16 @@ static PyObject *__pyx_pw_11cybhpt_full_8FluxList_17add_fluxes(PyObject *__pyx_v
       values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
       values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
     }
-    __pyx_v_EdotH = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_EdotH == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 76, __pyx_L3_error)
-    __pyx_v_LdotH = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_LdotH == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 76, __pyx_L3_error)
-    __pyx_v_QdotH = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_QdotH == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 76, __pyx_L3_error)
-    __pyx_v_EdotI = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_EdotI == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 76, __pyx_L3_error)
-    __pyx_v_LdotI = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_LdotI == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 76, __pyx_L3_error)
-    __pyx_v_QdotI = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_QdotI == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 76, __pyx_L3_error)
+    __pyx_v_EdotH = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_EdotH == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 88, __pyx_L3_error)
+    __pyx_v_LdotH = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_LdotH == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 88, __pyx_L3_error)
+    __pyx_v_QdotH = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_QdotH == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 88, __pyx_L3_error)
+    __pyx_v_EdotI = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_EdotI == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 88, __pyx_L3_error)
+    __pyx_v_LdotI = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_LdotI == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 88, __pyx_L3_error)
+    __pyx_v_QdotI = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_QdotI == (double)-1) && PyErr_Occurred())) __PYX_ERR(4, 88, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 76, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("add_fluxes", 1, 6, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 88, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.FluxList.add_fluxes", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -23501,7 +24385,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_16add_fluxes(struct __pyx_obj_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("add_fluxes", 0);
 
-  /* "cython/flux_wrap.pyx":77
+  /* "cython/flux_wrap.pyx":89
  * 
  *     def add_fluxes(self, double EdotH, double LdotH, double QdotH, double EdotI, double LdotI, double QdotI):
  *         self.fluxlistcpp.Edot.horizon += EdotH             # <<<<<<<<<<<<<<
@@ -23510,7 +24394,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_16add_fluxes(struct __pyx_obj_
  */
   __pyx_v_self->fluxlistcpp->Edot.horizon = (__pyx_v_self->fluxlistcpp->Edot.horizon + __pyx_v_EdotH);
 
-  /* "cython/flux_wrap.pyx":78
+  /* "cython/flux_wrap.pyx":90
  *     def add_fluxes(self, double EdotH, double LdotH, double QdotH, double EdotI, double LdotI, double QdotI):
  *         self.fluxlistcpp.Edot.horizon += EdotH
  *         self.fluxlistcpp.Ldot.horizon += LdotH             # <<<<<<<<<<<<<<
@@ -23519,7 +24403,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_16add_fluxes(struct __pyx_obj_
  */
   __pyx_v_self->fluxlistcpp->Ldot.horizon = (__pyx_v_self->fluxlistcpp->Ldot.horizon + __pyx_v_LdotH);
 
-  /* "cython/flux_wrap.pyx":79
+  /* "cython/flux_wrap.pyx":91
  *         self.fluxlistcpp.Edot.horizon += EdotH
  *         self.fluxlistcpp.Ldot.horizon += LdotH
  *         self.fluxlistcpp.Qdot.horizon += QdotH             # <<<<<<<<<<<<<<
@@ -23528,7 +24412,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_16add_fluxes(struct __pyx_obj_
  */
   __pyx_v_self->fluxlistcpp->Qdot.horizon = (__pyx_v_self->fluxlistcpp->Qdot.horizon + __pyx_v_QdotH);
 
-  /* "cython/flux_wrap.pyx":81
+  /* "cython/flux_wrap.pyx":93
  *         self.fluxlistcpp.Qdot.horizon += QdotH
  * 
  *         self.fluxlistcpp.Edot.infinity += EdotI             # <<<<<<<<<<<<<<
@@ -23537,7 +24421,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_16add_fluxes(struct __pyx_obj_
  */
   __pyx_v_self->fluxlistcpp->Edot.infinity = (__pyx_v_self->fluxlistcpp->Edot.infinity + __pyx_v_EdotI);
 
-  /* "cython/flux_wrap.pyx":82
+  /* "cython/flux_wrap.pyx":94
  * 
  *         self.fluxlistcpp.Edot.infinity += EdotI
  *         self.fluxlistcpp.Ldot.infinity += LdotI             # <<<<<<<<<<<<<<
@@ -23546,7 +24430,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_16add_fluxes(struct __pyx_obj_
  */
   __pyx_v_self->fluxlistcpp->Ldot.infinity = (__pyx_v_self->fluxlistcpp->Ldot.infinity + __pyx_v_LdotI);
 
-  /* "cython/flux_wrap.pyx":83
+  /* "cython/flux_wrap.pyx":95
  *         self.fluxlistcpp.Edot.infinity += EdotI
  *         self.fluxlistcpp.Ldot.infinity += LdotI
  *         self.fluxlistcpp.Qdot.infinity += QdotI             # <<<<<<<<<<<<<<
@@ -23555,7 +24439,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_16add_fluxes(struct __pyx_obj_
  */
   __pyx_v_self->fluxlistcpp->Qdot.infinity = (__pyx_v_self->fluxlistcpp->Qdot.infinity + __pyx_v_QdotI);
 
-  /* "cython/flux_wrap.pyx":76
+  /* "cython/flux_wrap.pyx":88
  *         self.fluxlistcpp.Qdot.infinity += Qdot
  * 
  *     def add_fluxes(self, double EdotH, double LdotH, double QdotH, double EdotI, double LdotI, double QdotI):             # <<<<<<<<<<<<<<
@@ -23570,7 +24454,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_16add_fluxes(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":86
+/* "cython/flux_wrap.pyx":98
  * 
  *     @property
  *     def energy(self):             # <<<<<<<<<<<<<<
@@ -23601,7 +24485,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6energy___get__(struct __pyx_o
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/flux_wrap.pyx":87
+  /* "cython/flux_wrap.pyx":99
  *     @property
  *     def energy(self):
  *         return {             # <<<<<<<<<<<<<<
@@ -23610,40 +24494,36 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6energy___get__(struct __pyx_o
  */
   __Pyx_XDECREF(__pyx_r);
 
-<<<<<<< HEAD
-  /* "cython/flux_wrap.pyx":55
-=======
-  /* "cython/flux_wrap.pyx":88
->>>>>>> e2354353061328e127ed9ca05c77018a631e6945
+  /* "cython/flux_wrap.pyx":100
  *     def energy(self):
  *         return {
  *             "I": self.fluxlistcpp.Edot.infinity,             # <<<<<<<<<<<<<<
  *             "H": self.fluxlistcpp.Edot.horizon
  *         }
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 88, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Edot.infinity); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 88, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Edot.infinity); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_I, __pyx_t_2) < 0) __PYX_ERR(4, 88, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_I, __pyx_t_2) < 0) __PYX_ERR(4, 100, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/flux_wrap.pyx":89
+  /* "cython/flux_wrap.pyx":101
  *         return {
  *             "I": self.fluxlistcpp.Edot.infinity,
  *             "H": self.fluxlistcpp.Edot.horizon             # <<<<<<<<<<<<<<
  *         }
  * 
  */
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Edot.horizon); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 89, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Edot.horizon); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 101, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_H, __pyx_t_2) < 0) __PYX_ERR(4, 88, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_H, __pyx_t_2) < 0) __PYX_ERR(4, 100, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/flux_wrap.pyx":86
+  /* "cython/flux_wrap.pyx":98
  * 
  *     @property
  *     def energy(self):             # <<<<<<<<<<<<<<
@@ -23663,7 +24543,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_6energy___get__(struct __pyx_o
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":93
+/* "cython/flux_wrap.pyx":105
  * 
  *     @property
  *     def angularmomentum(self):             # <<<<<<<<<<<<<<
@@ -23694,7 +24574,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_15angularmomentum___get__(stru
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/flux_wrap.pyx":94
+  /* "cython/flux_wrap.pyx":106
  *     @property
  *     def angularmomentum(self):
  *         return {             # <<<<<<<<<<<<<<
@@ -23703,40 +24583,36 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_15angularmomentum___get__(stru
  */
   __Pyx_XDECREF(__pyx_r);
 
-<<<<<<< HEAD
-  /* "cython/flux_wrap.pyx":62
-=======
-  /* "cython/flux_wrap.pyx":95
->>>>>>> e2354353061328e127ed9ca05c77018a631e6945
+  /* "cython/flux_wrap.pyx":107
  *     def angularmomentum(self):
  *         return {
  *             "I": self.fluxlistcpp.Ldot.infinity,             # <<<<<<<<<<<<<<
  *             "H": self.fluxlistcpp.Ldot.horizon
  *         }
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 95, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 107, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Ldot.infinity); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 95, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Ldot.infinity); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 107, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_I, __pyx_t_2) < 0) __PYX_ERR(4, 95, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_I, __pyx_t_2) < 0) __PYX_ERR(4, 107, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/flux_wrap.pyx":96
+  /* "cython/flux_wrap.pyx":108
  *         return {
  *             "I": self.fluxlistcpp.Ldot.infinity,
  *             "H": self.fluxlistcpp.Ldot.horizon             # <<<<<<<<<<<<<<
  *         }
  * 
  */
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Ldot.horizon); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 96, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Ldot.horizon); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_H, __pyx_t_2) < 0) __PYX_ERR(4, 95, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_H, __pyx_t_2) < 0) __PYX_ERR(4, 107, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/flux_wrap.pyx":93
+  /* "cython/flux_wrap.pyx":105
  * 
  *     @property
  *     def angularmomentum(self):             # <<<<<<<<<<<<<<
@@ -23756,7 +24632,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_15angularmomentum___get__(stru
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":100
+/* "cython/flux_wrap.pyx":112
  * 
  *     @property
  *     def carterconstant(self):             # <<<<<<<<<<<<<<
@@ -23787,7 +24663,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14carterconstant___get__(struc
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/flux_wrap.pyx":101
+  /* "cython/flux_wrap.pyx":113
  *     @property
  *     def carterconstant(self):
  *         return {             # <<<<<<<<<<<<<<
@@ -23796,40 +24672,36 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_14carterconstant___get__(struc
  */
   __Pyx_XDECREF(__pyx_r);
 
-<<<<<<< HEAD
-  /* "cython/flux_wrap.pyx":69
-=======
-  /* "cython/flux_wrap.pyx":102
->>>>>>> e2354353061328e127ed9ca05c77018a631e6945
+  /* "cython/flux_wrap.pyx":114
  *     def carterconstant(self):
  *         return {
  *             "I": self.fluxlistcpp.Qdot.infinity,             # <<<<<<<<<<<<<<
  *             "H": self.fluxlistcpp.Qdot.horizon
  *         }
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 102, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 114, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Qdot.infinity); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 102, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Qdot.infinity); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 114, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_I, __pyx_t_2) < 0) __PYX_ERR(4, 102, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_I, __pyx_t_2) < 0) __PYX_ERR(4, 114, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/flux_wrap.pyx":103
+  /* "cython/flux_wrap.pyx":115
  *         return {
  *             "I": self.fluxlistcpp.Qdot.infinity,
  *             "H": self.fluxlistcpp.Qdot.horizon             # <<<<<<<<<<<<<<
  *         }
  * 
  */
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Qdot.horizon); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 103, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->fluxlistcpp->Qdot.horizon); if (unlikely(!__pyx_t_2)) __PYX_ERR(4, 115, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_H, __pyx_t_2) < 0) __PYX_ERR(4, 102, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_H, __pyx_t_2) < 0) __PYX_ERR(4, 114, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/flux_wrap.pyx":100
+  /* "cython/flux_wrap.pyx":112
  * 
  *     @property
  *     def carterconstant(self):             # <<<<<<<<<<<<<<
@@ -23962,7 +24834,7 @@ static PyObject *__pyx_pf_11cybhpt_full_8FluxList_20__setstate_cython__(CYTHON_U
   return __pyx_r;
 }
 
-/* "cython/flux_wrap.pyx":107
+/* "cython/flux_wrap.pyx":119
  * 
  * 
  * def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):             # <<<<<<<<<<<<<<
@@ -24008,17 +24880,17 @@ static PyObject *__pyx_pw_11cybhpt_full_41flux(PyObject *__pyx_self, PyObject *_
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_geo)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("flux", 1, 3, 3, 1); __PYX_ERR(4, 107, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("flux", 1, 3, 3, 1); __PYX_ERR(4, 119, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_teuk)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("flux", 1, 3, 3, 2); __PYX_ERR(4, 107, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("flux", 1, 3, 3, 2); __PYX_ERR(4, 119, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "flux") < 0)) __PYX_ERR(4, 107, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "flux") < 0)) __PYX_ERR(4, 119, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -24027,20 +24899,20 @@ static PyObject *__pyx_pw_11cybhpt_full_41flux(PyObject *__pyx_self, PyObject *_
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_s = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_s == (int)-1) && PyErr_Occurred())) __PYX_ERR(4, 107, __pyx_L3_error)
+    __pyx_v_s = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_s == (int)-1) && PyErr_Occurred())) __PYX_ERR(4, 119, __pyx_L3_error)
     __pyx_v_geo = ((struct __pyx_obj_11cybhpt_full_KerrGeodesic *)values[1]);
     __pyx_v_teuk = ((struct __pyx_obj_11cybhpt_full_TeukolskyMode *)values[2]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("flux", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 107, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("flux", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(4, 119, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.flux", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_geo), __pyx_ptype_11cybhpt_full_KerrGeodesic, 1, "geo", 0))) __PYX_ERR(4, 107, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_teuk), __pyx_ptype_11cybhpt_full_TeukolskyMode, 1, "teuk", 0))) __PYX_ERR(4, 107, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_geo), __pyx_ptype_11cybhpt_full_KerrGeodesic, 1, "geo", 0))) __PYX_ERR(4, 119, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_teuk), __pyx_ptype_11cybhpt_full_TeukolskyMode, 1, "teuk", 0))) __PYX_ERR(4, 119, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_40flux(__pyx_self, __pyx_v_s, __pyx_v_geo, __pyx_v_teuk);
 
   /* function exit code */
@@ -24063,7 +24935,7 @@ static PyObject *__pyx_pf_11cybhpt_full_40flux(CYTHON_UNUSED PyObject *__pyx_sel
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("flux", 0);
 
-  /* "cython/flux_wrap.pyx":108
+  /* "cython/flux_wrap.pyx":120
  * 
  * def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):
  *     cdef FluxListCPP fluxescpp = flux_mode(s, dereference(geo.geocpp), dereference(teuk.teukcpp), include_minus_m = 0)             # <<<<<<<<<<<<<<
@@ -24072,39 +24944,42 @@ static PyObject *__pyx_pf_11cybhpt_full_40flux(CYTHON_UNUSED PyObject *__pyx_sel
  */
   __pyx_v_fluxescpp = flux_mode(__pyx_v_s, (*__pyx_v_geo->geocpp), (*__pyx_v_teuk->teukcpp), 0);
 
-  /* "cython/flux_wrap.pyx":109
+  /* "cython/flux_wrap.pyx":121
  * def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):
  *     cdef FluxListCPP fluxescpp = flux_mode(s, dereference(geo.geocpp), dereference(teuk.teukcpp), include_minus_m = 0)
  *     fluxes = FluxList()             # <<<<<<<<<<<<<<
  *     fluxes.set_fluxes(fluxescpp)
  *     return fluxes
  */
-  __pyx_t_1 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_11cybhpt_full_FluxList)); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 109, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_11cybhpt_full_FluxList)); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 121, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_fluxes = ((struct __pyx_obj_11cybhpt_full_FluxList *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "cython/flux_wrap.pyx":110
+  /* "cython/flux_wrap.pyx":122
  *     cdef FluxListCPP fluxescpp = flux_mode(s, dereference(geo.geocpp), dereference(teuk.teukcpp), include_minus_m = 0)
  *     fluxes = FluxList()
  *     fluxes.set_fluxes(fluxescpp)             # <<<<<<<<<<<<<<
  *     return fluxes
+ * 
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_11cybhpt_full_FluxList *)__pyx_v_fluxes->__pyx_vtab)->set_fluxes(__pyx_v_fluxes, __pyx_v_fluxescpp); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 110, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_11cybhpt_full_FluxList *)__pyx_v_fluxes->__pyx_vtab)->set_fluxes(__pyx_v_fluxes, __pyx_v_fluxescpp); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 122, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/flux_wrap.pyx":111
+  /* "cython/flux_wrap.pyx":123
  *     fluxes = FluxList()
  *     fluxes.set_fluxes(fluxescpp)
  *     return fluxes             # <<<<<<<<<<<<<<
+ * 
+ * # def full_flux_parallel_l_py(int s, KerrGeodesic geo, int modeMax, unicode wdir):
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(((PyObject *)__pyx_v_fluxes));
   __pyx_r = ((PyObject *)__pyx_v_fluxes);
   goto __pyx_L0;
 
-  /* "cython/flux_wrap.pyx":107
+  /* "cython/flux_wrap.pyx":119
  * 
  * 
  * def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):             # <<<<<<<<<<<<<<
@@ -24124,11 +24999,11 @@ static PyObject *__pyx_pf_11cybhpt_full_40flux(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "cython/redshift_wrap.pyx":41
+/* "cython/redshift_wrap.pyx":39
  * 
  * 
- * def metric_coefficients_cython_ORG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
- *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, np, a, r, z)
+ * def metric_coefficients_cython_ORG(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):             # <<<<<<<<<<<<<<
+ *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
  */
 
@@ -24141,7 +25016,7 @@ static PyObject *__pyx_pw_11cybhpt_full_43metric_coefficients_cython_ORG(PyObjec
   int __pyx_v_nt;
   int __pyx_v_nr;
   int __pyx_v_nz;
-  int __pyx_v_np;
+  int __pyx_v_nphi;
   double __pyx_v_a;
   double __pyx_v_r;
   double __pyx_v_z;
@@ -24152,7 +25027,7 @@ static PyObject *__pyx_pw_11cybhpt_full_43metric_coefficients_cython_ORG(PyObjec
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("metric_coefficients_cython_ORG (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_ai,&__pyx_n_s_bi,&__pyx_n_s_nt,&__pyx_n_s_nr,&__pyx_n_s_nz,&__pyx_n_s_np,&__pyx_n_s_a,&__pyx_n_s_r,&__pyx_n_s_z,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_ai,&__pyx_n_s_bi,&__pyx_n_s_nt,&__pyx_n_s_nr,&__pyx_n_s_nz,&__pyx_n_s_nphi,&__pyx_n_s_a,&__pyx_n_s_r,&__pyx_n_s_z,0};
     PyObject* values[9] = {0,0,0,0,0,0,0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -24188,53 +25063,53 @@ static PyObject *__pyx_pw_11cybhpt_full_43metric_coefficients_cython_ORG(PyObjec
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_bi)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 1); __PYX_ERR(5, 41, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 1); __PYX_ERR(5, 39, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nt)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 2); __PYX_ERR(5, 41, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 2); __PYX_ERR(5, 39, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nr)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 3); __PYX_ERR(5, 41, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 3); __PYX_ERR(5, 39, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nz)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 4); __PYX_ERR(5, 41, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 4); __PYX_ERR(5, 39, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
-        if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_np)) != 0)) kw_args--;
+        if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nphi)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 5); __PYX_ERR(5, 41, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 5); __PYX_ERR(5, 39, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_a)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 6); __PYX_ERR(5, 41, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 6); __PYX_ERR(5, 39, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (likely((values[7] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_r)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 7); __PYX_ERR(5, 41, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 7); __PYX_ERR(5, 39, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  8:
         if (likely((values[8] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_z)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 8); __PYX_ERR(5, 41, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, 8); __PYX_ERR(5, 39, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "metric_coefficients_cython_ORG") < 0)) __PYX_ERR(5, 41, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "metric_coefficients_cython_ORG") < 0)) __PYX_ERR(5, 39, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 9) {
       goto __pyx_L5_argtuple_error;
@@ -24249,32 +25124,32 @@ static PyObject *__pyx_pw_11cybhpt_full_43metric_coefficients_cython_ORG(PyObjec
       values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
       values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
     }
-    __pyx_v_ai = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_ai == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 41, __pyx_L3_error)
-    __pyx_v_bi = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_bi == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 41, __pyx_L3_error)
-    __pyx_v_nt = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_nt == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 41, __pyx_L3_error)
-    __pyx_v_nr = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_nr == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 41, __pyx_L3_error)
-    __pyx_v_nz = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_nz == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 41, __pyx_L3_error)
-    __pyx_v_np = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_np == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 41, __pyx_L3_error)
-    __pyx_v_a = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 41, __pyx_L3_error)
-    __pyx_v_r = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_r == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 41, __pyx_L3_error)
-    __pyx_v_z = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_z == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 41, __pyx_L3_error)
+    __pyx_v_ai = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_ai == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 39, __pyx_L3_error)
+    __pyx_v_bi = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_bi == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 39, __pyx_L3_error)
+    __pyx_v_nt = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_nt == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 39, __pyx_L3_error)
+    __pyx_v_nr = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_nr == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 39, __pyx_L3_error)
+    __pyx_v_nz = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_nz == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 39, __pyx_L3_error)
+    __pyx_v_nphi = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_nphi == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 39, __pyx_L3_error)
+    __pyx_v_a = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 39, __pyx_L3_error)
+    __pyx_v_r = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_r == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 39, __pyx_L3_error)
+    __pyx_v_z = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_z == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 39, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 41, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_ORG", 1, 9, 9, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 39, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.metric_coefficients_cython_ORG", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11cybhpt_full_42metric_coefficients_cython_ORG(__pyx_self, __pyx_v_ai, __pyx_v_bi, __pyx_v_nt, __pyx_v_nr, __pyx_v_nz, __pyx_v_np, __pyx_v_a, __pyx_v_r, __pyx_v_z);
+  __pyx_r = __pyx_pf_11cybhpt_full_42metric_coefficients_cython_ORG(__pyx_self, __pyx_v_ai, __pyx_v_bi, __pyx_v_nt, __pyx_v_nr, __pyx_v_nz, __pyx_v_nphi, __pyx_v_a, __pyx_v_r, __pyx_v_z);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_42metric_coefficients_cython_ORG(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_ai, int __pyx_v_bi, int __pyx_v_nt, int __pyx_v_nr, int __pyx_v_nz, int __pyx_v_np, double __pyx_v_a, double __pyx_v_r, double __pyx_v_z) {
+static PyObject *__pyx_pf_11cybhpt_full_42metric_coefficients_cython_ORG(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_ai, int __pyx_v_bi, int __pyx_v_nt, int __pyx_v_nr, int __pyx_v_nz, int __pyx_v_nphi, double __pyx_v_a, double __pyx_v_r, double __pyx_v_z) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -24283,25 +25158,25 @@ static PyObject *__pyx_pf_11cybhpt_full_42metric_coefficients_cython_ORG(CYTHON_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("metric_coefficients_cython_ORG", 0);
 
-  /* "cython/redshift_wrap.pyx":42
+  /* "cython/redshift_wrap.pyx":40
  * 
- * def metric_coefficients_cython_ORG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z):
- *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, np, a, r, z)             # <<<<<<<<<<<<<<
+ * def metric_coefficients_cython_ORG(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):
+ *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, nphi, a, r, z)             # <<<<<<<<<<<<<<
  * 
- * def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z):
+ * def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(metric_coefficient_ORG(__pyx_v_ai, __pyx_v_bi, __pyx_v_nt, __pyx_v_nr, __pyx_v_nz, __pyx_v_np, __pyx_v_a, __pyx_v_r, __pyx_v_z)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 42, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(metric_coefficient_ORG(__pyx_v_ai, __pyx_v_bi, __pyx_v_nt, __pyx_v_nr, __pyx_v_nz, __pyx_v_nphi, __pyx_v_a, __pyx_v_r, __pyx_v_z)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/redshift_wrap.pyx":41
+  /* "cython/redshift_wrap.pyx":39
  * 
  * 
- * def metric_coefficients_cython_ORG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
- *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, np, a, r, z)
+ * def metric_coefficients_cython_ORG(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):             # <<<<<<<<<<<<<<
+ *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
  */
 
@@ -24316,11 +25191,11 @@ static PyObject *__pyx_pf_11cybhpt_full_42metric_coefficients_cython_ORG(CYTHON_
   return __pyx_r;
 }
 
-/* "cython/redshift_wrap.pyx":44
- *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, np, a, r, z)
+/* "cython/redshift_wrap.pyx":42
+ *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
- * def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
- *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, np, a, r, z)
+ * def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):             # <<<<<<<<<<<<<<
+ *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
  */
 
@@ -24333,7 +25208,7 @@ static PyObject *__pyx_pw_11cybhpt_full_45metric_coefficients_cython_IRG(PyObjec
   int __pyx_v_nt;
   int __pyx_v_nr;
   int __pyx_v_nz;
-  int __pyx_v_np;
+  int __pyx_v_nphi;
   double __pyx_v_a;
   double __pyx_v_r;
   double __pyx_v_z;
@@ -24344,7 +25219,7 @@ static PyObject *__pyx_pw_11cybhpt_full_45metric_coefficients_cython_IRG(PyObjec
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("metric_coefficients_cython_IRG (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_ai,&__pyx_n_s_bi,&__pyx_n_s_nt,&__pyx_n_s_nr,&__pyx_n_s_nz,&__pyx_n_s_np,&__pyx_n_s_a,&__pyx_n_s_r,&__pyx_n_s_z,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_ai,&__pyx_n_s_bi,&__pyx_n_s_nt,&__pyx_n_s_nr,&__pyx_n_s_nz,&__pyx_n_s_nphi,&__pyx_n_s_a,&__pyx_n_s_r,&__pyx_n_s_z,0};
     PyObject* values[9] = {0,0,0,0,0,0,0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -24380,53 +25255,53 @@ static PyObject *__pyx_pw_11cybhpt_full_45metric_coefficients_cython_IRG(PyObjec
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_bi)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 1); __PYX_ERR(5, 44, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 1); __PYX_ERR(5, 42, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nt)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 2); __PYX_ERR(5, 44, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 2); __PYX_ERR(5, 42, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nr)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 3); __PYX_ERR(5, 44, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 3); __PYX_ERR(5, 42, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nz)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 4); __PYX_ERR(5, 44, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 4); __PYX_ERR(5, 42, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
-        if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_np)) != 0)) kw_args--;
+        if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nphi)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 5); __PYX_ERR(5, 44, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 5); __PYX_ERR(5, 42, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_a)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 6); __PYX_ERR(5, 44, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 6); __PYX_ERR(5, 42, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (likely((values[7] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_r)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 7); __PYX_ERR(5, 44, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 7); __PYX_ERR(5, 42, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  8:
         if (likely((values[8] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_z)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 8); __PYX_ERR(5, 44, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, 8); __PYX_ERR(5, 42, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "metric_coefficients_cython_IRG") < 0)) __PYX_ERR(5, 44, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "metric_coefficients_cython_IRG") < 0)) __PYX_ERR(5, 42, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 9) {
       goto __pyx_L5_argtuple_error;
@@ -24441,32 +25316,32 @@ static PyObject *__pyx_pw_11cybhpt_full_45metric_coefficients_cython_IRG(PyObjec
       values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
       values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
     }
-    __pyx_v_ai = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_ai == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 44, __pyx_L3_error)
-    __pyx_v_bi = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_bi == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 44, __pyx_L3_error)
-    __pyx_v_nt = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_nt == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 44, __pyx_L3_error)
-    __pyx_v_nr = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_nr == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 44, __pyx_L3_error)
-    __pyx_v_nz = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_nz == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 44, __pyx_L3_error)
-    __pyx_v_np = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_np == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 44, __pyx_L3_error)
-    __pyx_v_a = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 44, __pyx_L3_error)
-    __pyx_v_r = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_r == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 44, __pyx_L3_error)
-    __pyx_v_z = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_z == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 44, __pyx_L3_error)
+    __pyx_v_ai = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_ai == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 42, __pyx_L3_error)
+    __pyx_v_bi = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_bi == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 42, __pyx_L3_error)
+    __pyx_v_nt = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_nt == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 42, __pyx_L3_error)
+    __pyx_v_nr = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_nr == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 42, __pyx_L3_error)
+    __pyx_v_nz = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_nz == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 42, __pyx_L3_error)
+    __pyx_v_nphi = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_nphi == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 42, __pyx_L3_error)
+    __pyx_v_a = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_a == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 42, __pyx_L3_error)
+    __pyx_v_r = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_r == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 42, __pyx_L3_error)
+    __pyx_v_z = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_z == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 42, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 44, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("metric_coefficients_cython_IRG", 1, 9, 9, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 42, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.metric_coefficients_cython_IRG", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11cybhpt_full_44metric_coefficients_cython_IRG(__pyx_self, __pyx_v_ai, __pyx_v_bi, __pyx_v_nt, __pyx_v_nr, __pyx_v_nz, __pyx_v_np, __pyx_v_a, __pyx_v_r, __pyx_v_z);
+  __pyx_r = __pyx_pf_11cybhpt_full_44metric_coefficients_cython_IRG(__pyx_self, __pyx_v_ai, __pyx_v_bi, __pyx_v_nt, __pyx_v_nr, __pyx_v_nz, __pyx_v_nphi, __pyx_v_a, __pyx_v_r, __pyx_v_z);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11cybhpt_full_44metric_coefficients_cython_IRG(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_ai, int __pyx_v_bi, int __pyx_v_nt, int __pyx_v_nr, int __pyx_v_nz, int __pyx_v_np, double __pyx_v_a, double __pyx_v_r, double __pyx_v_z) {
+static PyObject *__pyx_pf_11cybhpt_full_44metric_coefficients_cython_IRG(CYTHON_UNUSED PyObject *__pyx_self, int __pyx_v_ai, int __pyx_v_bi, int __pyx_v_nt, int __pyx_v_nr, int __pyx_v_nz, int __pyx_v_nphi, double __pyx_v_a, double __pyx_v_r, double __pyx_v_z) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -24475,25 +25350,25 @@ static PyObject *__pyx_pf_11cybhpt_full_44metric_coefficients_cython_IRG(CYTHON_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("metric_coefficients_cython_IRG", 0);
 
-  /* "cython/redshift_wrap.pyx":45
+  /* "cython/redshift_wrap.pyx":43
  * 
- * def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z):
- *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, np, a, r, z)             # <<<<<<<<<<<<<<
+ * def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):
+ *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, nphi, a, r, z)             # <<<<<<<<<<<<<<
  * 
  * def circular_redshift(unicode filename, unicode gauge, int lmax, KerrGeodesic geo):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(metric_coefficient_IRG(__pyx_v_ai, __pyx_v_bi, __pyx_v_nt, __pyx_v_nr, __pyx_v_nz, __pyx_v_np, __pyx_v_a, __pyx_v_r, __pyx_v_z)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 45, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(metric_coefficient_IRG(__pyx_v_ai, __pyx_v_bi, __pyx_v_nt, __pyx_v_nr, __pyx_v_nz, __pyx_v_nphi, __pyx_v_a, __pyx_v_r, __pyx_v_z)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 43, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/redshift_wrap.pyx":44
- *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, np, a, r, z)
+  /* "cython/redshift_wrap.pyx":42
+ *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
- * def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
- *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, np, a, r, z)
+ * def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):             # <<<<<<<<<<<<<<
+ *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
  */
 
@@ -24508,8 +25383,8 @@ static PyObject *__pyx_pf_11cybhpt_full_44metric_coefficients_cython_IRG(CYTHON_
   return __pyx_r;
 }
 
-/* "cython/redshift_wrap.pyx":47
- *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, np, a, r, z)
+/* "cython/redshift_wrap.pyx":45
+ *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
  * def circular_redshift(unicode filename, unicode gauge, int lmax, KerrGeodesic geo):             # <<<<<<<<<<<<<<
  *     return redshift_circular(filename.encode(), str_to_gauge(gauge), lmax, dereference(geo.geocpp))
@@ -24557,23 +25432,23 @@ static PyObject *__pyx_pw_11cybhpt_full_47circular_redshift(PyObject *__pyx_self
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_gauge)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("circular_redshift", 1, 4, 4, 1); __PYX_ERR(5, 47, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("circular_redshift", 1, 4, 4, 1); __PYX_ERR(5, 45, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_lmax)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("circular_redshift", 1, 4, 4, 2); __PYX_ERR(5, 47, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("circular_redshift", 1, 4, 4, 2); __PYX_ERR(5, 45, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_geo)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("circular_redshift", 1, 4, 4, 3); __PYX_ERR(5, 47, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("circular_redshift", 1, 4, 4, 3); __PYX_ERR(5, 45, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "circular_redshift") < 0)) __PYX_ERR(5, 47, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "circular_redshift") < 0)) __PYX_ERR(5, 45, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
@@ -24585,20 +25460,20 @@ static PyObject *__pyx_pw_11cybhpt_full_47circular_redshift(PyObject *__pyx_self
     }
     __pyx_v_filename = ((PyObject*)values[0]);
     __pyx_v_gauge = ((PyObject*)values[1]);
-    __pyx_v_lmax = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_lmax == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 47, __pyx_L3_error)
+    __pyx_v_lmax = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_lmax == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 45, __pyx_L3_error)
     __pyx_v_geo = ((struct __pyx_obj_11cybhpt_full_KerrGeodesic *)values[3]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("circular_redshift", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 47, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("circular_redshift", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 45, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.circular_redshift", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyUnicode_Type), 1, "filename", 1))) __PYX_ERR(5, 47, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_gauge), (&PyUnicode_Type), 1, "gauge", 1))) __PYX_ERR(5, 47, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_geo), __pyx_ptype_11cybhpt_full_KerrGeodesic, 1, "geo", 0))) __PYX_ERR(5, 47, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_filename), (&PyUnicode_Type), 1, "filename", 1))) __PYX_ERR(5, 45, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_gauge), (&PyUnicode_Type), 1, "gauge", 1))) __PYX_ERR(5, 45, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_geo), __pyx_ptype_11cybhpt_full_KerrGeodesic, 1, "geo", 0))) __PYX_ERR(5, 45, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_46circular_redshift(__pyx_self, __pyx_v_filename, __pyx_v_gauge, __pyx_v_lmax, __pyx_v_geo);
 
   /* function exit code */
@@ -24621,7 +25496,7 @@ static PyObject *__pyx_pf_11cybhpt_full_46circular_redshift(CYTHON_UNUSED PyObje
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("circular_redshift", 0);
 
-  /* "cython/redshift_wrap.pyx":48
+  /* "cython/redshift_wrap.pyx":46
  * 
  * def circular_redshift(unicode filename, unicode gauge, int lmax, KerrGeodesic geo):
  *     return redshift_circular(filename.encode(), str_to_gauge(gauge), lmax, dereference(geo.geocpp))             # <<<<<<<<<<<<<<
@@ -24631,21 +25506,21 @@ static PyObject *__pyx_pf_11cybhpt_full_46circular_redshift(CYTHON_UNUSED PyObje
   __Pyx_XDECREF(__pyx_r);
   if (unlikely(__pyx_v_filename == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
-    __PYX_ERR(5, 48, __pyx_L1_error)
+    __PYX_ERR(5, 46, __pyx_L1_error)
   }
-  __pyx_t_1 = PyUnicode_AsEncodedString(__pyx_v_filename, NULL, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 48, __pyx_L1_error)
+  __pyx_t_1 = PyUnicode_AsEncodedString(__pyx_v_filename, NULL, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(5, 48, __pyx_L1_error)
+  __pyx_t_2 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(5, 46, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_3 = __pyx_f_11cybhpt_full_str_to_gauge(__pyx_v_gauge); if (unlikely(PyErr_Occurred())) __PYX_ERR(5, 48, __pyx_L1_error)
-  __pyx_t_1 = __Pyx_void_to_None(redshift_circular(__pyx_t_2, __pyx_t_3, __pyx_v_lmax, (*__pyx_v_geo->geocpp))); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 48, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_11cybhpt_full_str_to_gauge(__pyx_v_gauge); if (unlikely(PyErr_Occurred())) __PYX_ERR(5, 46, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_void_to_None(redshift_circular(__pyx_t_2, __pyx_t_3, __pyx_v_lmax, (*__pyx_v_geo->geocpp))); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/redshift_wrap.pyx":47
- *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, np, a, r, z)
+  /* "cython/redshift_wrap.pyx":45
+ *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
  * def circular_redshift(unicode filename, unicode gauge, int lmax, KerrGeodesic geo):             # <<<<<<<<<<<<<<
  *     return redshift_circular(filename.encode(), str_to_gauge(gauge), lmax, dereference(geo.geocpp))
@@ -24663,7 +25538,7 @@ static PyObject *__pyx_pf_11cybhpt_full_46circular_redshift(CYTHON_UNUSED PyObje
   return __pyx_r;
 }
 
-/* "cython/redshift_wrap.pyx":50
+/* "cython/redshift_wrap.pyx":48
  *     return redshift_circular(filename.encode(), str_to_gauge(gauge), lmax, dereference(geo.geocpp))
  * 
  * def run_tests():             # <<<<<<<<<<<<<<
@@ -24690,7 +25565,7 @@ static PyObject *__pyx_pf_11cybhpt_full_48run_tests(CYTHON_UNUSED PyObject *__py
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("run_tests", 0);
 
-  /* "cython/redshift_wrap.pyx":51
+  /* "cython/redshift_wrap.pyx":49
  * 
  * def run_tests():
  *     run_unit_tests()             # <<<<<<<<<<<<<<
@@ -24699,7 +25574,7 @@ static PyObject *__pyx_pf_11cybhpt_full_48run_tests(CYTHON_UNUSED PyObject *__py
  */
   run_unit_tests();
 
-  /* "cython/redshift_wrap.pyx":50
+  /* "cython/redshift_wrap.pyx":48
  *     return redshift_circular(filename.encode(), str_to_gauge(gauge), lmax, dereference(geo.geocpp))
  * 
  * def run_tests():             # <<<<<<<<<<<<<<
@@ -24714,7 +25589,7 @@ static PyObject *__pyx_pf_11cybhpt_full_48run_tests(CYTHON_UNUSED PyObject *__py
   return __pyx_r;
 }
 
-/* "cython/redshift_wrap.pyx":56
+/* "cython/redshift_wrap.pyx":54
  *     cdef RedshiftCoefficientsCPP *huucpp
  * 
  *     def __cinit__(self, unicode gauge, KerrGeodesic geo):             # <<<<<<<<<<<<<<
@@ -24756,11 +25631,11 @@ static int __pyx_pw_11cybhpt_full_20RedshiftCoefficients_1__cinit__(PyObject *__
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_geo)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, 1); __PYX_ERR(5, 56, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, 1); __PYX_ERR(5, 54, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(5, 56, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(5, 54, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -24773,14 +25648,14 @@ static int __pyx_pw_11cybhpt_full_20RedshiftCoefficients_1__cinit__(PyObject *__
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 56, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 54, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.RedshiftCoefficients.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_gauge), (&PyUnicode_Type), 1, "gauge", 1))) __PYX_ERR(5, 56, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_geo), __pyx_ptype_11cybhpt_full_KerrGeodesic, 1, "geo", 0))) __PYX_ERR(5, 56, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_gauge), (&PyUnicode_Type), 1, "gauge", 1))) __PYX_ERR(5, 54, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_geo), __pyx_ptype_11cybhpt_full_KerrGeodesic, 1, "geo", 0))) __PYX_ERR(5, 54, __pyx_L1_error)
   __pyx_r = __pyx_pf_11cybhpt_full_20RedshiftCoefficients___cinit__(((struct __pyx_obj_11cybhpt_full_RedshiftCoefficients *)__pyx_v_self), __pyx_v_gauge, __pyx_v_geo);
 
   /* function exit code */
@@ -24801,17 +25676,17 @@ static int __pyx_pf_11cybhpt_full_20RedshiftCoefficients___cinit__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "cython/redshift_wrap.pyx":57
+  /* "cython/redshift_wrap.pyx":55
  * 
  *     def __cinit__(self, unicode gauge, KerrGeodesic geo):
  *         self.huucpp = new RedshiftCoefficientsCPP(str_to_gauge(gauge), dereference(geo.geocpp))             # <<<<<<<<<<<<<<
  * 
  *     def __dealloc__(self):
  */
-  __pyx_t_1 = __pyx_f_11cybhpt_full_str_to_gauge(__pyx_v_gauge); if (unlikely(PyErr_Occurred())) __PYX_ERR(5, 57, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_11cybhpt_full_str_to_gauge(__pyx_v_gauge); if (unlikely(PyErr_Occurred())) __PYX_ERR(5, 55, __pyx_L1_error)
   __pyx_v_self->huucpp = new RedshiftCoefficients(__pyx_t_1, (*__pyx_v_geo->geocpp));
 
-  /* "cython/redshift_wrap.pyx":56
+  /* "cython/redshift_wrap.pyx":54
  *     cdef RedshiftCoefficientsCPP *huucpp
  * 
  *     def __cinit__(self, unicode gauge, KerrGeodesic geo):             # <<<<<<<<<<<<<<
@@ -24830,7 +25705,7 @@ static int __pyx_pf_11cybhpt_full_20RedshiftCoefficients___cinit__(struct __pyx_
   return __pyx_r;
 }
 
-/* "cython/redshift_wrap.pyx":59
+/* "cython/redshift_wrap.pyx":57
  *         self.huucpp = new RedshiftCoefficientsCPP(str_to_gauge(gauge), dereference(geo.geocpp))
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -24853,7 +25728,7 @@ static void __pyx_pf_11cybhpt_full_20RedshiftCoefficients_2__dealloc__(struct __
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "cython/redshift_wrap.pyx":60
+  /* "cython/redshift_wrap.pyx":58
  * 
  *     def __dealloc__(self):
  *         del self.huucpp             # <<<<<<<<<<<<<<
@@ -24862,7 +25737,7 @@ static void __pyx_pf_11cybhpt_full_20RedshiftCoefficients_2__dealloc__(struct __
  */
   delete __pyx_v_self->huucpp;
 
-  /* "cython/redshift_wrap.pyx":59
+  /* "cython/redshift_wrap.pyx":57
  *         self.huucpp = new RedshiftCoefficientsCPP(str_to_gauge(gauge), dereference(geo.geocpp))
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -24874,7 +25749,7 @@ static void __pyx_pf_11cybhpt_full_20RedshiftCoefficients_2__dealloc__(struct __
   __Pyx_RefNannyFinishContext();
 }
 
-/* "cython/redshift_wrap.pyx":62
+/* "cython/redshift_wrap.pyx":60
  *         del self.huucpp
  * 
  *     def __call__(self, int Ni, int ai, int bi, int ci, int di, int jr, int jz):             # <<<<<<<<<<<<<<
@@ -24931,41 +25806,41 @@ static PyObject *__pyx_pw_11cybhpt_full_20RedshiftCoefficients_5__call__(PyObjec
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ai)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__call__", 1, 7, 7, 1); __PYX_ERR(5, 62, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__call__", 1, 7, 7, 1); __PYX_ERR(5, 60, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_bi)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__call__", 1, 7, 7, 2); __PYX_ERR(5, 62, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__call__", 1, 7, 7, 2); __PYX_ERR(5, 60, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ci)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__call__", 1, 7, 7, 3); __PYX_ERR(5, 62, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__call__", 1, 7, 7, 3); __PYX_ERR(5, 60, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_di)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__call__", 1, 7, 7, 4); __PYX_ERR(5, 62, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__call__", 1, 7, 7, 4); __PYX_ERR(5, 60, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_jr)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__call__", 1, 7, 7, 5); __PYX_ERR(5, 62, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__call__", 1, 7, 7, 5); __PYX_ERR(5, 60, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_jz)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__call__", 1, 7, 7, 6); __PYX_ERR(5, 62, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__call__", 1, 7, 7, 6); __PYX_ERR(5, 60, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__call__") < 0)) __PYX_ERR(5, 62, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__call__") < 0)) __PYX_ERR(5, 60, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 7) {
       goto __pyx_L5_argtuple_error;
@@ -24978,17 +25853,17 @@ static PyObject *__pyx_pw_11cybhpt_full_20RedshiftCoefficients_5__call__(PyObjec
       values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
       values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
     }
-    __pyx_v_Ni = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_Ni == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 62, __pyx_L3_error)
-    __pyx_v_ai = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_ai == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 62, __pyx_L3_error)
-    __pyx_v_bi = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_bi == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 62, __pyx_L3_error)
-    __pyx_v_ci = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_ci == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 62, __pyx_L3_error)
-    __pyx_v_di = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_di == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 62, __pyx_L3_error)
-    __pyx_v_jr = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_jr == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 62, __pyx_L3_error)
-    __pyx_v_jz = __Pyx_PyInt_As_int(values[6]); if (unlikely((__pyx_v_jz == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 62, __pyx_L3_error)
+    __pyx_v_Ni = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_Ni == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 60, __pyx_L3_error)
+    __pyx_v_ai = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_ai == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 60, __pyx_L3_error)
+    __pyx_v_bi = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_bi == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 60, __pyx_L3_error)
+    __pyx_v_ci = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_ci == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 60, __pyx_L3_error)
+    __pyx_v_di = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_di == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 60, __pyx_L3_error)
+    __pyx_v_jr = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_jr == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 60, __pyx_L3_error)
+    __pyx_v_jz = __Pyx_PyInt_As_int(values[6]); if (unlikely((__pyx_v_jz == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 60, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__call__", 1, 7, 7, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 62, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__call__", 1, 7, 7, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 60, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.RedshiftCoefficients.__call__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -25010,7 +25885,7 @@ static PyObject *__pyx_pf_11cybhpt_full_20RedshiftCoefficients_4__call__(struct 
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__call__", 0);
 
-  /* "cython/redshift_wrap.pyx":63
+  /* "cython/redshift_wrap.pyx":61
  * 
  *     def __call__(self, int Ni, int ai, int bi, int ci, int di, int jr, int jz):
  *         return self.huucpp.getComponent(Ni, ai, bi, ci, di, jr, jz)             # <<<<<<<<<<<<<<
@@ -25018,13 +25893,13 @@ static PyObject *__pyx_pf_11cybhpt_full_20RedshiftCoefficients_4__call__(struct 
  * cdef class SphericalHarmonicCoupling:
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->huucpp->getComponent(__pyx_v_Ni, __pyx_v_ai, __pyx_v_bi, __pyx_v_ci, __pyx_v_di, __pyx_v_jr, __pyx_v_jz)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 63, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_complex_to_py_double(__pyx_v_self->huucpp->getComponent(__pyx_v_Ni, __pyx_v_ai, __pyx_v_bi, __pyx_v_ci, __pyx_v_di, __pyx_v_jr, __pyx_v_jz)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 61, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/redshift_wrap.pyx":62
+  /* "cython/redshift_wrap.pyx":60
  *         del self.huucpp
  * 
  *     def __call__(self, int Ni, int ai, int bi, int ci, int di, int jr, int jz):             # <<<<<<<<<<<<<<
@@ -25156,7 +26031,7 @@ static PyObject *__pyx_pf_11cybhpt_full_20RedshiftCoefficients_8__setstate_cytho
   return __pyx_r;
 }
 
-/* "cython/redshift_wrap.pyx":68
+/* "cython/redshift_wrap.pyx":66
  *     cdef SphericalHarmonicCouplingCPP *cpp
  * 
  *     def __cinit__(self, int lmax, int m):             # <<<<<<<<<<<<<<
@@ -25198,11 +26073,11 @@ static int __pyx_pw_11cybhpt_full_25SphericalHarmonicCoupling_1__cinit__(PyObjec
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_m)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, 1); __PYX_ERR(5, 68, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, 1); __PYX_ERR(5, 66, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(5, 68, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(5, 66, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -25210,12 +26085,12 @@ static int __pyx_pw_11cybhpt_full_25SphericalHarmonicCoupling_1__cinit__(PyObjec
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_lmax = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_lmax == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 68, __pyx_L3_error)
-    __pyx_v_m = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_m == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 68, __pyx_L3_error)
+    __pyx_v_lmax = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_lmax == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 66, __pyx_L3_error)
+    __pyx_v_m = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_m == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 66, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 68, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 66, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.SphericalHarmonicCoupling.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -25233,7 +26108,7 @@ static int __pyx_pf_11cybhpt_full_25SphericalHarmonicCoupling___cinit__(struct _
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "cython/redshift_wrap.pyx":69
+  /* "cython/redshift_wrap.pyx":67
  * 
  *     def __cinit__(self, int lmax, int m):
  *         self.cpp = new SphericalHarmonicCouplingCPP(lmax, m)             # <<<<<<<<<<<<<<
@@ -25242,7 +26117,7 @@ static int __pyx_pf_11cybhpt_full_25SphericalHarmonicCoupling___cinit__(struct _
  */
   __pyx_v_self->cpp = new SphericalHarmonicCoupling(__pyx_v_lmax, __pyx_v_m);
 
-  /* "cython/redshift_wrap.pyx":70
+  /* "cython/redshift_wrap.pyx":68
  *     def __cinit__(self, int lmax, int m):
  *         self.cpp = new SphericalHarmonicCouplingCPP(lmax, m)
  *         self.cpp.generateCouplings()             # <<<<<<<<<<<<<<
@@ -25251,7 +26126,7 @@ static int __pyx_pf_11cybhpt_full_25SphericalHarmonicCoupling___cinit__(struct _
  */
   __pyx_v_self->cpp->generateCouplings();
 
-  /* "cython/redshift_wrap.pyx":68
+  /* "cython/redshift_wrap.pyx":66
  *     cdef SphericalHarmonicCouplingCPP *cpp
  * 
  *     def __cinit__(self, int lmax, int m):             # <<<<<<<<<<<<<<
@@ -25265,7 +26140,7 @@ static int __pyx_pf_11cybhpt_full_25SphericalHarmonicCoupling___cinit__(struct _
   return __pyx_r;
 }
 
-/* "cython/redshift_wrap.pyx":72
+/* "cython/redshift_wrap.pyx":70
  *         self.cpp.generateCouplings()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -25288,7 +26163,7 @@ static void __pyx_pf_11cybhpt_full_25SphericalHarmonicCoupling_2__dealloc__(stru
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "cython/redshift_wrap.pyx":73
+  /* "cython/redshift_wrap.pyx":71
  * 
  *     def __dealloc__(self):
  *         del self.cpp             # <<<<<<<<<<<<<<
@@ -25297,7 +26172,7 @@ static void __pyx_pf_11cybhpt_full_25SphericalHarmonicCoupling_2__dealloc__(stru
  */
   delete __pyx_v_self->cpp;
 
-  /* "cython/redshift_wrap.pyx":72
+  /* "cython/redshift_wrap.pyx":70
  *         self.cpp.generateCouplings()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -25309,7 +26184,7 @@ static void __pyx_pf_11cybhpt_full_25SphericalHarmonicCoupling_2__dealloc__(stru
   __Pyx_RefNannyFinishContext();
 }
 
-/* "cython/redshift_wrap.pyx":76
+/* "cython/redshift_wrap.pyx":74
  * 
  *     @property
  *     def azimuthalmode(self):             # <<<<<<<<<<<<<<
@@ -25339,7 +26214,7 @@ static PyObject *__pyx_pf_11cybhpt_full_25SphericalHarmonicCoupling_13azimuthalm
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cython/redshift_wrap.pyx":77
+  /* "cython/redshift_wrap.pyx":75
  *     @property
  *     def azimuthalmode(self):
  *         return self.cpp.getAzimuthalModeNumber()             # <<<<<<<<<<<<<<
@@ -25347,13 +26222,13 @@ static PyObject *__pyx_pf_11cybhpt_full_25SphericalHarmonicCoupling_13azimuthalm
  *     def zcouplingcoefficient(self, int n, int i, int l):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->cpp->getAzimuthalModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 77, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->cpp->getAzimuthalModeNumber()); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 75, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/redshift_wrap.pyx":76
+  /* "cython/redshift_wrap.pyx":74
  * 
  *     @property
  *     def azimuthalmode(self):             # <<<<<<<<<<<<<<
@@ -25372,7 +26247,7 @@ static PyObject *__pyx_pf_11cybhpt_full_25SphericalHarmonicCoupling_13azimuthalm
   return __pyx_r;
 }
 
-/* "cython/redshift_wrap.pyx":79
+/* "cython/redshift_wrap.pyx":77
  *         return self.cpp.getAzimuthalModeNumber()
  * 
  *     def zcouplingcoefficient(self, int n, int i, int l):             # <<<<<<<<<<<<<<
@@ -25417,17 +26292,17 @@ static PyObject *__pyx_pw_11cybhpt_full_25SphericalHarmonicCoupling_5zcouplingco
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("zcouplingcoefficient", 1, 3, 3, 1); __PYX_ERR(5, 79, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("zcouplingcoefficient", 1, 3, 3, 1); __PYX_ERR(5, 77, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_l)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("zcouplingcoefficient", 1, 3, 3, 2); __PYX_ERR(5, 79, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("zcouplingcoefficient", 1, 3, 3, 2); __PYX_ERR(5, 77, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "zcouplingcoefficient") < 0)) __PYX_ERR(5, 79, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "zcouplingcoefficient") < 0)) __PYX_ERR(5, 77, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -25436,13 +26311,13 @@ static PyObject *__pyx_pw_11cybhpt_full_25SphericalHarmonicCoupling_5zcouplingco
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_n = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 79, __pyx_L3_error)
-    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 79, __pyx_L3_error)
-    __pyx_v_l = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_l == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 79, __pyx_L3_error)
+    __pyx_v_n = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 77, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 77, __pyx_L3_error)
+    __pyx_v_l = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_l == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 77, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("zcouplingcoefficient", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 79, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("zcouplingcoefficient", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 77, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.SphericalHarmonicCoupling.zcouplingcoefficient", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -25464,7 +26339,7 @@ static PyObject *__pyx_pf_11cybhpt_full_25SphericalHarmonicCoupling_4zcouplingco
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("zcouplingcoefficient", 0);
 
-  /* "cython/redshift_wrap.pyx":80
+  /* "cython/redshift_wrap.pyx":78
  * 
  *     def zcouplingcoefficient(self, int n, int i, int l):
  *         return self.cpp.getZCouplingCoefficient(n, i, l)             # <<<<<<<<<<<<<<
@@ -25472,13 +26347,13 @@ static PyObject *__pyx_pf_11cybhpt_full_25SphericalHarmonicCoupling_4zcouplingco
  *     def dzcouplingcoefficient(self, int n, int i, int l):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->cpp->getZCouplingCoefficient(__pyx_v_n, __pyx_v_i, __pyx_v_l)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 80, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->cpp->getZCouplingCoefficient(__pyx_v_n, __pyx_v_i, __pyx_v_l)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/redshift_wrap.pyx":79
+  /* "cython/redshift_wrap.pyx":77
  *         return self.cpp.getAzimuthalModeNumber()
  * 
  *     def zcouplingcoefficient(self, int n, int i, int l):             # <<<<<<<<<<<<<<
@@ -25497,7 +26372,7 @@ static PyObject *__pyx_pf_11cybhpt_full_25SphericalHarmonicCoupling_4zcouplingco
   return __pyx_r;
 }
 
-/* "cython/redshift_wrap.pyx":82
+/* "cython/redshift_wrap.pyx":80
  *         return self.cpp.getZCouplingCoefficient(n, i, l)
  * 
  *     def dzcouplingcoefficient(self, int n, int i, int l):             # <<<<<<<<<<<<<<
@@ -25542,17 +26417,17 @@ static PyObject *__pyx_pw_11cybhpt_full_25SphericalHarmonicCoupling_7dzcouplingc
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_i)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("dzcouplingcoefficient", 1, 3, 3, 1); __PYX_ERR(5, 82, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("dzcouplingcoefficient", 1, 3, 3, 1); __PYX_ERR(5, 80, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_l)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("dzcouplingcoefficient", 1, 3, 3, 2); __PYX_ERR(5, 82, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("dzcouplingcoefficient", 1, 3, 3, 2); __PYX_ERR(5, 80, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "dzcouplingcoefficient") < 0)) __PYX_ERR(5, 82, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "dzcouplingcoefficient") < 0)) __PYX_ERR(5, 80, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -25561,13 +26436,13 @@ static PyObject *__pyx_pw_11cybhpt_full_25SphericalHarmonicCoupling_7dzcouplingc
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_n = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 82, __pyx_L3_error)
-    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 82, __pyx_L3_error)
-    __pyx_v_l = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_l == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 82, __pyx_L3_error)
+    __pyx_v_n = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 80, __pyx_L3_error)
+    __pyx_v_i = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_i == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 80, __pyx_L3_error)
+    __pyx_v_l = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_l == (int)-1) && PyErr_Occurred())) __PYX_ERR(5, 80, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("dzcouplingcoefficient", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 82, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("dzcouplingcoefficient", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(5, 80, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cybhpt_full.SphericalHarmonicCoupling.dzcouplingcoefficient", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -25589,20 +26464,20 @@ static PyObject *__pyx_pf_11cybhpt_full_25SphericalHarmonicCoupling_6dzcouplingc
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("dzcouplingcoefficient", 0);
 
-  /* "cython/redshift_wrap.pyx":83
+  /* "cython/redshift_wrap.pyx":81
  * 
  *     def dzcouplingcoefficient(self, int n, int i, int l):
  *         return self.cpp.getDerivativeCouplingCoefficient(n, i, l)             # <<<<<<<<<<<<<<
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->cpp->getDerivativeCouplingCoefficient(__pyx_v_n, __pyx_v_i, __pyx_v_l)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 83, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->cpp->getDerivativeCouplingCoefficient(__pyx_v_n, __pyx_v_i, __pyx_v_l)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 81, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "cython/redshift_wrap.pyx":82
+  /* "cython/redshift_wrap.pyx":80
  *         return self.cpp.getZCouplingCoefficient(n, i, l)
  * 
  *     def dzcouplingcoefficient(self, int n, int i, int l):             # <<<<<<<<<<<<<<
@@ -26158,7 +27033,7 @@ static PyObject *__pyx_f_11cybhpt_full___pyx_unpickle_MetricModeGenerator__set_s
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":735
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":735
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -26175,7 +27050,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew1", 0);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":736
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":736
  * 
  * cdef inline object PyArray_MultiIterNew1(a):
  *     return PyArray_MultiIterNew(1, <void*>a)             # <<<<<<<<<<<<<<
@@ -26189,7 +27064,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":735
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":735
  * ctypedef npy_cdouble     complex_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -26208,7 +27083,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":738
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":738
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -26225,7 +27100,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew2", 0);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":739
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":739
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)             # <<<<<<<<<<<<<<
@@ -26239,7 +27114,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":738
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":738
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -26258,7 +27133,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":741
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":741
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -26275,7 +27150,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew3", 0);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":742
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":742
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)             # <<<<<<<<<<<<<<
@@ -26289,7 +27164,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":741
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":741
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -26308,7 +27183,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":744
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":744
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -26325,7 +27200,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew4", 0);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":745
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":745
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)             # <<<<<<<<<<<<<<
@@ -26339,7 +27214,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":744
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":744
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -26358,7 +27233,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":747
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":747
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -26375,7 +27250,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew5", 0);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":748
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":748
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)             # <<<<<<<<<<<<<<
@@ -26389,7 +27264,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":747
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":747
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -26408,7 +27283,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":750
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":750
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):             # <<<<<<<<<<<<<<
@@ -26422,7 +27297,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("PyDataType_SHAPE", 0);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":751
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":751
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):             # <<<<<<<<<<<<<<
@@ -26432,7 +27307,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   __pyx_t_1 = (PyDataType_HASSUBARRAY(__pyx_v_d) != 0);
   if (__pyx_t_1) {
 
-    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":752
+    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":752
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):
  *         return <tuple>d.subarray.shape             # <<<<<<<<<<<<<<
@@ -26444,7 +27319,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
     __pyx_r = ((PyObject*)__pyx_v_d->subarray->shape);
     goto __pyx_L0;
 
-    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":751
+    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":751
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):             # <<<<<<<<<<<<<<
@@ -26453,7 +27328,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
  */
   }
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":754
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":754
  *         return <tuple>d.subarray.shape
  *     else:
  *         return ()             # <<<<<<<<<<<<<<
@@ -26467,7 +27342,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
     goto __pyx_L0;
   }
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":750
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":750
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):             # <<<<<<<<<<<<<<
@@ -26482,7 +27357,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":929
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":929
  *     int _import_umath() except -1
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -26494,7 +27369,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_array_base", 0);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":930
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":930
  * 
  * cdef inline void set_array_base(ndarray arr, object base):
  *     Py_INCREF(base) # important to do this before stealing the reference below!             # <<<<<<<<<<<<<<
@@ -26503,7 +27378,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   Py_INCREF(__pyx_v_base);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":931
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":931
  * cdef inline void set_array_base(ndarray arr, object base):
  *     Py_INCREF(base) # important to do this before stealing the reference below!
  *     PyArray_SetBaseObject(arr, base)             # <<<<<<<<<<<<<<
@@ -26512,7 +27387,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
  */
   (void)(PyArray_SetBaseObject(__pyx_v_arr, __pyx_v_base));
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":929
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":929
  *     int _import_umath() except -1
  * 
  * cdef inline void set_array_base(ndarray arr, object base):             # <<<<<<<<<<<<<<
@@ -26524,7 +27399,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   __Pyx_RefNannyFinishContext();
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":933
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":933
  *     PyArray_SetBaseObject(arr, base)
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -26539,7 +27414,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("get_array_base", 0);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":934
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":934
  * 
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)             # <<<<<<<<<<<<<<
@@ -26548,7 +27423,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
  */
   __pyx_v_base = PyArray_BASE(__pyx_v_arr);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":935
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":935
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)
  *     if base is NULL:             # <<<<<<<<<<<<<<
@@ -26558,7 +27433,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_t_1 = ((__pyx_v_base == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":936
+    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":936
  *     base = PyArray_BASE(arr)
  *     if base is NULL:
  *         return None             # <<<<<<<<<<<<<<
@@ -26569,7 +27444,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":935
+    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":935
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)
  *     if base is NULL:             # <<<<<<<<<<<<<<
@@ -26578,7 +27453,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
  */
   }
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":937
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":937
  *     if base is NULL:
  *         return None
  *     return <object>base             # <<<<<<<<<<<<<<
@@ -26590,7 +27465,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_r = ((PyObject *)__pyx_v_base);
   goto __pyx_L0;
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":933
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":933
  *     PyArray_SetBaseObject(arr, base)
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -26605,7 +27480,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":941
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":941
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -26629,7 +27504,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_array", 0);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":942
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":942
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26645,7 +27520,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":943
+      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":943
  * cdef inline int import_array() except -1:
  *     try:
  *         __pyx_import_array()             # <<<<<<<<<<<<<<
@@ -26654,7 +27529,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
  */
       __pyx_t_4 = _import_array(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(6, 943, __pyx_L3_error)
 
-      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":942
+      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":942
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26668,7 +27543,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":944
+    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":944
  *     try:
  *         __pyx_import_array()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -26683,7 +27558,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":945
+      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":945
  *         __pyx_import_array()
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")             # <<<<<<<<<<<<<<
@@ -26699,7 +27574,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":942
+    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":942
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26714,7 +27589,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":941
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":941
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -26737,7 +27612,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":947
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":947
  *         raise ImportError("numpy.core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -26761,7 +27636,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_umath", 0);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":948
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":948
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26777,7 +27652,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":949
+      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":949
  * cdef inline int import_umath() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
@@ -26786,7 +27661,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
  */
       __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(6, 949, __pyx_L3_error)
 
-      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":948
+      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":948
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26800,7 +27675,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":950
+    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":950
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -26815,7 +27690,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":951
+      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":951
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -26831,7 +27706,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":948
+    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":948
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26846,7 +27721,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":947
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":947
  *         raise ImportError("numpy.core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -26869,7 +27744,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":953
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":953
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -26893,7 +27768,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_ufunc", 0);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":954
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":954
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26909,7 +27784,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":955
+      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":955
  * cdef inline int import_ufunc() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
@@ -26918,7 +27793,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
  */
       __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(6, 955, __pyx_L3_error)
 
-      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":954
+      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":954
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26932,7 +27807,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":956
+    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":956
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -26947,7 +27822,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":957
+      /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":957
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -26963,7 +27838,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":954
+    /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":954
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -26978,7 +27853,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":953
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":953
  *         raise ImportError("numpy.core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -27001,7 +27876,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":967
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":967
  * 
  * 
  * cdef inline bint is_timedelta64_object(object obj):             # <<<<<<<<<<<<<<
@@ -27014,7 +27889,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("is_timedelta64_object", 0);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":979
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":979
  *     bool
  *     """
  *     return PyObject_TypeCheck(obj, &PyTimedeltaArrType_Type)             # <<<<<<<<<<<<<<
@@ -27024,7 +27899,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   __pyx_r = PyObject_TypeCheck(__pyx_v_obj, (&PyTimedeltaArrType_Type));
   goto __pyx_L0;
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":967
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":967
  * 
  * 
  * cdef inline bint is_timedelta64_object(object obj):             # <<<<<<<<<<<<<<
@@ -27038,7 +27913,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":982
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":982
  * 
  * 
  * cdef inline bint is_datetime64_object(object obj):             # <<<<<<<<<<<<<<
@@ -27051,7 +27926,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("is_datetime64_object", 0);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":994
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":994
  *     bool
  *     """
  *     return PyObject_TypeCheck(obj, &PyDatetimeArrType_Type)             # <<<<<<<<<<<<<<
@@ -27061,7 +27936,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   __pyx_r = PyObject_TypeCheck(__pyx_v_obj, (&PyDatetimeArrType_Type));
   goto __pyx_L0;
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":982
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":982
  * 
  * 
  * cdef inline bint is_datetime64_object(object obj):             # <<<<<<<<<<<<<<
@@ -27075,7 +27950,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":997
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":997
  * 
  * 
  * cdef inline npy_datetime get_datetime64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -27086,7 +27961,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
 static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *__pyx_v_obj) {
   npy_datetime __pyx_r;
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1004
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1004
  *     also needed.  That can be found using `get_datetime64_unit`.
  *     """
  *     return (<PyDatetimeScalarObject*>obj).obval             # <<<<<<<<<<<<<<
@@ -27096,7 +27971,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
   __pyx_r = ((PyDatetimeScalarObject *)__pyx_v_obj)->obval;
   goto __pyx_L0;
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":997
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":997
  * 
  * 
  * cdef inline npy_datetime get_datetime64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -27109,7 +27984,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1007
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1007
  * 
  * 
  * cdef inline npy_timedelta get_timedelta64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -27120,7 +27995,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
 static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject *__pyx_v_obj) {
   npy_timedelta __pyx_r;
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1011
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1011
  *     returns the int64 value underlying scalar numpy timedelta64 object
  *     """
  *     return (<PyTimedeltaScalarObject*>obj).obval             # <<<<<<<<<<<<<<
@@ -27130,7 +28005,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
   __pyx_r = ((PyTimedeltaScalarObject *)__pyx_v_obj)->obval;
   goto __pyx_L0;
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1007
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1007
  * 
  * 
  * cdef inline npy_timedelta get_timedelta64_value(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -27143,7 +28018,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
   return __pyx_r;
 }
 
-/* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1014
+/* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1014
  * 
  * 
  * cdef inline NPY_DATETIMEUNIT get_datetime64_unit(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -27154,7 +28029,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
 static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObject *__pyx_v_obj) {
   NPY_DATETIMEUNIT __pyx_r;
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1018
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1018
  *     returns the unit part of the dtype for a numpy datetime64 object.
  *     """
  *     return <NPY_DATETIMEUNIT>(<PyDatetimeScalarObject*>obj).obmeta.base             # <<<<<<<<<<<<<<
@@ -27162,7 +28037,7 @@ static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObjec
   __pyx_r = ((NPY_DATETIMEUNIT)((PyDatetimeScalarObject *)__pyx_v_obj)->obmeta.base);
   goto __pyx_L0;
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1014
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":1014
  * 
  * 
  * cdef inline NPY_DATETIMEUNIT get_datetime64_unit(object obj) nogil:             # <<<<<<<<<<<<<<
@@ -27649,8 +28524,12 @@ static PyMethodDef __pyx_methods_11cybhpt_full_KerrGeodesic[] = {
   {"position", (PyCFunction)__pyx_pw_11cybhpt_full_12KerrGeodesic_25position, METH_O, 0},
   {"position_vec", (PyCFunction)__pyx_pw_11cybhpt_full_12KerrGeodesic_27position_vec, METH_O, 0},
   {"mino_time", (PyCFunction)__pyx_pw_11cybhpt_full_12KerrGeodesic_29mino_time, METH_O, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_11cybhpt_full_12KerrGeodesic_31__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_11cybhpt_full_12KerrGeodesic_33__setstate_cython__, METH_O, 0},
+  {"get_time_coefficients", (PyCFunction)__pyx_pw_11cybhpt_full_12KerrGeodesic_31get_time_coefficients, METH_O, 0},
+  {"get_radial_coefficients", (PyCFunction)__pyx_pw_11cybhpt_full_12KerrGeodesic_33get_radial_coefficients, METH_NOARGS, 0},
+  {"get_polar_coefficients", (PyCFunction)__pyx_pw_11cybhpt_full_12KerrGeodesic_35get_polar_coefficients, METH_NOARGS, 0},
+  {"get_azimuthal_coefficients", (PyCFunction)__pyx_pw_11cybhpt_full_12KerrGeodesic_37get_azimuthal_coefficients, METH_O, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_11cybhpt_full_12KerrGeodesic_39__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_11cybhpt_full_12KerrGeodesic_41__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -28039,23 +28918,24 @@ static PyObject *__pyx_getprop_11cybhpt_full_13TeukolskyMode_radialsolutions(PyO
 
 static PyMethodDef __pyx_methods_11cybhpt_full_TeukolskyMode[] = {
   {"teukolsky_amplitude", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_5teukolsky_amplitude, METH_O, 0},
-  {"couplingcoefficient", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_7couplingcoefficient, METH_O, 0},
-  {"radialpoint", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_9radialpoint, METH_O, 0},
-  {"radialsolution", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_13TeukolskyMode_11radialsolution, METH_VARARGS|METH_KEYWORDS, 0},
-  {"radialderivative", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_13TeukolskyMode_13radialderivative, METH_VARARGS|METH_KEYWORDS, 0},
-  {"radialderivative2", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_13TeukolskyMode_15radialderivative2, METH_VARARGS|METH_KEYWORDS, 0},
-  {"homogeneousradialsolution", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_13TeukolskyMode_17homogeneousradialsolution, METH_VARARGS|METH_KEYWORDS, 0},
-  {"homogeneousradialderivative", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_13TeukolskyMode_19homogeneousradialderivative, METH_VARARGS|METH_KEYWORDS, 0},
-  {"homogeneousradialderivative2", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_13TeukolskyMode_21homogeneousradialderivative2, METH_VARARGS|METH_KEYWORDS, 0},
-  {"polarpoint", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_23polarpoint, METH_O, 0},
-  {"polarsolution", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_25polarsolution, METH_O, 0},
-  {"polarderivative", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_27polarderivative, METH_O, 0},
-  {"polarderivative2", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_29polarderivative2, METH_O, 0},
-  {"solve", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_13TeukolskyMode_31solve, METH_VARARGS|METH_KEYWORDS, 0},
-  {"flip_spinweight_frequency", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_33flip_spinweight_frequency, METH_NOARGS, 0},
-  {"flip_spinweight", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_35flip_spinweight, METH_NOARGS, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_37__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_39__setstate_cython__, METH_O, 0},
+  {"teukolsky_amplitude_precision", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_7teukolsky_amplitude_precision, METH_O, 0},
+  {"couplingcoefficient", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_9couplingcoefficient, METH_O, 0},
+  {"radialpoint", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_11radialpoint, METH_O, 0},
+  {"radialsolution", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_13TeukolskyMode_13radialsolution, METH_VARARGS|METH_KEYWORDS, 0},
+  {"radialderivative", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_13TeukolskyMode_15radialderivative, METH_VARARGS|METH_KEYWORDS, 0},
+  {"radialderivative2", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_13TeukolskyMode_17radialderivative2, METH_VARARGS|METH_KEYWORDS, 0},
+  {"homogeneousradialsolution", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_13TeukolskyMode_19homogeneousradialsolution, METH_VARARGS|METH_KEYWORDS, 0},
+  {"homogeneousradialderivative", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_13TeukolskyMode_21homogeneousradialderivative, METH_VARARGS|METH_KEYWORDS, 0},
+  {"homogeneousradialderivative2", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_13TeukolskyMode_23homogeneousradialderivative2, METH_VARARGS|METH_KEYWORDS, 0},
+  {"polarpoint", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_25polarpoint, METH_O, 0},
+  {"polarsolution", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_27polarsolution, METH_O, 0},
+  {"polarderivative", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_29polarderivative, METH_O, 0},
+  {"polarderivative2", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_31polarderivative2, METH_O, 0},
+  {"solve", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_11cybhpt_full_13TeukolskyMode_33solve, METH_VARARGS|METH_KEYWORDS, 0},
+  {"flip_spinweight_frequency", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_35flip_spinweight_frequency, METH_NOARGS, 0},
+  {"flip_spinweight", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_37flip_spinweight, METH_NOARGS, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_39__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_11cybhpt_full_13TeukolskyMode_41__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -29069,6 +29949,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_new, __pyx_k_new, sizeof(__pyx_k_new), 0, 0, 1, 1},
   {&__pyx_kp_s_no_default___reduce___due_to_non, __pyx_k_no_default___reduce___due_to_non, sizeof(__pyx_k_no_default___reduce___due_to_non), 0, 0, 1, 0},
   {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
+  {&__pyx_n_s_nphi, __pyx_k_nphi, sizeof(__pyx_k_nphi), 0, 0, 1, 1},
   {&__pyx_n_s_nr, __pyx_k_nr, sizeof(__pyx_k_nr), 0, 0, 1, 1},
   {&__pyx_n_s_nsample, __pyx_k_nsample, sizeof(__pyx_k_nsample), 0, 0, 1, 1},
   {&__pyx_n_s_nsamples, __pyx_k_nsamples, sizeof(__pyx_k_nsamples), 0, 0, 1, 1},
@@ -29148,8 +30029,8 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 160, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(2, 107, __pyx_L1_error)
-  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) __PYX_ERR(3, 156, __pyx_L1_error)
-  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(3, 296, __pyx_L1_error)
+  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) __PYX_ERR(3, 157, __pyx_L1_error)
+  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(3, 300, __pyx_L1_error)
   __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(6, 945, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
@@ -29209,14 +30090,14 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
 
-  /* "cython/teukolsky_wrap.pyx":156
+  /* "cython/teukolsky_wrap.pyx":157
  *         return gauge_dict[gauge_str]
  *     else:
  *         print("Error")             # <<<<<<<<<<<<<<
  *         TypeError("{} is not a supported gauge.".format(gauge_str))
  * 
  */
-  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_n_u_Error); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(3, 156, __pyx_L1_error)
+  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_n_u_Error); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(3, 157, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
 
@@ -29239,14 +30120,14 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "cython/teukolsky_wrap.pyx":296
+  /* "cython/teukolsky_wrap.pyx":300
  *     def __init__(self, TeukolskyMode teuk, unicode gauge):
  *         if np.abs(teuk.spinweight) != 2:
  *             raise ValueError("Hertz mode only accepts Teukolsky solutions with spin-weight -2,+2.")             # <<<<<<<<<<<<<<
  *         self.gauge_cpp = str_to_gauge(gauge)
  *         self.gauge_str = gauge
  */
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_u_Hertz_mode_only_accepts_Teukolsk); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(3, 296, __pyx_L1_error)
+  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_u_Hertz_mode_only_accepts_Teukolsk); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(3, 300, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
 
@@ -29269,25 +30150,25 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__11);
   __Pyx_GIVEREF(__pyx_tuple__11);
 
-  /* "cython/teukolsky_wrap.pyx":583
+  /* "cython/teukolsky_wrap.pyx":587
  *                 for nr in range(3):
  *                     if nr == 0:
  *                         dPsiIn = hertz.radialsolution("In", 0)             # <<<<<<<<<<<<<<
  *                         dPsiUp = hertz.radialsolution("Up", 0)
  *                     elif nr == 1:
  */
-  __pyx_tuple__12 = PyTuple_Pack(2, __pyx_n_u_In, __pyx_int_0); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(3, 583, __pyx_L1_error)
+  __pyx_tuple__12 = PyTuple_Pack(2, __pyx_n_u_In, __pyx_int_0); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(3, 587, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__12);
   __Pyx_GIVEREF(__pyx_tuple__12);
 
-  /* "cython/teukolsky_wrap.pyx":584
+  /* "cython/teukolsky_wrap.pyx":588
  *                     if nr == 0:
  *                         dPsiIn = hertz.radialsolution("In", 0)
  *                         dPsiUp = hertz.radialsolution("Up", 0)             # <<<<<<<<<<<<<<
  *                     elif nr == 1:
  *                         dPsiIn = hertz.radialderivative("In", 0)
  */
-  __pyx_tuple__13 = PyTuple_Pack(2, __pyx_n_u_Up, __pyx_int_0); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(3, 584, __pyx_L1_error)
+  __pyx_tuple__13 = PyTuple_Pack(2, __pyx_n_u_Up, __pyx_int_0); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(3, 588, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__13);
   __Pyx_GIVEREF(__pyx_tuple__13);
 
@@ -29351,7 +30232,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__20);
   __Pyx_GIVEREF(__pyx_tuple__20);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":945
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":945
  *         __pyx_import_array()
  *     except Exception:
  *         raise ImportError("numpy.core.multiarray failed to import")             # <<<<<<<<<<<<<<
@@ -29362,7 +30243,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__21);
   __Pyx_GIVEREF(__pyx_tuple__21);
 
-  /* "../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":951
+  /* "../../../opt/anaconda3/envs/pybhpt-env/lib/python3.7/site-packages/numpy/__init__.pxd":951
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -29445,29 +30326,29 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__33);
   __pyx_codeobj__34 = (PyObject*)__Pyx_PyCode_New(5, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__33, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_geo_wrap_pyx, __pyx_n_s_kerr_geo_V32, 112, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__34)) __PYX_ERR(0, 112, __pyx_L1_error)
 
-  /* "cython/geo_wrap.pyx":275
+  /* "cython/geo_wrap.pyx":307
  * 
  * 
  * def kerr_orbital_constants_wrapper(double a, double p, double e, double x):             # <<<<<<<<<<<<<<
  *     cdef double En, Lz, Qc
  *     En = 0.
  */
-  __pyx_tuple__35 = PyTuple_Pack(7, __pyx_n_s_a, __pyx_n_s_p, __pyx_n_s_e, __pyx_n_s_x, __pyx_n_s_En, __pyx_n_s_Lz, __pyx_n_s_Qc); if (unlikely(!__pyx_tuple__35)) __PYX_ERR(0, 275, __pyx_L1_error)
+  __pyx_tuple__35 = PyTuple_Pack(7, __pyx_n_s_a, __pyx_n_s_p, __pyx_n_s_e, __pyx_n_s_x, __pyx_n_s_En, __pyx_n_s_Lz, __pyx_n_s_Qc); if (unlikely(!__pyx_tuple__35)) __PYX_ERR(0, 307, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__35);
   __Pyx_GIVEREF(__pyx_tuple__35);
-  __pyx_codeobj__36 = (PyObject*)__Pyx_PyCode_New(4, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__35, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_geo_wrap_pyx, __pyx_n_s_kerr_orbital_constants_wrapper, 275, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__36)) __PYX_ERR(0, 275, __pyx_L1_error)
+  __pyx_codeobj__36 = (PyObject*)__Pyx_PyCode_New(4, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__35, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_geo_wrap_pyx, __pyx_n_s_kerr_orbital_constants_wrapper, 307, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__36)) __PYX_ERR(0, 307, __pyx_L1_error)
 
-  /* "cython/geo_wrap.pyx":283
+  /* "cython/geo_wrap.pyx":315
  *     return np.array([En, Lz, Qc])
  * 
  * def kerr_mino_frequencies_wrapper(double a, double p, double e, double x):             # <<<<<<<<<<<<<<
  *     cdef double upT, upR, upTh, upPhi
  *     upT = 0.
  */
-  __pyx_tuple__37 = PyTuple_Pack(8, __pyx_n_s_a, __pyx_n_s_p, __pyx_n_s_e, __pyx_n_s_x, __pyx_n_s_upT, __pyx_n_s_upR, __pyx_n_s_upTh, __pyx_n_s_upPhi); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(0, 283, __pyx_L1_error)
+  __pyx_tuple__37 = PyTuple_Pack(8, __pyx_n_s_a, __pyx_n_s_p, __pyx_n_s_e, __pyx_n_s_x, __pyx_n_s_upT, __pyx_n_s_upR, __pyx_n_s_upTh, __pyx_n_s_upPhi); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(0, 315, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__37);
   __Pyx_GIVEREF(__pyx_tuple__37);
-  __pyx_codeobj__38 = (PyObject*)__Pyx_PyCode_New(4, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__37, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_geo_wrap_pyx, __pyx_n_s_kerr_mino_frequencies_wrapper, 283, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__38)) __PYX_ERR(0, 283, __pyx_L1_error)
+  __pyx_codeobj__38 = (PyObject*)__Pyx_PyCode_New(4, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__37, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_geo_wrap_pyx, __pyx_n_s_kerr_mino_frequencies_wrapper, 315, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__38)) __PYX_ERR(0, 315, __pyx_L1_error)
 
   /* "cython/radialsolver_wrap.pyx":71
  * 
@@ -29517,246 +30398,246 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__45);
   __pyx_codeobj__46 = (PyObject*)__Pyx_PyCode_New(5, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__45, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_radialsolver_wrap_pyx, __pyx_n_s_teukolsky_starobinsky_const_squa, 94, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__46)) __PYX_ERR(2, 94, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":437
+  /* "cython/teukolsky_wrap.pyx":441
  *         }
  * 
  * def test_hertz_mode_cython(int j, int m, int k, int n, KerrGeodesic geo):             # <<<<<<<<<<<<<<
  *     test_hertz_mode(j, m, k, n, dereference(geo.geocpp))
  * 
  */
-  __pyx_tuple__47 = PyTuple_Pack(5, __pyx_n_s_j, __pyx_n_s_m, __pyx_n_s_k, __pyx_n_s_n, __pyx_n_s_geo); if (unlikely(!__pyx_tuple__47)) __PYX_ERR(3, 437, __pyx_L1_error)
+  __pyx_tuple__47 = PyTuple_Pack(5, __pyx_n_s_j, __pyx_n_s_m, __pyx_n_s_k, __pyx_n_s_n, __pyx_n_s_geo); if (unlikely(!__pyx_tuple__47)) __PYX_ERR(3, 441, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__47);
   __Pyx_GIVEREF(__pyx_tuple__47);
-  __pyx_codeobj__48 = (PyObject*)__Pyx_PyCode_New(5, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__47, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_test_hertz_mode_cython, 437, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__48)) __PYX_ERR(3, 437, __pyx_L1_error)
+  __pyx_codeobj__48 = (PyObject*)__Pyx_PyCode_New(5, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__47, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_test_hertz_mode_cython, 441, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__48)) __PYX_ERR(3, 441, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":445
+  /* "cython/teukolsky_wrap.pyx":449
  * }
  * 
  * def teuk_to_hertz_ORG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
  *     cdef cpp_complex[double] PsiIn
  *     cdef cpp_complex[double] PsiUp
  */
-  __pyx_tuple__49 = PyTuple_Pack(10, __pyx_n_s_ZIn, __pyx_n_s_ZUp, __pyx_n_s_j, __pyx_n_s_m, __pyx_n_s_k, __pyx_n_s_a, __pyx_n_s_omega, __pyx_n_s_lambdaCH, __pyx_n_s_PsiIn, __pyx_n_s_PsiUp); if (unlikely(!__pyx_tuple__49)) __PYX_ERR(3, 445, __pyx_L1_error)
+  __pyx_tuple__49 = PyTuple_Pack(10, __pyx_n_s_ZIn, __pyx_n_s_ZUp, __pyx_n_s_j, __pyx_n_s_m, __pyx_n_s_k, __pyx_n_s_a, __pyx_n_s_omega, __pyx_n_s_lambdaCH, __pyx_n_s_PsiIn, __pyx_n_s_PsiUp); if (unlikely(!__pyx_tuple__49)) __PYX_ERR(3, 449, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__49);
   __Pyx_GIVEREF(__pyx_tuple__49);
-  __pyx_codeobj__50 = (PyObject*)__Pyx_PyCode_New(8, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__49, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_teuk_to_hertz_ORG, 445, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__50)) __PYX_ERR(3, 445, __pyx_L1_error)
+  __pyx_codeobj__50 = (PyObject*)__Pyx_PyCode_New(8, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__49, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_teuk_to_hertz_ORG, 449, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__50)) __PYX_ERR(3, 449, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":451
+  /* "cython/teukolsky_wrap.pyx":455
  *     return (PsiIn, PsiUp)
  * 
  * def teuk_to_hertz_IRG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
  *     cdef cpp_complex[double] PsiIn
  *     cdef cpp_complex[double] PsiUp
  */
-  __pyx_tuple__51 = PyTuple_Pack(10, __pyx_n_s_ZIn, __pyx_n_s_ZUp, __pyx_n_s_j, __pyx_n_s_m, __pyx_n_s_k, __pyx_n_s_a, __pyx_n_s_omega, __pyx_n_s_lambdaCH, __pyx_n_s_PsiIn, __pyx_n_s_PsiUp); if (unlikely(!__pyx_tuple__51)) __PYX_ERR(3, 451, __pyx_L1_error)
+  __pyx_tuple__51 = PyTuple_Pack(10, __pyx_n_s_ZIn, __pyx_n_s_ZUp, __pyx_n_s_j, __pyx_n_s_m, __pyx_n_s_k, __pyx_n_s_a, __pyx_n_s_omega, __pyx_n_s_lambdaCH, __pyx_n_s_PsiIn, __pyx_n_s_PsiUp); if (unlikely(!__pyx_tuple__51)) __PYX_ERR(3, 455, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__51);
   __Pyx_GIVEREF(__pyx_tuple__51);
-  __pyx_codeobj__52 = (PyObject*)__Pyx_PyCode_New(8, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__51, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_teuk_to_hertz_IRG, 451, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__52)) __PYX_ERR(3, 451, __pyx_L1_error)
+  __pyx_codeobj__52 = (PyObject*)__Pyx_PyCode_New(8, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__51, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_teuk_to_hertz_IRG, 455, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__52)) __PYX_ERR(3, 455, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":457
+  /* "cython/teukolsky_wrap.pyx":461
  *     return (PsiIn, PsiUp)
  * 
  * def teuk_to_hertz_SAAB(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
  *     cdef cpp_complex[double] PsiIn
  *     cdef cpp_complex[double] PsiUp
  */
-  __pyx_tuple__53 = PyTuple_Pack(10, __pyx_n_s_ZIn, __pyx_n_s_ZUp, __pyx_n_s_j, __pyx_n_s_m, __pyx_n_s_k, __pyx_n_s_a, __pyx_n_s_omega, __pyx_n_s_lambdaCH, __pyx_n_s_PsiIn, __pyx_n_s_PsiUp); if (unlikely(!__pyx_tuple__53)) __PYX_ERR(3, 457, __pyx_L1_error)
+  __pyx_tuple__53 = PyTuple_Pack(10, __pyx_n_s_ZIn, __pyx_n_s_ZUp, __pyx_n_s_j, __pyx_n_s_m, __pyx_n_s_k, __pyx_n_s_a, __pyx_n_s_omega, __pyx_n_s_lambdaCH, __pyx_n_s_PsiIn, __pyx_n_s_PsiUp); if (unlikely(!__pyx_tuple__53)) __PYX_ERR(3, 461, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__53);
   __Pyx_GIVEREF(__pyx_tuple__53);
-  __pyx_codeobj__54 = (PyObject*)__Pyx_PyCode_New(8, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__53, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_teuk_to_hertz_SAAB, 457, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__54)) __PYX_ERR(3, 457, __pyx_L1_error)
+  __pyx_codeobj__54 = (PyObject*)__Pyx_PyCode_New(8, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__53, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_teuk_to_hertz_SAAB, 461, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__54)) __PYX_ERR(3, 461, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":463
+  /* "cython/teukolsky_wrap.pyx":467
  *     return (PsiIn, PsiUp)
  * 
  * def teuk_to_hertz_ASAAB(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
  *     cdef cpp_complex[double] PsiIn
  *     cdef cpp_complex[double] PsiUp
  */
-  __pyx_tuple__55 = PyTuple_Pack(10, __pyx_n_s_ZIn, __pyx_n_s_ZUp, __pyx_n_s_j, __pyx_n_s_m, __pyx_n_s_k, __pyx_n_s_a, __pyx_n_s_omega, __pyx_n_s_lambdaCH, __pyx_n_s_PsiIn, __pyx_n_s_PsiUp); if (unlikely(!__pyx_tuple__55)) __PYX_ERR(3, 463, __pyx_L1_error)
+  __pyx_tuple__55 = PyTuple_Pack(10, __pyx_n_s_ZIn, __pyx_n_s_ZUp, __pyx_n_s_j, __pyx_n_s_m, __pyx_n_s_k, __pyx_n_s_a, __pyx_n_s_omega, __pyx_n_s_lambdaCH, __pyx_n_s_PsiIn, __pyx_n_s_PsiUp); if (unlikely(!__pyx_tuple__55)) __PYX_ERR(3, 467, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__55);
   __Pyx_GIVEREF(__pyx_tuple__55);
-  __pyx_codeobj__56 = (PyObject*)__Pyx_PyCode_New(8, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__55, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_teuk_to_hertz_ASAAB, 463, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__56)) __PYX_ERR(3, 463, __pyx_L1_error)
+  __pyx_codeobj__56 = (PyObject*)__Pyx_PyCode_New(8, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__55, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_teuk_to_hertz_ASAAB, 467, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__56)) __PYX_ERR(3, 467, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":471
+  /* "cython/teukolsky_wrap.pyx":475
  * cdef dict metric_component_gauge_dict = {
  *     "ORG" : {
  *         (1, 1): None,             # <<<<<<<<<<<<<<
  *         (1, 3): None,
  *         (1, 4): None,
  */
-  __pyx_tuple__57 = PyTuple_Pack(2, __pyx_int_1, __pyx_int_1); if (unlikely(!__pyx_tuple__57)) __PYX_ERR(3, 471, __pyx_L1_error)
+  __pyx_tuple__57 = PyTuple_Pack(2, __pyx_int_1, __pyx_int_1); if (unlikely(!__pyx_tuple__57)) __PYX_ERR(3, 475, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__57);
   __Pyx_GIVEREF(__pyx_tuple__57);
 
-  /* "cython/teukolsky_wrap.pyx":472
+  /* "cython/teukolsky_wrap.pyx":476
  *     "ORG" : {
  *         (1, 1): None,
  *         (1, 3): None,             # <<<<<<<<<<<<<<
  *         (1, 4): None,
  *         (3, 3): None,
  */
-  __pyx_tuple__58 = PyTuple_Pack(2, __pyx_int_1, __pyx_int_3); if (unlikely(!__pyx_tuple__58)) __PYX_ERR(3, 472, __pyx_L1_error)
+  __pyx_tuple__58 = PyTuple_Pack(2, __pyx_int_1, __pyx_int_3); if (unlikely(!__pyx_tuple__58)) __PYX_ERR(3, 476, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__58);
   __Pyx_GIVEREF(__pyx_tuple__58);
 
-  /* "cython/teukolsky_wrap.pyx":473
+  /* "cython/teukolsky_wrap.pyx":477
  *         (1, 1): None,
  *         (1, 3): None,
  *         (1, 4): None,             # <<<<<<<<<<<<<<
  *         (3, 3): None,
  *         (4, 4): None},
  */
-  __pyx_tuple__59 = PyTuple_Pack(2, __pyx_int_1, __pyx_int_4); if (unlikely(!__pyx_tuple__59)) __PYX_ERR(3, 473, __pyx_L1_error)
+  __pyx_tuple__59 = PyTuple_Pack(2, __pyx_int_1, __pyx_int_4); if (unlikely(!__pyx_tuple__59)) __PYX_ERR(3, 477, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__59);
   __Pyx_GIVEREF(__pyx_tuple__59);
 
-  /* "cython/teukolsky_wrap.pyx":474
+  /* "cython/teukolsky_wrap.pyx":478
  *         (1, 3): None,
  *         (1, 4): None,
  *         (3, 3): None,             # <<<<<<<<<<<<<<
  *         (4, 4): None},
  *     "IRG" : {
  */
-  __pyx_tuple__60 = PyTuple_Pack(2, __pyx_int_3, __pyx_int_3); if (unlikely(!__pyx_tuple__60)) __PYX_ERR(3, 474, __pyx_L1_error)
+  __pyx_tuple__60 = PyTuple_Pack(2, __pyx_int_3, __pyx_int_3); if (unlikely(!__pyx_tuple__60)) __PYX_ERR(3, 478, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__60);
   __Pyx_GIVEREF(__pyx_tuple__60);
 
-  /* "cython/teukolsky_wrap.pyx":475
+  /* "cython/teukolsky_wrap.pyx":479
  *         (1, 4): None,
  *         (3, 3): None,
  *         (4, 4): None},             # <<<<<<<<<<<<<<
  *     "IRG" : {
  *         (2, 2): None,
  */
-  __pyx_tuple__61 = PyTuple_Pack(2, __pyx_int_4, __pyx_int_4); if (unlikely(!__pyx_tuple__61)) __PYX_ERR(3, 475, __pyx_L1_error)
+  __pyx_tuple__61 = PyTuple_Pack(2, __pyx_int_4, __pyx_int_4); if (unlikely(!__pyx_tuple__61)) __PYX_ERR(3, 479, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__61);
   __Pyx_GIVEREF(__pyx_tuple__61);
 
-  /* "cython/teukolsky_wrap.pyx":477
+  /* "cython/teukolsky_wrap.pyx":481
  *         (4, 4): None},
  *     "IRG" : {
  *         (2, 2): None,             # <<<<<<<<<<<<<<
  *         (2, 3): None,
  *         (2, 4): None,
  */
-  __pyx_tuple__62 = PyTuple_Pack(2, __pyx_int_2, __pyx_int_2); if (unlikely(!__pyx_tuple__62)) __PYX_ERR(3, 477, __pyx_L1_error)
+  __pyx_tuple__62 = PyTuple_Pack(2, __pyx_int_2, __pyx_int_2); if (unlikely(!__pyx_tuple__62)) __PYX_ERR(3, 481, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__62);
   __Pyx_GIVEREF(__pyx_tuple__62);
 
-  /* "cython/teukolsky_wrap.pyx":478
+  /* "cython/teukolsky_wrap.pyx":482
  *     "IRG" : {
  *         (2, 2): None,
  *         (2, 3): None,             # <<<<<<<<<<<<<<
  *         (2, 4): None,
  *         (3, 3): None,
  */
-  __pyx_tuple__63 = PyTuple_Pack(2, __pyx_int_2, __pyx_int_3); if (unlikely(!__pyx_tuple__63)) __PYX_ERR(3, 478, __pyx_L1_error)
+  __pyx_tuple__63 = PyTuple_Pack(2, __pyx_int_2, __pyx_int_3); if (unlikely(!__pyx_tuple__63)) __PYX_ERR(3, 482, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__63);
   __Pyx_GIVEREF(__pyx_tuple__63);
 
-  /* "cython/teukolsky_wrap.pyx":479
+  /* "cython/teukolsky_wrap.pyx":483
  *         (2, 2): None,
  *         (2, 3): None,
  *         (2, 4): None,             # <<<<<<<<<<<<<<
  *         (3, 3): None,
  *         (4, 4): None},
  */
-  __pyx_tuple__64 = PyTuple_Pack(2, __pyx_int_2, __pyx_int_4); if (unlikely(!__pyx_tuple__64)) __PYX_ERR(3, 479, __pyx_L1_error)
+  __pyx_tuple__64 = PyTuple_Pack(2, __pyx_int_2, __pyx_int_4); if (unlikely(!__pyx_tuple__64)) __PYX_ERR(3, 483, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__64);
   __Pyx_GIVEREF(__pyx_tuple__64);
 
-  /* "cython/teukolsky_wrap.pyx":526
+  /* "cython/teukolsky_wrap.pyx":530
  * }
  * 
  * def metric_11(double a, double r, double z):             # <<<<<<<<<<<<<<
  *     cdef vector[double] rvec = vector[double](1)
  *     cdef vector[double] zvec = vector[double](1)
  */
-  __pyx_tuple__65 = PyTuple_Pack(7, __pyx_n_s_a, __pyx_n_s_r, __pyx_n_s_z, __pyx_n_s_rvec, __pyx_n_s_zvec, __pyx_n_s_temp, __pyx_n_s_coeffs); if (unlikely(!__pyx_tuple__65)) __PYX_ERR(3, 526, __pyx_L1_error)
+  __pyx_tuple__65 = PyTuple_Pack(7, __pyx_n_s_a, __pyx_n_s_r, __pyx_n_s_z, __pyx_n_s_rvec, __pyx_n_s_zvec, __pyx_n_s_temp, __pyx_n_s_coeffs); if (unlikely(!__pyx_tuple__65)) __PYX_ERR(3, 530, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__65);
   __Pyx_GIVEREF(__pyx_tuple__65);
-  __pyx_codeobj__66 = (PyObject*)__Pyx_PyCode_New(3, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__65, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_metric_11, 526, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__66)) __PYX_ERR(3, 526, __pyx_L1_error)
+  __pyx_codeobj__66 = (PyObject*)__Pyx_PyCode_New(3, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__65, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_metric_11, 530, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__66)) __PYX_ERR(3, 530, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":537
+  /* "cython/teukolsky_wrap.pyx":541
  *     return np.array(coeffs).squeeze()
  * 
  * def metric_coefficient_S4(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
  *     return metric_coefficient_ORG(alpha, beta, nt, nr, nz, np, a, r, z)
  * 
  */
-  __pyx_tuple__67 = PyTuple_Pack(9, __pyx_n_s_alpha, __pyx_n_s_beta, __pyx_n_s_nt, __pyx_n_s_nr, __pyx_n_s_nz, __pyx_n_s_np, __pyx_n_s_a, __pyx_n_s_r, __pyx_n_s_z); if (unlikely(!__pyx_tuple__67)) __PYX_ERR(3, 537, __pyx_L1_error)
+  __pyx_tuple__67 = PyTuple_Pack(9, __pyx_n_s_alpha, __pyx_n_s_beta, __pyx_n_s_nt, __pyx_n_s_nr, __pyx_n_s_nz, __pyx_n_s_np, __pyx_n_s_a, __pyx_n_s_r, __pyx_n_s_z); if (unlikely(!__pyx_tuple__67)) __PYX_ERR(3, 541, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__67);
   __Pyx_GIVEREF(__pyx_tuple__67);
-  __pyx_codeobj__68 = (PyObject*)__Pyx_PyCode_New(9, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__67, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_metric_coefficient_S4, 537, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__68)) __PYX_ERR(3, 537, __pyx_L1_error)
+  __pyx_codeobj__68 = (PyObject*)__Pyx_PyCode_New(9, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__67, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_metric_coefficient_S4, 541, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__68)) __PYX_ERR(3, 541, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":540
+  /* "cython/teukolsky_wrap.pyx":544
  *     return metric_coefficient_ORG(alpha, beta, nt, nr, nz, np, a, r, z)
  * 
  * def metric_coefficient_S0(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
  *     return metric_coefficient_IRG(alpha, beta, nt, nr, nz, np, a, r, z)
  * 
  */
-  __pyx_tuple__69 = PyTuple_Pack(9, __pyx_n_s_alpha, __pyx_n_s_beta, __pyx_n_s_nt, __pyx_n_s_nr, __pyx_n_s_nz, __pyx_n_s_np, __pyx_n_s_a, __pyx_n_s_r, __pyx_n_s_z); if (unlikely(!__pyx_tuple__69)) __PYX_ERR(3, 540, __pyx_L1_error)
+  __pyx_tuple__69 = PyTuple_Pack(9, __pyx_n_s_alpha, __pyx_n_s_beta, __pyx_n_s_nt, __pyx_n_s_nr, __pyx_n_s_nz, __pyx_n_s_np, __pyx_n_s_a, __pyx_n_s_r, __pyx_n_s_z); if (unlikely(!__pyx_tuple__69)) __PYX_ERR(3, 544, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__69);
   __Pyx_GIVEREF(__pyx_tuple__69);
-  __pyx_codeobj__70 = (PyObject*)__Pyx_PyCode_New(9, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__69, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_metric_coefficient_S0, 540, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__70)) __PYX_ERR(3, 540, __pyx_L1_error)
+  __pyx_codeobj__70 = (PyObject*)__Pyx_PyCode_New(9, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__69, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_teukolsky_wrap_pyx, __pyx_n_s_metric_coefficient_S0, 544, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__70)) __PYX_ERR(3, 544, __pyx_L1_error)
 
-  /* "cython/flux_wrap.pyx":107
+  /* "cython/flux_wrap.pyx":119
  * 
  * 
  * def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):             # <<<<<<<<<<<<<<
  *     cdef FluxListCPP fluxescpp = flux_mode(s, dereference(geo.geocpp), dereference(teuk.teukcpp), include_minus_m = 0)
  *     fluxes = FluxList()
  */
-  __pyx_tuple__71 = PyTuple_Pack(5, __pyx_n_s_s, __pyx_n_s_geo, __pyx_n_s_teuk, __pyx_n_s_fluxescpp, __pyx_n_s_fluxes); if (unlikely(!__pyx_tuple__71)) __PYX_ERR(4, 107, __pyx_L1_error)
+  __pyx_tuple__71 = PyTuple_Pack(5, __pyx_n_s_s, __pyx_n_s_geo, __pyx_n_s_teuk, __pyx_n_s_fluxescpp, __pyx_n_s_fluxes); if (unlikely(!__pyx_tuple__71)) __PYX_ERR(4, 119, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__71);
   __Pyx_GIVEREF(__pyx_tuple__71);
-  __pyx_codeobj__72 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__71, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_flux_wrap_pyx, __pyx_n_s_flux, 107, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__72)) __PYX_ERR(4, 107, __pyx_L1_error)
+  __pyx_codeobj__72 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__71, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_flux_wrap_pyx, __pyx_n_s_flux, 119, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__72)) __PYX_ERR(4, 119, __pyx_L1_error)
 
-  /* "cython/redshift_wrap.pyx":41
+  /* "cython/redshift_wrap.pyx":39
  * 
  * 
- * def metric_coefficients_cython_ORG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
- *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, np, a, r, z)
+ * def metric_coefficients_cython_ORG(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):             # <<<<<<<<<<<<<<
+ *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
  */
-  __pyx_tuple__73 = PyTuple_Pack(9, __pyx_n_s_ai, __pyx_n_s_bi, __pyx_n_s_nt, __pyx_n_s_nr, __pyx_n_s_nz, __pyx_n_s_np, __pyx_n_s_a, __pyx_n_s_r, __pyx_n_s_z); if (unlikely(!__pyx_tuple__73)) __PYX_ERR(5, 41, __pyx_L1_error)
+  __pyx_tuple__73 = PyTuple_Pack(9, __pyx_n_s_ai, __pyx_n_s_bi, __pyx_n_s_nt, __pyx_n_s_nr, __pyx_n_s_nz, __pyx_n_s_nphi, __pyx_n_s_a, __pyx_n_s_r, __pyx_n_s_z); if (unlikely(!__pyx_tuple__73)) __PYX_ERR(5, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__73);
   __Pyx_GIVEREF(__pyx_tuple__73);
-  __pyx_codeobj__74 = (PyObject*)__Pyx_PyCode_New(9, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__73, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_redshift_wrap_pyx, __pyx_n_s_metric_coefficients_cython_ORG, 41, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__74)) __PYX_ERR(5, 41, __pyx_L1_error)
+  __pyx_codeobj__74 = (PyObject*)__Pyx_PyCode_New(9, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__73, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_redshift_wrap_pyx, __pyx_n_s_metric_coefficients_cython_ORG, 39, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__74)) __PYX_ERR(5, 39, __pyx_L1_error)
 
-  /* "cython/redshift_wrap.pyx":44
- *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, np, a, r, z)
+  /* "cython/redshift_wrap.pyx":42
+ *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
- * def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
- *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, np, a, r, z)
+ * def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):             # <<<<<<<<<<<<<<
+ *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
  */
-  __pyx_tuple__75 = PyTuple_Pack(9, __pyx_n_s_ai, __pyx_n_s_bi, __pyx_n_s_nt, __pyx_n_s_nr, __pyx_n_s_nz, __pyx_n_s_np, __pyx_n_s_a, __pyx_n_s_r, __pyx_n_s_z); if (unlikely(!__pyx_tuple__75)) __PYX_ERR(5, 44, __pyx_L1_error)
+  __pyx_tuple__75 = PyTuple_Pack(9, __pyx_n_s_ai, __pyx_n_s_bi, __pyx_n_s_nt, __pyx_n_s_nr, __pyx_n_s_nz, __pyx_n_s_nphi, __pyx_n_s_a, __pyx_n_s_r, __pyx_n_s_z); if (unlikely(!__pyx_tuple__75)) __PYX_ERR(5, 42, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__75);
   __Pyx_GIVEREF(__pyx_tuple__75);
-  __pyx_codeobj__76 = (PyObject*)__Pyx_PyCode_New(9, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__75, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_redshift_wrap_pyx, __pyx_n_s_metric_coefficients_cython_IRG, 44, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__76)) __PYX_ERR(5, 44, __pyx_L1_error)
+  __pyx_codeobj__76 = (PyObject*)__Pyx_PyCode_New(9, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__75, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_redshift_wrap_pyx, __pyx_n_s_metric_coefficients_cython_IRG, 42, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__76)) __PYX_ERR(5, 42, __pyx_L1_error)
 
-  /* "cython/redshift_wrap.pyx":47
- *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, np, a, r, z)
+  /* "cython/redshift_wrap.pyx":45
+ *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
  * def circular_redshift(unicode filename, unicode gauge, int lmax, KerrGeodesic geo):             # <<<<<<<<<<<<<<
  *     return redshift_circular(filename.encode(), str_to_gauge(gauge), lmax, dereference(geo.geocpp))
  * 
  */
-  __pyx_tuple__77 = PyTuple_Pack(4, __pyx_n_s_filename, __pyx_n_s_gauge, __pyx_n_s_lmax, __pyx_n_s_geo); if (unlikely(!__pyx_tuple__77)) __PYX_ERR(5, 47, __pyx_L1_error)
+  __pyx_tuple__77 = PyTuple_Pack(4, __pyx_n_s_filename, __pyx_n_s_gauge, __pyx_n_s_lmax, __pyx_n_s_geo); if (unlikely(!__pyx_tuple__77)) __PYX_ERR(5, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__77);
   __Pyx_GIVEREF(__pyx_tuple__77);
-  __pyx_codeobj__78 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__77, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_redshift_wrap_pyx, __pyx_n_s_circular_redshift, 47, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__78)) __PYX_ERR(5, 47, __pyx_L1_error)
+  __pyx_codeobj__78 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__77, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_redshift_wrap_pyx, __pyx_n_s_circular_redshift, 45, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__78)) __PYX_ERR(5, 45, __pyx_L1_error)
 
-  /* "cython/redshift_wrap.pyx":50
+  /* "cython/redshift_wrap.pyx":48
  *     return redshift_circular(filename.encode(), str_to_gauge(gauge), lmax, dereference(geo.geocpp))
  * 
  * def run_tests():             # <<<<<<<<<<<<<<
  *     run_unit_tests()
  * 
  */
-  __pyx_codeobj__79 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_redshift_wrap_pyx, __pyx_n_s_run_tests, 50, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__79)) __PYX_ERR(5, 50, __pyx_L1_error)
+  __pyx_codeobj__79 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_cython_redshift_wrap_pyx, __pyx_n_s_run_tests, 48, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__79)) __PYX_ERR(5, 48, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_MetricModeGenerator(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
@@ -29860,68 +30741,68 @@ static int __Pyx_modinit_type_init_code(void) {
   if (PyObject_SetAttr(__pyx_m, __pyx_n_s_RadialTeukolsky, (PyObject *)&__pyx_type_11cybhpt_full_RadialTeukolsky) < 0) __PYX_ERR(2, 97, __pyx_L1_error)
   if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11cybhpt_full_RadialTeukolsky) < 0) __PYX_ERR(2, 97, __pyx_L1_error)
   __pyx_ptype_11cybhpt_full_RadialTeukolsky = &__pyx_type_11cybhpt_full_RadialTeukolsky;
-  if (PyType_Ready(&__pyx_type_11cybhpt_full_TeukolskyMode) < 0) __PYX_ERR(3, 159, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_11cybhpt_full_TeukolskyMode) < 0) __PYX_ERR(3, 160, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_11cybhpt_full_TeukolskyMode.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_11cybhpt_full_TeukolskyMode.tp_dictoffset && __pyx_type_11cybhpt_full_TeukolskyMode.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_11cybhpt_full_TeukolskyMode.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_TeukolskyMode, (PyObject *)&__pyx_type_11cybhpt_full_TeukolskyMode) < 0) __PYX_ERR(3, 159, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11cybhpt_full_TeukolskyMode) < 0) __PYX_ERR(3, 159, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_TeukolskyMode, (PyObject *)&__pyx_type_11cybhpt_full_TeukolskyMode) < 0) __PYX_ERR(3, 160, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11cybhpt_full_TeukolskyMode) < 0) __PYX_ERR(3, 160, __pyx_L1_error)
   __pyx_ptype_11cybhpt_full_TeukolskyMode = &__pyx_type_11cybhpt_full_TeukolskyMode;
-  if (PyType_Ready(&__pyx_type_11cybhpt_full_HertzMode) < 0) __PYX_ERR(3, 287, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_11cybhpt_full_HertzMode) < 0) __PYX_ERR(3, 291, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_11cybhpt_full_HertzMode.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_11cybhpt_full_HertzMode.tp_dictoffset && __pyx_type_11cybhpt_full_HertzMode.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_11cybhpt_full_HertzMode.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_HertzMode, (PyObject *)&__pyx_type_11cybhpt_full_HertzMode) < 0) __PYX_ERR(3, 287, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11cybhpt_full_HertzMode) < 0) __PYX_ERR(3, 287, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_HertzMode, (PyObject *)&__pyx_type_11cybhpt_full_HertzMode) < 0) __PYX_ERR(3, 291, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11cybhpt_full_HertzMode) < 0) __PYX_ERR(3, 291, __pyx_L1_error)
   __pyx_ptype_11cybhpt_full_HertzMode = &__pyx_type_11cybhpt_full_HertzMode;
-  if (PyType_Ready(&__pyx_type_11cybhpt_full_MetricModeGenerator) < 0) __PYX_ERR(3, 543, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_11cybhpt_full_MetricModeGenerator) < 0) __PYX_ERR(3, 547, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_11cybhpt_full_MetricModeGenerator.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_11cybhpt_full_MetricModeGenerator.tp_dictoffset && __pyx_type_11cybhpt_full_MetricModeGenerator.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_11cybhpt_full_MetricModeGenerator.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_MetricModeGenerator, (PyObject *)&__pyx_type_11cybhpt_full_MetricModeGenerator) < 0) __PYX_ERR(3, 543, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11cybhpt_full_MetricModeGenerator) < 0) __PYX_ERR(3, 543, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_MetricModeGenerator, (PyObject *)&__pyx_type_11cybhpt_full_MetricModeGenerator) < 0) __PYX_ERR(3, 547, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11cybhpt_full_MetricModeGenerator) < 0) __PYX_ERR(3, 547, __pyx_L1_error)
   __pyx_ptype_11cybhpt_full_MetricModeGenerator = &__pyx_type_11cybhpt_full_MetricModeGenerator;
   __pyx_vtabptr_11cybhpt_full_FluxList = &__pyx_vtable_11cybhpt_full_FluxList;
   __pyx_vtable_11cybhpt_full_FluxList.set_fluxes = (PyObject *(*)(struct __pyx_obj_11cybhpt_full_FluxList *, FluxList))__pyx_f_11cybhpt_full_8FluxList_set_fluxes;
-  if (PyType_Ready(&__pyx_type_11cybhpt_full_FluxList) < 0) __PYX_ERR(4, 24, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_11cybhpt_full_FluxList) < 0) __PYX_ERR(4, 36, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_11cybhpt_full_FluxList.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_11cybhpt_full_FluxList.tp_dictoffset && __pyx_type_11cybhpt_full_FluxList.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_11cybhpt_full_FluxList.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_11cybhpt_full_FluxList.tp_dict, __pyx_vtabptr_11cybhpt_full_FluxList) < 0) __PYX_ERR(4, 24, __pyx_L1_error)
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_FluxList, (PyObject *)&__pyx_type_11cybhpt_full_FluxList) < 0) __PYX_ERR(4, 24, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11cybhpt_full_FluxList) < 0) __PYX_ERR(4, 24, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_11cybhpt_full_FluxList.tp_dict, __pyx_vtabptr_11cybhpt_full_FluxList) < 0) __PYX_ERR(4, 36, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_FluxList, (PyObject *)&__pyx_type_11cybhpt_full_FluxList) < 0) __PYX_ERR(4, 36, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11cybhpt_full_FluxList) < 0) __PYX_ERR(4, 36, __pyx_L1_error)
   __pyx_ptype_11cybhpt_full_FluxList = &__pyx_type_11cybhpt_full_FluxList;
-  if (PyType_Ready(&__pyx_type_11cybhpt_full_RedshiftCoefficients) < 0) __PYX_ERR(5, 53, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_11cybhpt_full_RedshiftCoefficients) < 0) __PYX_ERR(5, 51, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_11cybhpt_full_RedshiftCoefficients.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_11cybhpt_full_RedshiftCoefficients.tp_dictoffset && __pyx_type_11cybhpt_full_RedshiftCoefficients.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_11cybhpt_full_RedshiftCoefficients.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_RedshiftCoefficients, (PyObject *)&__pyx_type_11cybhpt_full_RedshiftCoefficients) < 0) __PYX_ERR(5, 53, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11cybhpt_full_RedshiftCoefficients) < 0) __PYX_ERR(5, 53, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_RedshiftCoefficients, (PyObject *)&__pyx_type_11cybhpt_full_RedshiftCoefficients) < 0) __PYX_ERR(5, 51, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11cybhpt_full_RedshiftCoefficients) < 0) __PYX_ERR(5, 51, __pyx_L1_error)
   __pyx_ptype_11cybhpt_full_RedshiftCoefficients = &__pyx_type_11cybhpt_full_RedshiftCoefficients;
-  if (PyType_Ready(&__pyx_type_11cybhpt_full_SphericalHarmonicCoupling) < 0) __PYX_ERR(5, 65, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_11cybhpt_full_SphericalHarmonicCoupling) < 0) __PYX_ERR(5, 63, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_11cybhpt_full_SphericalHarmonicCoupling.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_11cybhpt_full_SphericalHarmonicCoupling.tp_dictoffset && __pyx_type_11cybhpt_full_SphericalHarmonicCoupling.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_11cybhpt_full_SphericalHarmonicCoupling.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_SphericalHarmonicCoupling, (PyObject *)&__pyx_type_11cybhpt_full_SphericalHarmonicCoupling) < 0) __PYX_ERR(5, 65, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11cybhpt_full_SphericalHarmonicCoupling) < 0) __PYX_ERR(5, 65, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_SphericalHarmonicCoupling, (PyObject *)&__pyx_type_11cybhpt_full_SphericalHarmonicCoupling) < 0) __PYX_ERR(5, 63, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11cybhpt_full_SphericalHarmonicCoupling) < 0) __PYX_ERR(5, 63, __pyx_L1_error)
   __pyx_ptype_11cybhpt_full_SphericalHarmonicCoupling = &__pyx_type_11cybhpt_full_SphericalHarmonicCoupling;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -30207,28 +31088,16 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(5, 1, __pyx_L1_error)
   #endif
 
-  /* "cython/redshift_wrap.pyx":5
+  /* "cython/flux_wrap.pyx":5
  * from cython.operator cimport dereference
- * from libcpp.string cimport string
+ * from libcpp.string cimport string as cpp_string
  * import numpy as np             # <<<<<<<<<<<<<<
  * cimport numpy as np
  * 
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 5, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(5, 5, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "cython/flux_wrap.pyx":4
- * from libcpp.complex cimport complex as cpp_complex
- * from cython.operator cimport dereference
- * import numpy as np             # <<<<<<<<<<<<<<
- * cimport numpy as np
- * 
- */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(4, 4, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(4, 5, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "cython/teukolsky_wrap.pyx":4
@@ -30340,28 +31209,28 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   PyType_Modified(__pyx_ptype_11cybhpt_full_KerrGeodesic);
 
-  /* "cython/geo_wrap.pyx":275
+  /* "cython/geo_wrap.pyx":307
  * 
  * 
  * def kerr_orbital_constants_wrapper(double a, double p, double e, double x):             # <<<<<<<<<<<<<<
  *     cdef double En, Lz, Qc
  *     En = 0.
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_13kerr_orbital_constants_wrapper, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 275, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_13kerr_orbital_constants_wrapper, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 307, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_kerr_orbital_constants_wrapper, __pyx_t_1) < 0) __PYX_ERR(0, 275, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_kerr_orbital_constants_wrapper, __pyx_t_1) < 0) __PYX_ERR(0, 307, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/geo_wrap.pyx":283
+  /* "cython/geo_wrap.pyx":315
  *     return np.array([En, Lz, Qc])
  * 
  * def kerr_mino_frequencies_wrapper(double a, double p, double e, double x):             # <<<<<<<<<<<<<<
  *     cdef double upT, upR, upTh, upPhi
  *     upT = 0.
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_15kerr_mino_frequencies_wrapper, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 283, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_15kerr_mino_frequencies_wrapper, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 315, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_kerr_mino_frequencies_wrapper, __pyx_t_1) < 0) __PYX_ERR(0, 283, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_kerr_mino_frequencies_wrapper, __pyx_t_1) < 0) __PYX_ERR(0, 315, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "cython/radialsolver_wrap.pyx":3
@@ -30532,570 +31401,570 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_teukolsky_starobinsky_const_squa, __pyx_t_1) < 0) __PYX_ERR(2, 94, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":142
+  /* "cython/teukolsky_wrap.pyx":143
  * 
  * cdef dict gauge_dict = {
  *     "ORG" : Gauge.ORG,             # <<<<<<<<<<<<<<
  *     "IRG" : Gauge.IRG,
  *     "SAAB0" : Gauge.SAAB0,
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(6); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 142, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(6); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 143, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_From_enum__Gauge(ORG); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 142, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_enum__Gauge(ORG); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 143, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_ORG, __pyx_t_2) < 0) __PYX_ERR(3, 142, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_ORG, __pyx_t_2) < 0) __PYX_ERR(3, 143, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":143
+  /* "cython/teukolsky_wrap.pyx":144
  * cdef dict gauge_dict = {
  *     "ORG" : Gauge.ORG,
  *     "IRG" : Gauge.IRG,             # <<<<<<<<<<<<<<
  *     "SAAB0" : Gauge.SAAB0,
  *     "SAAB4" : Gauge.SAAB4,
  */
-  __pyx_t_2 = __Pyx_PyInt_From_enum__Gauge(IRG); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 143, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_enum__Gauge(IRG); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 144, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_IRG, __pyx_t_2) < 0) __PYX_ERR(3, 142, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_IRG, __pyx_t_2) < 0) __PYX_ERR(3, 143, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":144
+  /* "cython/teukolsky_wrap.pyx":145
  *     "ORG" : Gauge.ORG,
  *     "IRG" : Gauge.IRG,
  *     "SAAB0" : Gauge.SAAB0,             # <<<<<<<<<<<<<<
  *     "SAAB4" : Gauge.SAAB4,
  *     "ASAAB0" : Gauge.ASAAB0,
  */
-  __pyx_t_2 = __Pyx_PyInt_From_enum__Gauge(SAAB0); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 144, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_enum__Gauge(SAAB0); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 145, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_SAAB0, __pyx_t_2) < 0) __PYX_ERR(3, 142, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_SAAB0, __pyx_t_2) < 0) __PYX_ERR(3, 143, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":145
+  /* "cython/teukolsky_wrap.pyx":146
  *     "IRG" : Gauge.IRG,
  *     "SAAB0" : Gauge.SAAB0,
  *     "SAAB4" : Gauge.SAAB4,             # <<<<<<<<<<<<<<
  *     "ASAAB0" : Gauge.ASAAB0,
  *     "ASAAB4" : Gauge.ASAAB4,
  */
-  __pyx_t_2 = __Pyx_PyInt_From_enum__Gauge(SAAB4); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 145, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_enum__Gauge(SAAB4); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 146, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_SAAB4, __pyx_t_2) < 0) __PYX_ERR(3, 142, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_SAAB4, __pyx_t_2) < 0) __PYX_ERR(3, 143, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":146
+  /* "cython/teukolsky_wrap.pyx":147
  *     "SAAB0" : Gauge.SAAB0,
  *     "SAAB4" : Gauge.SAAB4,
  *     "ASAAB0" : Gauge.ASAAB0,             # <<<<<<<<<<<<<<
  *     "ASAAB4" : Gauge.ASAAB4,
  *     # "SAAB" : Gauge.SAAB,
  */
-  __pyx_t_2 = __Pyx_PyInt_From_enum__Gauge(ASAAB0); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 146, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_enum__Gauge(ASAAB0); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 147, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_ASAAB0, __pyx_t_2) < 0) __PYX_ERR(3, 142, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_ASAAB0, __pyx_t_2) < 0) __PYX_ERR(3, 143, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":147
+  /* "cython/teukolsky_wrap.pyx":148
  *     "SAAB4" : Gauge.SAAB4,
  *     "ASAAB0" : Gauge.ASAAB0,
  *     "ASAAB4" : Gauge.ASAAB4,             # <<<<<<<<<<<<<<
  *     # "SAAB" : Gauge.SAAB,
  *     # "ASAAB" : Gauge.ASAAB,
  */
-  __pyx_t_2 = __Pyx_PyInt_From_enum__Gauge(ASAAB4); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 147, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_enum__Gauge(ASAAB4); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 148, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_ASAAB4, __pyx_t_2) < 0) __PYX_ERR(3, 142, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_ASAAB4, __pyx_t_2) < 0) __PYX_ERR(3, 143, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_XGOTREF(__pyx_v_11cybhpt_full_gauge_dict);
   __Pyx_DECREF_SET(__pyx_v_11cybhpt_full_gauge_dict, ((PyObject*)__pyx_t_1));
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":437
+  /* "cython/teukolsky_wrap.pyx":441
  *         }
  * 
  * def test_hertz_mode_cython(int j, int m, int k, int n, KerrGeodesic geo):             # <<<<<<<<<<<<<<
  *     test_hertz_mode(j, m, k, n, dereference(geo.geocpp))
  * 
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_25test_hertz_mode_cython, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 437, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_25test_hertz_mode_cython, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 441, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test_hertz_mode_cython, __pyx_t_1) < 0) __PYX_ERR(3, 437, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test_hertz_mode_cython, __pyx_t_1) < 0) __PYX_ERR(3, 441, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":441
+  /* "cython/teukolsky_wrap.pyx":445
  * 
  * cdef dict basis_dict = {
  *     "tetrad": None,             # <<<<<<<<<<<<<<
  *     "coordinate": None
  * }
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 441, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 445, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_tetrad, Py_None) < 0) __PYX_ERR(3, 441, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_tetrad, Py_None) < 0) __PYX_ERR(3, 445, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":442
+  /* "cython/teukolsky_wrap.pyx":446
  * cdef dict basis_dict = {
  *     "tetrad": None,
  *     "coordinate": None             # <<<<<<<<<<<<<<
  * }
  * 
  */
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_coordinate, Py_None) < 0) __PYX_ERR(3, 441, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_coordinate, Py_None) < 0) __PYX_ERR(3, 445, __pyx_L1_error)
   __Pyx_XGOTREF(__pyx_v_11cybhpt_full_basis_dict);
   __Pyx_DECREF_SET(__pyx_v_11cybhpt_full_basis_dict, ((PyObject*)__pyx_t_1));
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":445
+  /* "cython/teukolsky_wrap.pyx":449
  * }
  * 
  * def teuk_to_hertz_ORG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
  *     cdef cpp_complex[double] PsiIn
  *     cdef cpp_complex[double] PsiUp
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_27teuk_to_hertz_ORG, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 445, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_27teuk_to_hertz_ORG, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 449, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_teuk_to_hertz_ORG, __pyx_t_1) < 0) __PYX_ERR(3, 445, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_teuk_to_hertz_ORG, __pyx_t_1) < 0) __PYX_ERR(3, 449, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":451
+  /* "cython/teukolsky_wrap.pyx":455
  *     return (PsiIn, PsiUp)
  * 
  * def teuk_to_hertz_IRG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
  *     cdef cpp_complex[double] PsiIn
  *     cdef cpp_complex[double] PsiUp
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_29teuk_to_hertz_IRG, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 451, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_29teuk_to_hertz_IRG, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 455, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_teuk_to_hertz_IRG, __pyx_t_1) < 0) __PYX_ERR(3, 451, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_teuk_to_hertz_IRG, __pyx_t_1) < 0) __PYX_ERR(3, 455, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":457
+  /* "cython/teukolsky_wrap.pyx":461
  *     return (PsiIn, PsiUp)
  * 
  * def teuk_to_hertz_SAAB(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
  *     cdef cpp_complex[double] PsiIn
  *     cdef cpp_complex[double] PsiUp
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_31teuk_to_hertz_SAAB, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 457, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_31teuk_to_hertz_SAAB, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 461, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_teuk_to_hertz_SAAB, __pyx_t_1) < 0) __PYX_ERR(3, 457, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_teuk_to_hertz_SAAB, __pyx_t_1) < 0) __PYX_ERR(3, 461, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":463
+  /* "cython/teukolsky_wrap.pyx":467
  *     return (PsiIn, PsiUp)
  * 
  * def teuk_to_hertz_ASAAB(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):             # <<<<<<<<<<<<<<
  *     cdef cpp_complex[double] PsiIn
  *     cdef cpp_complex[double] PsiUp
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_33teuk_to_hertz_ASAAB, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 463, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_33teuk_to_hertz_ASAAB, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 467, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_teuk_to_hertz_ASAAB, __pyx_t_1) < 0) __PYX_ERR(3, 463, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_teuk_to_hertz_ASAAB, __pyx_t_1) < 0) __PYX_ERR(3, 467, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":470
+  /* "cython/teukolsky_wrap.pyx":474
  * 
  * cdef dict metric_component_gauge_dict = {
  *     "ORG" : {             # <<<<<<<<<<<<<<
  *         (1, 1): None,
  *         (1, 3): None,
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(6); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 470, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(6); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 474, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "cython/teukolsky_wrap.pyx":471
+  /* "cython/teukolsky_wrap.pyx":475
  * cdef dict metric_component_gauge_dict = {
  *     "ORG" : {
  *         (1, 1): None,             # <<<<<<<<<<<<<<
  *         (1, 3): None,
  *         (1, 4): None,
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 471, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 475, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__57, Py_None) < 0) __PYX_ERR(3, 471, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__57, Py_None) < 0) __PYX_ERR(3, 475, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":472
+  /* "cython/teukolsky_wrap.pyx":476
  *     "ORG" : {
  *         (1, 1): None,
  *         (1, 3): None,             # <<<<<<<<<<<<<<
  *         (1, 4): None,
  *         (3, 3): None,
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__58, Py_None) < 0) __PYX_ERR(3, 471, __pyx_L1_error)
-
-  /* "cython/teukolsky_wrap.pyx":473
- *         (1, 1): None,
- *         (1, 3): None,
- *         (1, 4): None,             # <<<<<<<<<<<<<<
- *         (3, 3): None,
- *         (4, 4): None},
- */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__59, Py_None) < 0) __PYX_ERR(3, 471, __pyx_L1_error)
-
-  /* "cython/teukolsky_wrap.pyx":474
- *         (1, 3): None,
- *         (1, 4): None,
- *         (3, 3): None,             # <<<<<<<<<<<<<<
- *         (4, 4): None},
- *     "IRG" : {
- */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__60, Py_None) < 0) __PYX_ERR(3, 471, __pyx_L1_error)
-
-  /* "cython/teukolsky_wrap.pyx":475
- *         (1, 4): None,
- *         (3, 3): None,
- *         (4, 4): None},             # <<<<<<<<<<<<<<
- *     "IRG" : {
- *         (2, 2): None,
- */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__61, Py_None) < 0) __PYX_ERR(3, 471, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_ORG, __pyx_t_2) < 0) __PYX_ERR(3, 470, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__58, Py_None) < 0) __PYX_ERR(3, 475, __pyx_L1_error)
 
   /* "cython/teukolsky_wrap.pyx":477
+ *         (1, 1): None,
+ *         (1, 3): None,
+ *         (1, 4): None,             # <<<<<<<<<<<<<<
+ *         (3, 3): None,
  *         (4, 4): None},
- *     "IRG" : {
- *         (2, 2): None,             # <<<<<<<<<<<<<<
- *         (2, 3): None,
- *         (2, 4): None,
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 477, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__62, Py_None) < 0) __PYX_ERR(3, 477, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__59, Py_None) < 0) __PYX_ERR(3, 475, __pyx_L1_error)
 
   /* "cython/teukolsky_wrap.pyx":478
+ *         (1, 3): None,
+ *         (1, 4): None,
+ *         (3, 3): None,             # <<<<<<<<<<<<<<
+ *         (4, 4): None},
+ *     "IRG" : {
+ */
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__60, Py_None) < 0) __PYX_ERR(3, 475, __pyx_L1_error)
+
+  /* "cython/teukolsky_wrap.pyx":479
+ *         (1, 4): None,
+ *         (3, 3): None,
+ *         (4, 4): None},             # <<<<<<<<<<<<<<
+ *     "IRG" : {
+ *         (2, 2): None,
+ */
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__61, Py_None) < 0) __PYX_ERR(3, 475, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_ORG, __pyx_t_2) < 0) __PYX_ERR(3, 474, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "cython/teukolsky_wrap.pyx":481
+ *         (4, 4): None},
+ *     "IRG" : {
+ *         (2, 2): None,             # <<<<<<<<<<<<<<
+ *         (2, 3): None,
+ *         (2, 4): None,
+ */
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 481, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__62, Py_None) < 0) __PYX_ERR(3, 481, __pyx_L1_error)
+
+  /* "cython/teukolsky_wrap.pyx":482
  *     "IRG" : {
  *         (2, 2): None,
  *         (2, 3): None,             # <<<<<<<<<<<<<<
  *         (2, 4): None,
  *         (3, 3): None,
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__63, Py_None) < 0) __PYX_ERR(3, 477, __pyx_L1_error)
-
-  /* "cython/teukolsky_wrap.pyx":479
- *         (2, 2): None,
- *         (2, 3): None,
- *         (2, 4): None,             # <<<<<<<<<<<<<<
- *         (3, 3): None,
- *         (4, 4): None},
- */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__64, Py_None) < 0) __PYX_ERR(3, 477, __pyx_L1_error)
-
-  /* "cython/teukolsky_wrap.pyx":480
- *         (2, 3): None,
- *         (2, 4): None,
- *         (3, 3): None,             # <<<<<<<<<<<<<<
- *         (4, 4): None},
- *     "SAAB0" : {
- */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__60, Py_None) < 0) __PYX_ERR(3, 477, __pyx_L1_error)
-
-  /* "cython/teukolsky_wrap.pyx":481
- *         (2, 4): None,
- *         (3, 3): None,
- *         (4, 4): None},             # <<<<<<<<<<<<<<
- *     "SAAB0" : {
- *         (2, 2): None,
- */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__61, Py_None) < 0) __PYX_ERR(3, 477, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_IRG, __pyx_t_2) < 0) __PYX_ERR(3, 470, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__63, Py_None) < 0) __PYX_ERR(3, 481, __pyx_L1_error)
 
   /* "cython/teukolsky_wrap.pyx":483
- *         (4, 4): None},
- *     "SAAB0" : {
- *         (2, 2): None,             # <<<<<<<<<<<<<<
+ *         (2, 2): None,
  *         (2, 3): None,
- *         (2, 4): None,
+ *         (2, 4): None,             # <<<<<<<<<<<<<<
+ *         (3, 3): None,
+ *         (4, 4): None},
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 483, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__62, Py_None) < 0) __PYX_ERR(3, 483, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__64, Py_None) < 0) __PYX_ERR(3, 481, __pyx_L1_error)
 
   /* "cython/teukolsky_wrap.pyx":484
+ *         (2, 3): None,
+ *         (2, 4): None,
+ *         (3, 3): None,             # <<<<<<<<<<<<<<
+ *         (4, 4): None},
+ *     "SAAB0" : {
+ */
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__60, Py_None) < 0) __PYX_ERR(3, 481, __pyx_L1_error)
+
+  /* "cython/teukolsky_wrap.pyx":485
+ *         (2, 4): None,
+ *         (3, 3): None,
+ *         (4, 4): None},             # <<<<<<<<<<<<<<
+ *     "SAAB0" : {
+ *         (2, 2): None,
+ */
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__61, Py_None) < 0) __PYX_ERR(3, 481, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_IRG, __pyx_t_2) < 0) __PYX_ERR(3, 474, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "cython/teukolsky_wrap.pyx":487
+ *         (4, 4): None},
+ *     "SAAB0" : {
+ *         (2, 2): None,             # <<<<<<<<<<<<<<
+ *         (2, 3): None,
+ *         (2, 4): None,
+ */
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 487, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__62, Py_None) < 0) __PYX_ERR(3, 487, __pyx_L1_error)
+
+  /* "cython/teukolsky_wrap.pyx":488
  *     "SAAB0" : {
  *         (2, 2): None,
  *         (2, 3): None,             # <<<<<<<<<<<<<<
  *         (2, 4): None,
  *         (3, 3): None,
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__63, Py_None) < 0) __PYX_ERR(3, 483, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__63, Py_None) < 0) __PYX_ERR(3, 487, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":485
+  /* "cython/teukolsky_wrap.pyx":489
  *         (2, 2): None,
  *         (2, 3): None,
  *         (2, 4): None,             # <<<<<<<<<<<<<<
  *         (3, 3): None,
  *         (4, 4): None},
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__64, Py_None) < 0) __PYX_ERR(3, 483, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__64, Py_None) < 0) __PYX_ERR(3, 487, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":486
+  /* "cython/teukolsky_wrap.pyx":490
  *         (2, 3): None,
  *         (2, 4): None,
  *         (3, 3): None,             # <<<<<<<<<<<<<<
  *         (4, 4): None},
  *     "SAAB4" : {
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__60, Py_None) < 0) __PYX_ERR(3, 483, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__60, Py_None) < 0) __PYX_ERR(3, 487, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":487
+  /* "cython/teukolsky_wrap.pyx":491
  *         (2, 4): None,
  *         (3, 3): None,
  *         (4, 4): None},             # <<<<<<<<<<<<<<
  *     "SAAB4" : {
  *         (1, 1): None,
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__61, Py_None) < 0) __PYX_ERR(3, 483, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_SAAB0, __pyx_t_2) < 0) __PYX_ERR(3, 470, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__61, Py_None) < 0) __PYX_ERR(3, 487, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_SAAB0, __pyx_t_2) < 0) __PYX_ERR(3, 474, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":489
+  /* "cython/teukolsky_wrap.pyx":493
  *         (4, 4): None},
  *     "SAAB4" : {
  *         (1, 1): None,             # <<<<<<<<<<<<<<
  *         (1, 3): None,
  *         (1, 4): None,
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 489, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 493, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__57, Py_None) < 0) __PYX_ERR(3, 489, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__57, Py_None) < 0) __PYX_ERR(3, 493, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":490
+  /* "cython/teukolsky_wrap.pyx":494
  *     "SAAB4" : {
  *         (1, 1): None,
  *         (1, 3): None,             # <<<<<<<<<<<<<<
  *         (1, 4): None,
  *         (3, 3): None,
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__58, Py_None) < 0) __PYX_ERR(3, 489, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__58, Py_None) < 0) __PYX_ERR(3, 493, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":491
+  /* "cython/teukolsky_wrap.pyx":495
  *         (1, 1): None,
  *         (1, 3): None,
  *         (1, 4): None,             # <<<<<<<<<<<<<<
  *         (3, 3): None,
  *         (4, 4): None},
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__59, Py_None) < 0) __PYX_ERR(3, 489, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__59, Py_None) < 0) __PYX_ERR(3, 493, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":492
+  /* "cython/teukolsky_wrap.pyx":496
  *         (1, 3): None,
  *         (1, 4): None,
  *         (3, 3): None,             # <<<<<<<<<<<<<<
  *         (4, 4): None},
  *     "ASAAB0" : {
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__60, Py_None) < 0) __PYX_ERR(3, 489, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__60, Py_None) < 0) __PYX_ERR(3, 493, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":493
+  /* "cython/teukolsky_wrap.pyx":497
  *         (1, 4): None,
  *         (3, 3): None,
  *         (4, 4): None},             # <<<<<<<<<<<<<<
  *     "ASAAB0" : {
  *         (2, 2): None,
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__61, Py_None) < 0) __PYX_ERR(3, 489, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_SAAB4, __pyx_t_2) < 0) __PYX_ERR(3, 470, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__61, Py_None) < 0) __PYX_ERR(3, 493, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_SAAB4, __pyx_t_2) < 0) __PYX_ERR(3, 474, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":495
+  /* "cython/teukolsky_wrap.pyx":499
  *         (4, 4): None},
  *     "ASAAB0" : {
  *         (2, 2): None,             # <<<<<<<<<<<<<<
  *         (2, 3): None,
  *         (2, 4): None,
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 495, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 499, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__62, Py_None) < 0) __PYX_ERR(3, 495, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__62, Py_None) < 0) __PYX_ERR(3, 499, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":496
+  /* "cython/teukolsky_wrap.pyx":500
  *     "ASAAB0" : {
  *         (2, 2): None,
  *         (2, 3): None,             # <<<<<<<<<<<<<<
  *         (2, 4): None,
  *         (3, 3): None,
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__63, Py_None) < 0) __PYX_ERR(3, 495, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__63, Py_None) < 0) __PYX_ERR(3, 499, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":497
+  /* "cython/teukolsky_wrap.pyx":501
  *         (2, 2): None,
  *         (2, 3): None,
  *         (2, 4): None,             # <<<<<<<<<<<<<<
  *         (3, 3): None,
  *         (4, 4): None},
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__64, Py_None) < 0) __PYX_ERR(3, 495, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__64, Py_None) < 0) __PYX_ERR(3, 499, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":498
+  /* "cython/teukolsky_wrap.pyx":502
  *         (2, 3): None,
  *         (2, 4): None,
  *         (3, 3): None,             # <<<<<<<<<<<<<<
  *         (4, 4): None},
  *     "ASAAB4" : {
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__60, Py_None) < 0) __PYX_ERR(3, 495, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__60, Py_None) < 0) __PYX_ERR(3, 499, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":499
+  /* "cython/teukolsky_wrap.pyx":503
  *         (2, 4): None,
  *         (3, 3): None,
  *         (4, 4): None},             # <<<<<<<<<<<<<<
  *     "ASAAB4" : {
  *         (1, 1): None,
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__61, Py_None) < 0) __PYX_ERR(3, 495, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_ASAAB0, __pyx_t_2) < 0) __PYX_ERR(3, 470, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__61, Py_None) < 0) __PYX_ERR(3, 499, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_ASAAB0, __pyx_t_2) < 0) __PYX_ERR(3, 474, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":501
+  /* "cython/teukolsky_wrap.pyx":505
  *         (4, 4): None},
  *     "ASAAB4" : {
  *         (1, 1): None,             # <<<<<<<<<<<<<<
  *         (1, 3): None,
  *         (1, 4): None,
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 501, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 505, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__57, Py_None) < 0) __PYX_ERR(3, 501, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__57, Py_None) < 0) __PYX_ERR(3, 505, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":502
+  /* "cython/teukolsky_wrap.pyx":506
  *     "ASAAB4" : {
  *         (1, 1): None,
  *         (1, 3): None,             # <<<<<<<<<<<<<<
  *         (1, 4): None,
  *         (3, 3): None,
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__58, Py_None) < 0) __PYX_ERR(3, 501, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__58, Py_None) < 0) __PYX_ERR(3, 505, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":503
+  /* "cython/teukolsky_wrap.pyx":507
  *         (1, 1): None,
  *         (1, 3): None,
  *         (1, 4): None,             # <<<<<<<<<<<<<<
  *         (3, 3): None,
  *         (4, 4): None},
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__59, Py_None) < 0) __PYX_ERR(3, 501, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__59, Py_None) < 0) __PYX_ERR(3, 505, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":504
+  /* "cython/teukolsky_wrap.pyx":508
  *         (1, 3): None,
  *         (1, 4): None,
  *         (3, 3): None,             # <<<<<<<<<<<<<<
  *         (4, 4): None},
  *     # "SAAB" : {
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__60, Py_None) < 0) __PYX_ERR(3, 501, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__60, Py_None) < 0) __PYX_ERR(3, 505, __pyx_L1_error)
 
-  /* "cython/teukolsky_wrap.pyx":505
+  /* "cython/teukolsky_wrap.pyx":509
  *         (1, 4): None,
  *         (3, 3): None,
  *         (4, 4): None},             # <<<<<<<<<<<<<<
  *     # "SAAB" : {
  *     #     (1, 1): None,
  */
-  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__61, Py_None) < 0) __PYX_ERR(3, 501, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_ASAAB4, __pyx_t_2) < 0) __PYX_ERR(3, 470, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_2, __pyx_tuple__61, Py_None) < 0) __PYX_ERR(3, 505, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_ASAAB4, __pyx_t_2) < 0) __PYX_ERR(3, 474, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_XGOTREF(__pyx_v_11cybhpt_full_metric_component_gauge_dict);
   __Pyx_DECREF_SET(__pyx_v_11cybhpt_full_metric_component_gauge_dict, ((PyObject*)__pyx_t_1));
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":526
+  /* "cython/teukolsky_wrap.pyx":530
  * }
  * 
  * def metric_11(double a, double r, double z):             # <<<<<<<<<<<<<<
  *     cdef vector[double] rvec = vector[double](1)
  *     cdef vector[double] zvec = vector[double](1)
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_35metric_11, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 526, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_35metric_11, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 530, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_metric_11, __pyx_t_1) < 0) __PYX_ERR(3, 526, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_metric_11, __pyx_t_1) < 0) __PYX_ERR(3, 530, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":537
+  /* "cython/teukolsky_wrap.pyx":541
  *     return np.array(coeffs).squeeze()
  * 
  * def metric_coefficient_S4(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
  *     return metric_coefficient_ORG(alpha, beta, nt, nr, nz, np, a, r, z)
  * 
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_37metric_coefficient_S4, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 537, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_37metric_coefficient_S4, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 541, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_metric_coefficient_S4, __pyx_t_1) < 0) __PYX_ERR(3, 537, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_metric_coefficient_S4, __pyx_t_1) < 0) __PYX_ERR(3, 541, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/teukolsky_wrap.pyx":540
+  /* "cython/teukolsky_wrap.pyx":544
  *     return metric_coefficient_ORG(alpha, beta, nt, nr, nz, np, a, r, z)
  * 
  * def metric_coefficient_S0(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
  *     return metric_coefficient_IRG(alpha, beta, nt, nr, nz, np, a, r, z)
  * 
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_39metric_coefficient_S0, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 540, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_39metric_coefficient_S0, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 544, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_metric_coefficient_S0, __pyx_t_1) < 0) __PYX_ERR(3, 540, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_metric_coefficient_S0, __pyx_t_1) < 0) __PYX_ERR(3, 544, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/flux_wrap.pyx":107
+  /* "cython/flux_wrap.pyx":119
  * 
  * 
  * def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):             # <<<<<<<<<<<<<<
  *     cdef FluxListCPP fluxescpp = flux_mode(s, dereference(geo.geocpp), dereference(teuk.teukcpp), include_minus_m = 0)
  *     fluxes = FluxList()
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_41flux, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 107, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_41flux, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(4, 119, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_flux, __pyx_t_1) < 0) __PYX_ERR(4, 107, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_flux, __pyx_t_1) < 0) __PYX_ERR(4, 119, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/redshift_wrap.pyx":41
+  /* "cython/redshift_wrap.pyx":39
  * 
  * 
- * def metric_coefficients_cython_ORG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
- *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, np, a, r, z)
+ * def metric_coefficients_cython_ORG(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):             # <<<<<<<<<<<<<<
+ *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_43metric_coefficients_cython_ORG, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 41, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_43metric_coefficients_cython_ORG, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_metric_coefficients_cython_ORG, __pyx_t_1) < 0) __PYX_ERR(5, 41, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_metric_coefficients_cython_ORG, __pyx_t_1) < 0) __PYX_ERR(5, 39, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/redshift_wrap.pyx":44
- *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, np, a, r, z)
+  /* "cython/redshift_wrap.pyx":42
+ *     return metric_coefficient_ORG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
- * def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z):             # <<<<<<<<<<<<<<
- *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, np, a, r, z)
+ * def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):             # <<<<<<<<<<<<<<
+ *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_45metric_coefficients_cython_IRG, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 44, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_45metric_coefficients_cython_IRG, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 42, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_metric_coefficients_cython_IRG, __pyx_t_1) < 0) __PYX_ERR(5, 44, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_metric_coefficients_cython_IRG, __pyx_t_1) < 0) __PYX_ERR(5, 42, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/redshift_wrap.pyx":47
- *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, np, a, r, z)
+  /* "cython/redshift_wrap.pyx":45
+ *     return metric_coefficient_IRG(ai, bi, nt, nr, nz, nphi, a, r, z)
  * 
  * def circular_redshift(unicode filename, unicode gauge, int lmax, KerrGeodesic geo):             # <<<<<<<<<<<<<<
  *     return redshift_circular(filename.encode(), str_to_gauge(gauge), lmax, dereference(geo.geocpp))
  * 
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_47circular_redshift, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 47, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_47circular_redshift, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_circular_redshift, __pyx_t_1) < 0) __PYX_ERR(5, 47, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_circular_redshift, __pyx_t_1) < 0) __PYX_ERR(5, 45, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cython/redshift_wrap.pyx":50
+  /* "cython/redshift_wrap.pyx":48
  *     return redshift_circular(filename.encode(), str_to_gauge(gauge), lmax, dereference(geo.geocpp))
  * 
  * def run_tests():             # <<<<<<<<<<<<<<
  *     run_unit_tests()
  * 
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_49run_tests, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 50, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_11cybhpt_full_49run_tests, NULL, __pyx_n_s_cybhpt_full); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 48, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_run_tests, __pyx_t_1) < 0) __PYX_ERR(5, 50, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_run_tests, __pyx_t_1) < 0) __PYX_ERR(5, 48, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "(tree fragment)":1

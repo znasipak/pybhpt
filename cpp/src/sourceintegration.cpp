@@ -6,31 +6,30 @@ SummationHelper::SummationHelper(): _sum(0.), _previousSum(0.), _maxTerm(0.), _p
 SummationHelper::~SummationHelper() {}
 
 void SummationHelper::add(Complex val){
+	// std::cout << "val = " << val << "\n";
 	if(abs(val) > _maxTerm) _maxTerm = abs(val);
 	_previousSum = _sum;
 	_sum += val;
-	// skip error tracking if sum goes to zero
-	// if(abs(_sum) == 0.){
-	// 	double loss = (abs(_previousSum) + abs(val))/abs(_sum);
-	// 	if(loss >= 1.){ // if we lose an order of magnitude due to cancellations, record it
-	// 		_precisionLoss *= loss;
-	// 	}else{ // if we add a big number back, we regain precision
-	// 		_precisionLoss *= abs(_previousSum)/abs(val);
-	// 	}
-	// 	if(_precisionLoss < 1.) _precisionLoss = 1.;
+
+	// could never really get the following to work, so I'll stick with the method of maxValue/abs(sum)
+
+	// double loss = 1.;
+	// // std::cout << "previousSum = " << _previousSum << "\n";
+	// // std::cout << "sum = " << _sum << "\n";
+	// if(abs(_sum) > 0.){
+	// 	loss = pow(10, int(std::log10(0.5*(abs(_previousSum) + abs(val))/abs(_sum)))); // floor to the nearest power of 10
+	// }else if(abs(_previousSum) > 0.){
+	// 	loss = std::log10(abs(_previousSum));
 	// }
-	double loss = 1.;
-	if(abs(_sum) > 0.){
-		loss = (abs(_previousSum) + abs(val))/abs(_sum);
-	}else{
-		loss = std::log10(abs(_previousSum));
-	}
-	if(loss >= 1.){ // if we lose an order of magnitude due to cancellations, record it
-		_precisionLoss *= loss;
-	}else{ // if we add a big number back, we regain precision
-		_precisionLoss *= abs(_previousSum)/abs(val);
-	}
-	if(_precisionLoss < 1.) _precisionLoss = 1.;
+	// if(loss >= 10.){ // if we lose an order of magnitude due to cancellations, record it
+	// 	_precisionLoss *= loss;
+	// }else if(abs(_previousSum) < 0.1*abs(val)){ // if we add a big number back, we regain precision
+	// 	_precisionLoss *= pow(10., std::floor(std::log10(abs(_previousSum)/abs(val))));
+	// }
+	// if(_precisionLoss < 1.) _precisionLoss = 1.;
+
+	_precisionLoss = 1.;
+	// std::cout << "precisionLoss = " << _precisionLoss << "\n";
 }
 
 void SummationHelper::setBasePrecision(double val){
@@ -46,6 +45,7 @@ double SummationHelper::getMaxTerm(){
 }
 
 double SummationHelper::getPrecision(){
+	// std::cout << _basePrecision << ", " << _precisionLoss << ", " << _maxTerm << ", " << abs(_sum) << "\n";
 	return _basePrecision*std::max(_precisionLoss, _maxTerm/abs(_sum));
 }
 
@@ -58,50 +58,62 @@ int integrand_convergence(Complex old_value, Complex new_value, double eps1, dou
 // 					Field amplitudes				 //
 ///////////////////////////////////////////////////////
 
-TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
+TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh){
 	if( abs(s) == 2 ){
+		ComplexDerivativesMatrixStruct Rin = {.solution = teuk.getSolution(In), .derivative = teuk.getDerivative(In), .secondDerivative = teuk.getSecondDerivative(In)};
+		ComplexDerivativesMatrixStruct Rup = {.solution = teuk.getSolution(Up), .derivative = teuk.getDerivative(Up), .secondDerivative = teuk.getSecondDerivative(Up)};
+		DerivativesMatrix Slm = {.solution = swsh.getSolution(), .derivative = swsh.getDerivative(), .secondDerivative = swsh.getSecondDerivative()};
 		return teukolsky_amplitude(s, L, m, k, n, traj, geoConstants, Rin, Rup, Slm);
 	}else if( s == 0 ){
-		return scalar_amplitude(L, m, k, n, traj, geoConstants, Rin, Rup, Slm);
+		return scalar_amplitude_generic(L, m, k, n, traj, geoConstants, teuk, swsh);
 	}else{
 		std::cout << "SOURCEINTEGRATION: ERROR: Source integration not yet implemented for s = " << s << " fields \n";
-		TeukolskyAmplitudes Zlm = {0., 0.};
+		TeukolskyAmplitudes Zlm = {0., 0., DBL_EPSILON, DBL_EPSILON};
 		return Zlm;
 	}
 }
 
-TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
+TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh){
 	if( abs(s) == 2 ){
+		ComplexDerivativesMatrixStruct Rin = {.solution = teuk.getSolution(In), .derivative = teuk.getDerivative(In), .secondDerivative = teuk.getSecondDerivative(In)};
+		ComplexDerivativesMatrixStruct Rup = {.solution = teuk.getSolution(Up), .derivative = teuk.getDerivative(Up), .secondDerivative = teuk.getSecondDerivative(Up)};
+		DerivativesMatrix Slm = {.solution = swsh.getSolution(), .derivative = swsh.getDerivative(), .secondDerivative = swsh.getSecondDerivative()};
 		return teukolsky_amplitude_circeq(s, L, m, traj, geoConstants, Rin, Rup, Slm);
 	}else if( s == 0 ){
-		return scalar_amplitude_circeq(L, m, traj, geoConstants, Rin, Rup, Slm);
+		return scalar_amplitude_circular(L, m, 0, 0, traj, geoConstants, teuk, swsh);
 	}else{
 		std::cout << "SOURCEINTEGRATION: ERROR: Source integration not yet implemented for s = " << s << " fields \n";
-		TeukolskyAmplitudes Zlm = {0., 0.};
+		TeukolskyAmplitudes Zlm = {0., 0., DBL_EPSILON, DBL_EPSILON};
 		return Zlm;
 	}
 }
 
-TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
+TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh){
 	if( abs(s) == 2 ){
+		ComplexDerivativesMatrixStruct Rin = {.solution = teuk.getSolution(In), .derivative = teuk.getDerivative(In), .secondDerivative = teuk.getSecondDerivative(In)};
+		ComplexDerivativesMatrixStruct Rup = {.solution = teuk.getSolution(Up), .derivative = teuk.getDerivative(Up), .secondDerivative = teuk.getSecondDerivative(Up)};
+		DerivativesMatrix Slm = {.solution = swsh.getSolution(), .derivative = swsh.getDerivative(), .secondDerivative = swsh.getSecondDerivative()};
 		return teukolsky_amplitude_ecceq(s, L, m, n, traj, geoConstants, Rin, Rup, Slm);
 	}else if( s == 0 ){
-		return scalar_amplitude_ecceq(L, m, n, traj, geoConstants, Rin, Rup, Slm);
+		return scalar_amplitude_equatorial(L, m, 0, n, traj, geoConstants, teuk, swsh);
 	}else{
 		std::cout << "SOURCEINTEGRATION: ERROR: Source integration not yet implemented for s = " << s << " fields \n";
-		TeukolskyAmplitudes Zlm = {0., 0.};
+		TeukolskyAmplitudes Zlm = {0., 0., DBL_EPSILON, DBL_EPSILON};
 		return Zlm;
 	}
 }
 
-TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
+TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh){
 	if( abs(s) == 2 ){
+		ComplexDerivativesMatrixStruct Rin = {.solution = teuk.getSolution(In), .derivative = teuk.getDerivative(In), .secondDerivative = teuk.getSecondDerivative(In)};
+		ComplexDerivativesMatrixStruct Rup = {.solution = teuk.getSolution(Up), .derivative = teuk.getDerivative(Up), .secondDerivative = teuk.getSecondDerivative(Up)};
+		DerivativesMatrix Slm = {.solution = swsh.getSolution(), .derivative = swsh.getDerivative(), .secondDerivative = swsh.getSecondDerivative()};
 		return teukolsky_amplitude_sphinc(s, L, m, k, traj, geoConstants, Rin, Rup, Slm);
 	}else if( s == 0 ){
-		return scalar_amplitude_sphinc(L, m, k, traj, geoConstants, Rin, Rup, Slm);
+		return scalar_amplitude_spherical(L, m, k, 0, traj, geoConstants, teuk, swsh);
 	}else{
 		std::cout << "SOURCEINTEGRATION: ERROR: Source integration not yet implemented for s = " << s << " fields \n";
-		TeukolskyAmplitudes Zlm = {0., 0.};
+		TeukolskyAmplitudes Zlm = {0., 0., DBL_EPSILON, DBL_EPSILON};
 		return Zlm;
 	}
 }
@@ -965,7 +977,7 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	ZlmUp *= -8.*M_PI/W/geoConstants.upsilonT;
 	ZlmIn *= -8.*M_PI/W/geoConstants.upsilonT;
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, sumIn.getPrecision(), sumUp.getPrecision()};
 
 	return Zlm;
 }
@@ -1035,7 +1047,7 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	int sampleSize = radialLength - 1;
 	int NsampleMax = 2*sampleSize;
 	if(NsampleMax < Nsample){
-		Nsample = NsampleMax;
+		Nsample = NsampleMax/2;
 	}
 	int halfSample = Nsample/2;
 	int sampleDiff = sampleSize/halfSample;
@@ -1103,10 +1115,26 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	// std::cout << sumUp.getPrecision() << "\n";
 	// std::cout << ZlmIn << "\n";
 	// std::cout << ZlmUp << "\n";
+	// if(sumIn.getPrecision()){
+
+	// }
+	double precisionIn = abs(1. - ZlmInCompare/ZlmIn);
+	double precisionUp = abs(1. - ZlmUpCompare/ZlmUp);
+	if(precisionIn < 5.){
+		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
+	}else{
+		precisionIn = sumIn.getPrecision();
+	}
+	if(precisionUp < 5.){
+		precisionUp = std::max(sumUp.getPrecision(), precisionUp);
+	}else{
+		precisionUp = sumUp.getPrecision();
+	}
+
 	ZlmUp *= -rescaleUp*8.*M_PI/W/geoConstants.upsilonT;
 	ZlmIn *= -rescaleIn*8.*M_PI/W/geoConstants.upsilonT;
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, precisionIn, precisionUp};
 
 	return Zlm;
 }
@@ -1217,7 +1245,7 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 	ZlmUp *= -8.*M_PI/W/geoConstants.upsilonT;
 	ZlmIn *= -8.*M_PI/W/geoConstants.upsilonT;
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, sumIn.getPrecision(), sumUp.getPrecision()};
 
 	return Zlm;
 }
@@ -1254,7 +1282,7 @@ TeukolskyAmplitudes teukolsky_amplitude_circeq(int s, int L, int m, GeodesicTraj
 	ZlmUp *= -8.*M_PI/W/geoConstants.upsilonT;
 	ZlmIn *= -8.*M_PI/W/geoConstants.upsilonT;
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
 
 	return Zlm;
 }
@@ -1874,7 +1902,7 @@ TeukolskyAmplitudes scalar_amplitude_circeq(int L, int m, GeodesicTrajectory& tr
 	Complex ZlmUp = -4.*M_PI/W/geoConstants.upsilonT*( I1Up*I2 + I3Up*I4 );
 	Complex ZlmIn = -4.*M_PI/W/geoConstants.upsilonT*( I1In*I2 + I3In*I4 );
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
 
 	return Zlm;
 }
@@ -2076,12 +2104,12 @@ TeukolskyAmplitudes scalar_amplitude_generic(int, int m, int k, int n, GeodesicT
 
 	int status = polar_integral_convergence_sum(I2, scalar_integrand_I2, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
 		return Zlm;
 	}
 	status = polar_integral_convergence_sum(I4, scalar_integrand_I4, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
 		return Zlm;
 	}
 
@@ -2105,7 +2133,7 @@ TeukolskyAmplitudes scalar_amplitude_generic(int, int m, int k, int n, GeodesicT
 		}
 	}
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
 
 	return Zlm;
 }
@@ -2122,12 +2150,12 @@ TeukolskyAmplitudes scalar_amplitude_equatorial(int, int m, int k, int n, Geodes
 
 	int status = scalar_integrand_I2(I2, m, k, teuk.getModeFrequency(), traj.tTheta[0], geoConstants.a*cos(swsh.getArguments(0)), traj.getAzimuthalAccumulation(2, 0), 0, swsh.getSolution(0));
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
 		return Zlm;
 	}
 	status = scalar_integrand_I4(I4, m, k, teuk.getModeFrequency(), traj.tTheta[0], geoConstants.a*cos(traj.getPolarPosition(0)), traj.getAzimuthalAccumulation(2, 0), 0, swsh.getSolution(0));
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
 		return Zlm;
 	}
 
@@ -2151,7 +2179,7 @@ TeukolskyAmplitudes scalar_amplitude_equatorial(int, int m, int k, int n, Geodes
 		}
 	}
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
 
 	return Zlm;
 }
@@ -2168,12 +2196,12 @@ TeukolskyAmplitudes scalar_amplitude_spherical(int, int m, int k, int n, Geodesi
 
 	int status = polar_integral_convergence_sum(I2, scalar_integrand_I2, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
 		return Zlm;
 	}
 	status = polar_integral_convergence_sum(I4, scalar_integrand_I4, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
 		return Zlm;
 	}
 
@@ -2193,7 +2221,7 @@ TeukolskyAmplitudes scalar_amplitude_spherical(int, int m, int k, int n, Geodesi
 		}
 	}
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
 
 	return Zlm;
 }
@@ -2208,12 +2236,12 @@ TeukolskyAmplitudes scalar_amplitude_circular(int, int m, int k, int n, Geodesic
 
 	int status = scalar_integrand_I2(I2, m, k, teuk.getModeFrequency(), traj.tTheta[0], geoConstants.a*cos(traj.getPolarPosition(0)), traj.getAzimuthalAccumulation(2, 0), 0, swsh.getSolution(0));
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
 		return Zlm;
 	}
 	status = scalar_integrand_I4(I4, m, k, teuk.getModeFrequency(), traj.tTheta[0], geoConstants.a*cos(traj.getPolarPosition(0)), traj.getAzimuthalAccumulation(2, 0), 0, swsh.getSolution(0));
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
 		return Zlm;
 	}
 
@@ -2233,818 +2261,818 @@ TeukolskyAmplitudes scalar_amplitude_circular(int, int m, int k, int n, Geodesic
 		}
 	}
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
 
 	return Zlm;
 }
 
-TeukolskyAmplitudes scalar_amplitude(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
+// TeukolskyAmplitudes scalar_amplitude(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
 	
 
-	ComplexVector R0 = (Rin.solution);
-	ComplexVector Rp0 = (Rin.derivative);
-
-	ComplexVector R1 = (Rup.solution);
-	ComplexVector Rp1 = (Rup.derivative);
-
-	Vector St = (Slm.solution);
-
-	Vector rp = traj.r;
-	Vector thp = traj.theta;
-	Vector tR = traj.tR;
-	Vector phiR = traj.phiR;
-	Vector tTh = traj.tTheta;
-	Vector phiTh = traj.phiTheta;
-
-	Complex W = scalar_wronskian(geoConstants.a, rp[0], R0[0], Rp0[0], R1[0], Rp1[0]);
-
-	int NsampleInit = pow(2, 5);
-	int NsampleR = NsampleInit, NsampleTh = NsampleInit;
-	int radialLength = rp.size(), polarLength = thp.size();
-	int sampleSizeR = radialLength - 1, sampleSizeTh = polarLength - 1;
-	int NsampleMaxR = 2*sampleSizeR, NsampleMaxTh = 2*sampleSizeTh;
-	while(NsampleR < 2*abs(n) + 2){
-		NsampleR *= 2;
-	}
-	while(NsampleTh < 2*abs(k) + 2){
-		NsampleTh *= 2;
-	}
-	if(NsampleMaxR < NsampleR){
-		NsampleR = NsampleMaxR;
-	}
-	if(NsampleMaxTh < NsampleTh){
-		NsampleTh = NsampleMaxTh;
-	}
-	int halfSampleR = NsampleR/2, halfSampleTh = NsampleTh/2;
-	int sampleDiffR = sampleSizeR/halfSampleR, sampleDiffTh = sampleSizeTh/halfSampleTh;
-	double deltaQR = M_PI/double(sampleSizeR), deltaQTh = M_PI/double(sampleSizeTh);
-
-	// first add the points at qr = 0 and qr = pi
-	Complex sum;
-	int samplePos;
-	double qr, qth;
-	double maxTerm = 0.;
-	Complex sumTerm;
-
-	double errorThreshold = 1.e-2;
-
-	// Calculate I1Up
-	samplePos = 0;
-	qr = samplePos*deltaQR;
-	sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr,
-		R0[samplePos]);
-	sum = sumTerm;
-	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-	samplePos = halfSampleR*sampleDiffR;
-	qr = samplePos*deltaQR;
-	sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos]);
-	sum += sumTerm;
-	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-	for(int i = 1; i < halfSampleR; i++){
-		samplePos = i*sampleDiffR;
-		qr = double(samplePos)*deltaQR;
-
-		sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos]);
-		sum += sumTerm;
-		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-		sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos]);
-		sum += sumTerm;
-		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-	}
-
-	Complex I1Up = sumTerm/double(NsampleR);
-
-	double precisionLoss = maxTerm/abs(I1Up);
-	double errorTolerance = 5.e-12;
-	double errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
-
-	Complex ICompare = 0.;
-	Complex temp = 0.;
-	while(NsampleR < NsampleMaxR && abs(1. - ICompare/I1Up) > errorToleranceAdjusted){
-		for(int i = 0; i < halfSampleR; i++){
-			samplePos = i*sampleDiffR + sampleDiffR/2;
-			qr = double(samplePos)*deltaQR;
-
-			sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos]);
-			sum += sumTerm;
-			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-			temp = sumTerm;
-
-			sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos]);
-			sum += sumTerm;
-			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-		}
-		NsampleR *= 2;
-		halfSampleR *= 2;
-		sampleDiffR /= 2;
-		ICompare = I1Up;
-		I1Up = sum/double(NsampleR);
-
-		precisionLoss = maxTerm/abs(I1Up);
-		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
-		// std::cout << "Precision of Teukolsky I1Up amplitude = " << abs(1. - ICompare/I1Up) << " with "<<NsampleR<<" samples \n";
-	}
-	double errorLossI1Up = errorToleranceAdjusted;
-	if(abs(1. - ICompare/I1Up) > errorToleranceAdjusted && errorToleranceAdjusted < errorThreshold){
-		std::cout << "(SOURCEINT) ERROR: I1Up ("<<L<<","<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<errorToleranceAdjusted<<" within N = " << NsampleMaxR << " samples. Only converged to precision of  "<<abs(1. - ICompare/I1Up)<< ". \n";
-	}
-
-	// Calculate I1In
-
-	maxTerm = 0.;
-	NsampleR = NsampleInit;
-	halfSampleR = NsampleR/2;
-	sampleDiffR = sampleSizeR/halfSampleR;
-
-	samplePos = 0;
-	qr = samplePos*deltaQR;
-	sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr,
-		R1[samplePos]);
-	sum = sumTerm;
-	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-	samplePos = halfSampleR*sampleDiffR;
-	qr = samplePos*deltaQR;
-	sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos]);
-	sum += sumTerm;
-	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-	for(int i = 1; i < halfSampleR; i++){
-		samplePos = i*sampleDiffR;
-		qr = double(samplePos)*deltaQR;
-		sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos]);
-		sum += sumTerm;
-		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-		sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos]);
-		sum += sumTerm;
-		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-	}
-
-	Complex I1In = sum/double(NsampleR);
-
-	precisionLoss = maxTerm/abs(I1In);
-	errorTolerance = 5.e-12;
-	errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
-
-	ICompare = 0.;
-	while(NsampleR < NsampleMaxR && abs(1. - ICompare/I1In) > errorToleranceAdjusted){
-		for(int i = 0; i < halfSampleR; i++){
-			samplePos = i*sampleDiffR + sampleDiffR/2;
-			qr = double(samplePos)*deltaQR;
-
-			sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos]);
-			sum += sumTerm;
-			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-			sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos]);
-			sum += sumTerm;
-			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-		}
-		NsampleR *= 2;
-		halfSampleR *= 2;
-		sampleDiffR /= 2;
-		ICompare = I1In;
-		I1In = sum/double(NsampleR);
-
-		precisionLoss = maxTerm/abs(I1In);
-		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
-		// std::cout << "Precision of Teukolsky I1In amplitude = " << abs(1. - ICompare/I1In) << " with "<<NsampleR<<" samples \n";
-	}
-	double errorLossI1In = errorToleranceAdjusted;
-	if(abs(1. - ICompare/I1In) > errorToleranceAdjusted && errorToleranceAdjusted < errorThreshold){
-		std::cout << "(SOURCEINT) ERROR: I1In ("<<L<<","<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<errorToleranceAdjusted<<" within N = " << NsampleMaxR << " samples. Only converged to precision of  "<<abs(1. - ICompare/I1In)<< ". \n";
-	}
-
-	// Calculate I3Up
-
-	maxTerm = 0.;
-	NsampleR = NsampleInit;
-	halfSampleR = NsampleR/2;
-	sampleDiffR = sampleSizeR/halfSampleR;
-
-	samplePos = 0;
-	qr = samplePos*deltaQR;
-	sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr,
-		R0[samplePos]);
-	sum = sumTerm;
-	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-	samplePos = halfSampleR*sampleDiffR;
-	qr = samplePos*deltaQR;
-	sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos]);
-	sum += sumTerm;
-	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-	for(int i = 1; i < halfSampleR; i++){
-		samplePos = i*sampleDiffR;
-		qr = double(samplePos)*deltaQR;
-
-		sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos]);
-		sum += sumTerm;
-		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-		sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos]);
-		sum += sumTerm;
-		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-	}
-
-	Complex I3Up = sum/double(NsampleR);
-
-	precisionLoss = maxTerm/abs(I3Up);
-	errorTolerance = 5.e-12;
-	errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
-
-	ICompare = 0.;
-	while(NsampleR < NsampleMaxR && abs(1. - ICompare/I3Up) > errorToleranceAdjusted){
-		for(int i = 0; i < halfSampleR; i++){
-			samplePos = i*sampleDiffR + sampleDiffR/2;
-			qr = double(samplePos)*deltaQR;
-
-			sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos]);
-			sum += sumTerm;
-			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-			sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos]);
-			sum += sumTerm;
-			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-		}
-		NsampleR *= 2;
-		halfSampleR *= 2;
-		sampleDiffR /= 2;
-		ICompare = I3Up;
-		I3Up = sum/double(NsampleR);
-
-		precisionLoss = maxTerm/abs(I3Up);
-		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
-		// std::cout << "Precision of Teukolsky I3Up amplitude = " << abs(1. - ICompare/I3Up) << " with "<<NsampleR<<" samples \n";
-	}
-	double errorLossI3Up = errorToleranceAdjusted;
-	if(abs(1. - ICompare/I3Up) > errorToleranceAdjusted && errorToleranceAdjusted < errorThreshold){
-		std::cout << "(SOURCEINT) ERROR: I3Up ("<<L<<","<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<errorToleranceAdjusted<<" within N = " << NsampleMaxR << " samples. Only converged to precision of  "<<abs(1. - ICompare/I3Up)<< ". \n";
-	}
-
-	// Calculate I3In
-
-	maxTerm = 0.;
-	NsampleR = NsampleInit;
-	halfSampleR = NsampleR/2;
-	sampleDiffR = sampleSizeR/halfSampleR;
-
-	samplePos = 0;
-	qr = samplePos*deltaQR;
-	sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr,
-		R1[samplePos]);
-	sum = sumTerm;
-	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-	samplePos = halfSampleR*sampleDiffR;
-	qr = samplePos*deltaQR;
-	sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos]);
-	sum += sumTerm;
-	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-	for(int i = 1; i < halfSampleR; i++){
-		samplePos = i*sampleDiffR;
-		qr = double(samplePos)*deltaQR;
-
-		sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos]);
-		sum += sumTerm;
-		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-		sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos]);
-		sum += sumTerm;
-		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-	}
-
-	Complex I3In = sum/double(NsampleR);
-
-	precisionLoss = maxTerm/abs(I3In);
-	errorTolerance = 5.e-12;
-	errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
-
-	ICompare = 0.;
-	while(NsampleR < NsampleMaxR && abs(1. - ICompare/I3In) > errorToleranceAdjusted){
-		for(int i = 0; i < halfSampleR; i++){
-			samplePos = i*sampleDiffR + sampleDiffR/2;
-			qr = double(samplePos)*deltaQR;
-
-			sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos]);
-			sum += sumTerm;
-			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-
-			sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos]);
-			sum += sumTerm;
-			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-		}
-		NsampleR *= 2;
-		halfSampleR *= 2;
-		sampleDiffR /= 2;
-		ICompare = I3In;
-		I3In = sum/double(NsampleR);
-
-		precisionLoss = maxTerm/abs(I3In);
-		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
-		// std::cout << "Precision of Teukolsky I3In amplitude = " << abs(1. - ICompare/I3In) << " with "<<NsampleR<<" samples \n";
-		// std::cout << "Precision loss of Teukolsky I3In amplitude = " << abs(precisionLoss) << " with "<<NsampleR<<" samples \n";
-	}
-	double errorLossI3In = errorToleranceAdjusted;
-	if(abs(1. - ICompare/I3In) > errorToleranceAdjusted && errorToleranceAdjusted < errorThreshold){
-		std::cout << "(SOURCEINT) ERROR: I3In ("<<L<<","<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<errorToleranceAdjusted<<" within N = " << NsampleMaxR << " samples. Only converged to precision of  "<<abs(1. - ICompare/I3In)<< ". \n";
-	}
-
-	// I2
-	maxTerm = 0.;
-	samplePos = 0;
-	qth = samplePos*deltaQTh;
-	sumTerm = scalar_integrand_2(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth,
-		St[samplePos]);
-	sum = sumTerm;
-	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-	// std::cout << "I2(qth = "<<qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
-
-	samplePos = halfSampleTh*sampleDiffTh;
-	qth = samplePos*deltaQTh;
-	sumTerm = scalar_integrand_2(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth,
-		St[samplePos]);
-	sum += sumTerm;
-	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-	// std::cout << "I2(qth = "<<2.*M_PI - qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
-
-	for(int i = 1; i < halfSampleTh; i++){
-		samplePos = i*sampleDiffTh;
-		qth = double(samplePos)*deltaQTh;
-
-		sumTerm = scalar_integrand_2(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth, St[samplePos]);
-		sum += sumTerm;
-		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-		// std::cout << "I2(qth = "<<qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
-
-		sumTerm = scalar_integrand_2(L, m, k, n, geoConstants, -tTh[samplePos], thp[samplePos], -phiTh[samplePos], 2.*M_PI - qth, St[samplePos]);
-		sum += sumTerm;
-		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-		// std::cout << "I2(qth = "<<2.*M_PI - qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
-	}
-
-	Complex I2 = sum/double(NsampleTh);
-
-	precisionLoss = maxTerm/abs(I2);
-	errorTolerance = 5.e-12;
-	errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
-
-	ICompare = 0.;
-	while(NsampleTh < NsampleMaxTh && abs(1. - ICompare/I2) > errorToleranceAdjusted){
-
-		for(int i = 0; i < halfSampleTh; i++){
-			samplePos = i*sampleDiffTh + sampleDiffTh/2;
-			qth = double(samplePos)*deltaQTh;
-
-			sumTerm = scalar_integrand_2(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth, St[samplePos]);
-			sum += sumTerm;
-			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-			// std::cout << "I2(qth = "<<qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
-
-			sumTerm = scalar_integrand_2(L, m, k, n, geoConstants, -tTh[samplePos], thp[samplePos], -phiTh[samplePos], 2.*M_PI - qth, St[samplePos]);
-			sum += sumTerm;
-			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-			// std::cout << "I2(qth = "<<2.*M_PI - qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
-		}
-		NsampleTh *= 2;
-		halfSampleTh *= 2;
-		sampleDiffTh /= 2;
-		ICompare = I2;
-		I2 = sum/double(NsampleTh);
-
-		precisionLoss = maxTerm/abs(I2);
-		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
-	}
-	double errorLossI2 = errorToleranceAdjusted;
-	if(abs(1. - ICompare/I2) > errorToleranceAdjusted && errorToleranceAdjusted < errorThreshold){
-		std::cout << "(SOURCEINT) ERROR: I2 ("<<L<<","<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<errorToleranceAdjusted<<" within N = " << NsampleMaxTh << " samples. Only converged to precision of  "<<abs(1. - ICompare/I2)<< ". \n";
-	}
-
-	// Calculate I4
-	maxTerm = 0.;
-	NsampleTh = NsampleInit;
-	halfSampleTh = NsampleTh/2;
-	sampleDiffTh = sampleSizeTh/halfSampleTh;
-
-	samplePos = 0;
-	qth = samplePos*deltaQTh;
-	sumTerm = scalar_integrand_4(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth,
-		St[samplePos]);
-	sum = sumTerm;
-	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-	// std::cout << "I4(qth = "<<qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
-
-	samplePos = halfSampleTh*sampleDiffTh;
-	qth = samplePos*deltaQTh;
-	sumTerm = scalar_integrand_4(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth,
-		St[samplePos]);
-	sum += sumTerm;
-	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-	// std::cout << "I4(qth = "<<2.*M_PI - qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
-
-	for(int i = 1; i < halfSampleTh; i++){
-		samplePos = i*sampleDiffTh;
-		qth = double(samplePos)*deltaQTh;
-
-		sumTerm = scalar_integrand_4(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth, St[samplePos]);
-		sum += sumTerm;
-		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-		// std::cout << "I4(qth = "<<qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
-
-		sumTerm = scalar_integrand_4(L, m, k, n, geoConstants, -tTh[samplePos], thp[samplePos], -phiTh[samplePos], 2.*M_PI - qth, St[samplePos]);
-		sum += sumTerm;
-		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-		// std::cout << "I4(qth = "<<2.*M_PI - qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
-	}
-
-	Complex I4 = sum/double(NsampleTh);
-
-	precisionLoss = maxTerm/abs(I4);
-	errorTolerance = 5.e-12;
-	errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
-
-	ICompare = 0.;
-	while(NsampleTh < NsampleMaxTh && abs(1. - ICompare/I4) > errorToleranceAdjusted){
-
-		for(int i = 0; i < halfSampleTh; i++){
-			samplePos = i*sampleDiffTh + sampleDiffTh/2;
-			qth = double(samplePos)*deltaQTh;
-
-			sumTerm = scalar_integrand_4(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth, St[samplePos]);
-			sum += sumTerm;
-			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-			// std::cout << "I4(qth = "<<qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
-
-			sumTerm = scalar_integrand_4(L, m, k, n, geoConstants, -tTh[samplePos], thp[samplePos], -phiTh[samplePos], 2.*M_PI - qth, St[samplePos]);
-			sum += sumTerm;
-			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
-			// std::cout << "I4(qth = "<<2.*M_PI - qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
-		}
-		NsampleTh *= 2;
-		halfSampleTh *= 2;
-		sampleDiffTh /= 2;
-		ICompare = I4;
-		I4 = sum/double(NsampleTh);
-
-		precisionLoss = maxTerm/abs(I4);
-		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
-	}
-	double errorLossI4 = errorToleranceAdjusted;
-
-	if(abs(1. - ICompare/I4) > errorToleranceAdjusted && errorToleranceAdjusted < errorThreshold){
-		std::cout << "(SOURCEINT) ERROR: I4 ("<<L<<","<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<errorToleranceAdjusted<<" within N = " << NsampleMaxTh << " samples. Only converged to precision of  "<<abs(1. - ICompare/I4)<< ". \n";
-	}
-	// std::cout << "I1Up = " << I1Up/W << "\n";
-	// std::cout << "I1In = " << horizonPrefactor*I1In/W << "\n";
-	// std::cout << "I2 = " << -4.*M_PI*I2/geoConstants.upsilonT << "\n";
-	// std::cout << "I3Up = " << I3Up/W << "\n";
-	// std::cout << "I3In = " << horizonPrefactor*I3In/W << "\n";
-	// std::cout << "I4 = " << -4.*M_PI*I4/geoConstants.upsilonT << "\n";
-
-	Complex ZlmUp = 0.;
-	Complex ZlmIn = 0.;
-	if(errorLossI2 < errorThreshold && errorLossI4 < errorThreshold && errorLossI1Up < errorThreshold && errorLossI3Up < errorThreshold ){
-		ZlmUp = -4.*M_PI/W/geoConstants.upsilonT*(I1Up*I2 + I3Up*I4);
-	}
-
-	// if(errorLossI1Up > 0 && errorLossI3Up > 0){
-	// 	std::cout << "SOURCEINTEGRATION: ERROR: error loss for ("<<L<<", "<<m<<", "<<k<<", "<<n<<"): I1Up = " << errorLossI1Up << ", I3Up = " << errorLossI3Up << "\n";
-	// }
-	//
-	// if(errorLossI1In > 0 && errorLossI3In > 0){
-	// 	std::cout << "SOURCEINTEGRATION: ERROR: error loss for ("<<L<<", "<<m<<", "<<k<<", "<<n<<"): I1In = " << errorLossI1In << ", I3In = " << errorLossI3In << "\n";
-	// }
-	//
-	// if(errorLossI2 > 0 && errorLossI4 > 0){
-	// 	std::cout << "SOURCEINTEGRATION: ERROR: error loss for ("<<L<<", "<<m<<", "<<k<<", "<<n<<"): I2 = " << errorLossI2 << ", I4 = " << errorLossI4 << "\n";
-	// }
-
-	if(errorLossI2 < errorThreshold && errorLossI4 < errorThreshold && errorLossI1In < errorThreshold && errorLossI3In < errorThreshold ){
-		ZlmIn = -4.*M_PI/W/geoConstants.upsilonT*(I1In*I2 + I3In*I4);
-	}
-
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
-
-	return Zlm;
-}
-
-TeukolskyAmplitudes scalar_amplitude_ecceq(int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
-	ComplexVector R0 = (Rin.solution);
-	ComplexVector Rp0 = (Rin.derivative);
-
-	ComplexVector R1 = (Rup.solution);
-	ComplexVector Rp1 = (Rup.derivative);
-
-	double S = (Slm.solution)[0];
-
-	Vector rp = (traj.r);
-	Vector tR = traj.tR;
-	Vector phiR = traj.phiR;
-
-	Complex W = scalar_wronskian(geoConstants.a, rp[0], R0[0], Rp0[0], R1[0], Rp1[0]);
-
-	int Nsample = pow(2, 3);
-	int radialLength = rp.size();
-	int sampleSize = radialLength - 1;
-	int NsampleMax = 2*sampleSize;
-	// for the spectral integration to return a convergent result, we need to sample at a rate 4 times the frequency of the integrand, which is set by the harmonic number n
-	while(Nsample < 4*abs(n)){
-		Nsample *= 2;
-	}
-	if(NsampleMax < Nsample){
-		std::cout << "SOURCEINTEGRATION: ERROR: Not enough samples to calculate Teukolsky amplitude for (s,l,m,k,n) = ("<<0<<","<<L<<","<<m<<","<<0<<","<<n<<"). Increase sample rate to > "<<4*abs(n)<<" to resolve high frequency integrand. \n";
-		TeukolskyAmplitudes Zlm = {0., 0.};
-		return Zlm;
-	}
-	int halfSample = Nsample/2;
-	int sampleDiff = sampleSize/halfSample;
-	double deltaQ = M_PI/double(sampleSize);
-
-	// first add the points at qr = 0 and qr = pi
-	Complex ZlmUp, ZlmIn, sumUp, sumIn;
-	int samplePos = 0.;
-	double qr = samplePos*deltaQ;
-	double maxTermUp = 0.;
-	double maxTermIn = 0.;
-	Complex sumUpTerm, sumInTerm;
-	sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr, R0[samplePos], S);
-	sumUp = sumUpTerm;
-	sumInTerm = scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr, R1[samplePos], S);
-	sumIn = sumInTerm;
-	maxTermUp = abs(sumUpTerm) < maxTermUp ? maxTermUp : abs(sumUpTerm);
-
-	samplePos = halfSample*sampleDiff;
-	qr = M_PI;
-	sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr, R0[samplePos], S);
-	sumUp += sumUpTerm;
-	sumInTerm = scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr, R1[samplePos], S);
-	sumIn += sumInTerm;
-	maxTermUp = abs(sumUpTerm) < maxTermUp ? maxTermUp : abs(sumUpTerm);
-	maxTermIn = abs(sumInTerm) < maxTermIn ? maxTermIn : abs(sumInTerm);
-
-
-	for(int i = 1; i < halfSample; i++){
-		samplePos = i*sampleDiff;
-		qr = double(samplePos)*deltaQ;
-		// std::cout << "qr = " << qr/M_PI << "\n";
-		// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
-		// first sum performs integration between qr = 0 to qr = pi
-		sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos], S);
-		sumUp += sumUpTerm;
-		maxTermUp = abs(sumUpTerm) < maxTermUp ? maxTermUp : abs(sumUpTerm);
-		// std::cout << teukolskyIntegrand(L, m, 0, n, geoConstants, tR[samplePos], 0., rp[samplePos], thp, phiR[samplePos], 0., qr, qth,
-		// 	R0[samplePos], Rp0[samplePos], Rpp0[samplePos], S, Sp, Spp) << "\n";
-		sumInTerm = scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos], S);
-		sumIn += sumInTerm;
-		maxTermIn = abs(sumInTerm) < maxTermIn ? maxTermIn : abs(sumInTerm);
-		// second sum performs integration between qr = pi to qr = 2*pi
-		// note that the radial velocity changes signs and because tR and phiR are antisymmetric
-		// with respect to qr, these pick-up a minus sign as well
-
-		// std::cout << "qr = " << qr << "\n";
-		sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos], S);
-		sumUp += sumUpTerm;
-		maxTermUp = abs(sumUpTerm) < maxTermUp ? maxTermUp : abs(sumUpTerm);
-		// std::cout << teukolskyIntegrand(L, m, 0, n, geoConstants, -tR[samplePos], 0., rp[samplePos], thp, -phiR[samplePos], 0., qr, qth, R0[samplePos], Rp0[samplePos], Rpp0[samplePos], S, Sp, Spp) << "\n";
-		sumInTerm = scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos], S);
-		sumIn += sumInTerm;
-		maxTermIn = abs(sumInTerm) < maxTermIn ? maxTermIn : abs(sumInTerm);
-	}
-
-	ZlmUp = sumUp/double(Nsample);
-	ZlmIn = sumIn/double(Nsample);
-
-	double errorTolerance = 5.e-12;
-	double precisionLossUp = maxTermUp/abs(ZlmUp);
-	double errorToleranceAdjustedUp = 10*DBL_EPSILON*precisionLossUp;
-	errorToleranceAdjustedUp = errorToleranceAdjustedUp < errorTolerance ? errorTolerance : errorToleranceAdjustedUp;
-	double precisionLossIn = maxTermIn/abs(ZlmIn);
-	double errorToleranceAdjustedIn = 10*DBL_EPSILON*precisionLossIn;
-	errorToleranceAdjustedIn = errorToleranceAdjustedIn < errorTolerance ? errorTolerance : errorToleranceAdjustedIn;
-
-	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
-	while(Nsample < NsampleMax && (abs(1. - ZlmUpCompare/ZlmUp) > errorToleranceAdjustedUp || abs(1. - ZlmInCompare/ZlmIn) > errorToleranceAdjustedIn)){
-		// std::cout << "Precision of Teukolsky Up amplitude = " << abs(1. - ZlmUpCompare/ZlmUp) << " with "<<Nsample<<" samples \n";
-
-		for(int i = 0; i < halfSample; i++){
-			samplePos = i*sampleDiff + sampleDiff/2;
-			qr = double(samplePos)*deltaQ;
-			// std::cout << "qr = " << qr/M_PI << "\n";
-			// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
-			sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos], S);
-			sumUp += sumUpTerm;
-			maxTermUp = abs(sumUpTerm) < maxTermUp ? maxTermUp : abs(sumUpTerm);
-			sumInTerm = scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos], S);
-			sumIn += sumInTerm;
-			maxTermIn = abs(sumInTerm) < maxTermIn ? maxTermIn : abs(sumInTerm);
-
-			sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos], S);
-			sumUp += sumUpTerm;
-			maxTermUp = abs(sumUpTerm) < maxTermUp ? maxTermUp : abs(sumUpTerm);
-			sumInTerm = scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos], S);
-			sumIn += sumInTerm;
-			maxTermIn = abs(sumInTerm) < maxTermIn ? maxTermIn : abs(sumInTerm);
-		}
-		Nsample *= 2;
-		halfSample *= 2;
-		sampleDiff /= 2;
-		ZlmUpCompare = ZlmUp;
-		ZlmInCompare = ZlmIn;
-		ZlmUp = sumUp/double(Nsample);
-		ZlmIn = sumIn/double(Nsample);
-
-		precisionLossUp = maxTermUp/abs(ZlmUp);
-		errorToleranceAdjustedUp = 10*DBL_EPSILON*precisionLossUp;
-		errorToleranceAdjustedUp = errorToleranceAdjustedUp < errorTolerance ? errorTolerance : errorToleranceAdjustedUp;
-		precisionLossIn = maxTermIn/abs(ZlmIn);
-		errorToleranceAdjustedIn = 10*DBL_EPSILON*precisionLossIn;
-		errorToleranceAdjustedIn = errorToleranceAdjustedIn < errorTolerance ? errorTolerance : errorToleranceAdjustedIn;
-
-	}
-
-	if(Nsample >= NsampleMax && (abs(1. - ZlmUpCompare/ZlmUp) > errorToleranceAdjustedUp || abs(1. - ZlmInCompare/ZlmIn) > errorToleranceAdjustedIn)){
-		// std::cout << "SOURCEINTEGRATION: ERROR: Teukolsky amplitudes for (s,l,m,k,n) = ("<<0<<","<<L<<","<<m<<","<<0<<","<<n<<") reached max sampling rate of "<<NsampleMax<<" before converging. \n";
-	}
-
-	// need at least three signficant digits if we want to make use of the normalization constants
-	if(errorToleranceAdjustedUp > 1){
-		ZlmUp = 0.;
-		// std::cout << "SOURCEINTEGRATION: ERROR: Teukolsky Up amplitude for (s,l,m,k,n) = ("<<0<<","<<L<<","<<m<<","<<0<<","<<n<<") lost all precision before converging. \n";
-	}else{
-		ZlmUp *= -4.*M_PI/W/geoConstants.upsilonT;
-	}
-	if(errorToleranceAdjustedIn > 1){
-		// std::cout << "SOURCEINTEGRATION: ERROR: Teukolsky In amplitude for (s,l,m,k,n) = ("<<0<<","<<L<<","<<m<<","<<0<<","<<n<<") lost all precision before converging. Returned value would have been "<< -ZlmIn*4.*M_PI/W/geoConstants.upsilonT << " \n";
-		ZlmIn = 0.;
-	}else{
-		ZlmIn *= -4.*M_PI/W/geoConstants.upsilonT;
-	}
-	// std::cout << "Precision loss = " << log10(precisionLoss) << "\n";
-	// std::cout << "Number of samples = " << Nsample << "\n";
-
-	//std::cout << "SOURCEINTEGRATION: Wronskian = "<< W <<"\n";
-	//std::cout << "SOURCEINTEGRATION: prefactorR = "<< prefactorR <<"\n";
-	//std::cout << "SOURCEINTEGRATION: prefactorRp = "<< prefactorRp <<"\n";
-	//std::cout << "SOURCEINTEGRATION: prefactorRpp = "<< prefactorRpp <<"\n";
-
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
-
-	return Zlm;
-}
-
-TeukolskyAmplitudes scalar_amplitude_sphinc(int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
+// 	ComplexVector R0 = (Rin.solution);
+// 	ComplexVector Rp0 = (Rin.derivative);
+
+// 	ComplexVector R1 = (Rup.solution);
+// 	ComplexVector Rp1 = (Rup.derivative);
+
+// 	Vector St = (Slm.solution);
+
+// 	Vector rp = traj.r;
+// 	Vector thp = traj.theta;
+// 	Vector tR = traj.tR;
+// 	Vector phiR = traj.phiR;
+// 	Vector tTh = traj.tTheta;
+// 	Vector phiTh = traj.phiTheta;
+
+// 	Complex W = scalar_wronskian(geoConstants.a, rp[0], R0[0], Rp0[0], R1[0], Rp1[0]);
+
+// 	int NsampleInit = pow(2, 5);
+// 	int NsampleR = NsampleInit, NsampleTh = NsampleInit;
+// 	int radialLength = rp.size(), polarLength = thp.size();
+// 	int sampleSizeR = radialLength - 1, sampleSizeTh = polarLength - 1;
+// 	int NsampleMaxR = 2*sampleSizeR, NsampleMaxTh = 2*sampleSizeTh;
+// 	while(NsampleR < 2*abs(n) + 2){
+// 		NsampleR *= 2;
+// 	}
+// 	while(NsampleTh < 2*abs(k) + 2){
+// 		NsampleTh *= 2;
+// 	}
+// 	if(NsampleMaxR < NsampleR){
+// 		NsampleR = NsampleMaxR;
+// 	}
+// 	if(NsampleMaxTh < NsampleTh){
+// 		NsampleTh = NsampleMaxTh;
+// 	}
+// 	int halfSampleR = NsampleR/2, halfSampleTh = NsampleTh/2;
+// 	int sampleDiffR = sampleSizeR/halfSampleR, sampleDiffTh = sampleSizeTh/halfSampleTh;
+// 	double deltaQR = M_PI/double(sampleSizeR), deltaQTh = M_PI/double(sampleSizeTh);
+
+// 	// first add the points at qr = 0 and qr = pi
+// 	Complex sum;
+// 	int samplePos;
+// 	double qr, qth;
+// 	double maxTerm = 0.;
+// 	Complex sumTerm;
+
+// 	double errorThreshold = 1.e-2;
+
+// 	// Calculate I1Up
+// 	samplePos = 0;
+// 	qr = samplePos*deltaQR;
+// 	sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr,
+// 		R0[samplePos]);
+// 	sum = sumTerm;
+// 	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 	samplePos = halfSampleR*sampleDiffR;
+// 	qr = samplePos*deltaQR;
+// 	sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos]);
+// 	sum += sumTerm;
+// 	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 	for(int i = 1; i < halfSampleR; i++){
+// 		samplePos = i*sampleDiffR;
+// 		qr = double(samplePos)*deltaQR;
+
+// 		sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos]);
+// 		sum += sumTerm;
+// 		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 		sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos]);
+// 		sum += sumTerm;
+// 		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 	}
+
+// 	Complex I1Up = sumTerm/double(NsampleR);
+
+// 	double precisionLoss = maxTerm/abs(I1Up);
+// 	double errorTolerance = 5.e-12;
+// 	double errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
+// 	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+
+// 	Complex ICompare = 0.;
+// 	Complex temp = 0.;
+// 	while(NsampleR < NsampleMaxR && abs(1. - ICompare/I1Up) > errorToleranceAdjusted){
+// 		for(int i = 0; i < halfSampleR; i++){
+// 			samplePos = i*sampleDiffR + sampleDiffR/2;
+// 			qr = double(samplePos)*deltaQR;
+
+// 			sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos]);
+// 			sum += sumTerm;
+// 			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 			temp = sumTerm;
+
+// 			sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos]);
+// 			sum += sumTerm;
+// 			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 		}
+// 		NsampleR *= 2;
+// 		halfSampleR *= 2;
+// 		sampleDiffR /= 2;
+// 		ICompare = I1Up;
+// 		I1Up = sum/double(NsampleR);
+
+// 		precisionLoss = maxTerm/abs(I1Up);
+// 		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
+// 		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+// 		// std::cout << "Precision of Teukolsky I1Up amplitude = " << abs(1. - ICompare/I1Up) << " with "<<NsampleR<<" samples \n";
+// 	}
+// 	double errorLossI1Up = errorToleranceAdjusted;
+// 	if(abs(1. - ICompare/I1Up) > errorToleranceAdjusted && errorToleranceAdjusted < errorThreshold){
+// 		std::cout << "(SOURCEINT) ERROR: I1Up ("<<L<<","<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<errorToleranceAdjusted<<" within N = " << NsampleMaxR << " samples. Only converged to precision of  "<<abs(1. - ICompare/I1Up)<< ". \n";
+// 	}
+
+// 	// Calculate I1In
+
+// 	maxTerm = 0.;
+// 	NsampleR = NsampleInit;
+// 	halfSampleR = NsampleR/2;
+// 	sampleDiffR = sampleSizeR/halfSampleR;
+
+// 	samplePos = 0;
+// 	qr = samplePos*deltaQR;
+// 	sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr,
+// 		R1[samplePos]);
+// 	sum = sumTerm;
+// 	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 	samplePos = halfSampleR*sampleDiffR;
+// 	qr = samplePos*deltaQR;
+// 	sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos]);
+// 	sum += sumTerm;
+// 	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 	for(int i = 1; i < halfSampleR; i++){
+// 		samplePos = i*sampleDiffR;
+// 		qr = double(samplePos)*deltaQR;
+// 		sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos]);
+// 		sum += sumTerm;
+// 		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 		sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos]);
+// 		sum += sumTerm;
+// 		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 	}
+
+// 	Complex I1In = sum/double(NsampleR);
+
+// 	precisionLoss = maxTerm/abs(I1In);
+// 	errorTolerance = 5.e-12;
+// 	errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
+// 	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+
+// 	ICompare = 0.;
+// 	while(NsampleR < NsampleMaxR && abs(1. - ICompare/I1In) > errorToleranceAdjusted){
+// 		for(int i = 0; i < halfSampleR; i++){
+// 			samplePos = i*sampleDiffR + sampleDiffR/2;
+// 			qr = double(samplePos)*deltaQR;
+
+// 			sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos]);
+// 			sum += sumTerm;
+// 			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 			sumTerm = scalar_integrand_1(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos]);
+// 			sum += sumTerm;
+// 			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 		}
+// 		NsampleR *= 2;
+// 		halfSampleR *= 2;
+// 		sampleDiffR /= 2;
+// 		ICompare = I1In;
+// 		I1In = sum/double(NsampleR);
+
+// 		precisionLoss = maxTerm/abs(I1In);
+// 		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
+// 		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+// 		// std::cout << "Precision of Teukolsky I1In amplitude = " << abs(1. - ICompare/I1In) << " with "<<NsampleR<<" samples \n";
+// 	}
+// 	double errorLossI1In = errorToleranceAdjusted;
+// 	if(abs(1. - ICompare/I1In) > errorToleranceAdjusted && errorToleranceAdjusted < errorThreshold){
+// 		std::cout << "(SOURCEINT) ERROR: I1In ("<<L<<","<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<errorToleranceAdjusted<<" within N = " << NsampleMaxR << " samples. Only converged to precision of  "<<abs(1. - ICompare/I1In)<< ". \n";
+// 	}
+
+// 	// Calculate I3Up
+
+// 	maxTerm = 0.;
+// 	NsampleR = NsampleInit;
+// 	halfSampleR = NsampleR/2;
+// 	sampleDiffR = sampleSizeR/halfSampleR;
+
+// 	samplePos = 0;
+// 	qr = samplePos*deltaQR;
+// 	sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr,
+// 		R0[samplePos]);
+// 	sum = sumTerm;
+// 	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 	samplePos = halfSampleR*sampleDiffR;
+// 	qr = samplePos*deltaQR;
+// 	sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos]);
+// 	sum += sumTerm;
+// 	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 	for(int i = 1; i < halfSampleR; i++){
+// 		samplePos = i*sampleDiffR;
+// 		qr = double(samplePos)*deltaQR;
+
+// 		sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos]);
+// 		sum += sumTerm;
+// 		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 		sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos]);
+// 		sum += sumTerm;
+// 		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 	}
+
+// 	Complex I3Up = sum/double(NsampleR);
+
+// 	precisionLoss = maxTerm/abs(I3Up);
+// 	errorTolerance = 5.e-12;
+// 	errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
+// 	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+
+// 	ICompare = 0.;
+// 	while(NsampleR < NsampleMaxR && abs(1. - ICompare/I3Up) > errorToleranceAdjusted){
+// 		for(int i = 0; i < halfSampleR; i++){
+// 			samplePos = i*sampleDiffR + sampleDiffR/2;
+// 			qr = double(samplePos)*deltaQR;
+
+// 			sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos]);
+// 			sum += sumTerm;
+// 			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 			sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos]);
+// 			sum += sumTerm;
+// 			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 		}
+// 		NsampleR *= 2;
+// 		halfSampleR *= 2;
+// 		sampleDiffR /= 2;
+// 		ICompare = I3Up;
+// 		I3Up = sum/double(NsampleR);
+
+// 		precisionLoss = maxTerm/abs(I3Up);
+// 		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
+// 		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+// 		// std::cout << "Precision of Teukolsky I3Up amplitude = " << abs(1. - ICompare/I3Up) << " with "<<NsampleR<<" samples \n";
+// 	}
+// 	double errorLossI3Up = errorToleranceAdjusted;
+// 	if(abs(1. - ICompare/I3Up) > errorToleranceAdjusted && errorToleranceAdjusted < errorThreshold){
+// 		std::cout << "(SOURCEINT) ERROR: I3Up ("<<L<<","<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<errorToleranceAdjusted<<" within N = " << NsampleMaxR << " samples. Only converged to precision of  "<<abs(1. - ICompare/I3Up)<< ". \n";
+// 	}
+
+// 	// Calculate I3In
+
+// 	maxTerm = 0.;
+// 	NsampleR = NsampleInit;
+// 	halfSampleR = NsampleR/2;
+// 	sampleDiffR = sampleSizeR/halfSampleR;
+
+// 	samplePos = 0;
+// 	qr = samplePos*deltaQR;
+// 	sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr,
+// 		R1[samplePos]);
+// 	sum = sumTerm;
+// 	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 	samplePos = halfSampleR*sampleDiffR;
+// 	qr = samplePos*deltaQR;
+// 	sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos]);
+// 	sum += sumTerm;
+// 	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 	for(int i = 1; i < halfSampleR; i++){
+// 		samplePos = i*sampleDiffR;
+// 		qr = double(samplePos)*deltaQR;
+
+// 		sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos]);
+// 		sum += sumTerm;
+// 		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 		sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos]);
+// 		sum += sumTerm;
+// 		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 	}
+
+// 	Complex I3In = sum/double(NsampleR);
+
+// 	precisionLoss = maxTerm/abs(I3In);
+// 	errorTolerance = 5.e-12;
+// 	errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
+// 	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+
+// 	ICompare = 0.;
+// 	while(NsampleR < NsampleMaxR && abs(1. - ICompare/I3In) > errorToleranceAdjusted){
+// 		for(int i = 0; i < halfSampleR; i++){
+// 			samplePos = i*sampleDiffR + sampleDiffR/2;
+// 			qr = double(samplePos)*deltaQR;
+
+// 			sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos]);
+// 			sum += sumTerm;
+// 			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+
+// 			sumTerm = scalar_integrand_3(L, m, k, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos]);
+// 			sum += sumTerm;
+// 			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 		}
+// 		NsampleR *= 2;
+// 		halfSampleR *= 2;
+// 		sampleDiffR /= 2;
+// 		ICompare = I3In;
+// 		I3In = sum/double(NsampleR);
+
+// 		precisionLoss = maxTerm/abs(I3In);
+// 		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
+// 		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+// 		// std::cout << "Precision of Teukolsky I3In amplitude = " << abs(1. - ICompare/I3In) << " with "<<NsampleR<<" samples \n";
+// 		// std::cout << "Precision loss of Teukolsky I3In amplitude = " << abs(precisionLoss) << " with "<<NsampleR<<" samples \n";
+// 	}
+// 	double errorLossI3In = errorToleranceAdjusted;
+// 	if(abs(1. - ICompare/I3In) > errorToleranceAdjusted && errorToleranceAdjusted < errorThreshold){
+// 		std::cout << "(SOURCEINT) ERROR: I3In ("<<L<<","<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<errorToleranceAdjusted<<" within N = " << NsampleMaxR << " samples. Only converged to precision of  "<<abs(1. - ICompare/I3In)<< ". \n";
+// 	}
+
+// 	// I2
+// 	maxTerm = 0.;
+// 	samplePos = 0;
+// 	qth = samplePos*deltaQTh;
+// 	sumTerm = scalar_integrand_2(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth,
+// 		St[samplePos]);
+// 	sum = sumTerm;
+// 	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 	// std::cout << "I2(qth = "<<qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
+
+// 	samplePos = halfSampleTh*sampleDiffTh;
+// 	qth = samplePos*deltaQTh;
+// 	sumTerm = scalar_integrand_2(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth,
+// 		St[samplePos]);
+// 	sum += sumTerm;
+// 	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 	// std::cout << "I2(qth = "<<2.*M_PI - qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
+
+// 	for(int i = 1; i < halfSampleTh; i++){
+// 		samplePos = i*sampleDiffTh;
+// 		qth = double(samplePos)*deltaQTh;
+
+// 		sumTerm = scalar_integrand_2(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth, St[samplePos]);
+// 		sum += sumTerm;
+// 		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 		// std::cout << "I2(qth = "<<qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
+
+// 		sumTerm = scalar_integrand_2(L, m, k, n, geoConstants, -tTh[samplePos], thp[samplePos], -phiTh[samplePos], 2.*M_PI - qth, St[samplePos]);
+// 		sum += sumTerm;
+// 		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 		// std::cout << "I2(qth = "<<2.*M_PI - qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
+// 	}
+
+// 	Complex I2 = sum/double(NsampleTh);
+
+// 	precisionLoss = maxTerm/abs(I2);
+// 	errorTolerance = 5.e-12;
+// 	errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
+// 	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+
+// 	ICompare = 0.;
+// 	while(NsampleTh < NsampleMaxTh && abs(1. - ICompare/I2) > errorToleranceAdjusted){
+
+// 		for(int i = 0; i < halfSampleTh; i++){
+// 			samplePos = i*sampleDiffTh + sampleDiffTh/2;
+// 			qth = double(samplePos)*deltaQTh;
+
+// 			sumTerm = scalar_integrand_2(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth, St[samplePos]);
+// 			sum += sumTerm;
+// 			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 			// std::cout << "I2(qth = "<<qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
+
+// 			sumTerm = scalar_integrand_2(L, m, k, n, geoConstants, -tTh[samplePos], thp[samplePos], -phiTh[samplePos], 2.*M_PI - qth, St[samplePos]);
+// 			sum += sumTerm;
+// 			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 			// std::cout << "I2(qth = "<<2.*M_PI - qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
+// 		}
+// 		NsampleTh *= 2;
+// 		halfSampleTh *= 2;
+// 		sampleDiffTh /= 2;
+// 		ICompare = I2;
+// 		I2 = sum/double(NsampleTh);
+
+// 		precisionLoss = maxTerm/abs(I2);
+// 		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
+// 		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+// 	}
+// 	double errorLossI2 = errorToleranceAdjusted;
+// 	if(abs(1. - ICompare/I2) > errorToleranceAdjusted && errorToleranceAdjusted < errorThreshold){
+// 		std::cout << "(SOURCEINT) ERROR: I2 ("<<L<<","<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<errorToleranceAdjusted<<" within N = " << NsampleMaxTh << " samples. Only converged to precision of  "<<abs(1. - ICompare/I2)<< ". \n";
+// 	}
+
+// 	// Calculate I4
+// 	maxTerm = 0.;
+// 	NsampleTh = NsampleInit;
+// 	halfSampleTh = NsampleTh/2;
+// 	sampleDiffTh = sampleSizeTh/halfSampleTh;
+
+// 	samplePos = 0;
+// 	qth = samplePos*deltaQTh;
+// 	sumTerm = scalar_integrand_4(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth,
+// 		St[samplePos]);
+// 	sum = sumTerm;
+// 	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 	// std::cout << "I4(qth = "<<qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
+
+// 	samplePos = halfSampleTh*sampleDiffTh;
+// 	qth = samplePos*deltaQTh;
+// 	sumTerm = scalar_integrand_4(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth,
+// 		St[samplePos]);
+// 	sum += sumTerm;
+// 	maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 	// std::cout << "I4(qth = "<<2.*M_PI - qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
+
+// 	for(int i = 1; i < halfSampleTh; i++){
+// 		samplePos = i*sampleDiffTh;
+// 		qth = double(samplePos)*deltaQTh;
+
+// 		sumTerm = scalar_integrand_4(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth, St[samplePos]);
+// 		sum += sumTerm;
+// 		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 		// std::cout << "I4(qth = "<<qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
+
+// 		sumTerm = scalar_integrand_4(L, m, k, n, geoConstants, -tTh[samplePos], thp[samplePos], -phiTh[samplePos], 2.*M_PI - qth, St[samplePos]);
+// 		sum += sumTerm;
+// 		maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 		// std::cout << "I4(qth = "<<2.*M_PI - qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
+// 	}
+
+// 	Complex I4 = sum/double(NsampleTh);
+
+// 	precisionLoss = maxTerm/abs(I4);
+// 	errorTolerance = 5.e-12;
+// 	errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
+// 	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+
+// 	ICompare = 0.;
+// 	while(NsampleTh < NsampleMaxTh && abs(1. - ICompare/I4) > errorToleranceAdjusted){
+
+// 		for(int i = 0; i < halfSampleTh; i++){
+// 			samplePos = i*sampleDiffTh + sampleDiffTh/2;
+// 			qth = double(samplePos)*deltaQTh;
+
+// 			sumTerm = scalar_integrand_4(L, m, k, n, geoConstants, tTh[samplePos], thp[samplePos], phiTh[samplePos], qth, St[samplePos]);
+// 			sum += sumTerm;
+// 			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 			// std::cout << "I4(qth = "<<qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
+
+// 			sumTerm = scalar_integrand_4(L, m, k, n, geoConstants, -tTh[samplePos], thp[samplePos], -phiTh[samplePos], 2.*M_PI - qth, St[samplePos]);
+// 			sum += sumTerm;
+// 			maxTerm = abs(sumTerm) < maxTerm ? maxTerm : abs(sumTerm);
+// 			// std::cout << "I4(qth = "<<2.*M_PI - qth<<") = " << -4.*M_PI*sumTerm/geoConstants.upsilonT << "\n";
+// 		}
+// 		NsampleTh *= 2;
+// 		halfSampleTh *= 2;
+// 		sampleDiffTh /= 2;
+// 		ICompare = I4;
+// 		I4 = sum/double(NsampleTh);
+
+// 		precisionLoss = maxTerm/abs(I4);
+// 		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
+// 		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+// 	}
+// 	double errorLossI4 = errorToleranceAdjusted;
+
+// 	if(abs(1. - ICompare/I4) > errorToleranceAdjusted && errorToleranceAdjusted < errorThreshold){
+// 		std::cout << "(SOURCEINT) ERROR: I4 ("<<L<<","<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<errorToleranceAdjusted<<" within N = " << NsampleMaxTh << " samples. Only converged to precision of  "<<abs(1. - ICompare/I4)<< ". \n";
+// 	}
+// 	// std::cout << "I1Up = " << I1Up/W << "\n";
+// 	// std::cout << "I1In = " << horizonPrefactor*I1In/W << "\n";
+// 	// std::cout << "I2 = " << -4.*M_PI*I2/geoConstants.upsilonT << "\n";
+// 	// std::cout << "I3Up = " << I3Up/W << "\n";
+// 	// std::cout << "I3In = " << horizonPrefactor*I3In/W << "\n";
+// 	// std::cout << "I4 = " << -4.*M_PI*I4/geoConstants.upsilonT << "\n";
+
+// 	Complex ZlmUp = 0.;
+// 	Complex ZlmIn = 0.;
+// 	if(errorLossI2 < errorThreshold && errorLossI4 < errorThreshold && errorLossI1Up < errorThreshold && errorLossI3Up < errorThreshold ){
+// 		ZlmUp = -4.*M_PI/W/geoConstants.upsilonT*(I1Up*I2 + I3Up*I4);
+// 	}
+
+// 	// if(errorLossI1Up > 0 && errorLossI3Up > 0){
+// 	// 	std::cout << "SOURCEINTEGRATION: ERROR: error loss for ("<<L<<", "<<m<<", "<<k<<", "<<n<<"): I1Up = " << errorLossI1Up << ", I3Up = " << errorLossI3Up << "\n";
+// 	// }
+// 	//
+// 	// if(errorLossI1In > 0 && errorLossI3In > 0){
+// 	// 	std::cout << "SOURCEINTEGRATION: ERROR: error loss for ("<<L<<", "<<m<<", "<<k<<", "<<n<<"): I1In = " << errorLossI1In << ", I3In = " << errorLossI3In << "\n";
+// 	// }
+// 	//
+// 	// if(errorLossI2 > 0 && errorLossI4 > 0){
+// 	// 	std::cout << "SOURCEINTEGRATION: ERROR: error loss for ("<<L<<", "<<m<<", "<<k<<", "<<n<<"): I2 = " << errorLossI2 << ", I4 = " << errorLossI4 << "\n";
+// 	// }
+
+// 	if(errorLossI2 < errorThreshold && errorLossI4 < errorThreshold && errorLossI1In < errorThreshold && errorLossI3In < errorThreshold ){
+// 		ZlmIn = -4.*M_PI/W/geoConstants.upsilonT*(I1In*I2 + I3In*I4);
+// 	}
+
+// 	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
+
+// 	return Zlm;
+// }
+
+// TeukolskyAmplitudes scalar_amplitude_ecceq(int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
+// 	ComplexVector R0 = (Rin.solution);
+// 	ComplexVector Rp0 = (Rin.derivative);
+
+// 	ComplexVector R1 = (Rup.solution);
+// 	ComplexVector Rp1 = (Rup.derivative);
+
+// 	double S = (Slm.solution)[0];
+
+// 	Vector rp = (traj.r);
+// 	Vector tR = traj.tR;
+// 	Vector phiR = traj.phiR;
+
+// 	Complex W = scalar_wronskian(geoConstants.a, rp[0], R0[0], Rp0[0], R1[0], Rp1[0]);
+
+// 	int Nsample = pow(2, 3);
+// 	int radialLength = rp.size();
+// 	int sampleSize = radialLength - 1;
+// 	int NsampleMax = 2*sampleSize;
+// 	// for the spectral integration to return a convergent result, we need to sample at a rate 4 times the frequency of the integrand, which is set by the harmonic number n
+// 	while(Nsample < 4*abs(n)){
+// 		Nsample *= 2;
+// 	}
+// 	if(NsampleMax < Nsample){
+// 		std::cout << "SOURCEINTEGRATION: ERROR: Not enough samples to calculate Teukolsky amplitude for (s,l,m,k,n) = ("<<0<<","<<L<<","<<m<<","<<0<<","<<n<<"). Increase sample rate to > "<<4*abs(n)<<" to resolve high frequency integrand. \n";
+// 		TeukolskyAmplitudes Zlm = {0., 0.};
+// 		return Zlm;
+// 	}
+// 	int halfSample = Nsample/2;
+// 	int sampleDiff = sampleSize/halfSample;
+// 	double deltaQ = M_PI/double(sampleSize);
+
+// 	// first add the points at qr = 0 and qr = pi
+// 	Complex ZlmUp, ZlmIn, sumUp, sumIn;
+// 	int samplePos = 0.;
+// 	double qr = samplePos*deltaQ;
+// 	double maxTermUp = 0.;
+// 	double maxTermIn = 0.;
+// 	Complex sumUpTerm, sumInTerm;
+// 	sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr, R0[samplePos], S);
+// 	sumUp = sumUpTerm;
+// 	sumInTerm = scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr, R1[samplePos], S);
+// 	sumIn = sumInTerm;
+// 	maxTermUp = abs(sumUpTerm) < maxTermUp ? maxTermUp : abs(sumUpTerm);
+
+// 	samplePos = halfSample*sampleDiff;
+// 	qr = M_PI;
+// 	sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr, R0[samplePos], S);
+// 	sumUp += sumUpTerm;
+// 	sumInTerm = scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr, R1[samplePos], S);
+// 	sumIn += sumInTerm;
+// 	maxTermUp = abs(sumUpTerm) < maxTermUp ? maxTermUp : abs(sumUpTerm);
+// 	maxTermIn = abs(sumInTerm) < maxTermIn ? maxTermIn : abs(sumInTerm);
+
+
+// 	for(int i = 1; i < halfSample; i++){
+// 		samplePos = i*sampleDiff;
+// 		qr = double(samplePos)*deltaQ;
+// 		// std::cout << "qr = " << qr/M_PI << "\n";
+// 		// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
+// 		// first sum performs integration between qr = 0 to qr = pi
+// 		sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos], S);
+// 		sumUp += sumUpTerm;
+// 		maxTermUp = abs(sumUpTerm) < maxTermUp ? maxTermUp : abs(sumUpTerm);
+// 		// std::cout << teukolskyIntegrand(L, m, 0, n, geoConstants, tR[samplePos], 0., rp[samplePos], thp, phiR[samplePos], 0., qr, qth,
+// 		// 	R0[samplePos], Rp0[samplePos], Rpp0[samplePos], S, Sp, Spp) << "\n";
+// 		sumInTerm = scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos], S);
+// 		sumIn += sumInTerm;
+// 		maxTermIn = abs(sumInTerm) < maxTermIn ? maxTermIn : abs(sumInTerm);
+// 		// second sum performs integration between qr = pi to qr = 2*pi
+// 		// note that the radial velocity changes signs and because tR and phiR are antisymmetric
+// 		// with respect to qr, these pick-up a minus sign as well
+
+// 		// std::cout << "qr = " << qr << "\n";
+// 		sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos], S);
+// 		sumUp += sumUpTerm;
+// 		maxTermUp = abs(sumUpTerm) < maxTermUp ? maxTermUp : abs(sumUpTerm);
+// 		// std::cout << teukolskyIntegrand(L, m, 0, n, geoConstants, -tR[samplePos], 0., rp[samplePos], thp, -phiR[samplePos], 0., qr, qth, R0[samplePos], Rp0[samplePos], Rpp0[samplePos], S, Sp, Spp) << "\n";
+// 		sumInTerm = scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos], S);
+// 		sumIn += sumInTerm;
+// 		maxTermIn = abs(sumInTerm) < maxTermIn ? maxTermIn : abs(sumInTerm);
+// 	}
+
+// 	ZlmUp = sumUp/double(Nsample);
+// 	ZlmIn = sumIn/double(Nsample);
+
+// 	double errorTolerance = 5.e-12;
+// 	double precisionLossUp = maxTermUp/abs(ZlmUp);
+// 	double errorToleranceAdjustedUp = 10*DBL_EPSILON*precisionLossUp;
+// 	errorToleranceAdjustedUp = errorToleranceAdjustedUp < errorTolerance ? errorTolerance : errorToleranceAdjustedUp;
+// 	double precisionLossIn = maxTermIn/abs(ZlmIn);
+// 	double errorToleranceAdjustedIn = 10*DBL_EPSILON*precisionLossIn;
+// 	errorToleranceAdjustedIn = errorToleranceAdjustedIn < errorTolerance ? errorTolerance : errorToleranceAdjustedIn;
+
+// 	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
+// 	while(Nsample < NsampleMax && (abs(1. - ZlmUpCompare/ZlmUp) > errorToleranceAdjustedUp || abs(1. - ZlmInCompare/ZlmIn) > errorToleranceAdjustedIn)){
+// 		// std::cout << "Precision of Teukolsky Up amplitude = " << abs(1. - ZlmUpCompare/ZlmUp) << " with "<<Nsample<<" samples \n";
+
+// 		for(int i = 0; i < halfSample; i++){
+// 			samplePos = i*sampleDiff + sampleDiff/2;
+// 			qr = double(samplePos)*deltaQ;
+// 			// std::cout << "qr = " << qr/M_PI << "\n";
+// 			// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
+// 			sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos], S);
+// 			sumUp += sumUpTerm;
+// 			maxTermUp = abs(sumUpTerm) < maxTermUp ? maxTermUp : abs(sumUpTerm);
+// 			sumInTerm = scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos], S);
+// 			sumIn += sumInTerm;
+// 			maxTermIn = abs(sumInTerm) < maxTermIn ? maxTermIn : abs(sumInTerm);
+
+// 			sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos], S);
+// 			sumUp += sumUpTerm;
+// 			maxTermUp = abs(sumUpTerm) < maxTermUp ? maxTermUp : abs(sumUpTerm);
+// 			sumInTerm = scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos], S);
+// 			sumIn += sumInTerm;
+// 			maxTermIn = abs(sumInTerm) < maxTermIn ? maxTermIn : abs(sumInTerm);
+// 		}
+// 		Nsample *= 2;
+// 		halfSample *= 2;
+// 		sampleDiff /= 2;
+// 		ZlmUpCompare = ZlmUp;
+// 		ZlmInCompare = ZlmIn;
+// 		ZlmUp = sumUp/double(Nsample);
+// 		ZlmIn = sumIn/double(Nsample);
+
+// 		precisionLossUp = maxTermUp/abs(ZlmUp);
+// 		errorToleranceAdjustedUp = 10*DBL_EPSILON*precisionLossUp;
+// 		errorToleranceAdjustedUp = errorToleranceAdjustedUp < errorTolerance ? errorTolerance : errorToleranceAdjustedUp;
+// 		precisionLossIn = maxTermIn/abs(ZlmIn);
+// 		errorToleranceAdjustedIn = 10*DBL_EPSILON*precisionLossIn;
+// 		errorToleranceAdjustedIn = errorToleranceAdjustedIn < errorTolerance ? errorTolerance : errorToleranceAdjustedIn;
+
+// 	}
+
+// 	if(Nsample >= NsampleMax && (abs(1. - ZlmUpCompare/ZlmUp) > errorToleranceAdjustedUp || abs(1. - ZlmInCompare/ZlmIn) > errorToleranceAdjustedIn)){
+// 		// std::cout << "SOURCEINTEGRATION: ERROR: Teukolsky amplitudes for (s,l,m,k,n) = ("<<0<<","<<L<<","<<m<<","<<0<<","<<n<<") reached max sampling rate of "<<NsampleMax<<" before converging. \n";
+// 	}
+
+// 	// need at least three signficant digits if we want to make use of the normalization constants
+// 	if(errorToleranceAdjustedUp > 1){
+// 		ZlmUp = 0.;
+// 		// std::cout << "SOURCEINTEGRATION: ERROR: Teukolsky Up amplitude for (s,l,m,k,n) = ("<<0<<","<<L<<","<<m<<","<<0<<","<<n<<") lost all precision before converging. \n";
+// 	}else{
+// 		ZlmUp *= -4.*M_PI/W/geoConstants.upsilonT;
+// 	}
+// 	if(errorToleranceAdjustedIn > 1){
+// 		// std::cout << "SOURCEINTEGRATION: ERROR: Teukolsky In amplitude for (s,l,m,k,n) = ("<<0<<","<<L<<","<<m<<","<<0<<","<<n<<") lost all precision before converging. Returned value would have been "<< -ZlmIn*4.*M_PI/W/geoConstants.upsilonT << " \n";
+// 		ZlmIn = 0.;
+// 	}else{
+// 		ZlmIn *= -4.*M_PI/W/geoConstants.upsilonT;
+// 	}
+// 	// std::cout << "Precision loss = " << log10(precisionLoss) << "\n";
+// 	// std::cout << "Number of samples = " << Nsample << "\n";
+
+// 	//std::cout << "SOURCEINTEGRATION: Wronskian = "<< W <<"\n";
+// 	//std::cout << "SOURCEINTEGRATION: prefactorR = "<< prefactorR <<"\n";
+// 	//std::cout << "SOURCEINTEGRATION: prefactorRp = "<< prefactorRp <<"\n";
+// 	//std::cout << "SOURCEINTEGRATION: prefactorRpp = "<< prefactorRpp <<"\n";
+
+// 	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+
+// 	return Zlm;
+// }
+
+// TeukolskyAmplitudes scalar_amplitude_sphinc(int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
 	
 
-	ComplexVector R0 = (Rin.solution);
-	ComplexVector Rp0 = (Rin.derivative);
+// 	ComplexVector R0 = (Rin.solution);
+// 	ComplexVector Rp0 = (Rin.derivative);
 
-	ComplexVector R1 = (Rup.solution);
-	ComplexVector Rp1 = (Rup.derivative);
+// 	ComplexVector R1 = (Rup.solution);
+// 	ComplexVector Rp1 = (Rup.derivative);
 
-	double S = (Slm.solution)[0];
+// 	double S = (Slm.solution)[0];
 
-	Vector rp = (traj.r);
-	Vector tR = traj.tR;
-	Vector phiR = traj.phiR;
+// 	Vector rp = (traj.r);
+// 	Vector tR = traj.tR;
+// 	Vector phiR = traj.phiR;
 
-	Complex W = scalar_wronskian(geoConstants.a, rp[0], R0[0], Rp0[0], R1[0], Rp1[0]);
+// 	Complex W = scalar_wronskian(geoConstants.a, rp[0], R0[0], Rp0[0], R1[0], Rp1[0]);
 
-	int Nsample = pow(2, 3);
-	int radialLength = rp.size();
-	int sampleSize = radialLength - 1;
-	int NsampleMax = 2*sampleSize;
-	if(NsampleMax < Nsample){
-		Nsample = NsampleMax;
-	}
-	int halfSample = Nsample/2;
-	int sampleDiff = sampleSize/halfSample;
-	double deltaQ = M_PI/double(sampleSize);
+// 	int Nsample = pow(2, 3);
+// 	int radialLength = rp.size();
+// 	int sampleSize = radialLength - 1;
+// 	int NsampleMax = 2*sampleSize;
+// 	if(NsampleMax < Nsample){
+// 		Nsample = NsampleMax;
+// 	}
+// 	int halfSample = Nsample/2;
+// 	int sampleDiff = sampleSize/halfSample;
+// 	double deltaQ = M_PI/double(sampleSize);
 
-	// first add the points at qr = 0 and qr = pi
-	Complex ZlmUp, ZlmIn, sumUp, sumIn;
-	int samplePos = 0.;
-	double qr = samplePos*deltaQ;
-	double maxTerm = 0.;
-	Complex sumUpTerm;
-	sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr,
-		R0[samplePos], S);
-	sumUp += sumUpTerm;
-	sumIn = scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr,
-		R1[samplePos], S);
-	maxTerm = abs(sumUpTerm) < maxTerm ? maxTerm : abs(sumUpTerm);
+// 	// first add the points at qr = 0 and qr = pi
+// 	Complex ZlmUp, ZlmIn, sumUp, sumIn;
+// 	int samplePos = 0.;
+// 	double qr = samplePos*deltaQ;
+// 	double maxTerm = 0.;
+// 	Complex sumUpTerm;
+// 	sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr,
+// 		R0[samplePos], S);
+// 	sumUp += sumUpTerm;
+// 	sumIn = scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr,
+// 		R1[samplePos], S);
+// 	maxTerm = abs(sumUpTerm) < maxTerm ? maxTerm : abs(sumUpTerm);
 
-	samplePos = halfSample*sampleDiff;
-	qr = M_PI;
-	sumUp += scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr,
-		R0[samplePos], S);
-	sumIn += scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr,
-		R1[samplePos], S);
-	maxTerm = abs(sumUpTerm) < maxTerm ? maxTerm : abs(sumUpTerm);
+// 	samplePos = halfSample*sampleDiff;
+// 	qr = M_PI;
+// 	sumUp += scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr,
+// 		R0[samplePos], S);
+// 	sumIn += scalar_integrand_ecceq(L, m, n, geoConstants, 0., rp[samplePos], 0., qr,
+// 		R1[samplePos], S);
+// 	maxTerm = abs(sumUpTerm) < maxTerm ? maxTerm : abs(sumUpTerm);
 
 
-	for(int i = 1; i < halfSample; i++){
-		samplePos = i*sampleDiff;
-		qr = double(samplePos)*deltaQ;
-		// std::cout << "qr = " << qr/M_PI << "\n";
-		// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
-		// first sum performs integration between qr = 0 to qr = pi
-		sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos], S);
-		sumUp += sumUpTerm;
-		maxTerm = abs(sumUpTerm) < maxTerm ? maxTerm : abs(sumUpTerm);
-		// std::cout << teukolskyIntegrand(L, m, 0, n, geoConstants, tR[samplePos], 0., rp[samplePos], thp, phiR[samplePos], 0., qr, qth,
-		// 	R0[samplePos], Rp0[samplePos], Rpp0[samplePos], S, Sp, Spp) << "\n";
-		sumIn += scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos], S);
-		// second sum performs integration between qr = pi to qr = 2*pi
-		// note that the radial velocity changes signs and because tR and phiR are antisymmetric
-		// with respect to qr, these pick-up a minus sign as well
+// 	for(int i = 1; i < halfSample; i++){
+// 		samplePos = i*sampleDiff;
+// 		qr = double(samplePos)*deltaQ;
+// 		// std::cout << "qr = " << qr/M_PI << "\n";
+// 		// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
+// 		// first sum performs integration between qr = 0 to qr = pi
+// 		sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos], S);
+// 		sumUp += sumUpTerm;
+// 		maxTerm = abs(sumUpTerm) < maxTerm ? maxTerm : abs(sumUpTerm);
+// 		// std::cout << teukolskyIntegrand(L, m, 0, n, geoConstants, tR[samplePos], 0., rp[samplePos], thp, phiR[samplePos], 0., qr, qth,
+// 		// 	R0[samplePos], Rp0[samplePos], Rpp0[samplePos], S, Sp, Spp) << "\n";
+// 		sumIn += scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos], S);
+// 		// second sum performs integration between qr = pi to qr = 2*pi
+// 		// note that the radial velocity changes signs and because tR and phiR are antisymmetric
+// 		// with respect to qr, these pick-up a minus sign as well
 
-		// std::cout << "qr = " << qr << "\n";
-		sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos], S);
-		sumUp += sumUpTerm;
-		maxTerm = abs(sumUpTerm) < maxTerm ? maxTerm : abs(sumUpTerm);
-		// std::cout << teukolskyIntegrand(L, m, 0, n, geoConstants, -tR[samplePos], 0., rp[samplePos], thp, -phiR[samplePos], 0., qr, qth, R0[samplePos], Rp0[samplePos], Rpp0[samplePos], S, Sp, Spp) << "\n";
-		sumIn += scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos], S);
-	}
+// 		// std::cout << "qr = " << qr << "\n";
+// 		sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos], S);
+// 		sumUp += sumUpTerm;
+// 		maxTerm = abs(sumUpTerm) < maxTerm ? maxTerm : abs(sumUpTerm);
+// 		// std::cout << teukolskyIntegrand(L, m, 0, n, geoConstants, -tR[samplePos], 0., rp[samplePos], thp, -phiR[samplePos], 0., qr, qth, R0[samplePos], Rp0[samplePos], Rpp0[samplePos], S, Sp, Spp) << "\n";
+// 		sumIn += scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos], S);
+// 	}
 
-	ZlmUp = sumUp/double(Nsample);
-	ZlmIn = sumIn/double(Nsample);
+// 	ZlmUp = sumUp/double(Nsample);
+// 	ZlmIn = sumIn/double(Nsample);
 
-	double precisionLoss = maxTerm/abs(ZlmUp);
-	double errorTolerance = 5.e-12;
-	double errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+// 	double precisionLoss = maxTerm/abs(ZlmUp);
+// 	double errorTolerance = 5.e-12;
+// 	double errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
+// 	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
 
-	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
-	while(Nsample < NsampleMax && (abs(1. - ZlmUpCompare/ZlmUp) > errorToleranceAdjusted || abs(1. - ZlmInCompare/ZlmIn) > errorToleranceAdjusted)){
-		// std::cout << "Precision of Teukolsky Up amplitude = " << abs(1. - ZlmUpCompare/ZlmUp) << " with "<<Nsample<<" samples \n";
+// 	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
+// 	while(Nsample < NsampleMax && (abs(1. - ZlmUpCompare/ZlmUp) > errorToleranceAdjusted || abs(1. - ZlmInCompare/ZlmIn) > errorToleranceAdjusted)){
+// 		// std::cout << "Precision of Teukolsky Up amplitude = " << abs(1. - ZlmUpCompare/ZlmUp) << " with "<<Nsample<<" samples \n";
 
-		for(int i = 0; i < halfSample; i++){
-			samplePos = i*sampleDiff + sampleDiff/2;
-			qr = double(samplePos)*deltaQ;
-			// std::cout << "qr = " << qr/M_PI << "\n";
-			// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
-			sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos], S);
-			sumUp += sumUpTerm;
-			maxTerm = abs(sumUpTerm) < maxTerm ? maxTerm : abs(sumUpTerm);
-			sumIn += scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos], S);
+// 		for(int i = 0; i < halfSample; i++){
+// 			samplePos = i*sampleDiff + sampleDiff/2;
+// 			qr = double(samplePos)*deltaQ;
+// 			// std::cout << "qr = " << qr/M_PI << "\n";
+// 			// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
+// 			sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R0[samplePos], S);
+// 			sumUp += sumUpTerm;
+// 			maxTerm = abs(sumUpTerm) < maxTerm ? maxTerm : abs(sumUpTerm);
+// 			sumIn += scalar_integrand_ecceq(L, m, n, geoConstants, tR[samplePos], rp[samplePos], phiR[samplePos], qr, R1[samplePos], S);
 
-			sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos], S);
-			sumUp += sumUpTerm;
-			maxTerm = abs(sumUpTerm) < maxTerm ? maxTerm : abs(sumUpTerm);
-			sumIn += scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos], S);
-		}
-		Nsample *= 2;
-		halfSample *= 2;
-		sampleDiff /= 2;
-		ZlmUpCompare = ZlmUp;
-		ZlmInCompare = ZlmIn;
-		ZlmUp = sumUp/double(Nsample);
-		ZlmIn = sumIn/double(Nsample);
+// 			sumUpTerm = scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R0[samplePos], S);
+// 			sumUp += sumUpTerm;
+// 			maxTerm = abs(sumUpTerm) < maxTerm ? maxTerm : abs(sumUpTerm);
+// 			sumIn += scalar_integrand_ecceq(L, m, n, geoConstants, -tR[samplePos], rp[samplePos], -phiR[samplePos], 2.*M_PI - qr, R1[samplePos], S);
+// 		}
+// 		Nsample *= 2;
+// 		halfSample *= 2;
+// 		sampleDiff /= 2;
+// 		ZlmUpCompare = ZlmUp;
+// 		ZlmInCompare = ZlmIn;
+// 		ZlmUp = sumUp/double(Nsample);
+// 		ZlmIn = sumIn/double(Nsample);
 
-		precisionLoss = maxTerm/abs(ZlmUp);
-		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+// 		precisionLoss = maxTerm/abs(ZlmUp);
+// 		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
+// 		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
 
-	}
-	// std::cout << "Precision of Teukolsky Up amplitude = " << abs(1. - ZlmUpCompare/ZlmUp) << " with "<<Nsample<<" samples \n";
-	// std::cout << std::setprecision(2);
-	// std::cout << "Precision loss of " << log10(precisionLoss) << " digits \n";
-	// std::cout << std::setprecision(15);
-	ZlmUp *= -4.*M_PI/W/geoConstants.upsilonT;
-	ZlmIn *= -4.*M_PI/W/geoConstants.upsilonT;
+// 	}
+// 	// std::cout << "Precision of Teukolsky Up amplitude = " << abs(1. - ZlmUpCompare/ZlmUp) << " with "<<Nsample<<" samples \n";
+// 	// std::cout << std::setprecision(2);
+// 	// std::cout << "Precision loss of " << log10(precisionLoss) << " digits \n";
+// 	// std::cout << std::setprecision(15);
+// 	ZlmUp *= -4.*M_PI/W/geoConstants.upsilonT;
+// 	ZlmIn *= -4.*M_PI/W/geoConstants.upsilonT;
 
-	//std::cout << "SOURCEINTEGRATION: Wronskian = "<< W <<"\n";
-	//std::cout << "SOURCEINTEGRATION: prefactorR = "<< prefactorR <<"\n";
-	//std::cout << "SOURCEINTEGRATION: prefactorRp = "<< prefactorRp <<"\n";
-	//std::cout << "SOURCEINTEGRATION: prefactorRpp = "<< prefactorRpp <<"\n";
+// 	//std::cout << "SOURCEINTEGRATION: Wronskian = "<< W <<"\n";
+// 	//std::cout << "SOURCEINTEGRATION: prefactorR = "<< prefactorR <<"\n";
+// 	//std::cout << "SOURCEINTEGRATION: prefactorRp = "<< prefactorRp <<"\n";
+// 	//std::cout << "SOURCEINTEGRATION: prefactorRpp = "<< prefactorRpp <<"\n";
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
+// 	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
 
-	return Zlm;
-}
+// 	return Zlm;
+// }
 
-Complex scalar_integrand_ecceq(int, int m, int n, GeodesicConstants &geoConstants, double tR, double rp, double phiR, double qr, Complex Rt, double St){
-	double freq = (m*geoConstants.upsilonPhi + n*geoConstants.upsilonR)/geoConstants.upsilonT;
-	return pow(rp, 2)*Rt*exp(I*(n*qr + freq*tR - m*phiR))*St;
-}
+// Complex scalar_integrand_ecceq(int, int m, int n, GeodesicConstants &geoConstants, double tR, double rp, double phiR, double qr, Complex Rt, double St){
+// 	double freq = (m*geoConstants.upsilonPhi + n*geoConstants.upsilonR)/geoConstants.upsilonT;
+// 	return pow(rp, 2)*Rt*exp(I*(n*qr + freq*tR - m*phiR))*St;
+// }
 
 Complex scalar_integrand_1(int, int m, int k, int n, GeodesicConstants &geoConstants, double tR, double rp, double phiR, double qr, Complex Rt){
 	double freq = (m*geoConstants.upsilonPhi + k*geoConstants.upsilonTheta + n*geoConstants.upsilonR)/geoConstants.upsilonT;

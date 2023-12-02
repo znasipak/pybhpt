@@ -12,6 +12,8 @@
 typedef struct TeukolskyAmplitudesStruct{
 	Complex in;
 	Complex up;
+	double inPrecision;
+	double upPrecision;
 } TeukolskyAmplitudes;
 
 typedef struct DerivativesMatrixStruct{
@@ -46,18 +48,18 @@ private:
 	double _basePrecision;
 };
 
-// TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
-// TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
-// TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
-// TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
+TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
+TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
+TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
+TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
 
-TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
+// TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
+// TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
+// TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
+// TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
 
 TeukolskyAmplitudes teukolsky_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-TeukolskyAmplitudes teukolsky_amplitude_circeq_plus_2(int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
+// TeukolskyAmplitudes teukolsky_amplitude_circeq_plus_2(int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
 TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
 TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
 TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
@@ -82,12 +84,12 @@ TeukolskyAmplitudes scalar_amplitude_spherical(int L, int m, int k, int n, Geode
 TeukolskyAmplitudes scalar_amplitude_circular(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
 TeukolskyAmplitudes scalar_amplitude_generic(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
 
-TeukolskyAmplitudes scalar_amplitude_circeq(int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-TeukolskyAmplitudes scalar_amplitude_ecceq(int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-TeukolskyAmplitudes scalar_amplitude_sphinc(int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-TeukolskyAmplitudes scalar_amplitude(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-Complex scalar_integrand_ecceq(int L, int m, int n, GeodesicConstants &geoConstants, double tR, double rp, double phiR, double qr, Complex Rt, double St);
-Complex scalar_integrand_sphinc(int L, int m, int k, int n, GeodesicConstants &geoConstants, double tR, double tTh, double rp, double thp, double phiR, double phiTh, double qr, double qth, Complex Rt, double St);
+// TeukolskyAmplitudes scalar_amplitude_circeq(int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
+// TeukolskyAmplitudes scalar_amplitude_ecceq(int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
+// TeukolskyAmplitudes scalar_amplitude_sphinc(int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
+// TeukolskyAmplitudes scalar_amplitude(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
+// Complex scalar_integrand_ecceq(int L, int m, int n, GeodesicConstants &geoConstants, double tR, double rp, double phiR, double qr, Complex Rt, double St);
+// Complex scalar_integrand_sphinc(int L, int m, int k, int n, GeodesicConstants &geoConstants, double tR, double tTh, double rp, double thp, double phiR, double phiTh, double qr, double qth, Complex Rt, double St);
 Complex scalar_integrand_1(int L, int m, int k, int n, GeodesicConstants &geoConstants, double tR, double rp, double phiR, double qr, Complex Rt);
 Complex scalar_integrand_2(int L, int m, int k, int n, GeodesicConstants &geoConstants, double tTh, double thp, double phiTh, double qth, double St);
 Complex scalar_integrand_3(int L, int m, int k, int n, GeodesicConstants &geoConstants, double tR, double rp, double phiR, double qr, Complex Rt);
