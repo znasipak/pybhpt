@@ -137,3 +137,4 @@ test-temp/
 .vscode/
 dev_compile.sh
 setup_dev.py
+cython/*.cpp
