@@ -32,29 +32,7 @@
         ],
         "name": "cybhpt_full",
         "sources": [
-            "cython/redshift_wrap.pyx",
-            "cpp/src/hypergeo_u.cpp",
-            "cpp/src/hertz.cpp",
-            "cpp/src/bessel.cpp",
-            "cpp/src/redshift.cpp",
-            "cpp/src/unit_test.cpp",
-            "cpp/src/monodromy.cpp",
-            "cpp/src/mst.cpp",
-            "cpp/src/metriccoeffs.cpp",
-            "cpp/src/metric.cpp",
-            "cpp/src/geo.cpp",
-            "cpp/src/teukolsky.cpp",
-            "cpp/src/radialsolver.cpp",
-            "cpp/src/specialfunc.cpp",
-            "cpp/src/gsn_asymp.cpp",
-            "cpp/src/fluxes.cpp",
-            "cpp/src/cf.cpp",
-            "cpp/src/nusolver.cpp",
-            "cpp/src/swsh.cpp",
-            "cpp/src/sourceintegration.cpp",
-            "cpp/src/utils.cpp",
-            "cpp/src/kerr.cpp",
-            "cpp/src/hypergeo_f.cpp"
+            "cython/redshift_wrap.pyx"
         ]
     },
     "module_name": "cybhpt_full"
