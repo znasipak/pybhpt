@@ -122,8 +122,8 @@ def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):
     fluxes.set_fluxes(fluxescpp)
     return fluxes
 
-def full_flux_parallel_l_py(int s, KerrGeodesic geo, int modeMax, unicode wdir):
-    full_flux_parallel_l(s, dereference(geo.geocpp), modeMax, wdir.encode())
+# def full_flux_parallel_l_py(int s, KerrGeodesic geo, int modeMax, unicode wdir):
+#     full_flux_parallel_l(s, dereference(geo.geocpp), modeMax, wdir.encode())
 
-def full_flux_parallel_lm_py(KerrGeodesic geo, int lmax, unicode wdir):
-    full_flux_parallel_lm(dereference(geo.geocpp), lmax, wdir.encode())
+# def full_flux_parallel_lm_py(KerrGeodesic geo, int lmax, unicode wdir):
+#     full_flux_parallel_lm(dereference(geo.geocpp), lmax, wdir.encode())
