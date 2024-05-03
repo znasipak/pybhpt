@@ -53,6 +53,12 @@ cdef extern from "radialsolver.hpp":
     cpp_complex[double] teukolsky_starobinsky_complex_constant(int j, int m, double a, double omega, double lambdaCH)
     cpp_complex[double] teukolsky_starobinsky_amplitude(BoundaryCondition bc, int s, int m, double a, double omega, double lambdaCH)
 
+cdef extern from "nusolver.hpp":
+    cpp_complex[double] nu_solver(double q, int s, int l, int m, double epsilon)
+
+def renormalized_angular_momentum(double a, int s, int l, int m, double omega):
+    return nu_solver(a, s, l, m, 2.*omega)
+
 cdef dict bc_dict = {
     "In" : BoundaryCondition.In,
     "Up" : BoundaryCondition.Up

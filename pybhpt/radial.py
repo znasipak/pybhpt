@@ -1,5 +1,9 @@
 from cybhpt_full import RadialTeukolsky as RadialTeukolskyCython
+from cybhpt_full import renormalized_angular_momentum as nu_cython
 import numpy as np
+
+def renormalized_angular_momentum(a, s, l, m, omega):
+    return nu_cython(a, s, l, m, omega)
 
 class RadialTeukolsky:
 

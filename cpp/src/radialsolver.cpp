@@ -39,7 +39,7 @@ double RadialTeukolsky::getSpinWeightedSpheroidalEigenvalue(){ return _lambda; }
 // going to generate solutions with any of the integration methods {HBL, GSN, TEUK}
 int RadialTeukolsky::ASYMsolveBoundary(BoundaryCondition bc){
 	int success = 1;
-	int boundaryFlagMax = 20;
+	int boundaryFlagMax = 40;
 	if( bc == In ){
 		teuk_in_ASYM_series(_horizonBoundarySolution, *this, _horizonBoundary);
 	 	teuk_in_derivative_ASYM_series(_horizonBoundaryDerivative, *this, _horizonBoundary);
@@ -78,7 +78,7 @@ int RadialTeukolsky::ASYMsolveBoundary(BoundaryCondition bc){
 
 int RadialTeukolsky::MSTsolveBoundary(BoundaryCondition bc){
 	int success = 1;
-	int boundaryFlagMax = 20;
+	int boundaryFlagMax = 40;
 	if( bc == In ){
 		teuk_in_MST_series_boundary(_horizonBoundarySolution, _horizonBoundaryDerivative, *this, _horizonBoundary);
 
