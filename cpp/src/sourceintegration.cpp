@@ -2,6 +2,8 @@
 
 #include "sourceintegration.hpp"
 
+#define PRECISION_THRESHOLD 500.
+
 SummationHelper::SummationHelper(): _sum(0.), _previousSum(0.), _maxTerm(0.), _precisionLoss(1.), _basePrecision(DBL_EPSILON) {}
 SummationHelper::~SummationHelper() {}
 
@@ -121,572 +123,6 @@ TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicT
 ///////////////////////////////////////
 // Teukolsky s = -2 field amplitudes //
 ///////////////////////////////////////
-
-// TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
-// 	std::function<void(Complex &, Complex &, int const &, int const &, int const &, int const &, GeodesicConstants &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, Complex const &, Complex const &, Complex const &,  Complex const &, Complex const &, Complex const &, double const &, double const &, double const &)> integrand;
-// 	std::function<void(Complex &, Complex &, int const &, int const &, int const &, int const &, GeodesicConstants &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, Complex const &, Complex const &, Complex const &,  Complex const &, Complex const &, Complex const &, double const &, double const &, double const &)> integrandRadialTurningPoint;
-// 	std::function<void(Complex &, Complex &, int const &, int const &, int const &, int const &, GeodesicConstants &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, Complex const &, Complex const &, Complex const &,  Complex const &, Complex const &, Complex const &, double const &, double const &, double const &)> integrandPolarTurningPoint;
-// 	std::function<void(Complex &, Complex &, int const &, int const &, int const &, int const &, GeodesicConstants &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, Complex const &, Complex const &, Complex const &,  Complex const &, Complex const &, Complex const &, double const &, double const &, double const &)> integrandRadialPolarTurningPoint;
-// 	// std::function<Complex(int const &, int const &, int const &, int const &, GeodesicConstants &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, Complex const &, Complex const &, Complex const &, double const &, double const &, double const &)> integrandCompare;
-// 	if(s == -2){
-// 		integrand = teukolskyIntegrandMinus2;
-// 		integrandRadialTurningPoint = teukolskyIntegrandMinus2RadialTurningPoint;
-// 		integrandPolarTurningPoint = teukolskyIntegrandMinus2PolarTurningPoint;
-// 		integrandRadialPolarTurningPoint = teukolskyIntegrandMinus2RadialPolarTurningPoint;
-// 		// integrandCompare = teukolskyIntegrand;
-// 	}else{
-// 		integrand = teukolskyIntegrandPlus2;
-// 		integrandRadialTurningPoint = teukolskyIntegrandPlus2RadialTurningPoint;
-// 		integrandPolarTurningPoint = teukolskyIntegrandPlus2PolarTurningPoint;
-// 		integrandRadialPolarTurningPoint = teukolskyIntegrandPlus2RadialPolarTurningPoint;
-// 	}
-	
-// 	ComplexVector R0 = (Rin.solution);
-// 	ComplexVector Rp0 = (Rin.derivative);
-// 	ComplexVector Rpp0 = (Rin.secondDerivative);
-
-// 	ComplexVector R1 = (Rup.solution);
-// 	ComplexVector Rp1 = (Rup.derivative);
-// 	ComplexVector Rpp1 = (Rup.secondDerivative);
-
-// 	Vector S = (Slm.solution);
-// 	Vector Sp = (Slm.derivative);
-// 	Vector Spp = (Slm.secondDerivative);
-
-// 	Vector rp = traj.r;
-// 	Vector thp = traj.theta;
-// 	Vector tR = traj.tR;
-// 	Vector phiR = traj.phiR;
-// 	Vector tTh = traj.tTheta;
-// 	Vector phiTh = traj.phiTheta;
-
-// 	Complex W = wronskian(s, geoConstants.a, rp[0], R0[0], Rp0[0], R1[0], Rp1[0]);
-
-// 	int NsampleR = pow(2, 2), NsampleTh = pow(2, 2);
-// 	while(NsampleR < 2*abs(n) + 2){
-// 		NsampleR *= 2;
-// 	}
-// 	while(NsampleTh < 2*abs(k) + 2){
-// 		NsampleTh *= 2;
-// 	}
-// 	int radialLength = rp.size(), polarLength = thp.size();
-// 	int sampleSizeR = radialLength - 1, sampleSizeTh = polarLength - 1;
-// 	int NsampleMaxR = 2*sampleSizeR, NsampleMaxTh = 2*sampleSizeTh;
-// 	if(NsampleMaxR < NsampleR){
-// 		NsampleR = NsampleMaxR;
-// 	}
-
-// 	if(NsampleMaxTh < NsampleTh){
-// 		NsampleTh = NsampleMaxTh;
-// 	}
-
-// 	int halfSampleR = NsampleR/2, halfSampleTh = NsampleTh/2;
-// 	int sampleDiffR = sampleSizeR/halfSampleR, sampleDiffTh = sampleSizeTh/halfSampleTh;
-// 	double deltaQR = M_PI/double(sampleSizeR), deltaQTh = M_PI/double(sampleSizeTh);
-
-// 	// first add the points at qr = 0 and qr = pi
-// 	Complex ZlmUp, ZlmIn, sumUp = 0., sumIn = 0.;
-// 	int samplePosR = 0, samplePosTh = 0;
-// 	double qr = 0.;
-// 	double qth = 0.;
-// 	double maxTermUp = 0.;
-// 	double maxTermIn = 0.;
-// 	Complex sumUpTerm, sumInTerm;
-
-// 	// initial sum over fixed qr = 0. and qr = pi; qth = 0 and qth = pi
-// 	// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
-// 	sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 	sumUp += sumUpTerm;
-// 	maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 	// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 	sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 	sumIn += sumInTerm;
-// 	maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 	samplePosTh = halfSampleTh*sampleDiffTh;
-// 	qth = double(samplePosTh)*deltaQTh;
-// 	// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
-// 	sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 	sumUp += sumUpTerm;
-// 	maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 	// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 	sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 	sumIn += sumInTerm;
-// 	maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 	samplePosR = halfSampleR*sampleDiffR;
-// 	qr = double(samplePosR)*deltaQR;
-// 	// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
-// 	sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 	sumUp += sumUpTerm;
-// 	maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 	// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 	sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 	sumIn += sumInTerm;
-// 	maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 	samplePosTh = 0;
-// 	qth = double(samplePosTh)*deltaQTh;
-// 	// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
-// 	sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 	sumUp += sumUpTerm;
-// 	maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 	// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 	sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 	sumIn += sumInTerm;
-// 	maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 	// initial sum over qr values with fixed qth = 0. and qth = pi
-// 	for(int i = 1; i < halfSampleR; i++){
-// 		samplePosR = i*sampleDiffR;
-// 		qr = double(samplePosR)*deltaQR;
-
-// 		samplePosTh = 0.;
-// 		qth = double(samplePosTh)*deltaQTh;
-// 		// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
-// 		// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
-// 		// first sum performs integration between qr = 0 to qr = pi
-// 		sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumUp += sumUpTerm;
-// 		maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 		// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 		sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumIn += sumInTerm;
-// 		maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-// 		// second sum performs integration between qr = pi to qr = 2*pi
-// 		// note that the radial velocity changes signs and because tR and phiR are antisymmetric
-// 		// with respect to qr, these pick-up a minus sign as well
-
-// 		// std::cout << "qr = " << 2. - qr/M_PI << ", qth = " << qth/M_PI << "\n";
-// 		sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], phiTh[samplePosTh], 2.*M_PI - qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumUp += sumUpTerm;
-// 		maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 		// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 		sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], phiTh[samplePosTh], 2.*M_PI - qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumIn += sumInTerm;
-// 		maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 		samplePosTh = halfSampleTh*sampleDiffTh;
-// 		qth = double(samplePosTh)*deltaQTh;
-// 		// std::cout << "qr = " << qr/M_PI << ", qth = " << 2. - qth/M_PI << "\n";
-// 		sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], -phiTh[samplePosTh], qr, 2.*M_PI - qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumUp += sumUpTerm;
-// 		maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 		// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 		sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], -phiTh[samplePosTh], qr, 2.*M_PI - qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumIn += sumInTerm;
-// 		maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-// 		// second sum performs integration between qr = pi to qr = 2*pi
-// 		// note that the radial velocity changes signs and because tR and phiR are antisymmetric
-// 		// with respect to qr, these pick-up a minus sign as well
-
-// 		// std::cout << "qr = " << 2. - qr/M_PI << ", qth = " << 2. - qth/M_PI << "\n";
-// 		sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], -phiTh[samplePosTh], 2.*M_PI - qr, 2.*M_PI - qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumUp += sumUpTerm;
-// 		maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 		// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 		sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], -phiTh[samplePosTh], 2.*M_PI - qr, 2.*M_PI - qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumIn += sumInTerm;
-// 		maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-// 	}
-
-// 	// initial sum over qth values with fixed qr = 0. and qr = pi
-// 	for(int j = 1; j < halfSampleTh; j++){
-// 		samplePosTh = j*sampleDiffTh;
-// 		qth = double(samplePosTh)*deltaQTh;
-
-// 		samplePosR = 0.;
-// 		qr = double(samplePosR)*deltaQR;
-// 		// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
-// 		// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
-// 		// first sum performs integration between qr = 0 to qr = pi
-// 		sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumUp += sumUpTerm;
-// 		maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 		// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 		sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumIn += sumInTerm;
-// 		maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-// 		// second sum performs integration between qr = pi to qr = 2*pi
-// 		// note that the radial velocity changes signs and because tR and phiR are antisymmetric
-// 		// with respect to qr, these pick-up a minus sign as well
-
-// 		// std::cout << "qr = " << qr/M_PI << ", qth = " << 2. - qth/M_PI << "\n";
-// 		sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], -phiTh[samplePosTh], qr, 2.*M_PI - qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumUp += sumUpTerm;
-// 		maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 		// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 		sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], -phiTh[samplePosTh], qr, 2.*M_PI - qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumIn += sumInTerm;
-// 		maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 		samplePosR = halfSampleR*sampleDiffR;
-// 		qr = double(samplePosR)*deltaQR;
-// 		// std::cout << "qr = " << 2. - qr/M_PI << ", qth = " << qth/M_PI << "\n";
-// 		sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], phiTh[samplePosTh], 2.*M_PI - qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumUp += sumUpTerm;
-// 		maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 		// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 		sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], phiTh[samplePosTh], 2.*M_PI - qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumIn += sumInTerm;
-// 		maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-// 		// second sum performs integration between qr = pi to qr = 2*pi
-// 		// note that the radial velocity changes signs and because tR and phiR are antisymmetric
-// 		// with respect to qr, these pick-up a minus sign as well
-
-// 		// std::cout << "qr = " << 2. - qr/M_PI << ", qth = " << 2. - qth/M_PI << "\n";
-// 		sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], -phiTh[samplePosTh], 2.*M_PI - qr, 2.*M_PI - qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumUp += sumUpTerm;
-// 		maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 		// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 		sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], -phiTh[samplePosTh], 2.*M_PI - qr, 2.*M_PI - qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 		sumIn += sumInTerm;
-// 		maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-// 	}
-
-// 	// initial sum over mixed qr and qth values
-// 	for(int i = 1; i < halfSampleR; i++){
-// 		samplePosR = i*sampleDiffR;
-// 		qr = double(samplePosR)*deltaQR;
-
-// 		for(int j = 1; j < halfSampleTh; j++){
-// 			samplePosTh = j*sampleDiffTh;
-// 			qth = double(samplePosTh)*deltaQTh;
-// 			// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
-// 			// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
-// 			// first sum performs integration between qr = 0 to qr = pi
-// 			sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumUp += sumUpTerm;
-// 			maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 			// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 			sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumIn += sumInTerm;
-// 			maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-// 			// second sum performs integration between qr = pi to qr = 2*pi
-// 			// note that the radial velocity changes signs and because tR and phiR are antisymmetric
-// 			// with respect to qr, these pick-up a minus sign as well
-
-// 			// std::cout << "qr = " << 2. - qr/M_PI << ", qth = " << qth/M_PI << "\n";
-// 			sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], phiTh[samplePosTh], 2.*M_PI - qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumUp += sumUpTerm;
-// 			maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 			// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 			sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], phiTh[samplePosTh], 2.*M_PI - qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumIn += sumInTerm;
-// 			maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 			// std::cout << "qr = " << qr/M_PI << ", qth = " << 2. - qth/M_PI << "\n";
-// 			sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], -phiTh[samplePosTh], qr, 2.*M_PI - qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumUp += sumUpTerm;
-// 			maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 			// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 			sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], -phiTh[samplePosTh], qr, 2.*M_PI - qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumIn += sumInTerm;
-// 			maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-// 			// second sum performs integration between qr = pi to qr = 2*pi
-// 			// note that the radial velocity changes signs and because tR and phiR are antisymmetric
-// 			// with respect to qr, these pick-up a minus sign as well
-
-// 			// std::cout << "qr = " << 2. - qr/M_PI << ", qth = " << 2. - qth/M_PI << "\n";
-// 			sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], -phiTh[samplePosTh], 2.*M_PI - qr, 2.*M_PI - qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumUp += sumUpTerm;
-// 			maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-// 			// std::cout << "Teukolsky Up sum = " << sumUp << " \n";
-
-// 			sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], -phiTh[samplePosTh], 2.*M_PI - qr, 2.*M_PI - qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumIn += sumInTerm;
-// 			maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-// 		}
-// 	}
-
-// 	ZlmUp = sumUp/double(NsampleR*NsampleTh);
-// 	ZlmIn = sumIn/double(NsampleR*NsampleTh);
-
-// 	double precisionLossUp = abs(maxTermUp/std::abs(ZlmUp));
-// 	double precisionLossIn = abs(maxTermIn/std::abs(ZlmIn));
-// 	// double precisionLoss = abs(maxTerm/std::real(ZlmUp));
-// 	// precisionLoss = precisionLoss < abs(maxTerm/std::imag(ZlmUp)) ? abs(maxTerm/std::imag(ZlmUp)) : precisionLoss;
-// 	double errorTolerance = 1.e-10;
-// 	double errorToleranceMax = 1.e-4;
-// 	double errorToleranceAdjustedUp = 10*DBL_EPSILON*precisionLossUp;
-// 	errorToleranceAdjustedUp = errorToleranceAdjustedUp < errorTolerance ? errorTolerance : errorToleranceAdjustedUp;
-// 	errorToleranceAdjustedUp = errorToleranceAdjustedUp < errorToleranceMax ? errorToleranceAdjustedUp : errorToleranceMax;
-
-// 	double errorToleranceAdjustedIn = 10*DBL_EPSILON*precisionLossIn;
-// 	errorToleranceAdjustedIn = errorToleranceAdjustedIn < errorTolerance ? errorTolerance : errorToleranceAdjustedIn;
-// 	errorToleranceAdjustedIn = errorToleranceAdjustedIn < errorToleranceMax ? errorToleranceAdjustedIn : errorToleranceMax;
-
-// 	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
-// 	// std::cout << "Teukolsky Up amplitude = " << ZlmUp << " with "<< NsampleR*NsampleTh <<" samples \n";
-// 	// std::cout << "Precision of Teukolsky Up amplitude = " << abs(1. - ZlmUpCompare/ZlmUp) << " with "<<NsampleR*NsampleTh<<" samples \n";
-// 	int convergenceTest = 0;
-// 	while(NsampleR < NsampleMaxR && convergenceTest < 2){
-// 		// needs to pass the convergence test twice
-// 		if(abs(1. - ZlmUpCompare/ZlmUp) < errorToleranceAdjustedUp && abs(1. - ZlmInCompare/ZlmIn) < errorToleranceAdjustedIn){
-// 			convergenceTest += 1;
-// 		}else{
-// 			convergenceTest = 0;
-// 		}
-// 		// additional qr sample points for fixed qth = 0. and qth = pi
-// 		for(int i = 0; i < halfSampleR; i++){
-// 			samplePosR = i*sampleDiffR + sampleDiffR/2;
-// 			qr = double(samplePosR)*deltaQR;
-
-// 			samplePosTh = 0.;
-// 			qth = double(samplePosTh)*deltaQTh;
-// 			// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
-// 			sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumUp += sumUpTerm;
-// 			maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 			sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumIn += sumInTerm;
-// 			maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 			// std::cout << "qr = " << 2. - qr/M_PI << ", qth = " << qth/M_PI << "\n";
-// 			sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], phiTh[samplePosTh], 2.*M_PI - qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumUp += sumUpTerm;
-// 			maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 			sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], phiTh[samplePosTh], 2.*M_PI - qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumIn += sumInTerm;
-// 			maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 			samplePosTh = halfSampleTh*sampleDiffTh;
-// 			qth = double(samplePosTh)*deltaQTh;
-// 			// std::cout << "qr = " << qr/M_PI << ", qth = " << 2. - qth/M_PI << "\n";
-// 			sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], -phiTh[samplePosTh], qr, 2.*M_PI - qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumUp += sumUpTerm;
-// 			maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 			sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], -phiTh[samplePosTh], qr, 2.*M_PI - qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumIn += sumInTerm;
-// 			maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 			// std::cout << "qr = " << 2. - qr/M_PI << ", qth = " << 2. - qth/M_PI << "\n";
-// 			sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], -phiTh[samplePosTh], 2.*M_PI - qr, 2.*M_PI - qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumUp += sumUpTerm;
-// 			maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 			sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], -phiTh[samplePosTh], 2.*M_PI - qr, 2.*M_PI - qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumIn += sumInTerm;
-// 			maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 			// additional qr sample points for interior qth points between 0 and pi
-// 			for(int j = 1; j < halfSampleTh; j++){
-// 				samplePosTh = j*sampleDiffTh;
-// 				qth = double(samplePosTh)*deltaQTh;
-// 				// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
-// 				sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumUp += sumUpTerm;
-// 				maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 				sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumIn += sumInTerm;
-// 				maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 				// std::cout << "qr = " << 2. - qr/M_PI << ", qth = " << qth/M_PI << "\n";
-// 				sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], phiTh[samplePosTh], 2.*M_PI - qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumUp += sumUpTerm;
-// 				maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 				sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], phiTh[samplePosTh], 2.*M_PI - qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumIn += sumInTerm;
-// 				maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 				// std::cout << "qr = " << qr/M_PI << ", qth = " << 2. - qth/M_PI << "\n";
-// 				sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], -phiTh[samplePosTh], qr, 2.*M_PI - qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumUp += sumUpTerm;
-// 				maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 				sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], -phiTh[samplePosTh], qr, 2.*M_PI - qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumIn += sumInTerm;
-// 				maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 				// std::cout << "qr = " << 2. - qr/M_PI << ", qth = " << 2. - qth/M_PI << "\n";
-// 				sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], -phiTh[samplePosTh], 2.*M_PI - qr, 2.*M_PI - qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumUp += sumUpTerm;
-// 				maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 				sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], -phiTh[samplePosTh], 2.*M_PI - qr, 2.*M_PI - qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumIn += sumInTerm;
-// 				maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-// 			}
-// 		}
-// 		// std::cout << "Teukolsky Up sum = " << sumUp << " with "<<NsampleR<<" samples \n";
-// 		NsampleR *= 2;
-// 		halfSampleR *= 2;
-// 		sampleDiffR /= 2;
-// 		ZlmUpCompare = ZlmUp;
-// 		ZlmInCompare = ZlmIn;
-// 		ZlmUp = sumUp/double(NsampleR*NsampleTh);
-// 		ZlmIn = sumIn/double(NsampleR*NsampleTh);
-
-// 		precisionLossUp = abs(maxTermUp/std::abs(ZlmUp));
-// 		precisionLossIn = abs(maxTermIn/std::abs(ZlmIn));
-// 		// double precisionLoss = abs(maxTerm/std::real(ZlmUp));
-// 		// precisionLoss = precisionLoss < abs(maxTerm/std::imag(ZlmUp)) ? abs(maxTerm/std::imag(ZlmUp)) : precisionLoss;
-// 		errorToleranceAdjustedUp = 10*DBL_EPSILON*precisionLossUp;
-// 		errorToleranceAdjustedUp = errorToleranceAdjustedUp < errorTolerance ? errorTolerance : errorToleranceAdjustedUp;
-// 		errorToleranceAdjustedUp = errorToleranceAdjustedUp < errorToleranceMax ? errorToleranceAdjustedUp : errorToleranceMax;
-
-// 		errorToleranceAdjustedIn = 10*DBL_EPSILON*precisionLossIn;
-// 		errorToleranceAdjustedIn = errorToleranceAdjustedIn < errorTolerance ? errorTolerance : errorToleranceAdjustedIn;
-// 		errorToleranceAdjustedIn = errorToleranceAdjustedIn < errorToleranceMax ? errorToleranceAdjustedIn : errorToleranceMax;
-// 		// std::cout << "Teukolsky Up amplitude = " << ZlmUp << " with "<<NsampleR*NsampleTh<<" samples \n";
-// 		// std::cout << "Precision of Teukolsky Up amplitude = " << abs(1. - ZlmUpCompare/ZlmUp) << " with "<<NsampleR*NsampleTh<<" samples \n";
-// 	}
-
-// 	ZlmUpCompare = 0.; ZlmInCompare = 0.;
-// 	convergenceTest = 0;
-// 	while(NsampleTh < NsampleMaxTh && convergenceTest < 2){
-// 		// needs to pass the convergence test twice
-// 		if(abs(1. - ZlmUpCompare/ZlmUp) < errorToleranceAdjustedUp && abs(1. - ZlmInCompare/ZlmIn) < errorToleranceAdjustedIn){
-// 			convergenceTest += 1;
-// 		}else{
-// 			convergenceTest = 0;
-// 		}
-// 		for(int j = 0; j < halfSampleTh; j++){
-// 			samplePosTh = j*sampleDiffTh + sampleDiffTh/2;
-// 			qth = double(samplePosTh)*deltaQTh;
-
-// 			samplePosR = 0.;
-// 			qr = double(samplePosR)*deltaQR;
-
-// 			sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumUp += sumUpTerm;
-// 			maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 			sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumIn += sumInTerm;
-// 			maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 			sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], -phiTh[samplePosTh], qr, 2.*M_PI - qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumUp += sumUpTerm;
-// 			maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 			sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], -phiTh[samplePosTh], qr, 2.*M_PI - qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumIn += sumInTerm;
-// 			maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 			samplePosR = halfSampleR*sampleDiffR;
-// 			qr = double(samplePosR)*deltaQR;
-
-// 			sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], phiTh[samplePosTh], 2.*M_PI - qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumUp += sumUpTerm;
-// 			maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 			sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], phiTh[samplePosTh], 2.*M_PI - qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumIn += sumInTerm;
-// 			maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 			sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], -phiTh[samplePosTh], 2.*M_PI - qr, 2.*M_PI - qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumUp += sumUpTerm;
-// 			maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 			sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], -phiTh[samplePosTh], 2.*M_PI - qr, 2.*M_PI - qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 			sumIn += sumInTerm;
-// 			maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-// 		}
-
-// 		for(int j = 0; j < halfSampleTh; j++){
-// 			samplePosTh = j*sampleDiffTh + sampleDiffTh/2;
-// 			qth = double(samplePosTh)*deltaQTh;
-
-// 			for(int i = 1; i < halfSampleR; i++){
-// 				samplePosR = i*sampleDiffR;
-// 				qr = double(samplePosR)*deltaQR;
-
-// 				sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumUp += sumUpTerm;
-// 				maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 				sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumIn += sumInTerm;
-// 				maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 				sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], phiTh[samplePosTh], 2.*M_PI - qr, qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumUp += sumUpTerm;
-// 				maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 				sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], phiTh[samplePosTh], 2.*M_PI - qr, qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumIn += sumInTerm;
-// 				maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 				sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], -phiTh[samplePosTh], qr, 2.*M_PI - qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumUp += sumUpTerm;
-// 				maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 				sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], -phiTh[samplePosTh], qr, 2.*M_PI - qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumIn += sumInTerm;
-// 				maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-
-// 				sumUpTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], -phiTh[samplePosTh], 2.*M_PI - qr, 2.*M_PI - qth, R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumUp += sumUpTerm;
-// 				maxTermUp = abs(std::real(sumUpTerm)) < maxTermUp ? maxTermUp : abs(std::real(sumUpTerm));
-
-// 				sumInTerm = teukolskyIntegrand(L, m, k, n, geoConstants, -tR[samplePosR], -tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], -phiR[samplePosR], -phiTh[samplePosTh], 2.*M_PI - qr, 2.*M_PI - qth, R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-// 				sumIn += sumInTerm;
-// 				maxTermIn = abs(std::real(sumInTerm)) < maxTermIn ? maxTermIn : abs(std::real(sumInTerm));
-// 			}
-// 		}
-
-// 		NsampleTh *= 2;
-// 		halfSampleTh *= 2;
-// 		sampleDiffTh /= 2;
-// 		ZlmUpCompare = ZlmUp;
-// 		ZlmInCompare = ZlmIn;
-// 		ZlmUp = sumUp/double(NsampleR*NsampleTh);
-// 		ZlmIn = sumIn/double(NsampleR*NsampleTh);
-
-// 		precisionLossUp = abs(maxTermUp/std::abs(ZlmUp));
-// 		precisionLossIn = abs(maxTermIn/std::abs(ZlmIn));
-// 		// double precisionLoss = abs(maxTerm/std::real(ZlmUp));
-// 		// precisionLoss = precisionLoss < abs(maxTerm/std::imag(ZlmUp)) ? abs(maxTerm/std::imag(ZlmUp)) : precisionLoss;
-// 		errorToleranceAdjustedUp = 10*DBL_EPSILON*precisionLossUp;
-// 		errorToleranceAdjustedUp = errorToleranceAdjustedUp < errorTolerance ? errorTolerance : errorToleranceAdjustedUp;
-// 		errorToleranceAdjustedUp = errorToleranceAdjustedUp < errorToleranceMax ? errorToleranceAdjustedUp : errorToleranceMax;
-
-// 		errorToleranceAdjustedIn = 10*DBL_EPSILON*precisionLossIn;
-// 		errorToleranceAdjustedIn = errorToleranceAdjustedIn < errorTolerance ? errorTolerance : errorToleranceAdjustedIn;
-// 		errorToleranceAdjustedIn = errorToleranceAdjustedIn < errorToleranceMax ? errorToleranceAdjustedIn : errorToleranceMax;
-// 		// std::cout << "Teukolsky Up amplitude = " << ZlmUp << " with "<<NsampleR*NsampleTh<<" samples \n";
-// 		// std::cout << "Precision of Teukolsky Up amplitude = " << abs(1. - ZlmUpCompare/ZlmUp) << " with "<<NsampleR*NsampleTh<<" samples and precision loss = "<<precisionLossUp<<"\n";
-// 	}
-// 	// std::cout << "Precision of Teukolsky In amplitude = " << abs(1. - ZlmInCompare/ZlmIn) << "\n";
-// 	// std::cout << "Precision of Teukolsky Up amplitude = " << abs(1. - ZlmUpCompare/ZlmUp) << "\n";
-// 	// std::cout << "Estimated precision loss = " << precisionLossIn << "\n";
-// 	// std::cout << "Adjusted error = " << errorToleranceAdjustedIn << "\n";
-// 	// std::cout << NsampleR << "\n";
-// 	// std::cout << NsampleTh << "\n";
-
-// 	ZlmUp *= -8.*M_PI/W/geoConstants.upsilonT;
-// 	ZlmIn *= -8.*M_PI/W/geoConstants.upsilonT;
-
-// 	//std::cout << "SOURCEINTEGRATION: Wronskian = "<< W <<"\n";
-// 	//std::cout << "SOURCEINTEGRATION: prefactorR = "<< prefactorR <<"\n";
-// 	//std::cout << "SOURCEINTEGRATION: prefactorRp = "<< prefactorRp <<"\n";
-// 	//std::cout << "SOURCEINTEGRATION: prefactorRpp = "<< prefactorRpp <<"\n";
-
-// 	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp};
-
-// 	return Zlm;
-// }
 
 TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
 	std::function<void(Complex &, Complex &, int const &, int const &, int const &, int const &, GeodesicConstants &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, Complex const &, Complex const &, Complex const &,  Complex const &, Complex const &, Complex const &, double const &, double const &, double const &)> integrand;
@@ -973,11 +409,24 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	// std::cout << "Estimated precision of Up sum = " << sumUp.getPrecision() << "\n";
 	// std::cout << halfSampleR << "\n";
 	// std::cout << halfSampleTh << "\n";
+	
+	double precisionIn = abs(1. - ZlmInCompare/ZlmIn);
+	double precisionUp = abs(1. - ZlmUpCompare/ZlmUp);
+	if(precisionIn < PRECISION_THRESHOLD){
+		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
+	}else{
+		precisionIn = sumIn.getPrecision();
+	}
+	if(precisionUp < PRECISION_THRESHOLD){
+		precisionUp = std::max(sumUp.getPrecision(), precisionUp);
+	}else{
+		precisionUp = sumUp.getPrecision();
+	}
 
 	ZlmUp *= -8.*M_PI/W/geoConstants.upsilonT;
 	ZlmIn *= -8.*M_PI/W/geoConstants.upsilonT;
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, sumIn.getPrecision(), sumUp.getPrecision()};
+	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, precisionIn, precisionUp};
 
 	return Zlm;
 }
@@ -1120,12 +569,12 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	// }
 	double precisionIn = abs(1. - ZlmInCompare/ZlmIn);
 	double precisionUp = abs(1. - ZlmUpCompare/ZlmUp);
-	if(precisionIn < 5.){
+	if(precisionIn < PRECISION_THRESHOLD){
 		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
 	}else{
 		precisionIn = sumIn.getPrecision();
 	}
-	if(precisionUp < 5.){
+	if(precisionUp < PRECISION_THRESHOLD){
 		precisionUp = std::max(sumUp.getPrecision(), precisionUp);
 	}else{
 		precisionUp = sumUp.getPrecision();
@@ -1242,10 +691,24 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 		ZlmUp = sumUp.getSum()/double(halfSample);
 		ZlmIn = sumIn.getSum()/double(halfSample);
 	}
+
+	double precisionIn = abs(1. - ZlmInCompare/ZlmIn);
+	double precisionUp = abs(1. - ZlmUpCompare/ZlmUp);
+	if(precisionIn < PRECISION_THRESHOLD){
+		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
+	}else{
+		precisionIn = sumIn.getPrecision();
+	}
+	if(precisionUp < PRECISION_THRESHOLD){
+		precisionUp = std::max(sumUp.getPrecision(), precisionUp);
+	}else{
+		precisionUp = sumUp.getPrecision();
+	}
+
 	ZlmUp *= -8.*M_PI/W/geoConstants.upsilonT;
 	ZlmIn *= -8.*M_PI/W/geoConstants.upsilonT;
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, sumIn.getPrecision(), sumUp.getPrecision()};
+	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, precisionIn, precisionUp};
 
 	return Zlm;
 }
