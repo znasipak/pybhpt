@@ -43,7 +43,7 @@ Complex nu_solver_monodromy(int s, int l, int m, double q, double eps, double la
 	n = 50;
 	nmax = 2000;
 
-	std::cout << "MONODROMY: Using monodromy methods for (s,l,m,om) = ("<<s<<","<<l<<","<<m<<","<<eps/2.<<"). \n";
+	// std::cout << "MONODROMY: Using monodromy methods for (s,l,m,om) = ("<<s<<","<<l<<","<<m<<","<<eps/2.<<"). \n";
 
 	series_coeff a1 = series_coeff_init(n);
 	series_coeff a2 = series_coeff_init(n);
@@ -76,10 +76,10 @@ Complex nu_solver_monodromy(int s, int l, int m, double q, double eps, double la
 	errorCheck = abs(std::imag(stokes)/f);
 	nuError = abs(std::real(cosmu)/f)*DBL_EPSILON;
 	errorCheck = (errorCheck < nuError)? nuError : errorCheck;
-	if(errorCheck > 1.e-3){
-		std::cout << "MONODROMY: Monodromy eigenvalue at infinity could not be determined due to precision loss of " << log10(errorCheck/DBL_EPSILON) << " digits \n";
-		return 0;
-	}
+	// if(errorCheck > 1.e-3){
+	// 	std::cout << "MONODROMY: Monodromy eigenvalue at infinity could not be determined due to precision loss of " << log10(errorCheck/DBL_EPSILON) << " digits \n";
+	// 	return 0;
+	// }
 
 	if(f < -1.){
 		nu = - 0.5 - abs(std::imag(cacos(f)/(2.0*M_PI)))*I;
