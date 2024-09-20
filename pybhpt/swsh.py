@@ -297,7 +297,11 @@ class SWSH(SWSHSeriesBase):
             self.eval = self.Yslm
             self.eigenvalue = Yslm_eigenvalue(self.s, self.l)
             self.coeffs = np.zeros(self.l - self.lmin)
-            self.coeffs[-1] = 1.
+             #### had to change it here because the shape is (0,) for g = 0
+            if self.l - self.lmin == 0:
+                self.coeffs = 1.
+            else:
+                self.coeffs[-1] = 1.
         else:
             self.eval = self.Sslm
             self.eigenvalue, self.coeffs = self.generate_eigs()

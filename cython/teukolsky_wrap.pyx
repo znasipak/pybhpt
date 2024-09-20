@@ -134,8 +134,8 @@ cdef extern from "hertz.hpp":
     void teukolsky_to_hertz_ASAAB(cpp_complex[double] &PsiIn, cpp_complex[double] &PsiUp, cpp_complex[double] ZteukIn, cpp_complex[double] ZteukUp, int L, int m, double a, double omega, double lambdaCH)
 
 cdef extern from "metriccoeffs.hpp":
-    cpp_complex[double] metric_coefficient_ORG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z)
-    cpp_complex[double] metric_coefficient_IRG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z)
+    cpp_complex[double] metric_coefficient_ORG(int ai, int bi, int nt, int nr, int nz, int npp, double a, double r, double z)
+    cpp_complex[double] metric_coefficient_IRG(int ai, int bi, int nt, int nr, int nz, int npp, double a, double r, double z)
     vector[vector[vector[cpp_complex[double]]]] metric_coefficients_ORG_11(double a, vector[double] r, vector[double] z)
 
 cdef dict gauge_dict = {
@@ -534,11 +534,11 @@ def metric_11(double a, double r, double z):
     
     return np.array(coeffs).squeeze()
 
-def metric_coefficient_S4(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):
-    return metric_coefficient_ORG(alpha, beta, nt, nr, nz, np, a, r, z)
+def metric_coefficient_S4(int alpha, int beta, int nt, int nr, int nz, int npp, double a, double r, double z):
+    return metric_coefficient_ORG(alpha, beta, nt, nr, nz, npp, a, r, z)
 
-def metric_coefficient_S0(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):
-    return metric_coefficient_IRG(alpha, beta, nt, nr, nz, np, a, r, z)
+def metric_coefficient_S0(int alpha, int beta, int nt, int nr, int nz, int npp, double a, double r, double z):
+    return metric_coefficient_IRG(alpha, beta, nt, nr, nz, npp, a, r, z)
 
 cdef class MetricModeGenerator:
     cdef unicode gauge_str

@@ -18,8 +18,8 @@ cdef extern from "unit_test.hpp":
     void run_unit_tests()
 
 cdef extern from "metriccoeffs.hpp":
-    cpp_complex[double] metric_coefficient_ORG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z)
-    cpp_complex[double] metric_coefficient_IRG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z)
+    cpp_complex[double] metric_coefficient_ORG(int ai, int bi, int nt, int nr, int nz, int npp, double a, double r, double z)
+    cpp_complex[double] metric_coefficient_IRG(int ai, int bi, int nt, int nr, int nz, int npp, double a, double r, double z)
 
 cdef extern from "metric.hpp":
     cdef cppclass SphericalHarmonicCouplingCPP "SphericalHarmonicCoupling":
@@ -38,11 +38,11 @@ cdef extern from "metric.hpp":
         int getMaxDerivativeCouplingModeNumber()
 
 
-def metric_coefficients_cython_ORG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z):
-    return metric_coefficient_ORG(ai, bi, nt, nr, nz, np, a, r, z)
+def metric_coefficients_cython_ORG(int ai, int bi, int nt, int nr, int nz, int npp, double a, double r, double z):
+    return metric_coefficient_ORG(ai, bi, nt, nr, nz, npp, a, r, z)
 
-def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int np, double a, double r, double z):
-    return metric_coefficient_IRG(ai, bi, nt, nr, nz, np, a, r, z)
+def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int npp, double a, double r, double z):
+    return metric_coefficient_IRG(ai, bi, nt, nr, nz, npp, a, r, z)
 
 def circular_redshift(unicode filename, unicode gauge, int lmax, KerrGeodesic geo):
     return redshift_circular(filename.encode(), str_to_gauge(gauge), lmax, dereference(geo.geocpp))
