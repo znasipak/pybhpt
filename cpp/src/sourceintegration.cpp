@@ -1139,8 +1139,8 @@ void A13_coeffs(Complex &All0, Complex &Alm0, Complex &Amm0, Complex &Alm1, Comp
 
 void u_13_coeffs(Complex &u1m, Complex &u1p, Complex &u3m, Complex &u3p, GeodesicConstants &geoConstants, double const &rp, double const &thp){
 	double a = geoConstants.a;
-	double uR = sqrt(kerr_geo_Vr(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, rp));
-	double uTheta = sqrt(kerr_geo_Vtheta(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, thp));
+	double uR = sqrt(abs(kerr_geo_Vr(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, rp)));
+	double uTheta = sqrt(abs(kerr_geo_Vtheta(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, thp)));
 
 	double z = cos(thp);
 	Complex rhobar = -1./(rp + I*a*z);
@@ -1153,7 +1153,7 @@ void u_13_coeffs(Complex &u1m, Complex &u1p, Complex &u3m, Complex &u3p, Geodesi
 
 void u_13_coeffs_RadialTurningPoint(Complex &u1,  Complex &u3m, Complex &u3p, GeodesicConstants &geoConstants, double const &rp, double const &thp){
 	double a = geoConstants.a;
-	double uTheta = sqrt(kerr_geo_Vtheta(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, thp));
+	double uTheta = sqrt(abs(kerr_geo_Vtheta(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, thp)));
 
 	double z = cos(thp);
 	Complex rhobar = -1./(rp + I*a*z);
@@ -1165,7 +1165,7 @@ void u_13_coeffs_RadialTurningPoint(Complex &u1,  Complex &u3m, Complex &u3p, Ge
 
 void u_13_coeffs_PolarTurningPoint(Complex &u1m, Complex &u1p, Complex &u3, GeodesicConstants &geoConstants, double const &rp, double const &thp){
 	double a = geoConstants.a;
-	double uR = sqrt(kerr_geo_Vr(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, rp));
+	double uR = sqrt(abs(kerr_geo_Vr(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, rp)));
 
 	double z = cos(thp);
 	Complex rhobar = -1./(rp + I*a*z);
@@ -1186,8 +1186,8 @@ void u_13_coeffs_RadialPolarTurningPoint(Complex &u1, Complex &u3, GeodesicConst
 
 void u_24_coeffs(Complex &u2m, Complex &u2p, Complex &u4m, Complex &u4p, GeodesicConstants &geoConstants, double const &rp, double const &thp){
 	double a = geoConstants.a;
-	double uR = sqrt(kerr_geo_Vr(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, rp));
-	double uTheta = sqrt(kerr_geo_Vtheta(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, thp));
+	double uR = sqrt(abs(kerr_geo_Vr(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, rp)));
+	double uTheta = sqrt(abs(kerr_geo_Vtheta(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, thp)));
 	double z = cos(thp);
 	Complex rho = -1./(rp - I*a*z);
 
@@ -1199,7 +1199,7 @@ void u_24_coeffs(Complex &u2m, Complex &u2p, Complex &u4m, Complex &u4p, Geodesi
 
 void u_24_coeffs_PolarTurningPoint(Complex &u2m, Complex &u2p, Complex &u4, GeodesicConstants &geoConstants, double const &rp, double const &thp){
 	double a = geoConstants.a;
-	double uR = sqrt(kerr_geo_Vr(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, rp));
+	double uR = sqrt(abs(kerr_geo_Vr(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, rp)));
 	double z = cos(thp);
 	Complex rho = -1./(rp - I*a*z);
 
@@ -1210,7 +1210,7 @@ void u_24_coeffs_PolarTurningPoint(Complex &u2m, Complex &u2p, Complex &u4, Geod
 
 void u_24_coeffs_RadialTurningPoint(Complex &u2, Complex &u4m, Complex &u4p, GeodesicConstants &geoConstants, double const &rp, double const &thp){
 	double a = geoConstants.a;
-	double uTheta = sqrt(kerr_geo_Vtheta(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, thp));
+	double uTheta = sqrt(abs(kerr_geo_Vtheta(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, thp)));
 	double z = cos(thp);
 	Complex rho = -1./(rp - I*a*z);
 

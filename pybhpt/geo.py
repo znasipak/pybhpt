@@ -1,5 +1,6 @@
 from cybhpt_full import KerrGeodesic as KerrGeodesicCython
 from cybhpt_full import kerr_geo_V01, kerr_geo_V02, kerr_geo_V11, kerr_geo_V22, kerr_geo_V31, kerr_geo_V32
+from cybhpt_full import kerr_mino_frequencies_wrapper, kerr_orbital_constants_wrapper
 import numpy as np
 
 def kerrgeo_Vt_radial(a, En, Lz, Q, r):
@@ -19,6 +20,12 @@ def kerrgeo_Vphi_radial(a, En, Lz, Q, r):
 
 def kerrgeo_Vphi_polar(a, En, Lz, Q, theta):
     return kerr_geo_V32(a, En, Lz, Q, theta)
+
+def kerrgeo_mino_frequencies(a, p, e, x):
+    return kerr_mino_frequencies_wrapper(a, p, e, x)
+
+def kerr_orbital_constants(a, p, e, x):
+    kerr_orbital_constants_wrapper(a, p, e, x)
 
 class KerrGeodesic:
     def __init__(self, a, p, e, x, nsamples = 2**8):
