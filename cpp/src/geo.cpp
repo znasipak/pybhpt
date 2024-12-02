@@ -438,7 +438,7 @@ double GeodesicSource::getMinoTimeOfTime(double t){
 
 	T = gsl_root_fsolver_brent;
 	s = gsl_root_fsolver_alloc (T);
-  gsl_root_fsolver_set (s, &F, lambda_lo, lambda_hi);
+    gsl_root_fsolver_set (s, &F, lambda_lo, lambda_hi);
 	double lambda = 0.;
 
 	do{

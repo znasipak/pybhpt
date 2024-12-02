@@ -25,7 +25,7 @@ def kerrgeo_mino_frequencies(a, p, e, x):
     return kerr_mino_frequencies_wrapper(a, p, e, x)
 
 def kerr_orbital_constants(a, p, e, x):
-    kerr_orbital_constants_wrapper(a, p, e, x)
+    return kerr_orbital_constants_wrapper(a, p, e, x)
 
 class KerrGeodesic:
     def __init__(self, a, p, e, x, nsamples = 2**8):

@@ -621,7 +621,10 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 
 	Complex W = wronskian(s, geoConstants.a, rp, R0, Rp0, R1, Rp1);
 
-	int Nsample = pow(2, 3);
+	int Nsample = pow(2, 2);
+	while(Nsample < 2*abs(k) + 2){
+		Nsample *= 2;
+	}
 	int polarLength = thp.size();
 	int sampleSize = polarLength - 1;
 	int NsampleMax = 2*sampleSize;
