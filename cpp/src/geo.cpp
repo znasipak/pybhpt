@@ -1035,8 +1035,13 @@ void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &u
 
 void kerr_geo_carter_frequencies(double &cR, double &cTh, double &cPh, double upT, double upR, double upTh, double upPh, double a, double En, double Lz, double Qc, double z1, double z2){
 	double upTTh, upPhTh;
-	kerr_geo_time_mino_frequency_polar(upTTh, a, En, Lz, Qc, z1, z2);
-	kerr_geo_azimuthal_mino_frequency_polar(upPhTh, a, En, Lz, Qc, z1, z2);
+	if(abs(a) > 0){
+		kerr_geo_time_mino_frequency_polar(upTTh, a, En, Lz, Qc, z1, z2);
+		kerr_geo_azimuthal_mino_frequency_polar(upPhTh, a, En, Lz, Qc, z1, z2);
+	}else{
+		kerr_geo_time_mino_frequency_polar_schw(upTTh, En, Lz, Qc, z1, z2);
+		kerr_geo_azimuthal_mino_frequency_polar_schw(upPhTh, En, Lz, Qc, z1, z2);
+	}
 	double freqFactor = a*Lz - a*a*En - upTTh*upTh;
 	double mFactor = Lz - a*En - upPhTh*upTh;
 	cR = freqFactor*upR/upT;

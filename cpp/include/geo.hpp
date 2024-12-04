@@ -186,7 +186,7 @@ void kerr_geo_time_mino_frequency_polar_schw(double &upT, double En, double Lz, 
 void kerr_geo_time_mino_frequency(double &upT, double a, double p, double e, double En, double Lz, double Qc, double z1, double z2, double r3, double r4, double upR, double upTh);
 void kerr_geo_azimuthal_mino_frequency_radial(double &upPh, double a, double p, double e, double En, double Lz, double Qc, double r3, double r4);
 void kerr_geo_azimuthal_mino_frequency_polar(double &upPh, double a, double En, double Lz, double Qc, double z1, double z2);
-void kerr_geo_azimuthal_mino_frequency_polar_schw(double &upPh, double a, double En, double Lz, double Qc, double z1, double z2);
+void kerr_geo_azimuthal_mino_frequency_polar_schw(double &upPh, double En, double Lz, double Qc, double z1, double z2);
 void kerr_geo_azimuthal_mino_frequency(double &upPh, double a, double p, double e, double En, double Lz, double Qc, double z1, double z2, double r3, double r4, double upR, double upTh);
 
 void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &upPh, double a, double p, double e, double x);
