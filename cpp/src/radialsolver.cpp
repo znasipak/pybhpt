@@ -7,7 +7,7 @@
 #define DELTA_R_HORIZON 1.e-2
 #define R_INFINITY 50.
 #define BOOST_INTEGRATE 0
-#define MST_AUTO_FREQ 0.01
+#define MST_AUTO_FREQ 1.e-2
 #define MST_AUTO_RADIAL 1000.
 #define MST_AUTO_POINTS_MAX 256
 #define ZERO_FREQ_MAX 1.e-11
@@ -546,15 +546,15 @@ void RadialTeukolsky::AUTOsolve(){
 		}
 	}
 
-	if(!AUTO_SUCCESS){
-		if(validMethodDomain(MST)){
-			MSTsolve();
-			AUTO_SUCCESS = 1;
-			if(failCheck()){ // if method failed, say auto method is not yet successful
-				AUTO_SUCCESS = 0;
-			}
-		}
-	}
+	// if(!AUTO_SUCCESS){
+	// 	if(validMethodDomain(MST)){
+	// 		MSTsolve();
+	// 		AUTO_SUCCESS = 1;
+	// 		if(failCheck()){ // if method failed, say auto method is not yet successful
+	// 			AUTO_SUCCESS = 0;
+	// 		}
+	// 	}
+	// }
 
 	if(!AUTO_SUCCESS){
 		if( _horizonBoundary == 0. || _infinityBoundary == 0. ){
@@ -580,15 +580,15 @@ void RadialTeukolsky::AUTOsolve(BoundaryCondition bc){
 		}
 	}
 
-	if(!AUTO_SUCCESS){
-		if(validMethodDomain(MST)){
-			MSTsolve(bc);
-			AUTO_SUCCESS = 1;
-			if(failCheck()){ // if method failed, say auto method is not yet successful
-				AUTO_SUCCESS = 0;
-			}
-		}
-	}
+	// if(!AUTO_SUCCESS){
+	// 	if(validMethodDomain(MST)){
+	// 		MSTsolve(bc);
+	// 		AUTO_SUCCESS = 1;
+	// 		if(failCheck()){ // if method failed, say auto method is not yet successful
+	// 			AUTO_SUCCESS = 0;
+	// 		}
+	// 	}
+	// }
 
 	if(!AUTO_SUCCESS){
 		if( _horizonBoundary == 0. || _infinityBoundary == 0. ){

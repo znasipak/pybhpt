@@ -477,18 +477,19 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	Vector tR = traj.tR;
 	Vector phiR = traj.phiR;
 
-	Complex W = wronskian(s, geoConstants.a, rp[0], R0[0], Rp0[0], R1[0], Rp1[0]);
 	double rescaleIn = 1.;
 	double rescaleUp = 1.;
+
+	Complex W = wronskian(s, geoConstants.a, rp[0], R0[0], Rp0[0], R1[0], Rp1[0]);
 	if(isnan(abs(W)) || isinf(abs(W))){
 		rescaleIn = 1./abs(R1[0]);
-		rescaleUp = 1./abs(R0[0]);
+		rescaleUp = 1./abs(R0[R0.size() - 1]);
 		rescale_solution(R0, Rp0, Rpp0, rescaleIn);
 		rescale_solution(R1, Rp1, Rpp1, rescaleUp);
 		W = wronskian(s, geoConstants.a, rp[0], R0[0], Rp0[0], R1[0], Rp1[0]);
 	}
 
-	int Nsample = pow(2, 2);
+	int Nsample = pow(2, 3);
 	while(Nsample < 2*abs(n) + 2){
 		Nsample *= 2;
 	}
@@ -569,12 +570,18 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	// }
 	double precisionIn = abs(1. - ZlmInCompare/ZlmIn);
 	double precisionUp = abs(1. - ZlmUpCompare/ZlmUp);
-	if(precisionIn < PRECISION_THRESHOLD){
+
+	double precision_cut = PRECISION_THRESHOLD;
+	// if(precision_cut < 1./geoConstants.getTimeFrequency(m, 0, n)){
+	// 	precision_cut = 1./geoConstants.getTimeFrequency(m, 0, n);
+	// }
+
+	if(precisionIn < precision_cut){
 		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
 	}else{
 		precisionIn = sumIn.getPrecision();
 	}
-	if(precisionUp < PRECISION_THRESHOLD){
+	if(precisionUp < precision_cut){
 		precisionUp = std::max(sumUp.getPrecision(), precisionUp);
 	}else{
 		precisionUp = sumUp.getPrecision();
@@ -621,7 +628,7 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 
 	Complex W = wronskian(s, geoConstants.a, rp, R0, Rp0, R1, Rp1);
 
-	int Nsample = pow(2, 2);
+	int Nsample = pow(2, 3);
 	while(Nsample < 2*abs(k) + 2){
 		Nsample *= 2;
 	}
@@ -697,12 +704,18 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 
 	double precisionIn = abs(1. - ZlmInCompare/ZlmIn);
 	double precisionUp = abs(1. - ZlmUpCompare/ZlmUp);
-	if(precisionIn < PRECISION_THRESHOLD){
+
+	double precision_cut = PRECISION_THRESHOLD;
+	// if(precision_cut < 1./geoConstants.getTimeFrequency(m, k, 0)){
+	// 	precision_cut = 1./geoConstants.getTimeFrequency(m, k, 0);
+	// }
+
+	if(precisionIn < precision_cut){
 		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
 	}else{
 		precisionIn = sumIn.getPrecision();
 	}
-	if(precisionUp < PRECISION_THRESHOLD){
+	if(precisionUp < precision_cut){
 		precisionUp = std::max(sumUp.getPrecision(), precisionUp);
 	}else{
 		precisionUp = sumUp.getPrecision();
