@@ -73,13 +73,13 @@ Complex bessel_I_bessel_series(Complex nu, double x){
 	double error;
 	term = sumFactor*bessel_I(0, x)/cgamma(nu + 1.);
 	sum += term;
-	error = abs(term/sum);
+	error = std::abs(term/sum);
 	
 	int n = 1;
 	while(error > BESSEL_EPSILON && n < NMAX){
 		sumFactor *= -1.;
 		term = 2.*sumFactor*bessel_I(2*n, x)*exp(lgamma(nu + 1.) - lgamma(nu + Complex(n) + 1.) - lgamma(nu - Complex(n) + 1.));
-		error = abs(term/sum);
+		error = std::abs(term/sum);
 		sum += term;
 		n += 1;
 	}
@@ -92,12 +92,12 @@ Complex bessel_J_bessel_series(Complex nu, double x){
 	double error;
 	term = bessel_J(0, x)/cgamma(nu + 1.);
 	sum += term;
-	error = abs(term/sum);
+	error = std::abs(term/sum);
 	
 	int n = 1;
 	while(error > BESSEL_EPSILON && n < NMAX){
 		term = 2.*bessel_J(2*n, x)*exp(lgamma(nu + 1.) - lgamma(nu + Complex(n) + 1.) - lgamma(nu - Complex(n) + 1.));
-		error = abs(term/sum);
+		error = std::abs(term/sum);
 		sum += term;
 		n += 1;
 	}
@@ -117,12 +117,12 @@ Complex hypergeo_1f1_bessel_series(Complex a, Complex b, Complex z){
 	int n = 0;
 	term = (a - 0.5)*bessel_I(a - 0.5, 0.5*z)*exp(lgamma(2.*a - 1.) + lgamma(2.*a - b) - lgamma(b));
 	sum += term;
-	error = abs(term/sum);
+	error = std::abs(term/sum);
 	n += 1;
 	
 	while(error > BESSEL_EPSILON && n < NMAX){
 		term = (a - 0.5 + Complex(n))*bessel_I(a - 0.5 + Complex(n), 0.5*z)*exp(lgamma(2.*a - 1. + Complex(n)) + lgamma(2.*a - b + Complex(n)) - lgamma(b + Complex(n)) - lgamma(1. + Complex(n)));
-		error = abs(term/sum);
+		error = std::abs(term/sum);
 		sum += term;
 		n += 1;
 	}
@@ -141,20 +141,20 @@ Result hypergeo_1f1_bessel_series_2(Complex a, Complex b, Complex z){
 	double error, maxAbsTerm = 0.;
 	int n = 0;
 	term = (b - a - 0.5)*bessel_I(b - a - 0.5, 0.5*z)*exp(lgamma(2.*(b - a) - 1.) + lgamma(b - 2.*a) - lgamma(b));
-	maxAbsTerm = abs(term);
+	maxAbsTerm = std::abs(term);
 	sum += term;
-	error = abs(term/sum);
+	error = std::abs(term/sum);
 	n += 1;
 	
 	while(error > BESSEL_EPSILON && n < NMAX){
 		term = pow(-1, n)*(b - a - 0.5 + Complex(n))*bessel_I(b - a - 0.5 + Complex(n), 0.5*z)*exp(lgamma(2.*(b - a) - 1. + Complex(n)) + lgamma(b - 2.*a + Complex(n)) - lgamma(b + Complex(n)) - lgamma(1. + Complex(n)));
-		error = abs(term/sum);
+		error = std::abs(term/sum);
 		sum += term;
 		n += 1;
-		maxAbsTerm = abs(term) > maxAbsTerm ? abs(term) : maxAbsTerm;
+		maxAbsTerm = std::abs(term) > maxAbsTerm ? std::abs(term) : maxAbsTerm;
 	}
 	Complex hypergeo1F1 = exp(0.5*z + lgamma(b - a - 0.5) - lgamma(2.*(b - a) - 1.) - lgamma(b - 2.*a) + lgamma(b))*pow(0.25*z, a - b + 0.5)*sum;
-	error = error > abs(maxAbsTerm/sum*DBL_EPSILON) ? error : abs(maxAbsTerm/sum*DBL_EPSILON);
+	error = error > std::abs(maxAbsTerm/sum*DBL_EPSILON) ? error : std::abs(maxAbsTerm/sum*DBL_EPSILON);
 
 	return Result(hypergeo1F1, hypergeo1F1*error);
 }
@@ -185,12 +185,12 @@ Complex hypergeo_1f1_bessel_series_3(Complex a, Complex b, Complex z){
 	int n = 0;
 	term = Rk(n, a, b)*bessel_I(n, 0.5*z);
 	sum += term;
-	error = abs(term/sum);
+	error = std::abs(term/sum);
 	n += 1;
 	
 	while(error > BESSEL_EPSILON && n < NMAX){
 		term = 2*pow(-1., n)*Rk(n, a, b)*bessel_I(n, 0.5*z);;
-		error = abs(term/sum);
+		error = std::abs(term/sum);
 		sum += term;
 		n += 1;
 	}
@@ -222,20 +222,20 @@ Result hypergeo_u_bessel_series_2(Complex a, Complex b, Complex z){
 	int n = 0;
 	term = exp(lgamma(1. - b) - lgamma(a - b + 1.) + log(hypergeo_u_bessel_series_2_prefactor(a, b, z)) + log(hypergeo_u_bessel_series_2_term(n, a, b, z)));
 	term += pow(z, 1. - b)*exp(lgamma(b - 1.) - lgamma(a) + log(hypergeo_u_bessel_series_2_prefactor(a - b + 1., 2. - b, z)) + log(hypergeo_u_bessel_series_2_term(n, a - b + 1., 2. - b, z)));
-	maxAbsTerm = abs(term);
+	maxAbsTerm = std::abs(term);
 	hypergeo1F1 += term;
-	error = abs(term/hypergeo1F1);
+	error = std::abs(term/hypergeo1F1);
 	n += 1;
 	
 	while(error > BESSEL_EPSILON && n < BESSEL_MAX){
 		term = exp(lgamma(1. - b) - lgamma(a - b + 1.) + log(hypergeo_u_bessel_series_2_prefactor(a, b, z)) + log(hypergeo_u_bessel_series_2_term(n, a, b, z)));
 		term += pow(z, 1. - b)*exp(lgamma(b - 1.) - lgamma(a) + log(hypergeo_u_bessel_series_2_prefactor(a - b + 1., 2. - b, z)) + log(hypergeo_u_bessel_series_2_term(n, a - b + 1., 2. - b, z)));
-		error = abs(term/hypergeo1F1);
+		error = std::abs(term/hypergeo1F1);
 		hypergeo1F1 += term;
 		n += 1;
-		maxAbsTerm = abs(term) > maxAbsTerm ? abs(term) : maxAbsTerm;
+		maxAbsTerm = std::abs(term) > maxAbsTerm ? std::abs(term) : maxAbsTerm;
 	}
-	error = error > abs(maxAbsTerm/hypergeo1F1*DBL_EPSILON) ? error : abs(maxAbsTerm/hypergeo1F1*DBL_EPSILON);
+	error = error > std::abs(maxAbsTerm/hypergeo1F1*DBL_EPSILON) ? error : std::abs(maxAbsTerm/hypergeo1F1*DBL_EPSILON);
 
 	return Result(hypergeo1F1, hypergeo1F1*error);
 }

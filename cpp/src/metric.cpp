@@ -5,7 +5,7 @@
 #define COUPLING_COEFF_NUM 6
 #define HUU_EXPANSION_ORDER 0
 
-SphericalHarmonicCoupling::SphericalHarmonicCoupling(int lmax, int m): _lmax(lmax), _lmin(abs(m)), _m(m), _zCoupling(COUPLING_COEFF_NUM*(lmax - _lmin + 1)), _dzCoupling(COUPLING_COEFF_NUM*(lmax - _lmin + 1)) {}
+SphericalHarmonicCoupling::SphericalHarmonicCoupling(int lmax, int m): _lmax(lmax), _lmin(std::abs(m)), _m(m), _zCoupling(COUPLING_COEFF_NUM*(lmax - _lmin + 1)), _dzCoupling(COUPLING_COEFF_NUM*(lmax - _lmin + 1)) {}
 SphericalHarmonicCoupling::~SphericalHarmonicCoupling() {}
 
 void SphericalHarmonicCoupling::generateCouplings(){
@@ -17,7 +17,7 @@ int SphericalHarmonicCoupling::getAzimuthalModeNumber(){ return _m; }
 
 Vector SphericalHarmonicCoupling::getZCouplingCoefficient(){ return _zCoupling; }
 double SphericalHarmonicCoupling::getZCouplingCoefficient(int n, int i, int l){
-	if(l <= getMaxZCouplingModeNumber() && l >= _lmin && abs(i) <= n){
+	if(l <= getMaxZCouplingModeNumber() && l >= _lmin && std::abs(i) <= n){
 		return _zCoupling[6*(l - _lmin) + (n*(n+1))/2 + i];
 	}else{
 		return 0.;
@@ -35,7 +35,7 @@ int SphericalHarmonicCoupling::getMaxZCouplingModeNumber(){
 
 Vector SphericalHarmonicCoupling::getDerivativeCouplingCoefficient(){ return _dzCoupling; }
 double SphericalHarmonicCoupling::getDerivativeCouplingCoefficient(int n, int i, int l){
-	if(l <= getMaxDerivativeCouplingModeNumber() && l >= _lmin && abs(i) <= n){
+	if(l <= getMaxDerivativeCouplingModeNumber() && l >= _lmin && std::abs(i) <= n){
 		return _dzCoupling[6*(l - _lmin) + (n*(n+1))/2 + i];
 	}else{
 		return 0.;
@@ -82,12 +82,12 @@ int test_spherical_coupling(int l, int m, double z, int Nz, int Ndx){
   std::cout << "Testing z^" << Nz << " Y_{"<<l<<","<<m<<"} \n";
   std::cout << "Actual value = " << zNYlm << "\n";
   std::cout << "Test value = " << testZCoupling << "\n";
-  std::cout << "Fractional error = " << abs(1. - testZCoupling/zNYlm) << "\n\n";
+  std::cout << "Fractional error = " << std::abs(1. - testZCoupling/zNYlm) << "\n\n";
 
   std::cout << "Testing partial_x^" << Ndx << " Y_{"<<l<<","<<m<<"} \n";
   std::cout << "Actual value = " << dNdxYlm << "\n";
   std::cout << "Test value = " << testDXCoupling << "\n";
-  std::cout << "Fractional error = " << abs(1. - testDXCoupling/dNdxYlm) << "\n\n";
+  std::cout << "Fractional error = " << std::abs(1. - testDXCoupling/dNdxYlm) << "\n\n";
 
   return 0.;
 }
@@ -350,7 +350,7 @@ RealMatrix MetricPerturbation::getMetricComponent(Vector t, Vector r, Vector z, 
       for(int nu = 0; nu < 4; nu++){
         test += kerr_metric_blc_z(mu, nu, a, r[i], z[i])*tetrad_vector(component2, nu, a, r[i], z[i]);
       }
-      if(abs(tetrad_covector(component2, mu, a, r[i], z[i])-test) > 1.e-10){
+      if(std::abs(tetrad_covector(component2, mu, a, r[i], z[i])-test) > 1.e-10){
         std::cout << "Tetrad vector calculation failed for mu = "<<mu<<" \n";
         std::cout << tetrad_covector(component2, mu, a, r[i], z[i]) << "\n";
         std::cout << test << "\n";
@@ -359,7 +359,7 @@ RealMatrix MetricPerturbation::getMetricComponent(Vector t, Vector r, Vector z, 
       for(int nu = 0; nu < 4; nu++){
         test += kerr_metric_blc_z(mu, nu, a, r[i], z[i])*tetrad_vector(component1, nu, a, r[i], z[i]);
       }
-      if(abs(tetrad_covector(component1, mu, a, r[i], z[i])-test) > 1.e-10){
+      if(std::abs(tetrad_covector(component1, mu, a, r[i], z[i])-test) > 1.e-10){
         std::cout << "Tetrad vector calculation failed for mu = "<<mu<<" \n";
         std::cout << tetrad_covector(component1, mu, a, r[i], z[i]) << "\n";
         std::cout << test << "\n";
@@ -372,7 +372,7 @@ RealMatrix MetricPerturbation::getMetricComponent(Vector t, Vector r, Vector z, 
           }
         }
       }
-      if(abs(test2) > 1.e-10){
+      if(std::abs(test2) > 1.e-10){
         std::cout << "Tetrad vector calculation failed for component1 = "<<component1<<" \n";
         std::cout << test2 << "\n";
       }
@@ -384,7 +384,7 @@ RealMatrix MetricPerturbation::getMetricComponent(Vector t, Vector r, Vector z, 
           }
         }
       }
-      if(abs(test2) > 1.e-10){
+      if(std::abs(test2) > 1.e-10){
         std::cout << "Tetrad vector calculation failed for component2 = "<<component2<<" \n";
         std::cout << test2 << "\n";
       }

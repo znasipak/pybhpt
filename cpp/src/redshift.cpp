@@ -39,7 +39,7 @@ void redshift_circular_reconstruction_RG(std::string filename, Gauge gauge, int 
   ComplexMatrix huuCircInSlm(lmax + 1, ComplexVector(lmax + 1, 0.));
   ComplexMatrix huuCircUpSlm(lmax + 1, ComplexVector(lmax + 1, 0.));
   for(int m = 0; m <= lmax; m++){
-    int lmin = abs(m) < 2 ? 2 : abs(m);
+    int lmin = std::abs(m) < 2 ? 2 : std::abs(m);
     SphericalHarmonicCoupling Cjlm(lmax + 6, m);
     Cjlm.generateCouplings();
     for(int j = lmin; j <= lmax + modeCoupling; j++){
@@ -48,11 +48,11 @@ void redshift_circular_reconstruction_RG(std::string filename, Gauge gauge, int 
       HertzMode hertz(teuk, gauge);
       hertz.generateSolutions();
 
-      for(int l = abs(m); l <= lmax + modeCoupling; l++){
+      for(int l = std::abs(m); l <= lmax + modeCoupling; l++){
         Complex tempMode = redshift_mode(huuCoeffCirc, Cjlm, hertz, In, l, 0, 0, 0, 0);
         std::cout << j << " " << l << " " << m <<  "\n";
         std::cout << tempMode << "\n";
-        if(abs(tempMode/regParam) > DBL_EPSILON){
+        if(std::abs(tempMode/regParam) > DBL_EPSILON){
           if(l <= lmax){
             huuCircInYlm[l][m] += tempMode;
           }
@@ -64,7 +64,7 @@ void redshift_circular_reconstruction_RG(std::string filename, Gauge gauge, int 
         // std::cout << huuCircInYlm[l][m] << "\n";
 
         tempMode = redshift_mode(huuCoeffCirc, Cjlm, hertz, Up, l, 0, 0, 0, 0);
-        if(abs(tempMode/regParam) > DBL_EPSILON){
+        if(std::abs(tempMode/regParam) > DBL_EPSILON){
           if(l <= lmax){
             huuCircUpYlm[l][m] += tempMode;
           }
@@ -154,7 +154,7 @@ void redshift_circular_reconstruction_AAB(std::string filename, Gauge gauge0, Ga
   ComplexMatrix huuCircInSlm(lmax + 1, ComplexVector(lmax + 1));
   ComplexMatrix huuCircUpSlm(lmax + 1, ComplexVector(lmax + 1));
   for(int m = 0; m <= lmax; m++){
-    int lmin = abs(m) < 2 ? 2 : abs(m);
+    int lmin = std::abs(m) < 2 ? 2 : std::abs(m);
     SphericalHarmonicCoupling Cjlm(lmax + 6, m);
     Cjlm.generateCouplings();
     for(int j = lmin; j <= lmax + modeCoupling; j++){
@@ -165,10 +165,10 @@ void redshift_circular_reconstruction_AAB(std::string filename, Gauge gauge0, Ga
       HertzMode hertz4(teuk, gauge4);
       hertz4.generateSolutions();
 
-      for(int l = abs(m); l <= lmax + modeCoupling; l++){
+      for(int l = std::abs(m); l <= lmax + modeCoupling; l++){
         Complex tempMode0 = redshift_mode(huuCoeffCircORG, Cjlm, hertz0, In, l, 0, 0, 0, 0);
         Complex tempMode4 = redshift_mode(huuCoeffCircIRG, Cjlm, hertz4, In, l, 0, 0, 0, 0);
-        if(abs(tempMode0/regParam) > DBL_EPSILON || abs(tempMode4/regParam) > DBL_EPSILON){
+        if(std::abs(tempMode0/regParam) > DBL_EPSILON || std::abs(tempMode4/regParam) > DBL_EPSILON){
           if(l <= lmax){
             huuCircIn0Ylm[l][m] += tempMode0;
             huuCircIn4Ylm[l][m] += tempMode4;
@@ -183,7 +183,7 @@ void redshift_circular_reconstruction_AAB(std::string filename, Gauge gauge0, Ga
         }
         tempMode0 = redshift_mode(huuCoeffCircORG, Cjlm, hertz0, Up, l, 0, 0, 0, 0);
         tempMode4 = redshift_mode(huuCoeffCircIRG, Cjlm, hertz4, Up, l, 0, 0, 0, 0);
-        if(abs(tempMode0/regParam) > DBL_EPSILON || abs(tempMode4/regParam) > DBL_EPSILON){
+        if(std::abs(tempMode0/regParam) > DBL_EPSILON || std::abs(tempMode4/regParam) > DBL_EPSILON){
           if(l <= lmax){
             huuCircUp0Ylm[l][m] += tempMode0;
             huuCircUp4Ylm[l][m] += tempMode4;
@@ -348,7 +348,7 @@ Complex redshift_mode(ComplexTensor &huuCoeff, SphericalHarmonicCoupling &Cjlm, 
   }
   double ylm = Ylm(l, m, hertz.getPolarPoints(jz));
   ComplexVector hertzR = {hertz.getRadialSolution(bc, 0, jr), hertz.getRadialSolution(bc, 1, jr), hertz.getRadialSolution(bc, 2, jr)};
-  // if(isnan(abs(hertzR[0])) || isinf(abs(hertzR[0]))){
+  // if(isnan(std::abs(hertzR[0])) || isinf(std::abs(hertzR[0]))){
   //   std::cout << "("<<l<<", "<<hertz.getAzimuthalModeNumber()<<") \n";
   // }
   Vector freqFactor = {1., omega, omega*omega};

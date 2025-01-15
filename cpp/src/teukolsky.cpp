@@ -21,7 +21,7 @@ void flip_spin_of_radial_teukolsky_amplitude_TS(Complex &Zlm, BoundaryCondition 
 }
 
 void flip_spin_of_coupling_coefficients(Vector &bslmo, int L, int m){
-  int lmin = (abs(m) < 2) ? 2 : abs(m);
+  int lmin = (std::abs(m) < 2) ? 2 : std::abs(m);
   for(size_t i = 0; i < bslmo.size(); i++){
     bslmo[i] *= pow(-1, lmin + i + L);
   }
@@ -47,7 +47,7 @@ int TeukolskyMode::generateSolutions(GeodesicSource& geo, SolutionMethod method,
 
 int TeukolskyMode::generateSolutions(double omega, GeodesicTrajectory &traj, GeodesicConstants &geoConst, Vector r, Vector theta, SolutionMethod method, int samplesize){
 	_omega = omega;
-	if(abs(_omega) < ZERO_FREQ_LIMIT){
+	if(std::abs(_omega) < ZERO_FREQ_LIMIT){
 		// std::cout << "(TEUKOLSKY) (l, m, k, n) = ("<<_L<<", "<<_m<<", "<<_k<<", "<<_n<<") is a zero frequency mode\n";
 		_omega = 0;
 	}
@@ -68,7 +68,7 @@ int TeukolskyMode::generateSolutions(double omega, GeodesicTrajectory &traj, Geo
 }
 
 int TeukolskyMode::generateSolutions(SpinWeightedHarmonic& swsh, RadialTeukolsky& teuk, GeodesicTrajectory& traj, GeodesicConstants &geoConst){
-	if(abs(_omega) < ZERO_FREQ_LIMIT){
+	if(std::abs(_omega) < ZERO_FREQ_LIMIT){
 		// std::cout << "(TEUKOLSKY) (l, m, k, n) = ("<<_L<<", "<<_m<<", "<<_k<<", "<<_n<<") is a zero frequency mode\n";
 		_omega = 0;
 	}
@@ -116,22 +116,22 @@ int TeukolskyMode::generateSolutions(SpinWeightedHarmonic& swsh, RadialTeukolsky
 		swsh.generateDerivatives();
 		_SlmP = swsh.getDerivative();
 
-		if(geoConst.e == 0. && abs(geoConst.x) == 1.){
-			if(abs(_k) > 0 || abs(_n) > 0){
+		if(geoConst.e == 0. && std::abs(geoConst.x) == 1.){
+			if(std::abs(_k) > 0 || std::abs(_n) > 0){
 				Zlm.in = 0.;
 				Zlm.up = 0.;
 			}else{
 				Zlm = field_amplitude_circeq(_s, _L, _m, traj, geoConst, teuk, swsh);
 			}
 		}else if(geoConst.e == 0.){
-			if(abs(_n) > 0){
+			if(std::abs(_n) > 0){
 				Zlm.in = 0.;
 				Zlm.up = 0.;
 			}else{
 				Zlm = field_amplitude_sphinc(_s, _L, _m, _k, traj, geoConst, teuk, swsh);
 			}
-		}else if(abs(geoConst.x) == 1.){
-			if(abs(_k) > 0){
+		}else if(std::abs(geoConst.x) == 1.){
+			if(std::abs(_k) > 0){
 				Zlm.in = 0.;
 				Zlm.up = 0.;
 			}else{
@@ -230,7 +230,7 @@ double TeukolskyMode::getCouplingCoefficient(int l){
 }
 
 int TeukolskyMode::getMinCouplingModeNumber(){
-	return abs(_m) < abs(_s) ? abs(_s) : abs(_m);
+	return std::abs(_m) < std::abs(_s) ? std::abs(_s) : std::abs(_m);
 }
 int TeukolskyMode::getMaxCouplingModeNumber(){
 	return _coupling.size() + getMinCouplingModeNumber() - 1;
@@ -326,7 +326,7 @@ double test_teukolsky_solutions(int spin, Complex R0, Complex R1, Complex R2, do
 
 	Complex test = 2.*(r - 1.)*(s + 1.)/delta*R1 + ((Kt*Kt - 2.*I*s*(r - 1.)*Kt)/delta + 4.*I*s*omega*r - lambda)/delta*R0;
 
-	return abs(1. + R2/test);
+	return std::abs(1. + R2/test);
 }
 
 int minimum_radial_harmonic(int m, int k, GeodesicSource& geo){
@@ -334,18 +334,18 @@ int minimum_radial_harmonic(int m, int k, GeodesicSource& geo){
 	double omegaR = geo.getTimeFrequency(1);
 	int n = 0;
 	if(omegaMK > 0){
-		while(abs(omegaMK + n*omegaR) > ZERO_FREQ_LIMIT && (omegaMK + n*omegaR) > 0.){
+		while(std::abs(omegaMK + n*omegaR) > ZERO_FREQ_LIMIT && (omegaMK + n*omegaR) > 0.){
 			n--;
 		}
-		if(abs(omegaMK + n*omegaR) > ZERO_FREQ_LIMIT){
+		if(std::abs(omegaMK + n*omegaR) > ZERO_FREQ_LIMIT){
 			n++;
 		}
 	}else{
-		while(abs(omegaMK + n*omegaR) > ZERO_FREQ_LIMIT && (omegaMK + n*omegaR) < 0.){
+		while(std::abs(omegaMK + n*omegaR) > ZERO_FREQ_LIMIT && (omegaMK + n*omegaR) < 0.){
 			n++;
 		}
 	}
-	if(abs(omegaMK + n*omegaR) > ZERO_FREQ_LIMIT && omegaMK + n*omegaR < 0){
+	if(std::abs(omegaMK + n*omegaR) > ZERO_FREQ_LIMIT && omegaMK + n*omegaR < 0){
 		n++;
 	}
 
@@ -356,7 +356,7 @@ int minimum_polar_harmonic_circ(int m, GeodesicSource& geo){
 	double omegaPh = geo.getTimeFrequency(m, 0, 0);
 	double omegaTh = geo.getTimeFrequency(2);
 	int k = 0;
-	while(k*omegaTh <= abs(omegaPh)){
+	while(k*omegaTh <= std::abs(omegaPh)){
 		k++;
 	}
 

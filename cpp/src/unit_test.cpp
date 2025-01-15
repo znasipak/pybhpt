@@ -61,10 +61,10 @@ int test_kerr_circ_eq_flux(){
 
   GeodesicSource geo = kerr_geo_circ(testOrbitSpin, testOrbitRadius, 1);
   Fluxes edot = energy_flux(-2, geo);
-  if(abs(1. - testValue_EdotInfinity/edot.infinity) < tol){
+  if(std::abs(1. - testValue_EdotInfinity/edot.infinity) < tol){
     test += 1;
   }
-  if(abs(1. - testValue_EdotHorizon/edot.horizon) < tol){
+  if(std::abs(1. - testValue_EdotHorizon/edot.horizon) < tol){
     test += 1;
   }
 
@@ -91,10 +91,10 @@ int test_kerr_circ_eq_flux_2(){
 
   GeodesicSource geo = kerr_geo_circ(testOrbitSpin, testOrbitRadius, 1);
   Fluxes edot = energy_flux(-2, geo);
-  if(abs(1. - testValue_EdotInfinity/edot.infinity) < tol){
+  if(std::abs(1. - testValue_EdotInfinity/edot.infinity) < tol){
     test += 1;
   }
-  if(abs(1. - testValue_EdotHorizon/edot.horizon) < tol){
+  if(std::abs(1. - testValue_EdotHorizon/edot.horizon) < tol){
     test += 1;
   }
 
@@ -120,10 +120,10 @@ int test_schwarzschild_circ_eq_flux(){
 
   GeodesicSource geo = kerr_geo_circ(testOrbitSpin, testOrbitRadius, 1);
   Fluxes edot = energy_flux(-2, geo);
-  if(abs(1. - testValue_EdotInfinity/edot.infinity) < tol){
+  if(std::abs(1. - testValue_EdotInfinity/edot.infinity) < tol){
     test += 1;
   }
-  if(abs(1. - testValue_EdotHorizon/edot.horizon) < tol){
+  if(std::abs(1. - testValue_EdotHorizon/edot.horizon) < tol){
     test += 1;
   }
 
@@ -169,28 +169,28 @@ int test_teukolsky_radial_function(){
   Complex testValue_RupMinP = -182.8647917286560 - 129.1459266988753*I;
   Complex testValue_RupMaxP = -252.8589469480107 - 37.6026300231709*I;
 
-  if(abs(1. - RinMin/testValue_RinMin) < tol){
+  if(std::abs(1. - RinMin/testValue_RinMin) < tol){
     test += 1;
   }
-  if(abs(1. - RinMax/testValue_RinMax) < tol){
+  if(std::abs(1. - RinMax/testValue_RinMax) < tol){
     test += 1;
   }
-  if(abs(1. - RupMin/testValue_RupMin) < tol){
+  if(std::abs(1. - RupMin/testValue_RupMin) < tol){
     test += 1;
   }
-  if(abs(1. - RupMax/testValue_RupMax) < tol){
+  if(std::abs(1. - RupMax/testValue_RupMax) < tol){
     test += 1;
   }
-  if(abs(1. - RinMinP/testValue_RinMinP) < tol){
+  if(std::abs(1. - RinMinP/testValue_RinMinP) < tol){
     test += 1;
   }
-  if(abs(1. - RinMaxP/testValue_RinMaxP) < tol){
+  if(std::abs(1. - RinMaxP/testValue_RinMaxP) < tol){
     test += 1;
   }
-  if(abs(1. - RupMinP/testValue_RupMinP) < tol){
+  if(std::abs(1. - RupMinP/testValue_RupMinP) < tol){
     test += 1;
   }
-  if(abs(1. - RupMaxP/testValue_RupMaxP) < tol){
+  if(std::abs(1. - RupMaxP/testValue_RupMaxP) < tol){
     test += 1;
   }
 
@@ -234,33 +234,33 @@ int test_teukolsky_radial_function_highModes(){
   Complex testValue_RupMinP = Complex(-4.929425935275619e9,1.1315542345652564e10);
   Complex testValue_RupMaxP = Complex(15136.92639217653,62776.41393296017);
 
-  // std::cout << abs(1. - RinMin/testValue_RinMin) << "\n";
-  // std::cout << abs(1. - RinMax/testValue_RinMax) << "\n";
-  // std::cout << abs(1. - RupMin/testValue_RupMin) << "\n";
-  // std::cout << abs(1. - RupMax/testValue_RupMax) << "\n";
+  // std::cout << std::abs(1. - RinMin/testValue_RinMin) << "\n";
+  // std::cout << std::abs(1. - RinMax/testValue_RinMax) << "\n";
+  // std::cout << std::abs(1. - RupMin/testValue_RupMin) << "\n";
+  // std::cout << std::abs(1. - RupMax/testValue_RupMax) << "\n";
 
-  if(abs(1. - RinMin/testValue_RinMin) < tol){
+  if(std::abs(1. - RinMin/testValue_RinMin) < tol){
     test += 1;
   }
-  if(abs(1. - RinMax/testValue_RinMax) < tol){
+  if(std::abs(1. - RinMax/testValue_RinMax) < tol){
     test += 1;
   }
-  if(abs(1. - RupMin/testValue_RupMin) < tol){
+  if(std::abs(1. - RupMin/testValue_RupMin) < tol){
     test += 1;
   }
-  if(abs(1. - RupMax/testValue_RupMax) < tol){
+  if(std::abs(1. - RupMax/testValue_RupMax) < tol){
     test += 1;
   }
-  if(abs(1. - RinMinP/testValue_RinMinP) < tol){
+  if(std::abs(1. - RinMinP/testValue_RinMinP) < tol){
     test += 1;
   }
-  if(abs(1. - RinMaxP/testValue_RinMaxP) < tol){
+  if(std::abs(1. - RinMaxP/testValue_RinMaxP) < tol){
     test += 1;
   }
-  if(abs(1. - RupMinP/testValue_RupMinP) < tol){
+  if(std::abs(1. - RupMinP/testValue_RupMinP) < tol){
     test += 1;
   }
-  if(abs(1. - RupMaxP/testValue_RupMaxP) < tol){
+  if(std::abs(1. - RupMaxP/testValue_RupMaxP) < tol){
     test += 1;
   }
 
@@ -296,16 +296,16 @@ int test_teukolsky_polar_function(){
   double testValue_SlmMinP = 0.015364831841802413;
   double testValue_SlmMaxP = 0.47201677488912486;
 
-  if(abs(1. - SlmMin/testValue_SlmMin) < tol){
+  if(std::abs(1. - SlmMin/testValue_SlmMin) < tol){
     test += 1;
   }
-  if(abs(1. - SlmMax/testValue_SlmMax) < tol){
+  if(std::abs(1. - SlmMax/testValue_SlmMax) < tol){
     test += 1;
   }
-  if(abs(1. - SlmMinP/testValue_SlmMinP) < tol){
+  if(std::abs(1. - SlmMinP/testValue_SlmMinP) < tol){
     test += 1;
   }
-  if(abs(1. - SlmMaxP/testValue_SlmMaxP) < tol){
+  if(std::abs(1. - SlmMaxP/testValue_SlmMaxP) < tol){
     test += 1;
   }
 

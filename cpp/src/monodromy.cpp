@@ -50,8 +50,8 @@ Complex nu_solver_monodromy(int s, int l, int m, double q, double eps, double la
 
 	stokesTest = 0;
 	stokes = monodromy_eigenvalue(a1, a2, params);
-	error = abs(1. - std::real(stokesTest/stokes));
-	errorCheck = abs(std::imag(stokes)/std::real(stokes));
+	error = std::abs(1. - std::real(stokesTest/stokes));
+	errorCheck = std::abs(std::imag(stokes)/std::real(stokes));
 	errorCheck = errorCheck > 0.1 ? 0.1 : errorCheck;
 
 	while(error > errorCheck && errorCheck > DBL_EPSILON && n < nmax){
@@ -60,8 +60,8 @@ Complex nu_solver_monodromy(int s, int l, int m, double q, double eps, double la
 		a1.nmax = n;
 		a2.nmax = n;
 		stokes = monodromy_eigenvalue(a1, a2, params);
-		error = abs(1. - std::real(stokesTest/stokes));
-		errorCheck = abs(std::imag(stokes)/std::real(stokes));
+		error = std::abs(1. - std::real(stokesTest/stokes));
+		errorCheck = std::abs(std::imag(stokes)/std::real(stokes));
 		errorCheck = errorCheck > 0.1 ? 0.1 : errorCheck;
 	}
 
@@ -73,8 +73,8 @@ Complex nu_solver_monodromy(int s, int l, int m, double q, double eps, double la
 	}
 
 	f = std::real(cosmu + stokes);
-	errorCheck = abs(std::imag(stokes)/f);
-	nuError = abs(std::real(cosmu)/f)*DBL_EPSILON;
+	errorCheck = std::abs(std::imag(stokes)/f);
+	nuError = std::abs(std::real(cosmu)/f)*DBL_EPSILON;
 	errorCheck = (errorCheck < nuError)? nuError : errorCheck;
 	// if(errorCheck > 1.e-3){
 	// 	std::cout << "MONODROMY: Monodromy eigenvalue at infinity could not be determined due to precision loss of " << log10(errorCheck/DBL_EPSILON) << " digits \n";
@@ -82,11 +82,11 @@ Complex nu_solver_monodromy(int s, int l, int m, double q, double eps, double la
 	// }
 
 	if(f < -1.){
-		nu = - 0.5 - abs(std::imag(cacos(f)/(2.0*M_PI)))*I;
+		nu = - 0.5 - std::abs(std::imag(cacos(f)/(2.0*M_PI)))*I;
 	}else if(f < 1. && f >= -1.){
 			nu = Complex(l) - acos(f)/(2.0*M_PI);
 	}else{
-		nu = - abs(std::imag(cacos(f)/(2.0*M_PI)))*I;
+		nu = - std::abs(std::imag(cacos(f)/(2.0*M_PI)))*I;
 	}
 
 	return nu;
@@ -118,10 +118,10 @@ Complex monodromy_eigenvalue(series_coeff &a1, series_coeff &a2, const CH_parame
 	a2sum = sum_weighted_a2_drop(a2, ninit);
 
 	a12 = (a1sum*a2sum) + (a1sumN*a2sumN) + (a1sum*a2sumN) + (a1sumN*a2sum);
-	if( abs(a1.coeffs[n]) != 1. ){
+	if( std::abs(a1.coeffs[n]) != 1. ){
 		std::cout << "MONODROMY: ERROR: a1 coefficients not properly normalized\n";
 	}
-	if( abs(a2.coeffs[n]) != 1. ){
+	if( std::abs(a2.coeffs[n]) != 1. ){
 		std::cout << "MONODROMY: ERROR: a2 coefficients not properly normalized\n";
 	}
 	a12recip = a1.coeffs[n]*a2.coeffs[n]/a12;
@@ -194,7 +194,7 @@ int generate_weighted_a2(series_coeff &a, const CH_parameters &params){
 	}else{
 		am1 = a.coeffs[n - 1]/(m2C - m1C); // rescale entry because we are actually storing the weighted coefficients while these recursion relations are for the unweighted coefficients
 	}
-	if( abs(a.coeffs[n]) != 1. ){
+	if( std::abs(a.coeffs[n]) != 1. ){
 		std::cout << "Error: series coefficients not properly normalized\n";
 	}
 	am0 = a.coeffs[n];

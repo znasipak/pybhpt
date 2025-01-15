@@ -3,7 +3,7 @@
 #include "gsn_asymp.hpp"
 
 Complex gsn_asymptotic_derivative_initial_sum_term_1(const double &a, const int &, const int &, const double &omega, const double &, const double &){
-	if(abs(a) < DBL_EPSILON){
+	if(std::abs(a) < DBL_EPSILON){
 		return 0.;
 	}
 	double kappa = sqrt(1. - pow(a, 2));

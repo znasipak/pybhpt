@@ -11,7 +11,7 @@
 #define ZERO_FREQ_LIMIT 1.e-11
 
 SpinWeightedHarmonic::SpinWeightedHarmonic(int s, int L, int m, double gamma, const Vector& theta): _s(s), _L(L), _m(m), _gamma(gamma),
-	_bcoupling(COUPLING_VECTOR_MAX + L - abs(m), 0.), _theta(theta), _Slm(_theta.size(), 0.), _SlmP(_theta.size(), 0.){}
+	_bcoupling(COUPLING_VECTOR_MAX + L - std::abs(m), 0.), _theta(theta), _Slm(_theta.size(), 0.), _SlmP(_theta.size(), 0.){}
 SpinWeightedHarmonic::~SpinWeightedHarmonic(){}
 
 int SpinWeightedHarmonic::getSpinWeight(){ return _s; }
@@ -22,7 +22,7 @@ double SpinWeightedHarmonic::getEigenvalue(){	return _lambda; }
 Vector SpinWeightedHarmonic::getCouplingCoefficient(){	return _bcoupling;}
 double SpinWeightedHarmonic::getCouplingCoefficient(int l){	return _bcoupling[l - getMinCouplingModeNumber()]; }
 int SpinWeightedHarmonic::getMinCouplingModeNumber(){
-	return abs(_m) < abs(_s) ? abs(_s) : abs(_m);
+	return std::abs(_m) < std::abs(_s) ? std::abs(_s) : std::abs(_m);
 }
 int SpinWeightedHarmonic::getMaxCouplingModeNumber(){
 	return _bcoupling.size() + getMinCouplingModeNumber() - 1;
@@ -113,7 +113,7 @@ double k2(const int &s, const int &l, const int &j, const int &m){
 
 // m(i, i-2)
 double akm2(const int &s, const int &l, const int &m, const double &g){
-	if( l < 0 || abs(m) > l || abs(s) > l ){
+	if( l < 0 || std::abs(m) > l || std::abs(s) > l ){
 		return 0;
 	}
 	return -g*g*k2(s, l-2, l, m);
@@ -121,7 +121,7 @@ double akm2(const int &s, const int &l, const int &m, const double &g){
 
 // m(i, i-1)
 double akm1(const int &s, const int &l, const int &m, const double &g){
-	if( l < 0 || abs(m) > l || abs(s) > l ){
+	if( l < 0 || std::abs(m) > l || std::abs(s) > l ){
 		return 0;
 	}
 	return -g*g*k2(s, l-1, l, m) + 2*s*g*k1(s, l-1, l, m);
@@ -129,7 +129,7 @@ double akm1(const int &s, const int &l, const int &m, const double &g){
 
 // m(i, i)
 double akp0(const int &s, const int &l, const int &m, const double &g){
-	if( l < 0 || abs(m) > l || abs(s) > l ){
+	if( l < 0 || std::abs(m) > l || std::abs(s) > l ){
 		return 0;
 	}
 	return -g*g*k2(s, l, l, m) + 2*s*g*k1(s, l, l, m) + l*(l + 1) - s*(s+1) - 2*m*g + g*g;
@@ -137,7 +137,7 @@ double akp0(const int &s, const int &l, const int &m, const double &g){
 
 // m(i, i+1)
 double akp1(const int &s, const int &l, const int &m, const double &g){
-	if( l < 0 || abs(m) > l + 1 || abs(s) > l + 1 ){
+	if( l < 0 || std::abs(m) > l + 1 || std::abs(s) > l + 1 ){
 		return 0;
 	}
 	return -g*g*k2(s, l+1, l, m) + 2*s*g*k1(s, l+1, l, m);
@@ -145,7 +145,7 @@ double akp1(const int &s, const int &l, const int &m, const double &g){
 
 // m(i, i+2)
 double akp2(const int &s, const int &l, const int &m, const double &g){
-	if( l < 0 || abs(m) > l + 2 || abs(s) > l + 2 ){
+	if( l < 0 || std::abs(m) > l + 2 || std::abs(s) > l + 2 ){
 		return 0;
 	}
 	return -g*g*k2(s, l+2, l, m);
@@ -215,7 +215,7 @@ double spectral_solver(const int &s, const int &l, const int &m, const double &g
 	int error = spectral_solver_n(s, l, m, g, la);
 	if(error) return 0;
 
-	unsigned int lmin = std::max(abs(s), abs(m));
+	unsigned int lmin = std::max(std::abs(s), std::abs(m));
 	double la_lm = gsl_vector_get(la, l - lmin);
 	gsl_vector_free(la);
 
@@ -223,9 +223,9 @@ double spectral_solver(const int &s, const int &l, const int &m, const double &g
 }
 
 int spectral_solver(const int &s, const int &l, const int &m, const double &g, double& lambda, Vector& bvec){
-	int lmin = std::max(abs(s), abs(m));
+	int lmin = std::max(std::abs(s), std::abs(m));
 	int nmax = l - lmin + SPECTRAL_NMAX_INIT_ADD;
-	if(g == 0 || abs(g) < ZERO_FREQ_LIMIT){
+	if(g == 0 || std::abs(g) < ZERO_FREQ_LIMIT){
 		lambda = l*(l + 1) - s*(s + 1);
 		bvec[l - lmin] = 1.;
 		return 1;
@@ -300,11 +300,11 @@ int spectral_solver(const int &s, const int &l, const int &m, const double &g, d
 		bvec[i] = rescale*gsl_matrix_get(bmat, i, l - lmin);
 		i++;
 	}
-	double bError = abs(bvec[i - 2]);
+	double bError = std::abs(bvec[i - 2]);
 	while(i < bvecSize - 1 && bError > SPECTRAL_COUPLING_CONVERGE_EPS){
 		bvec[i] = rescale*gsl_matrix_get(bmat, i, l - lmin);
 		bvec[i + 1] = rescale*gsl_matrix_get(bmat, i + 1, l - lmin);
-		bError = abs(bvec[i]);
+		bError = std::abs(bvec[i]);
 		i+=2;
 	}
 	lambda = gsl_vector_get(la, l - lmin);
@@ -326,7 +326,7 @@ int spectral_solver_n(const int &s, const int &l, const int &m, const double &g,
 }
 
 int spectral_solver_n(const int &s, const int &l, const int &m, const double &g, gsl_vector* la, gsl_matrix* bmat){
-	int lmin = std::max(abs(s), abs(m));
+	int lmin = std::max(std::abs(s), std::abs(m));
 	int nmax = la->size;
 	if( nmax < l-lmin ){
 		return 1; // error, need larger nmax tolerance
@@ -352,7 +352,7 @@ int spectral_solver_n(const int &s, const int &l, const int &m, const double &g,
 }
 
 int spectral_solver_n(const int &s, const int &l, const int &m, const double &g, gsl_vector* la, gsl_matrix* bmat, gsl_spmatrix* mat){
-	int lmin = std::max(abs(s), abs(m));
+	int lmin = std::max(std::abs(s), std::abs(m));
 	int nmax = la->size;
 	if( nmax < l-lmin ){
 		return 1; // error, need larger nmax tolerance
@@ -378,7 +378,7 @@ int spectral_solver_n(const int &s, const int &l, const int &m, const double &g,
 }
 
 coupling_test spherical_spheroidal_coupling_convergence_test(const int &s, const int &l, const int &m, const double &g, gsl_matrix* bmat, gsl_matrix* bmat2, coupling_converge &b_data){
-	int lmin = std::max(abs(s), abs(m));
+	int lmin = std::max(std::abs(s), std::abs(m));
 	int dim = bmat->size1;
 	int dim2 = bmat2->size2;
 	gsl_vector* bcol = gsl_vector_alloc(dim);
@@ -399,7 +399,7 @@ coupling_test spherical_spheroidal_coupling_convergence_test(const int &s, const
 	if(norm == 0.){
 		norm = 1.;
 	}
-	while(b_data.jmax < dim - 1 && abs(gsl_vector_get(bcol, b_data.jmax)/norm) > SPECTRAL_COUPLING_JMAX_EPS){
+	while(b_data.jmax < dim - 1 && std::abs(gsl_vector_get(bcol, b_data.jmax)/norm) > SPECTRAL_COUPLING_JMAX_EPS){
 		if(s == 0){
 			b_data.jmax += 2;
 		}else{
@@ -414,7 +414,7 @@ coupling_test spherical_spheroidal_coupling_convergence_test(const int &s, const
 		}
 	}
 
-	while(b_data.testIndex < dim - 1 && abs(gsl_vector_get(bcol, b_data.testIndex)/norm) > SPECTRAL_COUPLING_TEST_EPS){
+	while(b_data.testIndex < dim - 1 && std::abs(gsl_vector_get(bcol, b_data.testIndex)/norm) > SPECTRAL_COUPLING_TEST_EPS){
 		if(s == 0){
 			b_data.testIndex += 2;
 		}else{
@@ -448,8 +448,8 @@ coupling_test spherical_spheroidal_coupling_convergence_test(const int &s, const
 	}
 
 
-	b_data.jmax_err = abs(1 - jmax_num/jmax_denom);
-	b_data.test_err = abs(1 - test_num/test_denom);
+	b_data.jmax_err = std::abs(1 - jmax_num/jmax_denom);
+	b_data.test_err = std::abs(1 - test_num/test_denom);
 
 	double convergenceCriteria = SPECTRAL_COUPLING_CONVERGE_EPS;
 	if(g > 1.){
@@ -471,21 +471,21 @@ coupling_test spherical_spheroidal_coupling_convergence_test(const int &s, const
 
 // Coupling between scalar Yjm and spin-weighted harmonics sYlm
 double Asljm(const int &s, const int &l, const int &j, const int &m){
-	if( abs(l-j) > abs(s) ) return 0.;
-	if( j < abs(m) ) return 0.;
-	int lmin = abs(m) < abs(s) ? abs(s) : abs(m);
+	if( std::abs(l-j) > std::abs(s) ) return 0.;
+	if( j < std::abs(m) ) return 0.;
+	int lmin = std::abs(m) < std::abs(s) ? std::abs(s) : std::abs(m);
 	if( l < lmin ) return 0;
 	double aslmg = pow(-1., m + s*(1 + sgn<int>(s))/2);
-	aslmg *= sqrt(pow(4, abs(s))*pow(factorial(abs(s)), 2)*(2*j + 1)*(2*l + 1)/factorial(abs(2*s)));
-	aslmg *= w3j(abs(s), l, j, 0, m, -m);
-	aslmg *= w3j(abs(s), l, j, s, -s, 0);
+	aslmg *= sqrt(pow(4, std::abs(s))*pow(factorial(std::abs(s)), 2)*(2*j + 1)*(2*l + 1)/factorial(std::abs(2*s)));
+	aslmg *= w3j(std::abs(s), l, j, 0, m, -m);
+	aslmg *= w3j(std::abs(s), l, j, s, -s, 0);
 
 	return aslmg;
 }
 
 double dAsljm(const int &s, const int &l, const int &j, const int &m){
-	return double(j + 2 + abs(s))*clm(j + 1, m)*Asljm(s, l, j + 1, m)
-		- double(j - 1 - abs(s))*clm(j, m)*Asljm(s, l, j - 1, m);
+	return double(j + 2 + std::abs(s))*clm(j + 1, m)*Asljm(s, l, j + 1, m)
+		- double(j - 1 - std::abs(s))*clm(j, m)*Asljm(s, l, j - 1, m);
 }
 
 // Clebsch-Gordan coefficients
@@ -499,7 +499,7 @@ double clebsch(const int &j1, const int &j2, const int &j, const int &m1, const 
 
 // Wigner 3J symbol
 double w3j(const int &j1, const int &j2, const int &j, const int &m1, const int &m2, const int &m){
-	if(j1 < abs(m1) || j2 < abs(m2) || j < abs(m)){
+	if(j1 < std::abs(m1) || j2 < std::abs(m2) || j < std::abs(m)){
 		return 0.;
 	}
 	return gsl_sf_coupling_3j(2*j1, 2*j2, 2*j, 2*m1, 2*m2, 2*m);
@@ -515,7 +515,7 @@ Complex Sslm(const int &s, const int &l, const int &m, const double &g, const do
 }
 
 // double Sslm(const int &s, const int &l, const int &m, const double &g, const double &th){
-// 	unsigned int lmin = std::max(abs(s), abs(m));
+// 	unsigned int lmin = std::max(std::abs(s), std::abs(m));
 // 	unsigned int nmax = l - lmin + SPECTRAL_NMAX_INIT_ADD;
 // 	int error;
 // 	double swsh = 0;
@@ -597,14 +597,14 @@ Complex Sslm(const int &s, const int &l, const int &m, const double &g, const do
 // }
 
 double Sslm(const int &s, const int &l, const int &m, const double &g, const double &th){
-	Vector bvec(COUPLING_VECTOR_MAX + l - abs(m), 0.);
+	Vector bvec(COUPLING_VECTOR_MAX + l - std::abs(m), 0.);
 	double lambda;
 	spectral_solver(s, l, m, g, lambda, bvec);
 	return Sslm(s, l, m, g, bvec, th);
 }
 
 double Sslm(const int &s, const int &l, const int &m, const double &, const Vector& bvec, const double &th){
-	int lmin = std::max(abs(s), abs(m));
+	int lmin = std::max(std::abs(s), std::abs(m));
 	int i = l - lmin;
 
 	double swsh = bvec[i]*Yslm(s, lmin + i, m, th);
@@ -617,7 +617,7 @@ double Sslm(const int &s, const int &l, const int &m, const double &, const Vect
 		comp = swsh;
 		swsh += bvec[i]*Yslm(s, lmin + i, m, th);
 		swsh += bvec[i - 1]*Yslm(s, lmin + i - 1, m, th);
-		error = abs(1. - comp/swsh);
+		error = std::abs(1. - comp/swsh);
 		i -= 2;
 	}
 	if(i == 0){
@@ -631,7 +631,7 @@ double Sslm(const int &s, const int &l, const int &m, const double &, const Vect
 		comp = swsh;
 		swsh += bvec[i]*Yslm(s, lmin + i, m, th);
 		swsh += bvec[i + 1]*Yslm(s, lmin + i + 1, m, th);
-		error = abs(1. - comp/swsh);
+		error = std::abs(1. - comp/swsh);
 		i += 2;
 	}
 	if(i == imax){
@@ -644,20 +644,20 @@ double Sslm(const int &s, const int &l, const int &m, const double &, const Vect
 }
 
 double Sslm_derivative(const int &s, const int &l, const int &m, const double &, const Vector& bvec, const double &th){
-	unsigned int lmin = std::max(abs(s), abs(m));
+	unsigned int lmin = std::max(std::abs(s), std::abs(m));
 	int i = l - lmin;
 
 	double comp = 0.;
 	double swsh = bvec[i]*Yslm_derivative(s, lmin + i, m, th);
 	swsh += bvec[i + 1]*Yslm_derivative(s, lmin + i + 1, m, th);
-	double error = abs(1. - comp/swsh);
+	double error = std::abs(1. - comp/swsh);
 	i--;
 
 	while(i > 0 && error > 1.e-14){
 		comp = swsh;
 		swsh += bvec[i]*Yslm_derivative(s, lmin + i, m, th);
 		swsh += bvec[i - 1]*Yslm_derivative(s, lmin + i - 1, m, th);
-		error = abs(1. - comp/swsh);
+		error = std::abs(1. - comp/swsh);
 		i -= 2;
 	}
 	if(i == 0){
@@ -671,7 +671,7 @@ double Sslm_derivative(const int &s, const int &l, const int &m, const double &,
 		comp = swsh;
 		swsh += bvec[i]*Yslm_derivative(s, lmin + i, m, th);
 		swsh += bvec[i + 1]*Yslm_derivative(s, lmin + i + 1, m, th);
-		error = abs(1. - comp/swsh);
+		error = std::abs(1. - comp/swsh);
 		i += 2;
 	}
 	if(i == imax){
@@ -690,19 +690,19 @@ double Sslm_secondDerivative(const int &s, const int &, const int &m, const doub
 
 // SWSH Eigenvalues
 double swsh_eigenvalue(const int &s, const int &l, const int &m, const double &g){
-	unsigned int lmin = std::max(abs(s), abs(m));
+	unsigned int lmin = std::max(std::abs(s), std::abs(m));
 	unsigned int nmax = l - lmin + SPECTRAL_NMAX_INIT_ADD;
 
 	double swshtest = spectral_solver(s, l, m, g, nmax);
 	nmax += 2;
 	double swshtest2 = spectral_solver(s, l, m, g, nmax);
-	double relerror = fabs(1 - swshtest/swshtest2);
+	double relerror = std::abs(1 - swshtest/swshtest2);
 
 	while(0.01*relerror > DBL_EPSILON && relerror > 0. && nmax < SPECTRAL_NMAX){
 		swshtest = swshtest2;
 		nmax += 5;
 		swshtest2 = spectral_solver(s, l, m, g, nmax);
-		relerror = fabs(1-swshtest/swshtest2);
+		relerror = std::abs(1-swshtest/swshtest2);
 	}
 
 	return swshtest2;
@@ -719,41 +719,41 @@ Complex Yslm(const int &s, const int &l, const int &m, const double &th, const d
 double Yslm(const int &s, const int &l, const int &m, const double &th){
 	if( s == 0 ) return Ylm(l, m, th);
 
-	int lmin = std::max(abs(m), l - abs(s));
-	int lmax = l + abs(s);
+	int lmin = std::max(std::abs(m), l - std::abs(s));
+	int lmax = l + std::abs(s);
 	double yslm = 0;
 
 	for(int i = lmin; i <= lmax; i++){
 		yslm += Asljm(s, l, i, m)*Ylm(i, m, th);
 	}
 
-	return yslm/pow(sin(th), abs(s));
+	return yslm/pow(sin(th), std::abs(s));
 }
 
 double Yslm_derivative(const int &s, const int &l, const int &m, const double &th){
 	if( s == 0 ) return Ylm_derivative(l, m, th);
 
-	int lmin = std::max(abs(m), l - abs(s) - 1);
-	int lmax = l + abs(s) + 1;
+	int lmin = std::max(std::abs(m), l - std::abs(s) - 1);
+	int lmax = l + std::abs(s) + 1;
 	double DyslmDtheta = 0;
 
 	for(int i = lmin; i <= lmax; i++){
 		DyslmDtheta += dAsljm(s, l, i, m)*Ylm(i, m, th);
 	}
-	return -DyslmDtheta*pow(sin(th), -1 - abs(s));
+	return -DyslmDtheta*pow(sin(th), -1 - std::abs(s));
 }
 
 // double Yslm_derivative(const int &s, const int &l, const int &m, const double &th){
 // 	if( s == 0 ) return Ylm_derivative(l, m, th);
 //
-// 	int lmin = std::max(abs(m), l - abs(s));
-// 	int lmax = l + abs(s);
+// 	int lmin = std::max(std::abs(m), l - std::abs(s));
+// 	int lmax = l + std::abs(s);
 // 	double DyslmDtheta = 0;
 //
 // 	for(int i = lmin; i <= lmax; i++){
-// 		DyslmDtheta += Asljm(s, l, i, m)*(Ylm_derivative(i, m, th)*pow(sin(th), -abs(s)) - abs(s)*cos(th)*Ylm(i, m, th)*pow(sin(th), -abs(s)-1));
+// 		DyslmDtheta += Asljm(s, l, i, m)*(Ylm_derivative(i, m, th)*pow(sin(th), -std::abs(s)) - std::abs(s)*cos(th)*Ylm(i, m, th)*pow(sin(th), -std::abs(s)-1));
 // 	}
-// 	return DyslmDtheta*pow(sin(th), -abs(s));
+// 	return DyslmDtheta*pow(sin(th), -std::abs(s));
 // }
 
 ////////////////////

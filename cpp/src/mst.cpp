@@ -115,9 +115,9 @@ Complex MstSeriesData::getSeriesTerm(BasisFunctionType type, int n, double x){
 MstSeriesWorkspace::MstSeriesWorkspace(MstParameters &mstParameters):
 	_mstParameters(mstParameters), _mstSeriesData(_mstParameters)
 {
-	if(abs(_mstParameters.getRenormalizedAngularMomentum()) == 0.){
+	if(std::abs(_mstParameters.getRenormalizedAngularMomentum()) == 0.){
 		nu_solver(_mstParameters);
-		if(abs(_mstParameters.getRenormalizedAngularMomentum()) == 0.){
+		if(std::abs(_mstParameters.getRenormalizedAngularMomentum()) == 0.){
 			std::cout << "MST: (ERROR) Unable to solve for renormalized angular momentum for q = " << _mstParameters.getBlackHoleSpin() << ", s = "<< _mstParameters.getSpinWeight() <<", L = "
 				<< _mstParameters.getSpinWeightedSpheroidalModeNumber() << " m = "<< _mstParameters.getAzimuthalModeNumber() <<", epsilon = "<< _mstParameters.getMstEpsilon() <<" \n";
 		}
@@ -126,9 +126,9 @@ MstSeriesWorkspace::MstSeriesWorkspace(MstParameters &mstParameters):
 MstSeriesWorkspace::MstSeriesWorkspace(double q, int s, int L, int m, double epsilon):
 	_mstParameters(q, s, L, m, epsilon), _mstSeriesData(_mstParameters)
 {
-	if(abs(_mstParameters.getRenormalizedAngularMomentum()) == 0.){
+	if(std::abs(_mstParameters.getRenormalizedAngularMomentum()) == 0.){
 		nu_solver(_mstParameters);
-		if(abs(_mstParameters.getRenormalizedAngularMomentum()) == 0.){
+		if(std::abs(_mstParameters.getRenormalizedAngularMomentum()) == 0.){
 			std::cout << "MST: (ERROR) Unable to solve for renormalized angular momentum for q = " << q << ", s = "<< s <<", L = "
 				<< L << " m = "<< m <<", epsilon = "<< epsilon <<" \n";
 		}
@@ -137,9 +137,9 @@ MstSeriesWorkspace::MstSeriesWorkspace(double q, int s, int L, int m, double eps
 MstSeriesWorkspace::MstSeriesWorkspace(double q, int s, int L, int m, double epsilon, double lambda):
 	_mstParameters(q, s, L, m, epsilon, lambda), 	_mstSeriesData(_mstParameters)
 {
-	if(abs(_mstParameters.getRenormalizedAngularMomentum()) == 0.){
+	if(std::abs(_mstParameters.getRenormalizedAngularMomentum()) == 0.){
 		nu_solver(_mstParameters);
-		if(abs(_mstParameters.getRenormalizedAngularMomentum()) == 0.){
+		if(std::abs(_mstParameters.getRenormalizedAngularMomentum()) == 0.){
 			std::cout << "MST: (ERROR) Unable to solve for renormalized angular momentum for q = " << q << ", s = "<< s <<", L = "
 				<< L << " m = "<< m <<", epsilon = "<< epsilon <<" \n";
 		}
@@ -369,52 +369,52 @@ Result MstSeriesWorkspace::sumMstSeries(BasisFunctionType type, double r){
 	double x = _mstParameters.getMstX(r);
 
 	pn = _mstSeriesData.getSeriesTerm(type, 0, x);
-	seriesMaxAmplitude = (abs(pn) < seriesMaxAmplitude)?seriesMaxAmplitude:abs(pn);
+	seriesMaxAmplitude = (std::abs(pn) < seriesMaxAmplitude)?seriesMaxAmplitude:std::abs(pn);
 	pRef += pn;
 
 	for(int n = 1; n < MST_N_INIT; n++){
 		pn = _mstSeriesData.getSeriesTerm(type, n, x);
-		seriesMaxAmplitude = (abs(pn) < seriesMaxAmplitude)?seriesMaxAmplitude:abs(pn);
+		seriesMaxAmplitude = (std::abs(pn) < seriesMaxAmplitude)?seriesMaxAmplitude:std::abs(pn);
 		pRef += pn;
 
 		pn = _mstSeriesData.getSeriesTerm(type, -n, x);
-		seriesMaxAmplitude = (abs(pn) < seriesMaxAmplitude)?seriesMaxAmplitude:abs(pn);
+		seriesMaxAmplitude = (std::abs(pn) < seriesMaxAmplitude)?seriesMaxAmplitude:std::abs(pn);
 		pRef += pn;
 	}
 
 	int n = MST_N_INIT;
 	pn = _mstSeriesData.getSeriesTerm(type, n, x);
-	seriesMaxAmplitude = (abs(pn) < seriesMaxAmplitude)?seriesMaxAmplitude:abs(pn);
+	seriesMaxAmplitude = (std::abs(pn) < seriesMaxAmplitude)?seriesMaxAmplitude:std::abs(pn);
 	pPos += pn;
-	errorPos = abs(pn/pRef);
+	errorPos = std::abs(pn/pRef);
 	n++;
 	while( n < FN_SERIES_MAX && errorPos > MST_REL_ERROR ){
 		pn = _mstSeriesData.getSeriesTerm(type, n, x);
-		seriesMaxAmplitude = (abs(pn) < seriesMaxAmplitude)?seriesMaxAmplitude:abs(pn);
+		seriesMaxAmplitude = (std::abs(pn) < seriesMaxAmplitude)?seriesMaxAmplitude:std::abs(pn);
 		pPos += pn;
-		errorPos = abs(pn/pRef);
+		errorPos = std::abs(pn/pRef);
 		n++;
 	}
 
 	n = MST_N_INIT;
 	pn = _mstSeriesData.getSeriesTerm(type, -n, x);
-	seriesMaxAmplitude = (abs(pn) < seriesMaxAmplitude)?seriesMaxAmplitude:abs(pn);
+	seriesMaxAmplitude = (std::abs(pn) < seriesMaxAmplitude)?seriesMaxAmplitude:std::abs(pn);
 	pNeg += pn;
-	errorNeg = abs(pn/pRef);
+	errorNeg = std::abs(pn/pRef);
 	n++;
 	while(n < FN_SERIES_MAX && errorNeg > MST_REL_ERROR ){
 		pn = _mstSeriesData.getSeriesTerm(type, -n, x);
-		seriesMaxAmplitude = (abs(pn) < seriesMaxAmplitude)?seriesMaxAmplitude:abs(pn);
+		seriesMaxAmplitude = (std::abs(pn) < seriesMaxAmplitude)?seriesMaxAmplitude:std::abs(pn);
 		pNeg += pn;
-		errorNeg = abs(pn/pRef);
+		errorNeg = std::abs(pn/pRef);
 		n++;
 	}
 	pTot = pRef + pPos + pNeg;
 	// std::cout << "pTot = " << pTot << " \n";
 
-	errorSum = abs(DBL_EPSILON*seriesMaxAmplitude/pTot);
+	errorSum = std::abs(DBL_EPSILON*seriesMaxAmplitude/pTot);
 	errorTot = (errorNeg < errorPos)?errorPos:errorNeg;
-	errorTot *= abs(pRef/pTot);
+	errorTot *= std::abs(pRef/pTot);
 	error = (errorSum < errorTot)?errorTot:errorSum;
 
 	Result mst(pTot, error);
@@ -481,7 +481,7 @@ Complex MstSeriesWorkspace::inTransmissionAmplitude(){
 	int n = MST_N_INIT;
 	fn = _mstSeriesData.getSeriesCoefficient(n);
 	fSum += fn;
-	while(abs(fn/fSum) > MST_REL_ERROR){
+	while(std::abs(fn/fSum) > MST_REL_ERROR){
 		n++;
 		fn = _mstSeriesData.getSeriesCoefficient(n);
 		fSum += fn;
@@ -490,7 +490,7 @@ Complex MstSeriesWorkspace::inTransmissionAmplitude(){
 	n = MST_N_INIT;
 	fn = _mstSeriesData.getSeriesCoefficient(-n);
 	fSum += fn;
-	while(abs(fn/fSum) > MST_REL_ERROR){
+	while(std::abs(fn/fSum) > MST_REL_ERROR){
 		n++;
 		fn = _mstSeriesData.getSeriesCoefficient(-n);
 		fSum += fn;
@@ -522,7 +522,7 @@ Complex MstSeriesWorkspace::upTransmissionAmplitude(){
 	int n = MST_N_INIT;
 	fn = pow(-1., n)*_mstSeriesData.getSeriesCoefficient(n)*phammer(nu + 1. + Complex(s) - I*epsilon, n)/phammer(nu + 1. - Complex(s) + I*epsilon, n);
 	fSum += fn;
-	while(abs(fn/fSum) > MST_REL_ERROR){
+	while(std::abs(fn/fSum) > MST_REL_ERROR){
 		n++;
 		fn = pow(-1., n)*_mstSeriesData.getSeriesCoefficient(n)*phammer(nu + 1. + Complex(s) - I*epsilon, n)/phammer(nu + 1. - Complex(s) + I*epsilon, n);
 		fSum += fn;
@@ -531,7 +531,7 @@ Complex MstSeriesWorkspace::upTransmissionAmplitude(){
 	n = MST_N_INIT;
 	fn = pow(-1., -n)*_mstSeriesData.getSeriesCoefficient(-n)*phammer(nu + 1. + Complex(s) - I*epsilon, -n)/phammer(nu + 1. - Complex(s) + I*epsilon, -n);
 	fSum += fn;
-	while(abs(fn/fSum) > MST_REL_ERROR){
+	while(std::abs(fn/fSum) > MST_REL_ERROR){
 		n++;
 		fn = pow(-1., -n)*_mstSeriesData.getSeriesCoefficient(-n)*phammer(nu + 1. + Complex(s) - I*epsilon, -n)/phammer(nu + 1. - Complex(s) + I*epsilon, -n);
 		fSum += fn;

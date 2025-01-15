@@ -12,7 +12,7 @@ double energy_flux_newtonian(GeodesicSource& geo){
 }
 
 double energy_flux_newtonian(int s, double omegaPhi){
-	double v = pow(abs(omegaPhi), 1./3.);
+	double v = pow(std::abs(omegaPhi), 1./3.);
 	if(s == -2){
 		return 32./5.*pow(v, 10);
 	}else{ // s = 0 case
@@ -25,7 +25,7 @@ double energy_flux_newtonian(int s, double omegaPhi, double e){
 }
 
 double angular_momentum_flux_newtonian(int s, double omegaPhi){
-	double v = pow(abs(omegaPhi), 1./3.);
+	double v = pow(std::abs(omegaPhi), 1./3.);
 	if(s == -2){
 		return 32./5.*pow(v, 7);
 	}else{ // s = 0 case
@@ -38,7 +38,7 @@ double angular_momentum_flux_newtonian(int s, double omegaPhi, double e){
 }
 
 double carter_flux_newtonian(int s, double omegaPhi){
-	double v = pow(abs(omegaPhi), 1./3.);
+	double v = pow(std::abs(omegaPhi), 1./3.);
 	if(s == -2){
 		return 64./5.*pow(v, 6);
 	}else{ // s = 0 case
@@ -79,7 +79,7 @@ FluxList fluxes(int s, GeodesicSource& geo){
 	double qfluxHor = 0.;
 	double qfluxRef = carter_flux_newtonian(s, geo);
 
-	int L = abs(s);
+	int L = std::abs(s);
 	FluxList fluxMode = flux_l(s, L, geo);
 	efluxInf += fluxMode.Edot.infinity;
 	efluxHor += fluxMode.Edot.horizon;
@@ -88,9 +88,9 @@ FluxList fluxes(int s, GeodesicSource& geo){
 	qfluxInf += fluxMode.Qdot.infinity;
 	qfluxHor += fluxMode.Qdot.horizon;
 
-	double errorE = abs(fluxMode.Edot.infinity/efluxRef);
-	double errorL = abs(fluxMode.Ldot.infinity/lfluxRef);
-	double errorQ = abs(fluxMode.Qdot.infinity/qfluxRef);
+	double errorE = std::abs(fluxMode.Edot.infinity/efluxRef);
+	double errorL = std::abs(fluxMode.Ldot.infinity/lfluxRef);
+	double errorQ = std::abs(fluxMode.Qdot.infinity/qfluxRef);
 
 	std::cout << "Edot_infinity ("<<L<<")-mode = "<< fluxMode.Edot.infinity << " \n";
 	std::cout << "Edot_horizon ("<<L<<")-mode = "<< fluxMode.Edot.horizon << " \n";
@@ -107,9 +107,9 @@ FluxList fluxes(int s, GeodesicSource& geo){
 		qfluxInf += fluxMode.Qdot.infinity;
 		qfluxHor += fluxMode.Qdot.horizon;
 
-		errorE = abs(fluxMode.Edot.infinity/efluxRef);
-		errorL = abs(fluxMode.Ldot.infinity/lfluxRef);
-		errorQ = abs(fluxMode.Qdot.infinity/qfluxRef);
+		errorE = std::abs(fluxMode.Edot.infinity/efluxRef);
+		errorL = std::abs(fluxMode.Ldot.infinity/lfluxRef);
+		errorQ = std::abs(fluxMode.Qdot.infinity/qfluxRef);
 
 		std::cout << "Edot_infinity ("<<L<<")-mode = "<< fluxMode.Edot.infinity << " \n";
 		std::cout << "Edot_horizon ("<<L<<")-mode = "<< fluxMode.Edot.horizon << " \n";
@@ -174,17 +174,17 @@ FluxList flux_l(int s, int L, GeodesicSource& geo){
 	int convergenceCheckQ = 0;
 	while(m > L - 2 && m > 0){
 		fluxMode = flux_lm(s, L, m, geo);
-		if(abs(fluxMode.Edot.infinity/efluxRef) < FLUX_EPSILON && (fluxMode.Edot.infinity < efluxPreviousInf || fluxMode.Edot.infinity < 1.e-18) && abs(fluxMode.Edot.horizon/efluxRef) < FLUX_EPSILON && (fluxMode.Edot.horizon < efluxPreviousHor || fluxMode.Edot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Edot.infinity/efluxRef) < FLUX_EPSILON && (fluxMode.Edot.infinity < efluxPreviousInf || fluxMode.Edot.infinity < 1.e-18) && std::abs(fluxMode.Edot.horizon/efluxRef) < FLUX_EPSILON && (fluxMode.Edot.horizon < efluxPreviousHor || fluxMode.Edot.horizon < 1.e-18)){
 			convergenceCheckE += 1;
 		}else{
 			convergenceCheckE = 0;
 		}
-		if(abs(fluxMode.Ldot.infinity/lfluxRef) < FLUX_EPSILON && (fluxMode.Ldot.infinity < lfluxPreviousInf || fluxMode.Ldot.infinity < 1.e-18) && abs(fluxMode.Ldot.horizon/lfluxRef) < FLUX_EPSILON && (fluxMode.Ldot.horizon < lfluxPreviousHor || fluxMode.Ldot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Ldot.infinity/lfluxRef) < FLUX_EPSILON && (fluxMode.Ldot.infinity < lfluxPreviousInf || fluxMode.Ldot.infinity < 1.e-18) && std::abs(fluxMode.Ldot.horizon/lfluxRef) < FLUX_EPSILON && (fluxMode.Ldot.horizon < lfluxPreviousHor || fluxMode.Ldot.horizon < 1.e-18)){
 			convergenceCheckL += 1;
 		}else{
 			convergenceCheckL = 0;
 		}
-		if(abs(fluxMode.Qdot.infinity/qfluxRef) < FLUX_EPSILON && (fluxMode.Qdot.infinity < qfluxPreviousInf || fluxMode.Qdot.infinity < 1.e-18) && abs(fluxMode.Qdot.horizon/qfluxRef) < FLUX_EPSILON && (fluxMode.Qdot.horizon < qfluxPreviousHor || fluxMode.Qdot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Qdot.infinity/qfluxRef) < FLUX_EPSILON && (fluxMode.Qdot.infinity < qfluxPreviousInf || fluxMode.Qdot.infinity < 1.e-18) && std::abs(fluxMode.Qdot.horizon/qfluxRef) < FLUX_EPSILON && (fluxMode.Qdot.horizon < qfluxPreviousHor || fluxMode.Qdot.horizon < 1.e-18)){
 			convergenceCheckQ += 1;
 		}else{
 			convergenceCheckQ = 0;
@@ -216,23 +216,23 @@ FluxList flux_l(int s, int L, GeodesicSource& geo){
 	}
 
 	int minM = -L;
-	if(geo.getEccentricity() < DBL_EPSILON && 1. - abs(geo.getInclination()) < DBL_EPSILON){
+	if(geo.getEccentricity() < DBL_EPSILON && 1. - std::abs(geo.getInclination()) < DBL_EPSILON){
 		minM = 1;
 	}
 
 	while(m >= minM && (convergenceCheckE < convergenceCriteria || convergenceCheckL < convergenceCriteria || convergenceCheckQ < convergenceCriteria)){
 		fluxMode = flux_lm(s, L, m, geo);
-		if(abs(fluxMode.Edot.infinity/efluxRef) < FLUX_EPSILON && (fluxMode.Edot.infinity < efluxPreviousInf || fluxMode.Edot.infinity < 1.e-18) && abs(fluxMode.Edot.horizon/efluxRef) < FLUX_EPSILON && (fluxMode.Edot.horizon < efluxPreviousHor || fluxMode.Edot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Edot.infinity/efluxRef) < FLUX_EPSILON && (fluxMode.Edot.infinity < efluxPreviousInf || fluxMode.Edot.infinity < 1.e-18) && std::abs(fluxMode.Edot.horizon/efluxRef) < FLUX_EPSILON && (fluxMode.Edot.horizon < efluxPreviousHor || fluxMode.Edot.horizon < 1.e-18)){
 			convergenceCheckE += 1;
 		}else{
 			convergenceCheckE = 0;
 		}
-		if(abs(fluxMode.Ldot.infinity/lfluxRef) < FLUX_EPSILON && (fluxMode.Ldot.infinity < lfluxPreviousInf || fluxMode.Ldot.infinity < 1.e-18) && abs(fluxMode.Ldot.horizon/lfluxRef) < FLUX_EPSILON && (fluxMode.Ldot.horizon < lfluxPreviousHor || fluxMode.Ldot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Ldot.infinity/lfluxRef) < FLUX_EPSILON && (fluxMode.Ldot.infinity < lfluxPreviousInf || fluxMode.Ldot.infinity < 1.e-18) && std::abs(fluxMode.Ldot.horizon/lfluxRef) < FLUX_EPSILON && (fluxMode.Ldot.horizon < lfluxPreviousHor || fluxMode.Ldot.horizon < 1.e-18)){
 			convergenceCheckL += 1;
 		}else{
 			convergenceCheckL = 0;
 		}
-		if(abs(fluxMode.Qdot.infinity/qfluxRef) < FLUX_EPSILON && (fluxMode.Qdot.infinity < qfluxPreviousInf || fluxMode.Qdot.infinity < 1.e-18) && abs(fluxMode.Qdot.horizon/qfluxRef) < FLUX_EPSILON && (fluxMode.Qdot.horizon < qfluxPreviousHor || fluxMode.Qdot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Qdot.infinity/qfluxRef) < FLUX_EPSILON && (fluxMode.Qdot.infinity < qfluxPreviousInf || fluxMode.Qdot.infinity < 1.e-18) && std::abs(fluxMode.Qdot.horizon/qfluxRef) < FLUX_EPSILON && (fluxMode.Qdot.horizon < qfluxPreviousHor || fluxMode.Qdot.horizon < 1.e-18)){
 			convergenceCheckQ += 1;
 		}else{
 			convergenceCheckQ = 0;
@@ -275,7 +275,7 @@ FluxList flux_l(int s, int L, GeodesicSource& geo){
 }
 
 FluxList flux_lm(int s, int L, int m, GeodesicSource& geo){
-	if(geo.getEccentricity() == 0. && abs(geo.getInclination()) == 1.){
+	if(geo.getEccentricity() == 0. && std::abs(geo.getInclination()) == 1.){
 		if(m == 0){
 			FluxList fluxes;
 			return fluxes;
@@ -310,7 +310,7 @@ FluxList flux_lm_sum(int s, int L, int m, GeodesicSource& geo){
 	FluxList fluxMode;
 	int convergenceCriteria = 10;
 
-	if(abs(geo.getInclination()) == 1.){
+	if(std::abs(geo.getInclination()) == 1.){
 		return flux_lmk(s, L, m, 0, geo);
 	}
 
@@ -354,21 +354,21 @@ FluxList flux_lm_sum(int s, int L, int m, GeodesicSource& geo){
 	int convergenceCheckQ = 0;
 	while(k <= kMax && (convergenceCheckE < convergenceCriteria || convergenceCheckL < convergenceCriteria || convergenceCheckQ < convergenceCriteria)){
 		fluxMode = flux_lmk(s, L, m, k, geo);
-		if(abs(fluxMode.Edot.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.infinity < efluxPreviousInf || fluxMode.Edot.infinity < 1.e-18) && abs(fluxMode.Edot.horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.horizon < efluxPreviousHor || fluxMode.Edot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Edot.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.infinity < efluxPreviousInf || fluxMode.Edot.infinity < 1.e-18) && std::abs(fluxMode.Edot.horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.horizon < efluxPreviousHor || fluxMode.Edot.horizon < 1.e-18)){
 			convergenceCheckE += 1;
 		}else{
 			if(convergenceCheckE < COUNT_MAX){
 				convergenceCheckE = 0;
 			}
 		}
-		if(abs(fluxMode.Ldot.infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.infinity < lfluxPreviousInf || fluxMode.Ldot.infinity < 1.e-18) && abs(fluxMode.Ldot.horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.horizon < lfluxPreviousHor || fluxMode.Ldot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Ldot.infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.infinity < lfluxPreviousInf || fluxMode.Ldot.infinity < 1.e-18) && std::abs(fluxMode.Ldot.horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.horizon < lfluxPreviousHor || fluxMode.Ldot.horizon < 1.e-18)){
 			convergenceCheckL += 1;
 		}else{
 			if(convergenceCheckL < COUNT_MAX){
 				convergenceCheckL = 0;
 			}
 		}
-		if(abs(fluxMode.Qdot.infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.infinity < qfluxPreviousInf || fluxMode.Qdot.infinity < 1.e-18) && abs(fluxMode.Qdot.horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.horizon < qfluxPreviousHor || fluxMode.Qdot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Qdot.infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.infinity < qfluxPreviousInf || fluxMode.Qdot.infinity < 1.e-18) && std::abs(fluxMode.Qdot.horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.horizon < qfluxPreviousHor || fluxMode.Qdot.horizon < 1.e-18)){
 			convergenceCheckQ += 1;
 		}else{
 			if(convergenceCheckQ < COUNT_MAX){
@@ -434,21 +434,21 @@ FluxList flux_lm_sum(int s, int L, int m, GeodesicSource& geo){
 	convergenceCheckQ = 0;
 	while(k >= kMin && (convergenceCheckE < convergenceCriteria || convergenceCheckL < convergenceCriteria || convergenceCheckQ < convergenceCriteria)){
 		fluxMode = flux_lmk(s, L, m, k, geo);
-		if(abs(fluxMode.Edot.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.infinity < efluxPreviousInf || fluxMode.Edot.infinity < 1.e-18) && abs(fluxMode.Edot.horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.horizon < efluxPreviousHor || fluxMode.Edot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Edot.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.infinity < efluxPreviousInf || fluxMode.Edot.infinity < 1.e-18) && std::abs(fluxMode.Edot.horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.horizon < efluxPreviousHor || fluxMode.Edot.horizon < 1.e-18)){
 			convergenceCheckE += 1;
 		}else{
 			if(convergenceCheckE < COUNT_MAX){
 				convergenceCheckE = 0;
 			}
 		}
-		if(abs(fluxMode.Ldot.infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.infinity < lfluxPreviousInf || fluxMode.Ldot.infinity < 1.e-18) && abs(fluxMode.Ldot.horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.horizon < lfluxPreviousHor || fluxMode.Ldot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Ldot.infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.infinity < lfluxPreviousInf || fluxMode.Ldot.infinity < 1.e-18) && std::abs(fluxMode.Ldot.horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.horizon < lfluxPreviousHor || fluxMode.Ldot.horizon < 1.e-18)){
 			convergenceCheckL += 1;
 		}else{
 			if(convergenceCheckL < COUNT_MAX){
 				convergenceCheckL = 0;
 			}
 		}
-		if(abs(fluxMode.Qdot.infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.infinity < qfluxPreviousInf || fluxMode.Qdot.infinity < 1.e-18) && abs(fluxMode.Qdot.horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.horizon < qfluxPreviousHor || fluxMode.Qdot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Qdot.infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.infinity < qfluxPreviousInf || fluxMode.Qdot.infinity < 1.e-18) && std::abs(fluxMode.Qdot.horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.horizon < qfluxPreviousHor || fluxMode.Qdot.horizon < 1.e-18)){
 			convergenceCheckQ += 1;
 		}else{
 			if(convergenceCheckQ < COUNT_MAX){
@@ -499,7 +499,7 @@ FluxList flux_lm_sum(int s, int L, int m, GeodesicSource& geo){
 }
 
 FluxList flux_lmk(int s, int L, int m, int k, GeodesicSource& geo){
-	if(abs(geo.getInclination()) == 1. && abs(k) > 0){
+	if(std::abs(geo.getInclination()) == 1. && std::abs(k) > 0){
 		FluxList fluxes;
 		return fluxes;
 	}else if(geo.getEccentricity() == 0.){
@@ -541,7 +541,7 @@ FluxList flux_lmk_sum(int s, int L, int m, int k, GeodesicSource& geo){
 	// give some width to the region we will initially evaluate
 	// in case we are slightly off from the actual peak value
 	int nWidth = 2;
-	nWidth += abs(round(0.2*n0));
+	nWidth += std::abs(round(0.2*n0));
 	int nInit = n0 - nWidth;
 
 	// calculate the minimum radial harmonic that still gives us a postive frequency
@@ -609,21 +609,21 @@ FluxList flux_lmk_sum(int s, int L, int m, int k, GeodesicSource& geo){
 	while(n <= nMax && (convergenceCheckE < convergenceCriteria || convergenceCheckL < convergenceCriteria || convergenceCheckQ < convergenceCriteria)){
 		teukMode = TeukolskyMode(s, L, m, k, n, geo);
 		fluxMode = flux_mode(s, geo, teukMode);
-		if(abs(fluxMode.Edot.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.infinity < efluxPreviousInf || fluxMode.Edot.infinity < 1.e-18) && abs(fluxMode.Edot.horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.horizon < efluxPreviousHor || fluxMode.Edot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Edot.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.infinity < efluxPreviousInf || fluxMode.Edot.infinity < 1.e-18) && std::abs(fluxMode.Edot.horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.horizon < efluxPreviousHor || fluxMode.Edot.horizon < 1.e-18)){
 			convergenceCheckE += 1;
 		}else{
 			if(convergenceCheckE < COUNT_MAX){
 				convergenceCheckE = 0;
 			}
 		}
-		if(abs(fluxMode.Ldot.infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.infinity < lfluxPreviousInf || fluxMode.Ldot.infinity < 1.e-18) && abs(fluxMode.Ldot.horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.horizon < lfluxPreviousHor || fluxMode.Ldot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Ldot.infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.infinity < lfluxPreviousInf || fluxMode.Ldot.infinity < 1.e-18) && std::abs(fluxMode.Ldot.horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.horizon < lfluxPreviousHor || fluxMode.Ldot.horizon < 1.e-18)){
 			convergenceCheckL += 1;
 		}else{
 			if(convergenceCheckL < COUNT_MAX){
 				convergenceCheckL = 0;
 			}
 		}
-		if(abs(fluxMode.Qdot.infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.infinity < qfluxPreviousInf || fluxMode.Qdot.infinity < 1.e-18) && abs(fluxMode.Qdot.horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.horizon < qfluxPreviousHor || fluxMode.Qdot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Qdot.infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.infinity < qfluxPreviousInf || fluxMode.Qdot.infinity < 1.e-18) && std::abs(fluxMode.Qdot.horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.horizon < qfluxPreviousHor || fluxMode.Qdot.horizon < 1.e-18)){
 			convergenceCheckQ += 1;
 		}else{
 			if(convergenceCheckQ < COUNT_MAX){
@@ -694,21 +694,21 @@ FluxList flux_lmk_sum(int s, int L, int m, int k, GeodesicSource& geo){
 	while(n >= nMin && (convergenceCheckE < convergenceCriteria || convergenceCheckL < convergenceCriteria || convergenceCheckQ < convergenceCriteria)){
 		teukMode = TeukolskyMode(s, L, m, k, n, geo);
 		fluxMode = flux_mode(s, geo, teukMode);
-		if(abs(fluxMode.Edot.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.infinity < efluxPreviousInf || fluxMode.Edot.infinity < 1.e-18) && abs(fluxMode.Edot.horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.horizon < efluxPreviousHor || fluxMode.Edot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Edot.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.infinity < efluxPreviousInf || fluxMode.Edot.infinity < 1.e-18) && std::abs(fluxMode.Edot.horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot.horizon < efluxPreviousHor || fluxMode.Edot.horizon < 1.e-18)){
 			convergenceCheckE += 1;
 		}else{
 			if(convergenceCheckE < COUNT_MAX){
 				convergenceCheckE = 0;
 			}
 		}
-		if(abs(fluxMode.Ldot.infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.infinity < lfluxPreviousInf || fluxMode.Ldot.infinity < 1.e-18) && abs(fluxMode.Ldot.horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.horizon < lfluxPreviousHor || fluxMode.Ldot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Ldot.infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.infinity < lfluxPreviousInf || fluxMode.Ldot.infinity < 1.e-18) && std::abs(fluxMode.Ldot.horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot.horizon < lfluxPreviousHor || fluxMode.Ldot.horizon < 1.e-18)){
 			convergenceCheckL += 1;
 		}else{
 			if(convergenceCheckL < COUNT_MAX){
 				convergenceCheckL = 0;
 			}
 		}
-		if(abs(fluxMode.Qdot.infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.infinity < qfluxPreviousInf || fluxMode.Qdot.infinity < 1.e-18) && abs(fluxMode.Qdot.horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.horizon < qfluxPreviousHor || fluxMode.Qdot.horizon < 1.e-18)){
+		if(std::abs(fluxMode.Qdot.infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.infinity < qfluxPreviousInf || fluxMode.Qdot.infinity < 1.e-18) && std::abs(fluxMode.Qdot.horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot.horizon < qfluxPreviousHor || fluxMode.Qdot.horizon < 1.e-18)){
 			convergenceCheckQ += 1;
 		}else{
 			if(convergenceCheckQ < COUNT_MAX){
@@ -788,7 +788,7 @@ FluxList flux_mode(int s, GeodesicSource& geo, TeukolskyMode& teukMode, int incl
 	}
 	double LdotPrefactor = 0.;
 	double QdotPrefactor = 0.;
-	if(abs(teukMode.getFrequency()) > 1.e-8){
+	if(std::abs(teukMode.getFrequency()) > 1.e-8){
 		LdotPrefactor = angular_momentum_flux_factor(geo, teukMode);
 		QdotPrefactor = carter_flux_factor(geo, teukMode);
 	}
@@ -820,9 +820,9 @@ Fluxes scalar_energy_flux_mode(double a, double gamma, double omega, double hori
 }
 
 Fluxes scalar_energy_flux_mode(GeodesicSource& geo, TeukolskyMode& teukMode){
-	if(abs(teukMode.getFrequency()) > ZERO_FREQ_MAX){
+	if(std::abs(teukMode.getFrequency()) > ZERO_FREQ_MAX){
 		teukMode.generateSolutions(geo);
-		return scalar_energy_flux_mode(geo.getBlackHoleSpin(), teukMode.getHorizonFrequency(), teukMode.getFrequency(), pow(abs(teukMode.getTeukolskyAmplitude(In)), 2), pow(abs(teukMode.getTeukolskyAmplitude(Up)), 2));
+		return scalar_energy_flux_mode(geo.getBlackHoleSpin(), teukMode.getHorizonFrequency(), teukMode.getFrequency(), pow(std::abs(teukMode.getTeukolskyAmplitude(In)), 2), pow(std::abs(teukMode.getTeukolskyAmplitude(Up)), 2));
 	}else{
 		Fluxes eflux = {0., 0.};
 		return eflux;
@@ -830,10 +830,10 @@ Fluxes scalar_energy_flux_mode(GeodesicSource& geo, TeukolskyMode& teukMode){
 }
 
 Fluxes gravitational_energy_flux_mode(GeodesicSource& geo, TeukolskyMode& teukMode){
-	if(abs(teukMode.getFrequency()) > ZERO_FREQ_MAX){
+	if(std::abs(teukMode.getFrequency()) > ZERO_FREQ_MAX){
 		teukMode.generateSolutions(geo);
 		double prefactor = pow(2.*teukMode.getFrequency(), -2)/M_PI;
-		Fluxes eflux = {prefactor*pow(abs(teukMode.getTeukolskyAmplitude(Up)), 2), horizonConstant(teukMode)*prefactor*pow(abs(teukMode.getTeukolskyAmplitude(In)), 2)};
+		Fluxes eflux = {prefactor*pow(std::abs(teukMode.getTeukolskyAmplitude(Up)), 2), horizonConstant(teukMode)*prefactor*pow(std::abs(teukMode.getTeukolskyAmplitude(In)), 2)};
 		return eflux;
 	}else{
 		// std::cout << "Skipping (l, m, k, n) = (" << teukMode.getSpheroidalModeNumber() << ", " << teukMode.getAzimuthalModeNumber() << ", " << teukMode.getPolarModeNumber() << ", " << teukMode.getRadialModeNumber() << ")\n";
@@ -873,11 +873,11 @@ Fluxes energy_flux(int s, GeodesicSource& geo){
 	double efluxHor = 0.;
 	double efluxRef = energy_flux_newtonian(s, geo);
 
-	int L = abs(s);
+	int L = std::abs(s);
 	Fluxes fluxMode = energy_flux_l(s, L, geo);
 	efluxInf += fluxMode.infinity;
 	efluxHor += fluxMode.horizon;
-	double error = abs(fluxMode.infinity/efluxRef);
+	double error = std::abs(fluxMode.infinity/efluxRef);
 	// std::cout << "Edot_infinity ("<<L<<")-mode = "<< fluxMode.infinity << " \n";
 	// std::cout << "Edot_horizon ("<<L<<")-mode = "<< fluxMode.horizon << " \n";
 	// std::cout << "Edot_infinity sum = "<< efluxInf << " \n";
@@ -887,7 +887,7 @@ Fluxes energy_flux(int s, GeodesicSource& geo){
 		fluxMode = energy_flux_l(s, L, geo);
 		efluxInf += fluxMode.infinity;
 		efluxHor += fluxMode.horizon;
-		error = abs(fluxMode.infinity/efluxRef);
+		error = std::abs(fluxMode.infinity/efluxRef);
 		// std::cout << "Edot_infinity ("<<L<<")-mode = "<< fluxMode.infinity << " \n";
 		// std::cout << "Edot_horizon ("<<L<<")-mode = "<< fluxMode.horizon << " \n";
 		// std::cout << "Edot_infinity sum = "<< efluxInf << " \n";
@@ -908,7 +908,7 @@ Fluxes energy_flux_alt(int s, GeodesicSource& geo){
 	Fluxes fluxMode = energy_flux_m(s, m, geo);
 	efluxInf += fluxMode.infinity;
 	efluxHor += fluxMode.horizon;
-	double error = abs(fluxMode.infinity/efluxRef);
+	double error = std::abs(fluxMode.infinity/efluxRef);
 	// std::cout << "Edot_infinity ("<<m<<")-mode = "<< fluxMode.infinity << " \n";
 	// std::cout << "Edot_horizon ("<<m<<")-mode = "<< fluxMode.horizon << " \n";
 	// std::cout << "Edot_infinity sum = "<< efluxInf << " \n";
@@ -918,7 +918,7 @@ Fluxes energy_flux_alt(int s, GeodesicSource& geo){
 		fluxMode = energy_flux_m(s, m, geo);
 		efluxInf += fluxMode.infinity;
 		efluxHor += fluxMode.horizon;
-		error = abs(fluxMode.infinity/efluxRef);
+		error = std::abs(fluxMode.infinity/efluxRef);
 		// std::cout << "Edot_infinity ("<<m<<")-mode = "<< fluxMode.infinity << " \n";
 		// std::cout << "Edot_horizon ("<<m<<")-mode = "<< fluxMode.horizon << " \n";
 		// std::cout << "Edot_infinity sum = "<< efluxInf << " \n";
@@ -940,7 +940,7 @@ Fluxes energy_flux_l(int s, int L, GeodesicSource& geo){
 
 	int m = L;
 	fluxMode = energy_flux_lm(s, L, m, geo);
-	// if(abs(m) > 0){
+	// if(std::abs(m) > 0){
 	// 	efluxInf += 2.*fluxMode.infinity;
 	// 	efluxHor += 2.*fluxMode.horizon;
 	// }else{
@@ -957,7 +957,7 @@ Fluxes energy_flux_l(int s, int L, GeodesicSource& geo){
 		efluxPreviousInf = 2.*fluxMode.infinity;
 		efluxPreviousHor = 2.*fluxMode.horizon;
 		fluxMode = energy_flux_lm(s, L, m, geo);
-		if(abs(fluxMode.infinity/efluxRef) < FLUX_EPSILON && (fluxMode.infinity < efluxPreviousInf || fluxMode.infinity < 1.e-18) && abs(fluxMode.horizon/efluxRef) < FLUX_EPSILON && (fluxMode.horizon < efluxPreviousHor || fluxMode.horizon < 1.e-18)){
+		if(std::abs(fluxMode.infinity/efluxRef) < FLUX_EPSILON && (fluxMode.infinity < efluxPreviousInf || fluxMode.infinity < 1.e-18) && std::abs(fluxMode.horizon/efluxRef) < FLUX_EPSILON && (fluxMode.horizon < efluxPreviousHor || fluxMode.horizon < 1.e-18)){
 			convergenceCheck += 1;
 		}else{
 			convergenceCheck = 0;
@@ -970,7 +970,7 @@ Fluxes energy_flux_l(int s, int L, GeodesicSource& geo){
 	}
 
 	int minM = -L;
-	if(geo.getEccentricity() < DBL_EPSILON && 1. - abs(geo.getInclination()) < DBL_EPSILON){
+	if(geo.getEccentricity() < DBL_EPSILON && 1. - std::abs(geo.getInclination()) < DBL_EPSILON){
 		minM = 1;
 	}
 
@@ -978,7 +978,7 @@ Fluxes energy_flux_l(int s, int L, GeodesicSource& geo){
 		efluxPreviousInf = 2.*fluxMode.infinity;
 		efluxPreviousHor = 2.*fluxMode.horizon;
 		fluxMode = energy_flux_lm(s, L, m, geo);
-		if(abs(fluxMode.infinity/efluxRef) < FLUX_EPSILON && (fluxMode.infinity < efluxPreviousInf || fluxMode.infinity < 1.e-18) && abs(fluxMode.horizon/efluxRef) < FLUX_EPSILON && (fluxMode.horizon < efluxPreviousHor || fluxMode.horizon < 1.e-18)){
+		if(std::abs(fluxMode.infinity/efluxRef) < FLUX_EPSILON && (fluxMode.infinity < efluxPreviousInf || fluxMode.infinity < 1.e-18) && std::abs(fluxMode.horizon/efluxRef) < FLUX_EPSILON && (fluxMode.horizon < efluxPreviousHor || fluxMode.horizon < 1.e-18)){
 			convergenceCheck += 1;
 		}else{
 			convergenceCheck = 0;
@@ -1009,7 +1009,7 @@ Fluxes energy_flux_m(int s, int m, GeodesicSource& geo){
 	Fluxes fluxMode;
 	int convergenceCriteria = 2;
 
-	int L = abs(m) < abs(s) ? abs(s) : abs(m);
+	int L = std::abs(m) < std::abs(s) ? std::abs(s) : std::abs(m);
 
 	fluxMode = energy_flux_lm(s, L, m, geo);
 	efluxInf += fluxMode.infinity;
@@ -1023,7 +1023,7 @@ Fluxes energy_flux_m(int s, int m, GeodesicSource& geo){
 	int convergenceCheck = 0;
 	while(L < FLUX_LMAX && convergenceCheck < convergenceCriteria){
 		fluxMode = energy_flux_lm(s, L, m, geo);
-		if(abs(fluxMode.infinity/efluxRef) < FLUX_EPSILON && (fluxMode.infinity < efluxPreviousInf || fluxMode.infinity < 1.e-18) && abs(fluxMode.horizon/efluxRef) < FLUX_EPSILON && (fluxMode.horizon < efluxPreviousHor || fluxMode.horizon < 1.e-18)){
+		if(std::abs(fluxMode.infinity/efluxRef) < FLUX_EPSILON && (fluxMode.infinity < efluxPreviousInf || fluxMode.infinity < 1.e-18) && std::abs(fluxMode.horizon/efluxRef) < FLUX_EPSILON && (fluxMode.horizon < efluxPreviousHor || fluxMode.horizon < 1.e-18)){
 			convergenceCheck += 1;
 		}else{
 			convergenceCheck = 0;
@@ -1042,7 +1042,7 @@ Fluxes energy_flux_m(int s, int m, GeodesicSource& geo){
 }
 
 Fluxes energy_flux_lm(int s, int L, int m, GeodesicSource& geo){
-	if(geo.getEccentricity() == 0. && abs(geo.getInclination()) == 1.){
+	if(geo.getEccentricity() == 0. && std::abs(geo.getInclination()) == 1.){
 		if(m == 0){
 			Fluxes energy_flux = {0., 0.};
 			return energy_flux;
@@ -1061,7 +1061,7 @@ Fluxes energy_flux_lm_sum(int s, int L, int m, GeodesicSource& geo){
 	double efluxPreviousInf = 0., efluxPreviousHor = 0.;
 	Fluxes fluxMode;
 	int convergenceCriteria = 3;
-	if(abs(geo.getInclination()) == 1.){
+	if(std::abs(geo.getInclination()) == 1.){
 		return energy_flux_lmk(s, L, m, 0, geo);
 	}
 
@@ -1089,7 +1089,7 @@ Fluxes energy_flux_lm_sum(int s, int L, int m, GeodesicSource& geo){
 	int convergenceCheck = 0;
 	while(k <= kMax && convergenceCheck < convergenceCriteria){
 		fluxMode = energy_flux_lmk(s, L, m, k, geo);
-		if(abs(fluxMode.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.infinity < efluxPreviousInf || fluxMode.infinity < 1.e-18) && abs(fluxMode.horizon/efluxRef) < FLUX_EPSILON/10 && (abs(fluxMode.horizon) < abs(efluxPreviousHor) || abs(fluxMode.horizon) < 1.e-18)){
+		if(std::abs(fluxMode.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.infinity < efluxPreviousInf || fluxMode.infinity < 1.e-18) && std::abs(fluxMode.horizon/efluxRef) < FLUX_EPSILON/10 && (std::abs(fluxMode.horizon) < std::abs(efluxPreviousHor) || std::abs(fluxMode.horizon) < 1.e-18)){
 			convergenceCheck += 1;
 		}else{
 			convergenceCheck = 0;
@@ -1115,7 +1115,7 @@ Fluxes energy_flux_lm_sum(int s, int L, int m, GeodesicSource& geo){
 	convergenceCheck = 0;
 	while(k >= kMin && convergenceCheck < convergenceCriteria){
 		fluxMode = energy_flux_lmk(s, L, m, k, geo);
-		if(abs(fluxMode.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.infinity < efluxPreviousInf || fluxMode.infinity < 1.e-18) && abs(fluxMode.horizon/efluxRef) < FLUX_EPSILON/10 && (abs(fluxMode.horizon) < abs(efluxPreviousHor) || abs(fluxMode.horizon) < 1.e-18)){
+		if(std::abs(fluxMode.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.infinity < efluxPreviousInf || fluxMode.infinity < 1.e-18) && std::abs(fluxMode.horizon/efluxRef) < FLUX_EPSILON/10 && (std::abs(fluxMode.horizon) < std::abs(efluxPreviousHor) || std::abs(fluxMode.horizon) < 1.e-18)){
 			convergenceCheck += 1;
 		}else{
 			convergenceCheck = 0;
@@ -1134,7 +1134,7 @@ Fluxes energy_flux_lm_sum(int s, int L, int m, GeodesicSource& geo){
 }
 
 Fluxes energy_flux_lmk(int s, int L, int m, int k, GeodesicSource& geo){
-	if(geo.getEccentricity() == 0. && abs(geo.getInclination()) == 1.){
+	if(geo.getEccentricity() == 0. && std::abs(geo.getInclination()) == 1.){
 		Fluxes flux = {0., 0.};
 		return flux;
 	}else if(geo.getEccentricity() == 0.){
@@ -1162,7 +1162,7 @@ Fluxes energy_flux_lmk_sum(int s, int L, int m, int k, GeodesicSource& geo){
 	// give some width to the region we will initially evaluate
 	// in case we are slightly off from the actual peak value
 	int nWidth = 2;
-	nWidth += abs(round(0.2*n0));
+	nWidth += std::abs(round(0.2*n0));
 	int nInit = n0 - nWidth;
 
 	// calculate the minimum radial harmonic that still gives us a postive frequency
@@ -1201,7 +1201,7 @@ Fluxes energy_flux_lmk_sum(int s, int L, int m, int k, GeodesicSource& geo){
 	while(n <= nMax && convergenceCheck < convergenceCriteria){
 		teukMode = TeukolskyMode(s, L, m, k, n, geo);
 		fluxMode = energy_flux_mode(s, geo, teukMode);
-		if(abs(fluxMode.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.infinity < efluxPreviousInf || fluxMode.infinity < 1.e-18) && abs(fluxMode.horizon/efluxRef) < FLUX_EPSILON/10 && (abs(fluxMode.horizon) < abs(efluxPreviousHor) || abs(fluxMode.horizon) < 1.e-18)){
+		if(std::abs(fluxMode.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.infinity < efluxPreviousInf || fluxMode.infinity < 1.e-18) && std::abs(fluxMode.horizon/efluxRef) < FLUX_EPSILON/10 && (std::abs(fluxMode.horizon) < std::abs(efluxPreviousHor) || std::abs(fluxMode.horizon) < 1.e-18)){
 			convergenceCheck += 1;
 		}else{
 			convergenceCheck = 0;
@@ -1221,7 +1221,7 @@ Fluxes energy_flux_lmk_sum(int s, int L, int m, int k, GeodesicSource& geo){
 	while(n >= nMin && convergenceCheck < convergenceCriteria){
 		teukMode = TeukolskyMode(s, L, m, k, n, geo);
 		fluxMode = energy_flux_mode(s, geo, teukMode);
-		if(abs(fluxMode.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.infinity < efluxPreviousInf || fluxMode.infinity < 1.e-18) && abs(fluxMode.horizon/efluxRef) < FLUX_EPSILON/10 && (abs(fluxMode.horizon) < abs(efluxPreviousHor) || abs(fluxMode.horizon) < 1.e-18)){
+		if(std::abs(fluxMode.infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.infinity < efluxPreviousInf || fluxMode.infinity < 1.e-18) && std::abs(fluxMode.horizon/efluxRef) < FLUX_EPSILON/10 && (std::abs(fluxMode.horizon) < std::abs(efluxPreviousHor) || std::abs(fluxMode.horizon) < 1.e-18)){
 			convergenceCheck += 1;
 		}else{
 			convergenceCheck = 0;
@@ -1255,7 +1255,7 @@ int radial_n_mode_max(int l, double e){
 // Parallelized functions
 
 void full_flux_parallel_l(int s, GeodesicSource geo, int modeMax, std::string dir){
-	int lMax = modeMax + abs(s) - 1;
+	int lMax = modeMax + std::abs(s) - 1;
 	// int modeNumMax = (lMax - 1)*(lMax + 4)/2;
 	int modeNumMax = modeMax;
 	std::vector<FluxList> fluxes(modeNumMax);
@@ -1263,13 +1263,13 @@ void full_flux_parallel_l(int s, GeodesicSource geo, int modeMax, std::string di
 	#pragma omp parallel shared(geo, fluxes, modeNumMax) private(l)
 	{
 		#pragma omp for schedule(dynamic)
-			for(l = abs(s); l <= lMax; l++) {
+			for(l = std::abs(s); l <= lMax; l++) {
 				int th_id = omp_get_thread_num();
 				// std::cout << "Start flux calculation for ("<<l<<", "<<m<<")-mode on kernel " << th_id << "\n";
-				fluxes[l - abs(s)] = flux_l(s, l, geo);
+				fluxes[l - std::abs(s)] = flux_l(s, l, geo);
 				std::cout << "Flux calculation completed on kernel " << th_id << "\n";
-				std::cout << "Edot_inf ("<<l<<")-mode = " << fluxes[l - abs(s)].Edot.infinity << "\n";
-				std::cout << "Edot_h ("<<l<<")-mode = " << fluxes[l - abs(s)].Edot.horizon << "\n";
+				std::cout << "Edot_inf ("<<l<<")-mode = " << fluxes[l - std::abs(s)].Edot.infinity << "\n";
+				std::cout << "Edot_h ("<<l<<")-mode = " << fluxes[l - std::abs(s)].Edot.horizon << "\n";
 			}
 	}
 
@@ -1296,7 +1296,7 @@ void full_flux_parallel_l(int s, GeodesicSource geo, int modeMax, std::string di
 	double LdotTotH = 0.;
 	double QdotTotInf = 0.;
 	double QdotTotH = 0.;
-	for(int l = abs(s); l <= lMax; l++) {
+	for(int l = std::abs(s); l <= lMax; l++) {
 		double EdotTotInfL = 0.;
 		double EdotTotHL = 0.;
 		double LdotTotInfL = 0.;
@@ -1305,12 +1305,12 @@ void full_flux_parallel_l(int s, GeodesicSource geo, int modeMax, std::string di
 		double QdotTotHL = 0.;
 		// std::cout << "Edot_inf ("<<l<<", 0)-mode = " << Edot[lm].infinity << "\n";
 		// std::cout << "Edot_h ("<<l<<", 0)-mode = " << Edot[lm].horizon << "\n";
-		EdotTotInfL += fluxes[l - abs(s)].Edot.infinity;
-		EdotTotHL += fluxes[l - abs(s)].Edot.horizon;
-		LdotTotInfL += fluxes[l - abs(s)].Ldot.infinity;
-		LdotTotHL += fluxes[l - abs(s)].Ldot.horizon;
-		QdotTotInfL += fluxes[l - abs(s)].Qdot.infinity;
-		QdotTotHL += fluxes[l - abs(s)].Qdot.horizon;
+		EdotTotInfL += fluxes[l - std::abs(s)].Edot.infinity;
+		EdotTotHL += fluxes[l - std::abs(s)].Edot.horizon;
+		LdotTotInfL += fluxes[l - std::abs(s)].Ldot.infinity;
+		LdotTotHL += fluxes[l - std::abs(s)].Ldot.horizon;
+		QdotTotInfL += fluxes[l - std::abs(s)].Qdot.infinity;
+		QdotTotHL += fluxes[l - std::abs(s)].Qdot.horizon;
 
 		EdotTotInf += EdotTotInfL;
 		EdotTotH += EdotTotHL;
@@ -1477,7 +1477,7 @@ void flux_parallel_lm(GeodesicSource geo, int lMax){
 }
 
 void flux_parallel_l(int s, GeodesicSource geo, int modeMax){
-	int lMax = modeMax + abs(s) - 1;
+	int lMax = modeMax + std::abs(s) - 1;
 	// int modeNumMax = (lMax - 1)*(lMax + 4)/2;
 	int modeNumMax = modeMax;
 	std::vector<Fluxes> Edot(modeNumMax);
@@ -1485,22 +1485,22 @@ void flux_parallel_l(int s, GeodesicSource geo, int modeMax){
 	#pragma omp parallel shared(geo, Edot, modeNumMax) private(l)
 	{
 		#pragma omp for schedule(dynamic)
-			for(l = abs(s); l <= lMax; l++) {
+			for(l = std::abs(s); l <= lMax; l++) {
 				int th_id = omp_get_thread_num();
 				// std::cout << "Start flux calculation for ("<<l<<", "<<m<<")-mode on kernel " << th_id << "\n";
-				Edot[l - abs(s)] = energy_flux_l(s, l, geo);
+				Edot[l - std::abs(s)] = energy_flux_l(s, l, geo);
 				std::cout << "Flux calculation completed on kernel " << th_id << "\n";
-				std::cout << "Edot_inf ("<<l<<")-mode = " << Edot[l - abs(s)].infinity << "\n";
-				std::cout << "Edot_h ("<<l<<")-mode = " << Edot[l - abs(s)].horizon << "\n";
+				std::cout << "Edot_inf ("<<l<<")-mode = " << Edot[l - std::abs(s)].infinity << "\n";
+				std::cout << "Edot_h ("<<l<<")-mode = " << Edot[l - std::abs(s)].horizon << "\n";
 			}
 	}
 	double EdotTotInf = 0.;
 	double EdotTotH = 0.;
-	for(int l = abs(s); l <= lMax; l++) {
-		std::cout << "Edot_inf ("<<l<<")-mode = " << Edot[l - abs(s)].infinity << "\n";
-		std::cout << "Edot_h ("<<l<<")-mode = " << Edot[l - abs(s)].horizon << "\n";
-		EdotTotInf += Edot[l - abs(s)].infinity;
-		EdotTotH += Edot[l - abs(s)].horizon;
+	for(int l = std::abs(s); l <= lMax; l++) {
+		std::cout << "Edot_inf ("<<l<<")-mode = " << Edot[l - std::abs(s)].infinity << "\n";
+		std::cout << "Edot_h ("<<l<<")-mode = " << Edot[l - std::abs(s)].horizon << "\n";
+		EdotTotInf += Edot[l - std::abs(s)].infinity;
+		EdotTotH += Edot[l - std::abs(s)].horizon;
 	}
 	std::cout << "Edot_inf = " << EdotTotInf << "\n";
 	std::cout << "Edot_h = " << EdotTotH << "\n";
@@ -1513,24 +1513,24 @@ void flux_parallel_l(int s, GeodesicSource geo, int modeMax){
 // 	double EdotTotH = 0.;
 // 	int lmax = 50;
 // 	int convergeFlag = 0;
-// 	int l = abs(s);
+// 	int l = std::abs(s);
 // 	while(l < lmax && convergeFlag == 0) {
 // 		// int th_id = omp_get_thread_num();
 // 		// std::cout << "Start flux calculation for ("<<l<<", "<<m<<")-mode on kernel " << th_id << "\n";
 // 		Fluxes Edot = energy_flux_l(s, l, geo);
 // 		EdotTotInf += Edot.inf;
 // 		EdotTotInf += Edot.inf;
-// 		std::cout << "Edot_inf ("<<l<<")-mode = " << Edot[l - abs(s)].infinity << "\n";
-// 		std::cout << "Edot_h ("<<l<<")-mode = " << Edot[l - abs(s)].horizon << "\n";
+// 		std::cout << "Edot_inf ("<<l<<")-mode = " << Edot[l - std::abs(s)].infinity << "\n";
+// 		std::cout << "Edot_h ("<<l<<")-mode = " << Edot[l - std::abs(s)].horizon << "\n";
 // 		l++;
 // 	}
 // 	double EdotTotInf = 0.;
 // 	double EdotTotH = 0.;
-// 	for(int l = abs(s); l <= lMax; l++) {
-// 		std::cout << "Edot_inf ("<<l<<")-mode = " << Edot[l - abs(s)].infinity << "\n";
-// 		std::cout << "Edot_h ("<<l<<")-mode = " << Edot[l - abs(s)].horizon << "\n";
-// 		EdotTotInf += Edot[l - abs(s)].infinity;
-// 		EdotTotH += Edot[l - abs(s)].horizon;
+// 	for(int l = std::abs(s); l <= lMax; l++) {
+// 		std::cout << "Edot_inf ("<<l<<")-mode = " << Edot[l - std::abs(s)].infinity << "\n";
+// 		std::cout << "Edot_h ("<<l<<")-mode = " << Edot[l - std::abs(s)].horizon << "\n";
+// 		EdotTotInf += Edot[l - std::abs(s)].infinity;
+// 		EdotTotH += Edot[l - std::abs(s)].horizon;
 // 	}
 // 	std::cout << "Edot_inf = " << EdotTotInf << "\n";
 // 	std::cout << "Edot_h = " << EdotTotH << "\n";

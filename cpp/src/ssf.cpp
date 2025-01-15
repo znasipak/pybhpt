@@ -11,7 +11,7 @@
 #define COUPLING_EPSILON 1.e-24
 
 double Clm(int l, int m){
-  if(l >= abs(m) && l !=0 ){
+  if(l >= std::abs(m) && l !=0 ){
     return sqrt(l + m)/sqrt(2.*l + 1.)*sqrt(l - m)/sqrt(2.*l - 1.);
   }else{
     return 0.;
@@ -43,7 +43,7 @@ double zeta_coupling(int coeff, int l, int m){
 }
 
 // double beta_coupling(int coeff, int l, int m, double thp){
-//   if(l >= abs(m)){
+//   if(l >= std::abs(m)){
 //     return 1.5*delta_coupling(coeff, l, m)/sin(thp) - 0.5*zeta_coupling(coeff, l, m)/(pow(sin(thp), 3));
 //   }else{
 //     return 0.;
@@ -73,7 +73,7 @@ double beta_coupling(int n, int l, int m, double theta){
 // Coupling due to Warburton window function
 void polar_coupling_coefficient_3(Vector &couplingVector, TeukolskyMode &teuk, int l, int m){
 	for(int n = -3; n <= 3; n += 2){
-		if(l - n >= abs(m)){
+		if(l - n >= std::abs(m)){
 			beta_coupling(couplingVector, teuk, n, l - n, m);
 		}
 	}
@@ -82,7 +82,7 @@ void polar_coupling_coefficient_3(Vector &couplingVector, TeukolskyMode &teuk, i
 double polar_coupling_coefficient_3(TeukolskyMode &teuk, int l, int m, int jth){
 	double coupling = 0.;
 	for(int n = -3; n <= 3; n += 2){
-		if(l - n >= abs(m)){
+		if(l - n >= std::abs(m)){
 			coupling += beta_coupling(teuk, n, l - n, m, jth);
 		}
 	}
@@ -111,11 +111,11 @@ double alpha_coupling(int n, int l, int m){
 double xi_coupling(int n, double thp){
 	double cth = cos(thp);
 	double sth = sin(thp);
-  if(abs(n) == 2){
+  if(std::abs(n) == 2){
     return cth*pow(sth, -3);
-  }else if(abs(n) == 1){
+  }else if(std::abs(n) == 1){
     return (1. - 2.*pow(cth, 2))*pow(sth, -3);
-  }else if(abs(n) == 0){
+  }else if(std::abs(n) == 0){
     return cth*pow(sth, -3);
   }else{
     return 0.;
@@ -136,7 +136,7 @@ double beta_coupling_nasipak(TeukolskyMode &teuk, int n, int l, int m, int jth){
 
 void polar_coupling_coefficient_2(Vector &couplingVector, TeukolskyMode &teuk, int l, int m){
 	for(int n = -2; n <= 2; n++){
-		if(l - n >= abs(m)){
+		if(l - n >= std::abs(m)){
 			beta_coupling_nasipak(couplingVector, teuk, n, l - n, m);
 		}
 	}
@@ -145,7 +145,7 @@ void polar_coupling_coefficient_2(Vector &couplingVector, TeukolskyMode &teuk, i
 double polar_coupling_coefficient_2(TeukolskyMode &teuk, int l, int m, int jth){
 	double coupling = 0.;
 	for(int n = -2; n <= 2; n++){
-		if(l - n >= abs(m)){
+		if(l - n >= std::abs(m)){
 			coupling += beta_coupling_nasipak(teuk, n, l - n, m, jth);
 		}
 	}
@@ -242,7 +242,7 @@ double beta_coupling_higher_order(int n, int l, int m, double theta){
 
 void polar_coupling_coefficient_4(Vector &couplingVector, TeukolskyMode &teuk, int l, int m){
 	for(int n = -4; n <= 4; n++){
-		if(l - n >= abs(m)){
+		if(l - n >= std::abs(m)){
 			beta_coupling_higher_order(couplingVector, teuk, n, l - n, m);
 		}
 	}
@@ -251,7 +251,7 @@ void polar_coupling_coefficient_4(Vector &couplingVector, TeukolskyMode &teuk, i
 double polar_coupling_coefficient_4(TeukolskyMode &teuk, int l, int m, int jth){
 	double coupling = 0.;
 	for(int n = -4; n <= 4; n++){
-		if(l - n >= abs(m)){
+		if(l - n >= std::abs(m)){
 			coupling += beta_coupling_higher_order(teuk, n, l - n, m, jth);
 		}
 	}
@@ -344,7 +344,7 @@ Vector scalar_self_force_reference(int mu, GeodesicSource &geo, int sampleSize){
 }
 
 RealTensor scalar_self_force_components_data_init(int componentNum, int lmax, int m, int sampleSize){
-  return RealTensor(componentNum, RealMatrix(lmax - abs(m) + 1, Vector(sampleSize, 0.)));
+  return RealTensor(componentNum, RealMatrix(lmax - std::abs(m) + 1, Vector(sampleSize, 0.)));
 }
 
 RealTensor scalar_self_force_components_convergence_init(const RealTensor &convergenceData, int convergenceCriteria){
@@ -370,9 +370,9 @@ SelfForceData scalar_self_force_components_m(int mu, int lmax, int m, GeodesicSo
 
 SelfForceData scalar_self_force_components_m(List components, int lmax, int m, GeodesicSource &geo, int sampleSize){
 	int fullSampleSize;
-	if(geo.getEccentricity() > 0. && abs(geo.getInclination()) < 1.){
+	if(geo.getEccentricity() > 0. && std::abs(geo.getInclination()) < 1.){
 		fullSampleSize = sampleSize*sampleSize;
-	}else if(geo.getEccentricity() == 0. && abs(geo.getInclination()) == 1.){
+	}else if(geo.getEccentricity() == 0. && std::abs(geo.getInclination()) == 1.){
 		fullSampleSize = 1;
 	}else{
 		fullSampleSize = sampleSize;
@@ -391,7 +391,7 @@ SelfForceData scalar_self_force_components_m(List components, int lmax, int m, G
 int scalar_self_force_components_m(List components, RealTensor &ssfTotIn, RealTensor &ssfTotUp, RealTensor &ssfRef, int m, GeodesicSource geo){
 
   int componentNum = components.size();
-  int lmax = ssfTotIn[0].size() + abs(m) - 1;
+  int lmax = ssfTotIn[0].size() + std::abs(m) - 1;
   int sampleSize = ssfTotIn[0][0].size();
   int convergenceCriteria = 3;
   convergenceCriteria *= 2; // double it due to the fact that l + m + k = odd modes vanish
@@ -404,7 +404,7 @@ int scalar_self_force_components_m(List components, RealTensor &ssfTotIn, RealTe
   RealTensor ssfModePreviousIn = scalar_self_force_components_data_init(componentNum, lmax, m, sampleSize);
   RealTensor ssfModePreviousUp = scalar_self_force_components_data_init(componentNum, lmax, m, sampleSize);
 
-  if(abs(geo.getInclination()) == 1.){
+  if(std::abs(geo.getInclination()) == 1.){
 		// std::cout << "(SSF) Only calculating k = 0 mode. \n";
     return scalar_self_force_components_mk(components, ssfTotIn, ssfTotUp, ssfConvergenceIn, ssfConvergenceUp, convergenceCriteria, ssfRef, m, 0, geo);
   }
@@ -426,13 +426,13 @@ int scalar_self_force_components_m(List components, RealTensor &ssfTotIn, RealTe
 
   // int ltestprint = 20;
   // int kTestIter = 18;
-  // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k-1<<"\n";
-  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
-  // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
+  // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k-1<<"\n";
+  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
+  // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
   //
-  // std::cout << "F_up(l = "<<ltestprint<<") = " << ssfTotUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k-1<<"\n";
-  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
-  // std::cout << "convergenceCount = " << ssfConvergenceUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
+  // std::cout << "F_up(l = "<<ltestprint<<") = " << ssfTotUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k-1<<"\n";
+  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
+  // std::cout << "convergenceCount = " << ssfConvergenceUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
 
   while(k <= kInitMax){
     ssfModeIn = ssfInit;
@@ -441,13 +441,13 @@ int scalar_self_force_components_m(List components, RealTensor &ssfTotIn, RealTe
     convergenceFlag = scalar_self_force_components_convergence_sum(ssfTotIn, ssfModeIn, ssfModePreviousIn, ssfRef, ssfConvergenceIn, CONVERGENCE_CRITERIA_LARGE);
     convergenceFlag *= scalar_self_force_components_convergence_sum(ssfTotUp, ssfModeUp, ssfModePreviousUp, ssfRef, ssfConvergenceUp, CONVERGENCE_CRITERIA_LARGE);
     k++;
-    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k-1<<"\n";
-    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
-    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
+    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k-1<<"\n";
+    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
+    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
     //
-    // std::cout << "F_up(l = "<<ltestprint<<") = " << ssfTotUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k-1<<"\n";
-    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
-    // std::cout << "convergenceCount = " << ssfConvergenceUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
+    // std::cout << "F_up(l = "<<ltestprint<<") = " << ssfTotUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k-1<<"\n";
+    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
+    // std::cout << "convergenceCount = " << ssfConvergenceUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
 		if(convergenceFlag != 0){
 			std::cout << "(SSF) Error: Large convergence criteria of "<< CONVERGENCE_CRITERIA_LARGE <<" met after summing over only "<< k - kInitMin << " k-modes. \n";
 		}
@@ -463,13 +463,13 @@ int scalar_self_force_components_m(List components, RealTensor &ssfTotIn, RealTe
     convergenceFlag = scalar_self_force_components_convergence_sum(ssfTotIn, ssfModeIn, ssfModePreviousIn, ssfRef, ssfConvergenceIn, convergenceCriteria);
     convergenceFlag *= scalar_self_force_components_convergence_sum(ssfTotUp, ssfModeUp, ssfModePreviousUp, ssfRef, ssfConvergenceUp, convergenceCriteria);
     k++;
-    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k-1<<"\n";
-    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
-    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
+    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k-1<<"\n";
+    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
+    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
     //
-    // std::cout << "F_up(l = "<<ltestprint<<") = " << ssfTotUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k-1<<"\n";
-    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
-    // std::cout << "convergenceCount = " << ssfConvergenceUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
+    // std::cout << "F_up(l = "<<ltestprint<<") = " << ssfTotUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k-1<<"\n";
+    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
+    // std::cout << "convergenceCount = " << ssfConvergenceUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k-1<<"\n";
   }
 
   if(k > kInitMax + kPlusMinus){
@@ -488,13 +488,13 @@ int scalar_self_force_components_m(List components, RealTensor &ssfTotIn, RealTe
   convergenceFlag = scalar_self_force_components_convergence_sum(ssfTotIn, ssfModeIn, ssfModePreviousIn, ssfRef, ssfConvergenceIn, convergenceCriteria);
   convergenceFlag *= scalar_self_force_components_convergence_sum(ssfTotUp, ssfModeUp, ssfModePreviousUp, ssfRef, ssfConvergenceUp, convergenceCriteria);
   k--;
-  // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k+1<<"\n";
-  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
-  // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
+  // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k+1<<"\n";
+  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
+  // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
   //
-  // std::cout << "F_up(l = "<<ltestprint<<") = " << ssfTotUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k+1<<"\n";
-  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
-  // std::cout << "convergenceCount = " << ssfConvergenceUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
+  // std::cout << "F_up(l = "<<ltestprint<<") = " << ssfTotUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k+1<<"\n";
+  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
+  // std::cout << "convergenceCount = " << ssfConvergenceUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
 
   while(convergenceFlag == 0 && k >= kInitMin - kPlusMinus){
     ssfModeIn = ssfInit;
@@ -503,13 +503,13 @@ int scalar_self_force_components_m(List components, RealTensor &ssfTotIn, RealTe
     convergenceFlag = scalar_self_force_components_convergence_sum(ssfTotIn, ssfModeIn, ssfModePreviousIn, ssfRef, ssfConvergenceIn, convergenceCriteria);
     convergenceFlag *= scalar_self_force_components_convergence_sum(ssfTotUp, ssfModeUp, ssfModePreviousUp, ssfRef, ssfConvergenceUp, convergenceCriteria);
     k--;
-    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k+1<<"\n";
-    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
-    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
+    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k+1<<"\n";
+    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
+    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
     //
-    // std::cout << "F_up(l = "<<ltestprint<<") = " << ssfTotUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k+1<<"\n";
-    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
-    // std::cout << "convergenceCount = " << ssfConvergenceUp[0][ltestprint - abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
+    // std::cout << "F_up(l = "<<ltestprint<<") = " << ssfTotUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " with sum from k = "<<kInitMin<<" to "<<k+1<<"\n";
+    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
+    // std::cout << "convergenceCount = " << ssfConvergenceUp[0][ltestprint - std::abs(m)][kTestIter*sqrt(sampleSize)] << " for k = "<<k+1<<"\n";
   }
 
   if(k < kInitMin - kPlusMinus){
@@ -521,9 +521,9 @@ int scalar_self_force_components_m(List components, RealTensor &ssfTotIn, RealTe
 
 SelfForceData scalar_self_force_components_mk(List components, int lmax, int m, int k, GeodesicSource &geo, int sampleSize){
 	int fullSampleSize;
-	if(geo.getEccentricity() > 0. && abs(geo.getInclination()) < 1.){
+	if(geo.getEccentricity() > 0. && std::abs(geo.getInclination()) < 1.){
 		fullSampleSize = sampleSize*sampleSize;
-	}else if(geo.getEccentricity() == 0. && abs(geo.getInclination()) == 1.){
+	}else if(geo.getEccentricity() == 0. && std::abs(geo.getInclination()) == 1.){
 		fullSampleSize = 1;
 	}else{
 		fullSampleSize = sampleSize;
@@ -543,18 +543,18 @@ SelfForceData scalar_self_force_components_mk(List components, int lmax, int m, 
 
 int scalar_self_force_components_mk(List components, RealTensor &ssfTotIn, RealTensor &ssfTotUp, const RealTensor &ssfConvergenceInM, const RealTensor &ssfConvergenceUpM, int convergenceCriteriaM, RealTensor &ssfRef, int m, int k, GeodesicSource &geo){
 	std::cout << "(SSF) Computing (m, k) = ("<<m<<", "<<k<<")\n";
-  if(abs(geo.getEccentricity()) == 0.){
+  if(std::abs(geo.getEccentricity()) == 0.){
 		// std::cout << "(SSF) Only calculating n = 0 mode. \n";
     scalar_self_force_components_mkn(components, ssfTotIn, ssfTotUp, m, k, 0, geo);
     return 0;
   }
   int componentNum = components.size();
-  int lmax = ssfTotIn[0].size() + abs(m) - 1;
+  int lmax = ssfTotIn[0].size() + std::abs(m) - 1;
   int sampleSize = ssfTotIn[0][0].size();
   int convergenceCriteria = 5;
 
   int nMin = minimum_radial_harmonic(m, k, geo);
-  // int nInitMin = radial_n_mode_max_ssf(abs(m), geo.getEccentricity());
+  // int nInitMin = radial_n_mode_max_ssf(std::abs(m), geo.getEccentricity());
   // int nInitMax = radial_n_mode_max_ssf(lmax, geo.getEccentricity());
   int nInitMin = -8;
   int nInitMax = 8;
@@ -563,7 +563,7 @@ int scalar_self_force_components_mk(List components, RealTensor &ssfTotIn, RealT
   if(nInitMin <= nMin){ nInitMin = nMin + 1; nInitMax = nInitMin + nWidth; }
   int n = nInitMin;
 	int nbuffer = 120/pow(1. - pow(geo.getEccentricity(), 2), 1.5);
-  int nMaxPlus = nbuffer + abs(k);
+  int nMaxPlus = nbuffer + std::abs(k);
 
   RealTensor ssfInit = scalar_self_force_components_data_init(componentNum, lmax, m, sampleSize);
   RealTensor ssfConvergenceInitIn = scalar_self_force_components_convergence_init(ssfConvergenceInM, convergenceCriteriaM);
@@ -590,13 +590,13 @@ int scalar_self_force_components_mk(List components, RealTensor &ssfTotIn, RealT
   // int ltestprint = 20;
   // int iterTest = 18;
 
-  // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n-1<<"\n";
-  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
-  // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
+  // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n-1<<"\n";
+  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
+  // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
   //
-  // std::cout << "F_up(l = "<<ltestprint<<") = " << ssfTotUp[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n-1<<"\n";
-  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeUp[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
-  // std::cout << "convergenceCount = " << ssfConvergenceUp[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
+  // std::cout << "F_up(l = "<<ltestprint<<") = " << ssfTotUp[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n-1<<"\n";
+  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeUp[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
+  // std::cout << "convergenceCount = " << ssfConvergenceUp[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
 
   while(n <= nInitMax){
     ssfModeIn = ssfInit;
@@ -609,13 +609,13 @@ int scalar_self_force_components_mk(List components, RealTensor &ssfTotIn, RealT
     convergenceFlag = scalar_self_force_components_convergence_sum(ssfTotIn, ssfModeIn, ssfModePreviousIn, ssfRef, ssfConvergenceIn, CONVERGENCE_CRITERIA_LARGE);
     convergenceFlag *= scalar_self_force_components_convergence_sum(ssfTotUp, ssfModeUp, ssfModePreviousUp, ssfRef, ssfConvergenceUp, CONVERGENCE_CRITERIA_LARGE);
     n++;
-    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n-1<<"\n";
-    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
-    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
+    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n-1<<"\n";
+    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
+    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
     //
-    // std::cout << "F_up(l = "<<ltestprint<<") = " << ssfTotUp[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n-1<<"\n";
-    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeUp[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
-    // std::cout << "convergenceCount = " << ssfConvergenceUp[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
+    // std::cout << "F_up(l = "<<ltestprint<<") = " << ssfTotUp[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n-1<<"\n";
+    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeUp[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
+    // std::cout << "convergenceCount = " << ssfConvergenceUp[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
 		if(convergenceFlag != 0){
 			std::cout  << "(SSF) Error: Large convergence criteria of "<< CONVERGENCE_CRITERIA_LARGE <<" met after summing over only "<< n - nInitMin << " n-modes. \n";
 		}
@@ -635,13 +635,13 @@ int scalar_self_force_components_mk(List components, RealTensor &ssfTotIn, RealT
     convergenceFlag = scalar_self_force_components_convergence_sum(ssfTotIn, ssfModeIn, ssfModePreviousIn, ssfRef, ssfConvergenceIn, convergenceCriteria);
     convergenceFlag *= scalar_self_force_components_convergence_sum(ssfTotUp, ssfModeUp, ssfModePreviousUp, ssfRef, ssfConvergenceUp, convergenceCriteria);
     n++;
-    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n-1<<"\n";
-    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
-    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
+    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n-1<<"\n";
+    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
+    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
     //
-    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n-1<<"\n";
-    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
-    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
+    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n-1<<"\n";
+    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
+    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n-1<<"\n";
   }
   if(n >= nInitMax + nMaxPlus){
     std::cout << "(SSF) ERROR: SSF (m,k) = ("<<m<<","<<k<<")-mode reached nmax = "<<nInitMax + nMaxPlus<<" before converging. \n";
@@ -653,7 +653,7 @@ int scalar_self_force_components_mk(List components, RealTensor &ssfTotIn, RealT
           if(ssfConvergenceUp[mu][i][j] < convergenceCriteria){ lFlag += 1; }
         }
         if(lFlag > 0){
-          std::cout << "(SSF) ERROR: ("<<i + abs(m)<<","<<m<<","<<k<<")-mode of "<<components[mu]<<"-component did not converge.\n";
+          std::cout << "(SSF) ERROR: ("<<i + std::abs(m)<<","<<m<<","<<k<<")-mode of "<<components[mu]<<"-component did not converge.\n";
         }
       }
     }
@@ -676,13 +676,13 @@ int scalar_self_force_components_mk(List components, RealTensor &ssfTotIn, RealT
   convergenceFlag = scalar_self_force_components_convergence_sum(ssfTotIn, ssfModeIn, ssfModePreviousIn, ssfRef, ssfConvergenceIn, convergenceCriteria);
   convergenceFlag *= scalar_self_force_components_convergence_sum(ssfTotUp, ssfModeUp, ssfModePreviousUp, ssfRef, ssfConvergenceUp, convergenceCriteria);
   n--;
-  // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n+1<<"\n";
-  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
-  // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
+  // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n+1<<"\n";
+  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
+  // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
   //
-  // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n+1<<"\n";
-  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
-  // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
+  // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n+1<<"\n";
+  // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
+  // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
 
   convergenceFlag = 0;
   if(n >= nMin){
@@ -696,13 +696,13 @@ int scalar_self_force_components_mk(List components, RealTensor &ssfTotIn, RealT
     convergenceFlag = scalar_self_force_components_convergence_sum(ssfTotIn, ssfModeIn, ssfModePreviousIn, ssfRef, ssfConvergenceIn, convergenceCriteria);
     convergenceFlag *= scalar_self_force_components_convergence_sum(ssfTotUp, ssfModeUp, ssfModePreviousUp, ssfRef, ssfConvergenceUp, convergenceCriteria);
     n--;
-    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n+1<<"\n";
-    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
-    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
+    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n+1<<"\n";
+    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
+    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
     //
-    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n+1<<"\n";
-    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
-    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
+    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n+1<<"\n";
+    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
+    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
   }
 
   while(convergenceFlag == 0 && n >= nMin){
@@ -717,13 +717,13 @@ int scalar_self_force_components_mk(List components, RealTensor &ssfTotIn, RealT
     convergenceFlag = scalar_self_force_components_convergence_sum(ssfTotIn, ssfModeIn, ssfModePreviousIn, ssfRef, ssfConvergenceIn, convergenceCriteria);
     convergenceFlag *= scalar_self_force_components_convergence_sum(ssfTotUp, ssfModeUp, ssfModePreviousUp, ssfRef, ssfConvergenceUp, convergenceCriteria);
     n--;
-    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n+1<<"\n";
-    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
-    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
+    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n+1<<"\n";
+    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
+    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
     //
-    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n+1<<"\n";
-    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
-    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
+    // std::cout << "F_in(l = "<<ltestprint<<") = " << ssfTotIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " with sum from n = "<<nInitMin<<" to "<<n+1<<"\n";
+    // std::cout << "F_mode(l = "<<ltestprint<<") = " << ssfModeIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
+    // std::cout << "convergenceCount = " << ssfConvergenceIn[0][ltestprint - std::abs(m)][iterTest*sqrt(sampleSize)] << " for n = "<<n+1<<"\n";
   }
 
   if(n < nMin){
@@ -753,15 +753,15 @@ int scalar_self_force_components_convergence_sum(RealMatrix &ssfTot, RealMatrix 
       if(ssfConvergence[l][i] < double(convergenceCriteria)){
         ssfTot[l][i] += ssfMode[l][i];
 
-        if(abs(ssfMode[l][i]/ssfRef[l][i]) < SSF_EPSILON && abs(ssfMode[l][i]) < abs(ssfPrevious[l][i])){
+        if(std::abs(ssfMode[l][i]/ssfRef[l][i]) < SSF_EPSILON && std::abs(ssfMode[l][i]) < std::abs(ssfPrevious[l][i])){
           ssfConvergence[l][i] += 1.;
-        }else if(abs(ssfMode[l][i]) < DBL_EPSILON){
+        }else if(std::abs(ssfMode[l][i]) < DBL_EPSILON){
           ssfConvergence[l][i] += 1.;
         }else{
           ssfConvergence[l][i] = 0.;
         }
 
-        if(abs(ssfMode[l][i]) > 0.){
+        if(std::abs(ssfMode[l][i]) > 0.){
           ssfPrevious[l][i] = ssfMode[l][i];
         }
 
@@ -777,33 +777,33 @@ int scalar_self_force_components_convergence_sum(RealMatrix &ssfTot, RealMatrix 
 
 Complex self_force_amplitude(int mu, TeukolskyMode &teuk, int l, int m, int jr, int jth, BoundaryCondition bc){
   if(mu == 0){
-    if( abs(teuk.getFrequency()) > ZERO_FREQ_LIMIT ){
+    if( std::abs(teuk.getFrequency()) > ZERO_FREQ_LIMIT ){
       return -2.*I*teuk.getFrequency()*teuk.getCouplingCoefficient(l)*(teuk.getRadialSolution(bc, jr))*Ylm(l, m, teuk.getPolarPoints(jth));
 			// we double count the omega_{mkn} and omega_{-m,-k,-n} except for zero frequencies
     }else{
       return 0.;
     }
   }else if(mu == 1){
-    if( abs(teuk.getFrequency()) > ZERO_FREQ_LIMIT ){
+    if( std::abs(teuk.getFrequency()) > ZERO_FREQ_LIMIT ){
       return 2.*teuk.getCouplingCoefficient(l)*teuk.getRadialDerivative(bc, jr)*Ylm(l, m, teuk.getPolarPoints(jth));
     }else{
       return teuk.getCouplingCoefficient(l)*teuk.getRadialDerivative(bc, jr)*Ylm(l, m, teuk.getPolarPoints(jth));
     }
   }else if(mu == 2){
 		double polarCoupling = polar_coupling_coefficient(4, teuk, l, m, jth);
-    if( abs(teuk.getFrequency()) > ZERO_FREQ_LIMIT ){
+    if( std::abs(teuk.getFrequency()) > ZERO_FREQ_LIMIT ){
       return 2.*polarCoupling*teuk.getRadialSolution(bc, jr)*Ylm(l, m, teuk.getPolarPoints(jth));
     }else{
       return polarCoupling*teuk.getRadialSolution(bc, jr)*Ylm(l, m, teuk.getPolarPoints(jth));
     }
   }else if(mu == 3){
-    if(abs(m) > 0){
+    if(std::abs(m) > 0){
       return 2.*I*double(m)*teuk.getCouplingCoefficient(l)*(teuk.getRadialSolution(bc, jr))*Ylm(l, m, teuk.getPolarPoints(jth));
     }else{
       return 0.;
     }
   }else if(mu == 4){
-    if( abs(teuk.getFrequency()) > ZERO_FREQ_LIMIT ){
+    if( std::abs(teuk.getFrequency()) > ZERO_FREQ_LIMIT ){
       return 2.*teuk.getCouplingCoefficient(l)*(teuk.getRadialSolution(bc, jr));
     }else{
       return teuk.getCouplingCoefficient(l)*(teuk.getRadialSolution(bc, jr));
@@ -815,9 +815,9 @@ Complex self_force_amplitude(int mu, TeukolskyMode &teuk, int l, int m, int jr, 
 
 RealMatrix scalar_self_force_components_mkn(int mu, int lmax, int m, int k, int n, GeodesicSource &geo, int sampleSize){
 	int fullSampleSize;
-	if(geo.getEccentricity() > 0. && abs(geo.getInclination()) < 1.){
+	if(geo.getEccentricity() > 0. && std::abs(geo.getInclination()) < 1.){
 		fullSampleSize = sampleSize*sampleSize;
-	}else if(geo.getEccentricity() == 0. && abs(geo.getInclination()) == 1.){
+	}else if(geo.getEccentricity() == 0. && std::abs(geo.getInclination()) == 1.){
 		fullSampleSize = 1;
 	}else{
 		fullSampleSize = sampleSize;
@@ -832,9 +832,9 @@ RealMatrix scalar_self_force_components_mkn(int mu, int lmax, int m, int k, int 
 
 SelfForceData scalar_self_force_components_mkn(List components, int lmax, int m, int k, int n, GeodesicSource &geo, int sampleSize){
 	int fullSampleSize;
-	if(geo.getEccentricity() > 0. && abs(geo.getInclination()) < 1.){
+	if(geo.getEccentricity() > 0. && std::abs(geo.getInclination()) < 1.){
 		fullSampleSize = sampleSize*sampleSize;
-	}else if(geo.getEccentricity() == 0. && abs(geo.getInclination()) == 1.){
+	}else if(geo.getEccentricity() == 0. && std::abs(geo.getInclination()) == 1.){
 		fullSampleSize = 1;
 	}else{
 		fullSampleSize = sampleSize;
@@ -850,9 +850,9 @@ SelfForceData scalar_self_force_components_mkn(List components, int lmax, int m,
 }
 
 int scalar_self_force_components_mkn(List components, RealTensor &ssfIn, RealTensor &ssfUp, int m, int k, int n, GeodesicSource &geo){
-	if(geo.getEccentricity() == 0. && abs(geo.getInclination()) == 1.){
+	if(geo.getEccentricity() == 0. && std::abs(geo.getInclination()) == 1.){
 		return scalar_self_force_components_mkn_circular(components, ssfIn, ssfUp, m, k, n, geo);
-	}else if(abs(geo.getInclination()) == 1.){
+	}else if(std::abs(geo.getInclination()) == 1.){
 		return scalar_self_force_components_mkn_equatorial(components, ssfIn, ssfUp, m, k, n, geo);
 	}else if( geo.getEccentricity() == 0. ){
 		return scalar_self_force_components_mkn_spherical(components, ssfIn, ssfUp, m, k, n, geo);
@@ -863,17 +863,17 @@ int scalar_self_force_components_mkn(List components, RealTensor &ssfIn, RealTen
 
 int scalar_self_force_components_mkn_equatorial(List components, RealTensor &ssfIn, RealTensor &ssfUp, int m, int k, int n, GeodesicSource &geo){
 	int returnFlag = 0;
-	if(abs(k) > 0){
+	if(std::abs(k) > 0){
 		return returnFlag;
 	}
 
   int componentNum = components.size();
-  int lmax = ssfIn[0].size() - 1 + abs(m);
+  int lmax = ssfIn[0].size() - 1 + std::abs(m);
   double freq = geo.getTimeFrequency(m, k, n);
   SpinWeightedHarmonic swsh(0, lmax, m, freq*geo.getBlackHoleSpin(), geo.getPolarPosition());
   swsh.generateCouplingCoefficients();
   int jmax = lmax;
-  while(abs(swsh.getCouplingCoefficient()[jmax - abs(m)]) > DBL_EPSILON && jmax < swsh.getMaxCouplingModeNumber() - 1){
+  while(std::abs(swsh.getCouplingCoefficient()[jmax - std::abs(m)]) > DBL_EPSILON && jmax < swsh.getMaxCouplingModeNumber() - 1){
     jmax += 2;
   }
 
@@ -886,8 +886,8 @@ int scalar_self_force_components_mkn_equatorial(List components, RealTensor &ssf
 
   Complex ssfModeTermUp = 0., ssfModeTermIn = 0.;
   double phaseR = 0.;
-  for(int j = abs(m); j <= jmax; j++){
-    if((abs(m) + j + k) % 2 == 0){
+  for(int j = std::abs(m); j <= jmax; j++){
+    if((std::abs(m) + j + k) % 2 == 0){
       TeukolskyMode teuk(0, j, m, k, n, geo);
       teuk.generateSolutions(geo);
 			// if(j < 40){
@@ -895,17 +895,17 @@ int scalar_self_force_components_mkn_equatorial(List components, RealTensor &ssf
 			//   std::cout << "ClmUp = " << teuk.getTeukolskyAmplitude(Up) << "\n";
 			//   std::cout << "ClmIn = " << teuk.getTeukolskyAmplitude(In)*sqrt(2.*(1. + sqrt(1. - pow(teuk.getBlackHoleSpin(),2)))) << "\n";
 			// }
-      int couplingMax = teuk.getCouplingCoefficient().size() + abs(m) - 1;
+      int couplingMax = teuk.getCouplingCoefficient().size() + std::abs(m) - 1;
       int lmaxJMode = lmax < couplingMax ? lmax : couplingMax;
-      for(int l = abs(m); l <= lmaxJMode; l++){
+      for(int l = std::abs(m); l <= lmaxJMode; l++){
         for(int mu = 0; mu < componentNum; mu++){
 					int calcFlag = 1;
-          if(abs(teuk.getTeukolskyAmplitude(Up)) + abs(teuk.getTeukolskyAmplitude(In)) == 0.){
+          if(std::abs(teuk.getTeukolskyAmplitude(Up)) + std::abs(teuk.getTeukolskyAmplitude(In)) == 0.){
             calcFlag = 0;
           }else if(components[mu] != 2){
-            if((l + j) % 2 == 1 || abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
+            if((l + j) % 2 == 1 || std::abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
               calcFlag = 0;
-            }else if(components[mu] == 3 && abs(m) == 0){
+            }else if(components[mu] == 3 && std::abs(m) == 0){
               calcFlag = 0;
             }
           }else if(components[mu] == 2){
@@ -918,27 +918,27 @@ int scalar_self_force_components_mkn_equatorial(List components, RealTensor &ssf
 
               phaseR = freq*deltaTR[jr*radialSampleRate] - double(m)*deltaPhiR[jr*radialSampleRate] + 2.*M_PI*double(n*jr)/double(sampleSize);
 
-              if( isnan(abs(ssfModeTermIn)) ){
+              if( isnan(std::abs(ssfModeTermIn)) ){
                 if(returnFlag < 2){
                   std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for In mode of F_"<<components[mu]<<". Set mode to zero. \n";
                   returnFlag = 2;
                 }
               }else{
-                ssfIn[mu][l - abs(m)][jr] += std::real(ssfModeTermIn*exp(-I*phaseR));
+                ssfIn[mu][l - std::abs(m)][jr] += std::real(ssfModeTermIn*exp(-I*phaseR));
                 if(jr > 0 && jr < sampleSizeHalf){
-                  ssfIn[mu][l - abs(m)][(sampleSize - jr)] += std::real(ssfModeTermIn*exp(I*phaseR));
+                  ssfIn[mu][l - std::abs(m)][(sampleSize - jr)] += std::real(ssfModeTermIn*exp(I*phaseR));
                 }
               }
 
-              if( isnan(abs(ssfModeTermUp)) ){
+              if( isnan(std::abs(ssfModeTermUp)) ){
                 if(returnFlag < 2){
                   std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for Up mode of F_"<<components[mu]<<". Set mode to zero. \n";
                   returnFlag = 2;
                 }
               }else{
-                ssfUp[mu][l - abs(m)][jr] += std::real(ssfModeTermUp*exp(-I*phaseR));
+                ssfUp[mu][l - std::abs(m)][jr] += std::real(ssfModeTermUp*exp(-I*phaseR));
                 if(jr > 0 && jr < sampleSizeHalf){
-                  ssfUp[mu][l - abs(m)][(sampleSize - jr)] += std::real(ssfModeTermUp*exp(I*phaseR));
+                  ssfUp[mu][l - std::abs(m)][(sampleSize - jr)] += std::real(ssfModeTermUp*exp(I*phaseR));
                 }
               }
             }
@@ -953,17 +953,17 @@ int scalar_self_force_components_mkn_equatorial(List components, RealTensor &ssf
 
 int scalar_self_force_components_mkn_spherical(List components, RealTensor &ssfIn, RealTensor &ssfUp, int m, int k, int n, GeodesicSource &geo){
 	int returnFlag = 0;
-	if(abs(n) > 0){
+	if(std::abs(n) > 0){
 		return returnFlag;
 	}
 
   int componentNum = components.size();
-  int lmax = ssfIn[0].size() - 1 + abs(m);
+  int lmax = ssfIn[0].size() - 1 + std::abs(m);
   double freq = geo.getTimeFrequency(m, k, n);
   SpinWeightedHarmonic swsh(0, lmax, m, freq*geo.getBlackHoleSpin(), geo.getPolarPosition());
   swsh.generateCouplingCoefficients();
   int jmax = lmax;
-  while(abs(swsh.getCouplingCoefficient()[jmax - abs(m)]) > DBL_EPSILON && jmax < swsh.getMaxCouplingModeNumber() - 1){
+  while(std::abs(swsh.getCouplingCoefficient()[jmax - std::abs(m)]) > DBL_EPSILON && jmax < swsh.getMaxCouplingModeNumber() - 1){
     jmax += 2;
   }
 
@@ -976,27 +976,27 @@ int scalar_self_force_components_mkn_spherical(List components, RealTensor &ssfI
 
   Complex ssfModeTermUp = 0., ssfModeTermIn = 0.;
   double phaseTh = 0.;
-  for(int j = abs(m); j <= jmax; j++){
-    if((abs(m) + j + k) % 2 == 0){
+  for(int j = std::abs(m); j <= jmax; j++){
+    if((std::abs(m) + j + k) % 2 == 0){
       TeukolskyMode teuk(0, j, m, k, n, geo);
       teuk.generateSolutions(geo);
-      int couplingMax = teuk.getCouplingCoefficient().size() + abs(m) - 1;
+      int couplingMax = teuk.getCouplingCoefficient().size() + std::abs(m) - 1;
       int lmaxJMode = lmax < couplingMax ? lmax : couplingMax;
-      for(int l = abs(m); l <= lmaxJMode; l++){
+      for(int l = std::abs(m); l <= lmaxJMode; l++){
         for(int mu = 0; mu < componentNum; mu++){
 					int calcFlag = 1;
-          if(abs(teuk.getTeukolskyAmplitude(Up)) + abs(teuk.getTeukolskyAmplitude(In)) == 0.){
+          if(std::abs(teuk.getTeukolskyAmplitude(Up)) + std::abs(teuk.getTeukolskyAmplitude(In)) == 0.){
             calcFlag = 0;
           }else if(components[mu] != 2){
-            if((l + j) % 2 == 1 || abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
+            if((l + j) % 2 == 1 || std::abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
               calcFlag = 0;
-            }else if(components[mu] == 3 && abs(m) == 0){
+            }else if(components[mu] == 3 && std::abs(m) == 0){
               calcFlag = 0;
             }
           }else if(components[mu] == 2){
             // if( (l + j) % 2 == 0 ){
             //   calcFlag = 0;
-            // }else if(abs(teuk.getCouplingCoefficient(l - 3)) < COUPLING_EPSILON && abs(teuk.getCouplingCoefficient(l - 1)) < COUPLING_EPSILON && abs(teuk.getCouplingCoefficient(l + 3)) < COUPLING_EPSILON && abs(teuk.getCouplingCoefficient(l + 1)) < COUPLING_EPSILON){
+            // }else if(std::abs(teuk.getCouplingCoefficient(l - 3)) < COUPLING_EPSILON && std::abs(teuk.getCouplingCoefficient(l - 1)) < COUPLING_EPSILON && std::abs(teuk.getCouplingCoefficient(l + 3)) < COUPLING_EPSILON && std::abs(teuk.getCouplingCoefficient(l + 1)) < COUPLING_EPSILON){
             //   calcFlag = 0;
             // }
           }
@@ -1007,27 +1007,27 @@ int scalar_self_force_components_mkn_spherical(List components, RealTensor &ssfI
 
             	phaseTh = freq*deltaTTh[jth*polarSampleRate] - double(m)*deltaPhiTh[jth*polarSampleRate] + 2.*M_PI*double(k*jth)/double(sampleSize);
 
-            	if( isnan(abs(ssfModeTermIn)) ){
+            	if( isnan(std::abs(ssfModeTermIn)) ){
               	if(returnFlag < 2){
                 	std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for In mode of F_"<<components[mu]<<". Set mode to zero. \n";
                 	returnFlag = 2;
             		}
             	}else{
-              	ssfIn[mu][l - abs(m)][jth] += std::real(ssfModeTermIn*exp(-I*phaseTh));
+              	ssfIn[mu][l - std::abs(m)][jth] += std::real(ssfModeTermIn*exp(-I*phaseTh));
               	if(jth > 0 && jth < sampleSizeHalf){
-                	ssfIn[mu][l - abs(m)][sampleSize - jth] += std::real(ssfModeTermIn*exp(I*phaseTh));
+                	ssfIn[mu][l - std::abs(m)][sampleSize - jth] += std::real(ssfModeTermIn*exp(I*phaseTh));
                 }
               }
 
-              if( isnan(abs(ssfModeTermUp)) ){
+              if( isnan(std::abs(ssfModeTermUp)) ){
                 if(returnFlag < 2){
                   std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for Up mode of F_"<<components[mu]<<". Set mode to zero. \n";
                   returnFlag = 2;
                 }
               }else{
-                ssfUp[mu][l - abs(m)][jth] += std::real(ssfModeTermUp*exp(-I*phaseTh));
+                ssfUp[mu][l - std::abs(m)][jth] += std::real(ssfModeTermUp*exp(-I*phaseTh));
                 if(jth > 0 && jth < sampleSizeHalf){
-                  ssfUp[mu][l - abs(m)][sampleSize - jth] += std::real(ssfModeTermUp*exp(I*phaseTh));
+                  ssfUp[mu][l - std::abs(m)][sampleSize - jth] += std::real(ssfModeTermUp*exp(I*phaseTh));
                 }
               }
             }
@@ -1042,36 +1042,36 @@ int scalar_self_force_components_mkn_spherical(List components, RealTensor &ssfI
 
 int scalar_self_force_components_mkn_circular(List components, RealTensor &ssfIn, RealTensor &ssfUp, int m, int k, int n, GeodesicSource &geo){
 	int returnFlag = 0;
-	if(abs(k) > 0 || abs(n) > 0){
+	if(std::abs(k) > 0 || std::abs(n) > 0){
 		return returnFlag;
 	}
 
   int componentNum = components.size();
-  int lmax = ssfIn[0].size() - 1 + abs(m);
+  int lmax = ssfIn[0].size() - 1 + std::abs(m);
   double freq = geo.getTimeFrequency(m, k, n);
   SpinWeightedHarmonic swsh(0, lmax, m, freq*geo.getBlackHoleSpin(), geo.getPolarPosition());
   swsh.generateCouplingCoefficients();
   int jmax = lmax;
-  while(abs(swsh.getCouplingCoefficient()[jmax - abs(m)]) > DBL_EPSILON && jmax < swsh.getMaxCouplingModeNumber() - 1){
+  while(std::abs(swsh.getCouplingCoefficient()[jmax - std::abs(m)]) > DBL_EPSILON && jmax < swsh.getMaxCouplingModeNumber() - 1){
     jmax += 2;
   }
 
   Complex ssfModeTermUp = 0., ssfModeTermIn = 0.;
-  for(int j = abs(m); j <= jmax; j++){
-    if((abs(m) + j + k) % 2 == 0){
+  for(int j = std::abs(m); j <= jmax; j++){
+    if((std::abs(m) + j + k) % 2 == 0){
       TeukolskyMode teuk(0, j, m, k, n, geo);
       teuk.generateSolutions(geo);
-      int couplingMax = teuk.getCouplingCoefficient().size() + abs(m) - 1;
+      int couplingMax = teuk.getCouplingCoefficient().size() + std::abs(m) - 1;
       int lmaxJMode = lmax < couplingMax ? lmax : couplingMax;
-      for(int l = abs(m); l <= lmaxJMode; l++){
+      for(int l = std::abs(m); l <= lmaxJMode; l++){
         for(int mu = 0; mu < componentNum; mu++){
 					int calcFlag = 1;
-          if(abs(teuk.getTeukolskyAmplitude(Up)) + abs(teuk.getTeukolskyAmplitude(In)) == 0.){
+          if(std::abs(teuk.getTeukolskyAmplitude(Up)) + std::abs(teuk.getTeukolskyAmplitude(In)) == 0.){
             calcFlag = 0;
           }else if(components[mu] != 2){
-            if((l + j) % 2 == 1 || abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
+            if((l + j) % 2 == 1 || std::abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
               calcFlag = 0;
-            }else if(components[mu] == 3 && abs(m) == 0){
+            }else if(components[mu] == 3 && std::abs(m) == 0){
               calcFlag = 0;
             }
           }else if(components[mu] == 2){
@@ -1081,22 +1081,22 @@ int scalar_self_force_components_mkn_circular(List components, RealTensor &ssfIn
 						ssfModeTermUp = self_force_amplitude(components[mu], teuk, l, m, 0, 0, Up);
 						ssfModeTermIn = self_force_amplitude(components[mu], teuk, l, m, 0, 0, In);
 
-            if( isnan(abs(ssfModeTermIn)) ){
+            if( isnan(std::abs(ssfModeTermIn)) ){
               if(returnFlag < 2){
                 std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for In mode of F_"<<components[mu]<<". Set mode to zero. \n";
                 returnFlag = 2;
               }
             }else{
-              ssfIn[mu][l - abs(m)][0] += std::real(ssfModeTermIn);
+              ssfIn[mu][l - std::abs(m)][0] += std::real(ssfModeTermIn);
             }
 
-            if( isnan(abs(ssfModeTermUp)) ){
+            if( isnan(std::abs(ssfModeTermUp)) ){
               if(returnFlag < 2){
                 std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for Up mode of F_"<<components[mu]<<". Set mode to zero. \n";
                 returnFlag = 2;
               }
             }else{
-              ssfUp[mu][l - abs(m)][0] += std::real(ssfModeTermUp);
+              ssfUp[mu][l - std::abs(m)][0] += std::real(ssfModeTermUp);
             }
           }
         }
@@ -1111,10 +1111,10 @@ int scalar_self_force_components_mkn_generic(List components, RealTensor &ssfIn,
 	int returnFlag = 0;
 
 	if(geo.getEccentricity() == 0.){
-		if(abs(n) > 0){
+		if(std::abs(n) > 0){
 			return returnFlag;
-		}else if(abs(geo.getInclination()) == 1.){
-			if(abs(k) > 0){
+		}else if(std::abs(geo.getInclination()) == 1.){
+			if(std::abs(k) > 0){
 				return returnFlag;
 			}else{
 				return scalar_self_force_components_mkn_circular(components, ssfIn, ssfUp, m, k, n, geo);
@@ -1122,8 +1122,8 @@ int scalar_self_force_components_mkn_generic(List components, RealTensor &ssfIn,
 		}else{
 			return scalar_self_force_components_mkn_spherical(components, ssfIn, ssfUp, m, k, n, geo);
 		}
-  }else if(abs(geo.getInclination()) == 1.){
-		if(abs(k) > 0){
+  }else if(std::abs(geo.getInclination()) == 1.){
+		if(std::abs(k) > 0){
 			return returnFlag;
 		}else{
 			return scalar_self_force_components_mkn_equatorial(components, ssfIn, ssfUp, m, k, n, geo);
@@ -1131,13 +1131,13 @@ int scalar_self_force_components_mkn_generic(List components, RealTensor &ssfIn,
   }
 
   int componentNum = components.size();
-  int lmax = ssfIn[0].size() - 1 + abs(m);
+  int lmax = ssfIn[0].size() - 1 + std::abs(m);
   double freq = geo.getTimeFrequency(m, k, n);
 	int lmaxTest = lmax + 4; // we include the plus 4 to account for the extra coupling for the theta component
   SpinWeightedHarmonic swsh(0, lmaxTest, m, freq*geo.getBlackHoleSpin(), geo.getPolarPosition());
   swsh.generateCouplingCoefficients();
   int jmax = lmaxTest;
-  while(abs(swsh.getCouplingCoefficient()[jmax - abs(m)]) > DBL_EPSILON && jmax < swsh.getMaxCouplingModeNumber() - 1){
+  while(std::abs(swsh.getCouplingCoefficient()[jmax - std::abs(m)]) > DBL_EPSILON && jmax < swsh.getMaxCouplingModeNumber() - 1){
     jmax += 2;
   }
 
@@ -1155,8 +1155,8 @@ int scalar_self_force_components_mkn_generic(List components, RealTensor &ssfIn,
   Complex ssfModeTermUp = 0., ssfModeTermIn = 0.;
   double phaseR = 0.;
   double phaseTh = 0.;
-  for(int j = abs(m); j <= jmax; j++){
-    if((abs(m) + j + k) % 2 == 0){
+  for(int j = std::abs(m); j <= jmax; j++){
+    if((std::abs(m) + j + k) % 2 == 0){
       TeukolskyMode teuk(0, j, m, k, n, geo);
       teuk.generateSolutions(geo);
       // if(j < 40){
@@ -1164,23 +1164,23 @@ int scalar_self_force_components_mkn_generic(List components, RealTensor &ssfIn,
       //   std::cout << "ClmUp = " << teuk.getTeukolskyAmplitude(Up) << "\n";
       //   std::cout << "ClmIn = " << teuk.getTeukolskyAmplitude(In)*sqrt(2.*(1. + sqrt(1. - pow(teuk.getBlackHoleSpin(),2)))) << "\n";
       // }
-      int couplingMax = teuk.getCouplingCoefficient().size() + abs(m) - 1;
+      int couplingMax = teuk.getCouplingCoefficient().size() + std::abs(m) - 1;
       int lmaxJMode = lmax < couplingMax ? lmax : couplingMax;
-      for(int l = abs(m); l <= lmaxJMode; l++){
+      for(int l = std::abs(m); l <= lmaxJMode; l++){
         for(int mu = 0; mu < componentNum; mu++){
 					int calcFlag = 1;
-          if(abs(teuk.getTeukolskyAmplitude(Up)) + abs(teuk.getTeukolskyAmplitude(In)) == 0.){
+          if(std::abs(teuk.getTeukolskyAmplitude(Up)) + std::abs(teuk.getTeukolskyAmplitude(In)) == 0.){
             calcFlag = 0;
           }else if(components[mu] != 2){
-            if((l + j) % 2 == 1 || abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
+            if((l + j) % 2 == 1 || std::abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
               calcFlag = 0;
-            }else if(components[mu] == 3 && abs(m) == 0){
+            }else if(components[mu] == 3 && std::abs(m) == 0){
               calcFlag = 0;
             }
           }else if(components[mu] == 2){
             // if( (l + j) % 2 == 0 ){
             //   calcFlag = 0;
-            // }else if(abs(teuk.getCouplingCoefficient(l - 3)) < COUPLING_EPSILON && abs(teuk.getCouplingCoefficient(l - 1)) < COUPLING_EPSILON && abs(teuk.getCouplingCoefficient(l + 3)) < COUPLING_EPSILON && abs(teuk.getCouplingCoefficient(l + 1)) < COUPLING_EPSILON){
+            // }else if(std::abs(teuk.getCouplingCoefficient(l - 3)) < COUPLING_EPSILON && std::abs(teuk.getCouplingCoefficient(l - 1)) < COUPLING_EPSILON && std::abs(teuk.getCouplingCoefficient(l + 3)) < COUPLING_EPSILON && std::abs(teuk.getCouplingCoefficient(l + 1)) < COUPLING_EPSILON){
             //   calcFlag = 0;
             // }
           }
@@ -1193,39 +1193,39 @@ int scalar_self_force_components_mkn_generic(List components, RealTensor &ssfIn,
                 phaseR = freq*deltaTR[jr*radialSampleRate] - double(m)*deltaPhiR[jr*radialSampleRate] + 2.*M_PI*double(n*jr)/double(sampleSize);
                 phaseTh = freq*deltaTTh[jth*polarSampleRate] - double(m)*deltaPhiTh[jth*polarSampleRate] + 2.*M_PI*double(k*jth)/double(sampleSize);
 
-                if( isnan(abs(ssfModeTermIn)) ){
+                if( isnan(std::abs(ssfModeTermIn)) ){
                   if(returnFlag < 2){
                     std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for In mode of F_"<<components[mu]<<". Set mode to zero. \n";
                     returnFlag = 2;
                   }
                 }else{
-                  ssfIn[mu][l - abs(m)][jr*sampleSize + jth] += std::real(ssfModeTermIn*exp(-I*(phaseR + phaseTh)));
+                  ssfIn[mu][l - std::abs(m)][jr*sampleSize + jth] += std::real(ssfModeTermIn*exp(-I*(phaseR + phaseTh)));
                   if(jr > 0 && jth > 0 && jr < sampleSizeHalf && jth < sampleSizeHalf){
-                    ssfIn[mu][l - abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermIn*exp(-I*(phaseR - phaseTh)));
-                    ssfIn[mu][l - abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermIn*exp(I*(phaseR - phaseTh)));
-                    ssfIn[mu][l - abs(m)][(sampleSize - jr)*sampleSize + sampleSize - jth] += std::real(ssfModeTermIn*exp(I*(phaseR + phaseTh)));
+                    ssfIn[mu][l - std::abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermIn*exp(-I*(phaseR - phaseTh)));
+                    ssfIn[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermIn*exp(I*(phaseR - phaseTh)));
+                    ssfIn[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + sampleSize - jth] += std::real(ssfModeTermIn*exp(I*(phaseR + phaseTh)));
                   }else if(jr > 0 && jr < sampleSizeHalf){
-                    ssfIn[mu][l - abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermIn*exp(I*(phaseR - phaseTh)));
+                    ssfIn[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermIn*exp(I*(phaseR - phaseTh)));
                   }else if(jth > 0 && jth < sampleSizeHalf){
-                    ssfIn[mu][l - abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermIn*exp(-I*(phaseR - phaseTh)));
+                    ssfIn[mu][l - std::abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermIn*exp(-I*(phaseR - phaseTh)));
                   }
                 }
 
-                if( isnan(abs(ssfModeTermUp)) ){
+                if( isnan(std::abs(ssfModeTermUp)) ){
                   if(returnFlag < 2){
                     std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for Up mode of F_"<<components[mu]<<". Set mode to zero. \n";
                     returnFlag = 2;
                   }
                 }else{
-                  ssfUp[mu][l - abs(m)][jr*sampleSize + jth] += std::real(ssfModeTermUp*exp(-I*(phaseR + phaseTh)));
+                  ssfUp[mu][l - std::abs(m)][jr*sampleSize + jth] += std::real(ssfModeTermUp*exp(-I*(phaseR + phaseTh)));
                   if(jr > 0 && jth > 0 && jr < sampleSizeHalf && jth < sampleSizeHalf){
-                    ssfUp[mu][l - abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermUp*exp(-I*(phaseR - phaseTh)));
-                    ssfUp[mu][l - abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermUp*exp(I*(phaseR - phaseTh)));
-                    ssfUp[mu][l - abs(m)][(sampleSize - jr)*sampleSize + sampleSize - jth] += std::real(ssfModeTermUp*exp(I*(phaseR + phaseTh)));
+                    ssfUp[mu][l - std::abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermUp*exp(-I*(phaseR - phaseTh)));
+                    ssfUp[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermUp*exp(I*(phaseR - phaseTh)));
+                    ssfUp[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + sampleSize - jth] += std::real(ssfModeTermUp*exp(I*(phaseR + phaseTh)));
                   }else if(jr > 0 && jr < sampleSizeHalf){
-                    ssfUp[mu][l - abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermUp*exp(I*(phaseR - phaseTh)));
+                    ssfUp[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermUp*exp(I*(phaseR - phaseTh)));
                   }else if(jth > 0 && jth < sampleSizeHalf){
-                    ssfUp[mu][l - abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermUp*exp(-I*(phaseR - phaseTh)));
+                    ssfUp[mu][l - std::abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermUp*exp(-I*(phaseR - phaseTh)));
                   }
                 }
               }
@@ -1299,9 +1299,9 @@ int tensor_same_size(const RealTensor &ssf1, const RealTensor &ssf2){
 }
 
 int scalar_self_force_components_mkn(List components, RealTensor &ssfIn, RealTensor &ssfUp, const RealTensor &ssfConvergenceIn, const RealTensor &ssfConvergenceUp, int convergenceCriteria, int m, int k, int n, GeodesicSource &geo){
-	if(geo.getEccentricity() == 0. && abs(geo.getInclination()) == 1.){
+	if(geo.getEccentricity() == 0. && std::abs(geo.getInclination()) == 1.){
 		return scalar_self_force_components_mkn_circular(components, ssfIn, ssfUp, ssfConvergenceIn, ssfConvergenceUp, convergenceCriteria, m, k, n, geo);
-	}else if(abs(geo.getInclination()) == 1.){
+	}else if(std::abs(geo.getInclination()) == 1.){
 		return scalar_self_force_components_mkn_equatorial(components, ssfIn, ssfUp, ssfConvergenceIn, ssfConvergenceUp, convergenceCriteria, m, k, n, geo);
 	}else if( geo.getEccentricity() == 0. ){
 		return scalar_self_force_components_mkn_spherical(components, ssfIn, ssfUp, ssfConvergenceIn, ssfConvergenceUp, convergenceCriteria, m, k, n, geo);
@@ -1312,7 +1312,7 @@ int scalar_self_force_components_mkn(List components, RealTensor &ssfIn, RealTen
 
 int scalar_self_force_components_mkn_equatorial(List components, RealTensor &ssfIn, RealTensor &ssfUp, const RealTensor &ssfConvergenceIn, const RealTensor &ssfConvergenceUp, int convergenceCriteria, int m, int k, int n, GeodesicSource &geo){
   int returnFlag = 0;
-	if(abs(k) > 0){
+	if(std::abs(k) > 0){
 		return returnFlag;
 	}
 
@@ -1322,25 +1322,25 @@ int scalar_self_force_components_mkn_equatorial(List components, RealTensor &ssf
   int lmaxIn = max_mode_convergence(ssfConvergenceIn, convergenceCriteria);
   int lmaxUp = max_mode_convergence(ssfConvergenceUp, convergenceCriteria);
   int lmax = lmaxIn < lmaxUp ? lmaxUp : lmaxIn;
-  lmax += abs(m);
-	// int lmax = ssfIn[0].size() - 1 + abs(m);
+  lmax += std::abs(m);
+	// int lmax = ssfIn[0].size() - 1 + std::abs(m);
 
   SpinWeightedHarmonic swsh(0, lmax, m, freq*geo.getBlackHoleSpin(), geo.getPolarPosition());
   swsh.generateCouplingCoefficients();
   int jmax = lmax;
-  while(jmax < swsh.getMaxCouplingModeNumber() - 1 && abs(swsh.getCouplingCoefficient(jmax)) > DBL_EPSILON){
+  while(jmax < swsh.getMaxCouplingModeNumber() - 1 && std::abs(swsh.getCouplingCoefficient(jmax)) > DBL_EPSILON){
     jmax += 2;
   }
 
   int lminIn = min_mode_convergence(ssfConvergenceIn, convergenceCriteria);
   int lminUp = min_mode_convergence(ssfConvergenceUp, convergenceCriteria);
   int lmin = lminIn < lminUp ? lminIn : lminUp;
-  lmin += abs(m);
-	// int lmin = abs(m);
+  lmin += std::abs(m);
+	// int lmin = std::abs(m);
   swsh = SpinWeightedHarmonic(0, lmin, m, freq*geo.getBlackHoleSpin(), geo.getPolarPosition());
   swsh.generateCouplingCoefficients();
   int jmin = lmin;
-  while(jmin > swsh.getMinCouplingModeNumber() + 1 && abs(swsh.getCouplingCoefficient(jmin)) > DBL_EPSILON){
+  while(jmin > swsh.getMinCouplingModeNumber() + 1 && std::abs(swsh.getCouplingCoefficient(jmin)) > DBL_EPSILON){
     jmin -= 2;
   }
 
@@ -1355,7 +1355,7 @@ int scalar_self_force_components_mkn_equatorial(List components, RealTensor &ssf
   double phaseR = 0.;
   double phaseTh = 0.;
   for(int j = jmin; j <= jmax; j++){
-    if((abs(m) + j + k) % 2 == 0){
+    if((std::abs(m) + j + k) % 2 == 0){
       TeukolskyMode teuk(0, j, m, k, n, geo);
       teuk.generateSolutions(geo);
       int couplingMax = teuk.getMaxCouplingModeNumber();
@@ -1363,12 +1363,12 @@ int scalar_self_force_components_mkn_equatorial(List components, RealTensor &ssf
       for(int l = lmin; l <= lmaxJMode; l++){
         for(int mu = 0; mu < componentNum; mu++){
           int calcFlag = 1;
-          if(abs(teuk.getTeukolskyAmplitude(Up)) + abs(teuk.getTeukolskyAmplitude(In)) == 0.){
+          if(std::abs(teuk.getTeukolskyAmplitude(Up)) + std::abs(teuk.getTeukolskyAmplitude(In)) == 0.){
             calcFlag = 0;
           }else if(components[mu] != 2){
-            if((l + j) % 2 == 1 || abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
+            if((l + j) % 2 == 1 || std::abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
               calcFlag = 0;
-            }else if(components[mu] == 3 && abs(m) == 0){
+            }else if(components[mu] == 3 && std::abs(m) == 0){
               calcFlag = 0;
             }
           }else if(components[mu] == 2){
@@ -1379,13 +1379,13 @@ int scalar_self_force_components_mkn_equatorial(List components, RealTensor &ssf
               phaseR = freq*deltaTR[jr*radialSampleRate] - double(m)*deltaPhiR[jr*radialSampleRate] + 2.*M_PI*double(n*jr)/double(sampleSize);
 
 							int calcFlagIn = 0;
-							if(abs(teuk.getTeukolskyAmplitude(In)) > 0.){
-								if(ssfConvergenceIn[mu][l - abs(m)][jr] < double(convergenceCriteria)){
+							if(std::abs(teuk.getTeukolskyAmplitude(In)) > 0.){
+								if(ssfConvergenceIn[mu][l - std::abs(m)][jr] < double(convergenceCriteria)){
 									calcFlagIn = 1;
 								}
 
 								if(jr > 0 && jr < sampleSizeHalf){
-									if(ssfConvergenceIn[mu][l - abs(m)][(sampleSize - jr)] < double(convergenceCriteria)){
+									if(ssfConvergenceIn[mu][l - std::abs(m)][(sampleSize - jr)] < double(convergenceCriteria)){
 										calcFlagIn = 1;
 									}
 								}
@@ -1394,27 +1394,27 @@ int scalar_self_force_components_mkn_equatorial(List components, RealTensor &ssf
               if(calcFlagIn == 1){
                 ssfModeTermIn = self_force_amplitude(components[mu], teuk, l, m, jr*radialSampleRate, 0, In);
 
-                if( isnan(abs(ssfModeTermIn)) || isnan(abs(phaseR)) || isnan(abs(phaseTh)) ){
+                if( isnan(std::abs(ssfModeTermIn)) || isnan(std::abs(phaseR)) || isnan(std::abs(phaseTh)) ){
                   if(returnFlag < 2){
                     std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for In mode of F_"<<components[mu]<<". Set mode to zero. \n";
                     returnFlag = 2;
                   }
                 }else{
-                  ssfIn[mu][l - abs(m)][jr] += std::real(ssfModeTermIn*exp(-I*(phaseR)));
+                  ssfIn[mu][l - std::abs(m)][jr] += std::real(ssfModeTermIn*exp(-I*(phaseR)));
                   if(jr > 0 && jr < sampleSizeHalf){
-                    ssfIn[mu][l - abs(m)][(sampleSize - jr)] += std::real(ssfModeTermIn*exp(I*(phaseR)));
+                    ssfIn[mu][l - std::abs(m)][(sampleSize - jr)] += std::real(ssfModeTermIn*exp(I*(phaseR)));
                   }
                 }
               }
 
 							int calcFlagUp = 0;
-							if(abs(teuk.getTeukolskyAmplitude(Up)) > 0.){
-								if(ssfConvergenceUp[mu][l - abs(m)][jr] < double(convergenceCriteria)){
+							if(std::abs(teuk.getTeukolskyAmplitude(Up)) > 0.){
+								if(ssfConvergenceUp[mu][l - std::abs(m)][jr] < double(convergenceCriteria)){
 									calcFlagUp = 1;
 								}
 
 								if(jr > 0 && jr < sampleSizeHalf){
-									if(ssfConvergenceUp[mu][l - abs(m)][(sampleSize - jr)] < double(convergenceCriteria)){
+									if(ssfConvergenceUp[mu][l - std::abs(m)][(sampleSize - jr)] < double(convergenceCriteria)){
 										calcFlagUp = 1;
 									}
 								}
@@ -1423,15 +1423,15 @@ int scalar_self_force_components_mkn_equatorial(List components, RealTensor &ssf
               if(calcFlagUp == 1){
                 ssfModeTermUp = self_force_amplitude(components[mu], teuk, l, m, jr*radialSampleRate, 0, Up);
 
-                if( isnan(abs(ssfModeTermUp)) || isnan(abs(phaseR)) || isnan(abs(phaseTh)) ){
+                if( isnan(std::abs(ssfModeTermUp)) || isnan(std::abs(phaseR)) || isnan(std::abs(phaseTh)) ){
                   if(returnFlag < 2){
                     std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for Up mode of F_"<<components[mu]<<". Set mode to zero. \n";
                     returnFlag = 2;
                   }
                 }else{
-                  ssfUp[mu][l - abs(m)][jr] += std::real(ssfModeTermUp*exp(-I*(phaseR)));
+                  ssfUp[mu][l - std::abs(m)][jr] += std::real(ssfModeTermUp*exp(-I*(phaseR)));
                   if(jr > 0 && jr < sampleSizeHalf){
-                    ssfUp[mu][l - abs(m)][(sampleSize - jr)] += std::real(ssfModeTermUp*exp(I*(phaseR)));
+                    ssfUp[mu][l - std::abs(m)][(sampleSize - jr)] += std::real(ssfModeTermUp*exp(I*(phaseR)));
                   }
                 }
               }
@@ -1447,7 +1447,7 @@ int scalar_self_force_components_mkn_equatorial(List components, RealTensor &ssf
 
 int scalar_self_force_components_mkn_spherical(List components, RealTensor &ssfIn, RealTensor &ssfUp, const RealTensor &ssfConvergenceIn, const RealTensor &ssfConvergenceUp, int convergenceCriteria, int m, int k, int n, GeodesicSource &geo){
   int returnFlag = 0;
-	if(abs(n) > 0){
+	if(std::abs(n) > 0){
 		return returnFlag;
 	}
 
@@ -1457,31 +1457,31 @@ int scalar_self_force_components_mkn_spherical(List components, RealTensor &ssfI
   int lmaxIn = max_mode_convergence(ssfConvergenceIn, convergenceCriteria);
   int lmaxUp = max_mode_convergence(ssfConvergenceUp, convergenceCriteria);
   int lmax = lmaxIn < lmaxUp ? lmaxUp : lmaxIn;
-  lmax += abs(m);
-	// int lmax = ssfIn[0].size() - 1 + abs(m);
+  lmax += std::abs(m);
+	// int lmax = ssfIn[0].size() - 1 + std::abs(m);
 
 	int lmaxTest = lmax + 4; // we include the plus 4 to account for the extra coupling for the theta component
 	SpinWeightedHarmonic swsh(0, lmaxTest, m, freq*geo.getBlackHoleSpin(), geo.getPolarPosition());
 	swsh.generateCouplingCoefficients();
 	int jmax = lmaxTest;
-	while(jmax < swsh.getMaxCouplingModeNumber() - 1 && abs(swsh.getCouplingCoefficient(jmax)) > DBL_EPSILON){
+	while(jmax < swsh.getMaxCouplingModeNumber() - 1 && std::abs(swsh.getCouplingCoefficient(jmax)) > DBL_EPSILON){
     jmax += 2;
   }
 
   int lminIn = min_mode_convergence(ssfConvergenceIn, convergenceCriteria);
   int lminUp = min_mode_convergence(ssfConvergenceUp, convergenceCriteria);
   int lmin = lminIn < lminUp ? lminIn : lminUp;
-  lmin += abs(m);
-	// int lmin = abs(m);
+  lmin += std::abs(m);
+	// int lmin = std::abs(m);
 	int lminTest = lmin - 4; // we include the minus 4 to account for the extra coupling for the theta component
 	int jmin = lminTest;
-	if(lminTest < abs(m)){
-		lminTest = abs(m);
+	if(lminTest < std::abs(m)){
+		lminTest = std::abs(m);
 		jmin = lminTest;
 	}else{
 		swsh = SpinWeightedHarmonic(0, lminTest, m, freq*geo.getBlackHoleSpin(), geo.getPolarPosition());
 	  swsh.generateCouplingCoefficients();
-	  while(jmin > swsh.getMinCouplingModeNumber() + 1 && abs(swsh.getCouplingCoefficient(jmin)) > DBL_EPSILON){
+	  while(jmin > swsh.getMinCouplingModeNumber() + 1 && std::abs(swsh.getCouplingCoefficient(jmin)) > DBL_EPSILON){
 	    jmin -= 2;
 	  }
 	}
@@ -1497,7 +1497,7 @@ int scalar_self_force_components_mkn_spherical(List components, RealTensor &ssfI
   double phaseR = 0.;
   double phaseTh = 0.;
   for(int j = jmin; j <= jmax; j++){
-    if((abs(m) + j + k) % 2 == 0){
+    if((std::abs(m) + j + k) % 2 == 0){
       TeukolskyMode teuk(0, j, m, k, n, geo);
       teuk.generateSolutions(geo);
       int couplingMax = teuk.getMaxCouplingModeNumber();
@@ -1505,18 +1505,18 @@ int scalar_self_force_components_mkn_spherical(List components, RealTensor &ssfI
       for(int l = lmin; l <= lmaxJMode; l++){
         for(int mu = 0; mu < componentNum; mu++){
           int calcFlag = 1;
-          if(abs(teuk.getTeukolskyAmplitude(Up)) + abs(teuk.getTeukolskyAmplitude(In)) == 0.){
+          if(std::abs(teuk.getTeukolskyAmplitude(Up)) + std::abs(teuk.getTeukolskyAmplitude(In)) == 0.){
             calcFlag = 0;
           }else if(components[mu] != 2){
-            if((l + j) % 2 == 1 || abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
+            if((l + j) % 2 == 1 || std::abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
               calcFlag = 0;
-            }else if(components[mu] == 3 && abs(m) == 0){
+            }else if(components[mu] == 3 && std::abs(m) == 0){
               calcFlag = 0;
             }
           }else if(components[mu] == 2){
             // if( (l + j) % 2 == 0 ){
             //   calcFlag = 0;
-            // }else if(abs(teuk.getCouplingCoefficient(l - 3)) < COUPLING_EPSILON && abs(teuk.getCouplingCoefficient(l - 1)) < COUPLING_EPSILON && abs(teuk.getCouplingCoefficient(l + 3)) < COUPLING_EPSILON && abs(teuk.getCouplingCoefficient(l + 1)) < COUPLING_EPSILON){
+            // }else if(std::abs(teuk.getCouplingCoefficient(l - 3)) < COUPLING_EPSILON && std::abs(teuk.getCouplingCoefficient(l - 1)) < COUPLING_EPSILON && std::abs(teuk.getCouplingCoefficient(l + 3)) < COUPLING_EPSILON && std::abs(teuk.getCouplingCoefficient(l + 1)) < COUPLING_EPSILON){
             //   calcFlag = 0;
             // }
           }
@@ -1525,13 +1525,13 @@ int scalar_self_force_components_mkn_spherical(List components, RealTensor &ssfI
               phaseTh = freq*deltaTTh[jth*polarSampleRate] - double(m)*deltaPhiTh[jth*polarSampleRate] + 2.*M_PI*double(k*jth)/double(sampleSize);
 
 							int calcFlagIn = 0;
-							if(abs(teuk.getTeukolskyAmplitude(In)) > 0.){
-								if(ssfConvergenceIn[mu][l - abs(m)][jth] < double(convergenceCriteria)){
+							if(std::abs(teuk.getTeukolskyAmplitude(In)) > 0.){
+								if(ssfConvergenceIn[mu][l - std::abs(m)][jth] < double(convergenceCriteria)){
 									calcFlagIn = 1;
 								}
 
 								if(jth > 0 && jth < sampleSizeHalf){
-									if(ssfConvergenceIn[mu][l - abs(m)][sampleSize - jth] < double(convergenceCriteria)){
+									if(ssfConvergenceIn[mu][l - std::abs(m)][sampleSize - jth] < double(convergenceCriteria)){
 										calcFlagIn = 1;
 									}
 								}
@@ -1540,27 +1540,27 @@ int scalar_self_force_components_mkn_spherical(List components, RealTensor &ssfI
               if(calcFlagIn == 1){
                 ssfModeTermIn = self_force_amplitude(components[mu], teuk, l, m, 0, jth*polarSampleRate, In);
 
-                if( isnan(abs(ssfModeTermIn)) || isnan(abs(phaseR)) || isnan(abs(phaseTh)) ){
+                if( isnan(std::abs(ssfModeTermIn)) || isnan(std::abs(phaseR)) || isnan(std::abs(phaseTh)) ){
                   if(returnFlag < 2){
                     std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for In mode of F_"<<components[mu]<<". Set mode to zero. \n";
                     returnFlag = 2;
                   }
                 }else{
-                  ssfIn[mu][l - abs(m)][jth] += std::real(ssfModeTermIn*exp(-I*(phaseTh)));
+                  ssfIn[mu][l - std::abs(m)][jth] += std::real(ssfModeTermIn*exp(-I*(phaseTh)));
                   if(jth > 0 && jth < sampleSizeHalf){
-                    ssfIn[mu][l - abs(m)][sampleSize - jth] += std::real(ssfModeTermIn*exp(I*(phaseTh)));
+                    ssfIn[mu][l - std::abs(m)][sampleSize - jth] += std::real(ssfModeTermIn*exp(I*(phaseTh)));
                   }
                 }
               }
 
 							int calcFlagUp = 0;
-							if(abs(teuk.getTeukolskyAmplitude(Up)) > 0.){
-								if(ssfConvergenceUp[mu][l - abs(m)][jth] < double(convergenceCriteria)){
+							if(std::abs(teuk.getTeukolskyAmplitude(Up)) > 0.){
+								if(ssfConvergenceUp[mu][l - std::abs(m)][jth] < double(convergenceCriteria)){
 									calcFlagUp = 1;
 								}
 
 								if(jth > 0 && jth < sampleSizeHalf){
-									if(ssfConvergenceUp[mu][l - abs(m)][sampleSize - jth] < double(convergenceCriteria)){
+									if(ssfConvergenceUp[mu][l - std::abs(m)][sampleSize - jth] < double(convergenceCriteria)){
 										calcFlagUp = 1;
 									}
 								}
@@ -1569,15 +1569,15 @@ int scalar_self_force_components_mkn_spherical(List components, RealTensor &ssfI
               if(calcFlagUp == 1){
                 ssfModeTermUp = self_force_amplitude(components[mu], teuk, l, m, 0, jth*polarSampleRate, Up);
 
-                if( isnan(abs(ssfModeTermUp)) || isnan(abs(phaseR)) || isnan(abs(phaseTh)) ){
+                if( isnan(std::abs(ssfModeTermUp)) || isnan(std::abs(phaseR)) || isnan(std::abs(phaseTh)) ){
                   if(returnFlag < 2){
                     std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for Up mode of F_"<<components[mu]<<". Set mode to zero. \n";
                     returnFlag = 2;
                   }
                 }else{
-                  ssfUp[mu][l - abs(m)][jth] += std::real(ssfModeTermUp*exp(-I*(phaseTh)));
+                  ssfUp[mu][l - std::abs(m)][jth] += std::real(ssfModeTermUp*exp(-I*(phaseTh)));
                   if(jth > 0 && jth < sampleSizeHalf){
-                    ssfUp[mu][l - abs(m)][sampleSize - jth] += std::real(ssfModeTermUp*exp(I*(phaseTh)));
+                    ssfUp[mu][l - std::abs(m)][sampleSize - jth] += std::real(ssfModeTermUp*exp(I*(phaseTh)));
                   }
                 }
               }
@@ -1593,7 +1593,7 @@ int scalar_self_force_components_mkn_spherical(List components, RealTensor &ssfI
 
 int scalar_self_force_components_mkn_circular(List components, RealTensor &ssfIn, RealTensor &ssfUp, const RealTensor &ssfConvergenceIn, const RealTensor &ssfConvergenceUp, int convergenceCriteria, int m, int k, int n, GeodesicSource &geo){
   int returnFlag = 0;
-	if(abs(k) > 0 || abs(n) > 0){
+	if(std::abs(k) > 0 || std::abs(n) > 0){
 		return returnFlag;
 	}
 
@@ -1603,25 +1603,25 @@ int scalar_self_force_components_mkn_circular(List components, RealTensor &ssfIn
   int lmaxIn = max_mode_convergence(ssfConvergenceIn, convergenceCriteria);
   int lmaxUp = max_mode_convergence(ssfConvergenceUp, convergenceCriteria);
   int lmax = lmaxIn < lmaxUp ? lmaxUp : lmaxIn;
-  lmax += abs(m);
-	// int lmax = ssfIn[0].size() - 1 + abs(m);
+  lmax += std::abs(m);
+	// int lmax = ssfIn[0].size() - 1 + std::abs(m);
 
   SpinWeightedHarmonic swsh(0, lmax, m, freq*geo.getBlackHoleSpin(), geo.getPolarPosition());
   swsh.generateCouplingCoefficients();
   int jmax = lmax;
-  while(jmax < swsh.getMaxCouplingModeNumber() - 1 && abs(swsh.getCouplingCoefficient(jmax)) > DBL_EPSILON){
+  while(jmax < swsh.getMaxCouplingModeNumber() - 1 && std::abs(swsh.getCouplingCoefficient(jmax)) > DBL_EPSILON){
     jmax += 2;
   }
 
   int lminIn = min_mode_convergence(ssfConvergenceIn, convergenceCriteria);
   int lminUp = min_mode_convergence(ssfConvergenceUp, convergenceCriteria);
   int lmin = lminIn < lminUp ? lminIn : lminUp;
-  lmin += abs(m);
-	// int lmin = abs(m);
+  lmin += std::abs(m);
+	// int lmin = std::abs(m);
   swsh = SpinWeightedHarmonic(0, lmin, m, freq*geo.getBlackHoleSpin(), geo.getPolarPosition());
   swsh.generateCouplingCoefficients();
   int jmin = lmin;
-  while(jmin > swsh.getMinCouplingModeNumber() + 1 && abs(swsh.getCouplingCoefficient(jmin)) > DBL_EPSILON){
+  while(jmin > swsh.getMinCouplingModeNumber() + 1 && std::abs(swsh.getCouplingCoefficient(jmin)) > DBL_EPSILON){
     jmin -= 2;
   }
 
@@ -1629,7 +1629,7 @@ int scalar_self_force_components_mkn_circular(List components, RealTensor &ssfIn
   double phaseR = 0.;
   double phaseTh = 0.;
   for(int j = jmin; j <= jmax; j++){
-    if((abs(m) + j + k) % 2 == 0){
+    if((std::abs(m) + j + k) % 2 == 0){
       TeukolskyMode teuk(0, j, m, k, n, geo);
       teuk.generateSolutions(geo);
       int couplingMax = teuk.getMaxCouplingModeNumber();
@@ -1637,12 +1637,12 @@ int scalar_self_force_components_mkn_circular(List components, RealTensor &ssfIn
       for(int l = lmin; l <= lmaxJMode; l++){
         for(int mu = 0; mu < componentNum; mu++){
           int calcFlag = 1;
-          if(abs(teuk.getTeukolskyAmplitude(Up)) + abs(teuk.getTeukolskyAmplitude(In)) == 0.){
+          if(std::abs(teuk.getTeukolskyAmplitude(Up)) + std::abs(teuk.getTeukolskyAmplitude(In)) == 0.){
             calcFlag = 0;
           }else if(components[mu] != 2){
-            if((l + j) % 2 == 1 || abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
+            if((l + j) % 2 == 1 || std::abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
               calcFlag = 0;
-            }else if(components[mu] == 3 && abs(m) == 0){
+            }else if(components[mu] == 3 && std::abs(m) == 0){
               calcFlag = 0;
             }
           }else if(components[mu] == 2){
@@ -1650,8 +1650,8 @@ int scalar_self_force_components_mkn_circular(List components, RealTensor &ssfIn
           }
           if(calcFlag == 1){
 						int calcFlagIn = 0;
-						if(abs(teuk.getTeukolskyAmplitude(In)) > 0.){
-							if(ssfConvergenceIn[mu][l - abs(m)][0] < double(convergenceCriteria)){
+						if(std::abs(teuk.getTeukolskyAmplitude(In)) > 0.){
+							if(ssfConvergenceIn[mu][l - std::abs(m)][0] < double(convergenceCriteria)){
 								calcFlagIn = 1;
 							}
 						}
@@ -1659,19 +1659,19 @@ int scalar_self_force_components_mkn_circular(List components, RealTensor &ssfIn
             if(calcFlagIn == 1){
               ssfModeTermIn = self_force_amplitude(components[mu], teuk, l, m, 0, 0, In);
 
-              if( isnan(abs(ssfModeTermIn)) || isnan(abs(phaseR)) || isnan(abs(phaseTh)) ){
+              if( isnan(std::abs(ssfModeTermIn)) || isnan(std::abs(phaseR)) || isnan(std::abs(phaseTh)) ){
                 if(returnFlag < 2){
                   std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for In mode of F_"<<components[mu]<<". Set mode to zero. \n";
                   returnFlag = 2;
                 }
               }else{
-                ssfIn[mu][l - abs(m)][0] += std::real(ssfModeTermIn);
+                ssfIn[mu][l - std::abs(m)][0] += std::real(ssfModeTermIn);
               }
             }
 
 						int calcFlagUp = 0;
-						if(abs(teuk.getTeukolskyAmplitude(Up)) > 0.){
-							if(ssfConvergenceUp[mu][l - abs(m)][0] < double(convergenceCriteria)){
+						if(std::abs(teuk.getTeukolskyAmplitude(Up)) > 0.){
+							if(ssfConvergenceUp[mu][l - std::abs(m)][0] < double(convergenceCriteria)){
 								calcFlagUp = 1;
 							}
 						}
@@ -1679,13 +1679,13 @@ int scalar_self_force_components_mkn_circular(List components, RealTensor &ssfIn
             if(calcFlagUp == 1){
               ssfModeTermUp = self_force_amplitude(components[mu], teuk, l, m, 0, 0, Up);
 
-              if( isnan(abs(ssfModeTermUp)) || isnan(abs(phaseR)) || isnan(abs(phaseTh)) ){
+              if( isnan(std::abs(ssfModeTermUp)) || isnan(std::abs(phaseR)) || isnan(std::abs(phaseTh)) ){
                 if(returnFlag < 2){
                   std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for Up mode of F_"<<components[mu]<<". Set mode to zero. \n";
                   returnFlag = 2;
                 }
               }else{
-                ssfUp[mu][l - abs(m)][0] += std::real(ssfModeTermUp);
+                ssfUp[mu][l - std::abs(m)][0] += std::real(ssfModeTermUp);
               }
             }
           }
@@ -1698,9 +1698,9 @@ int scalar_self_force_components_mkn_circular(List components, RealTensor &ssfIn
 }
 
 int scalar_self_force_components_mkn_generic(List components, RealTensor &ssfIn, RealTensor &ssfUp, const RealTensor &ssfConvergenceIn, const RealTensor &ssfConvergenceUp, int convergenceCriteria, int m, int k, int n, GeodesicSource &geo){
-  if(geo.getEccentricity() == 0 && abs(n) > 0){
+  if(geo.getEccentricity() == 0 && std::abs(n) > 0){
     return 0;
-  }else if(abs(geo.getInclination()) == 1 && abs(k) > 0){
+  }else if(std::abs(geo.getInclination()) == 1 && std::abs(k) > 0){
     return 0;
   }
   int returnFlag = 0;
@@ -1711,31 +1711,31 @@ int scalar_self_force_components_mkn_generic(List components, RealTensor &ssfIn,
   int lmaxIn = max_mode_convergence(ssfConvergenceIn, convergenceCriteria);
   int lmaxUp = max_mode_convergence(ssfConvergenceUp, convergenceCriteria);
   int lmax = lmaxIn < lmaxUp ? lmaxUp : lmaxIn;
-  lmax += abs(m);
-	// int lmax = ssfIn[0].size() - 1 + abs(m);
+  lmax += std::abs(m);
+	// int lmax = ssfIn[0].size() - 1 + std::abs(m);
 
 	int lmaxTest = lmax + 4; // we include the plus 4 to account for the extra coupling for the theta component
 	SpinWeightedHarmonic swsh(0, lmaxTest, m, freq*geo.getBlackHoleSpin(), geo.getPolarPosition());
 	swsh.generateCouplingCoefficients();
 	int jmax = lmaxTest;
-	while(jmax < swsh.getMaxCouplingModeNumber() - 1 && abs(swsh.getCouplingCoefficient(jmax)) > DBL_EPSILON){
+	while(jmax < swsh.getMaxCouplingModeNumber() - 1 && std::abs(swsh.getCouplingCoefficient(jmax)) > DBL_EPSILON){
     jmax += 2;
   }
 
   int lminIn = min_mode_convergence(ssfConvergenceIn, convergenceCriteria);
   int lminUp = min_mode_convergence(ssfConvergenceUp, convergenceCriteria);
   int lmin = lminIn < lminUp ? lminIn : lminUp;
-  lmin += abs(m);
-	// int lmin = abs(m);
+  lmin += std::abs(m);
+	// int lmin = std::abs(m);
 	int lminTest = lmin - 4; // we include the minus 4 to account for the extra coupling for the theta component
 	int jmin = lminTest;
-	if(lminTest < abs(m)){
-		lminTest = abs(m);
+	if(lminTest < std::abs(m)){
+		lminTest = std::abs(m);
 		jmin = lminTest;
 	}else{
 		swsh = SpinWeightedHarmonic(0, lminTest, m, freq*geo.getBlackHoleSpin(), geo.getPolarPosition());
 	  swsh.generateCouplingCoefficients();
-	  while(jmin > swsh.getMinCouplingModeNumber() + 1 && abs(swsh.getCouplingCoefficient(jmin)) > DBL_EPSILON){
+	  while(jmin > swsh.getMinCouplingModeNumber() + 1 && std::abs(swsh.getCouplingCoefficient(jmin)) > DBL_EPSILON){
 	    jmin -= 2;
 	  }
 	}
@@ -1759,7 +1759,7 @@ int scalar_self_force_components_mkn_generic(List components, RealTensor &ssfIn,
   double phaseR = 0.;
   double phaseTh = 0.;
   for(int j = jmin; j <= jmax; j++){
-    if((abs(m) + j + k) % 2 == 0){
+    if((std::abs(m) + j + k) % 2 == 0){
       TeukolskyMode teuk(0, j, m, k, n, geo);
       // std::cout << "Computing Teukolsky mode ("<<j<<","<<m<<","<<k<<","<<n<<")\n";
       teuk.generateSolutions(geo);
@@ -1772,18 +1772,18 @@ int scalar_self_force_components_mkn_generic(List components, RealTensor &ssfIn,
       for(int l = lmin; l <= lmaxJMode; l++){
         for(int mu = 0; mu < componentNum; mu++){
           int calcFlag = 1;
-          if(abs(teuk.getTeukolskyAmplitude(Up)) + abs(teuk.getTeukolskyAmplitude(In)) == 0.){
+          if(std::abs(teuk.getTeukolskyAmplitude(Up)) + std::abs(teuk.getTeukolskyAmplitude(In)) == 0.){
             calcFlag = 0;
           }else if(components[mu] != 2){
-            if((l + j) % 2 == 1 || abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
+            if((l + j) % 2 == 1 || std::abs(teuk.getCouplingCoefficient(l)) < COUPLING_EPSILON){
               calcFlag = 0;
-            }else if(components[mu] == 3 && abs(m) == 0){
+            }else if(components[mu] == 3 && std::abs(m) == 0){
               calcFlag = 0;
             }
           }else if(components[mu] == 2){
             // if( (l + j) % 2 == 0 ){
             //   calcFlag = 0;
-            // }else if(abs(teuk.getCouplingCoefficient(l - 3)) < COUPLING_EPSILON && abs(teuk.getCouplingCoefficient(l - 1)) < COUPLING_EPSILON && abs(teuk.getCouplingCoefficient(l + 3)) < COUPLING_EPSILON && abs(teuk.getCouplingCoefficient(l + 1)) < COUPLING_EPSILON){
+            // }else if(std::abs(teuk.getCouplingCoefficient(l - 3)) < COUPLING_EPSILON && std::abs(teuk.getCouplingCoefficient(l - 1)) < COUPLING_EPSILON && std::abs(teuk.getCouplingCoefficient(l + 3)) < COUPLING_EPSILON && std::abs(teuk.getCouplingCoefficient(l + 1)) < COUPLING_EPSILON){
             //   calcFlag = 0;
             // }
           }
@@ -1794,27 +1794,27 @@ int scalar_self_force_components_mkn_generic(List components, RealTensor &ssfIn,
                 phaseTh = freq*deltaTTh[jth*polarSampleRate] - double(m)*deltaPhiTh[jth*polarSampleRate] + 2.*M_PI*double(k*jth)/double(sampleSize);
 
 								int calcFlagIn = 0;
-								if(abs(teuk.getTeukolskyAmplitude(In)) > 0.){
-									if(ssfConvergenceIn[mu][l - abs(m)][jr*sampleSize + jth] < double(convergenceCriteria)){
+								if(std::abs(teuk.getTeukolskyAmplitude(In)) > 0.){
+									if(ssfConvergenceIn[mu][l - std::abs(m)][jr*sampleSize + jth] < double(convergenceCriteria)){
 										calcFlagIn = 1;
 									}
 
 									if(jr > 0 && jth > 0 && jr < sampleSizeHalf && jth < sampleSizeHalf){
-										if(ssfConvergenceIn[mu][l - abs(m)][jr*sampleSize + sampleSize - jth] < double(convergenceCriteria)){
+										if(ssfConvergenceIn[mu][l - std::abs(m)][jr*sampleSize + sampleSize - jth] < double(convergenceCriteria)){
 											calcFlagIn = 1;
 										}
-										if(ssfConvergenceIn[mu][l - abs(m)][(sampleSize - jr)*sampleSize + jth] < double(convergenceCriteria)){
+										if(ssfConvergenceIn[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + jth] < double(convergenceCriteria)){
 											calcFlagIn = 1;
 										}
-										if(ssfConvergenceIn[mu][l - abs(m)][(sampleSize - jr)*sampleSize + sampleSize - jth] < double(convergenceCriteria)){
+										if(ssfConvergenceIn[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + sampleSize - jth] < double(convergenceCriteria)){
 											calcFlagIn = 1;
 										}
 									}else if(jr > 0 && jr < sampleSizeHalf){
-										if(ssfConvergenceIn[mu][l - abs(m)][(sampleSize - jr)*sampleSize + jth] < double(convergenceCriteria)){
+										if(ssfConvergenceIn[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + jth] < double(convergenceCriteria)){
 											calcFlagIn = 1;
 										}
 									}else if(jth > 0 && jth < sampleSizeHalf){
-										if(ssfConvergenceIn[mu][l - abs(m)][jr*sampleSize + sampleSize - jth] < double(convergenceCriteria)){
+										if(ssfConvergenceIn[mu][l - std::abs(m)][jr*sampleSize + sampleSize - jth] < double(convergenceCriteria)){
 											calcFlagIn = 1;
 										}
 									}
@@ -1823,47 +1823,47 @@ int scalar_self_force_components_mkn_generic(List components, RealTensor &ssfIn,
                 if(calcFlagIn == 1){
                   ssfModeTermIn = self_force_amplitude(components[mu], teuk, l, m, jr*radialSampleRate, jth*polarSampleRate, In);
 
-                  if( isnan(abs(ssfModeTermIn)) || isnan(abs(phaseR)) || isnan(abs(phaseTh)) ){
+                  if( isnan(std::abs(ssfModeTermIn)) || isnan(std::abs(phaseR)) || isnan(std::abs(phaseTh)) ){
                     if(returnFlag < 2){
                       std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for In mode of F_"<<components[mu]<<". Set mode to zero. \n";
                       returnFlag = 2;
                     }
                   }else{
-                    ssfIn[mu][l - abs(m)][jr*sampleSize + jth] += std::real(ssfModeTermIn*exp(-I*(phaseR + phaseTh)));
+                    ssfIn[mu][l - std::abs(m)][jr*sampleSize + jth] += std::real(ssfModeTermIn*exp(-I*(phaseR + phaseTh)));
                     if(jr > 0 && jth > 0 && jr < sampleSizeHalf && jth < sampleSizeHalf){
-                      ssfIn[mu][l - abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermIn*exp(-I*(phaseR - phaseTh)));
-                      ssfIn[mu][l - abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermIn*exp(I*(phaseR - phaseTh)));
-                      ssfIn[mu][l - abs(m)][(sampleSize - jr)*sampleSize + sampleSize - jth] += std::real(ssfModeTermIn*exp(I*(phaseR + phaseTh)));
+                      ssfIn[mu][l - std::abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermIn*exp(-I*(phaseR - phaseTh)));
+                      ssfIn[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermIn*exp(I*(phaseR - phaseTh)));
+                      ssfIn[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + sampleSize - jth] += std::real(ssfModeTermIn*exp(I*(phaseR + phaseTh)));
                     }else if(jr > 0 && jr < sampleSizeHalf){
-                      ssfIn[mu][l - abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermIn*exp(I*(phaseR - phaseTh)));
+                      ssfIn[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermIn*exp(I*(phaseR - phaseTh)));
                     }else if(jth > 0 && jth < sampleSizeHalf){
-                      ssfIn[mu][l - abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermIn*exp(-I*(phaseR - phaseTh)));
+                      ssfIn[mu][l - std::abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermIn*exp(-I*(phaseR - phaseTh)));
                     }
                   }
                 }
 
 								int calcFlagUp = 0;
-								if(abs(teuk.getTeukolskyAmplitude(Up)) > 0.){
-									if(ssfConvergenceUp[mu][l - abs(m)][jr*sampleSize + jth] < double(convergenceCriteria)){
+								if(std::abs(teuk.getTeukolskyAmplitude(Up)) > 0.){
+									if(ssfConvergenceUp[mu][l - std::abs(m)][jr*sampleSize + jth] < double(convergenceCriteria)){
 										calcFlagUp = 1;
 									}
 
 									if(jr > 0 && jth > 0 && jr < sampleSizeHalf && jth < sampleSizeHalf){
-										if(ssfConvergenceUp[mu][l - abs(m)][jr*sampleSize + sampleSize - jth] < double(convergenceCriteria)){
+										if(ssfConvergenceUp[mu][l - std::abs(m)][jr*sampleSize + sampleSize - jth] < double(convergenceCriteria)){
 											calcFlagUp = 1;
 										}
-										if(ssfConvergenceUp[mu][l - abs(m)][(sampleSize - jr)*sampleSize + jth] < double(convergenceCriteria)){
+										if(ssfConvergenceUp[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + jth] < double(convergenceCriteria)){
 											calcFlagUp = 1;
 										}
-										if(ssfConvergenceUp[mu][l - abs(m)][(sampleSize - jr)*sampleSize + sampleSize - jth] < double(convergenceCriteria)){
+										if(ssfConvergenceUp[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + sampleSize - jth] < double(convergenceCriteria)){
 											calcFlagUp = 1;
 										}
 									}else if(jr > 0 && jr < sampleSizeHalf){
-										if(ssfConvergenceUp[mu][l - abs(m)][(sampleSize - jr)*sampleSize + jth] < double(convergenceCriteria)){
+										if(ssfConvergenceUp[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + jth] < double(convergenceCriteria)){
 											calcFlagUp = 1;
 										}
 									}else if(jth > 0 && jth < sampleSizeHalf){
-										if(ssfConvergenceUp[mu][l - abs(m)][jr*sampleSize + sampleSize - jth] < double(convergenceCriteria)){
+										if(ssfConvergenceUp[mu][l - std::abs(m)][jr*sampleSize + sampleSize - jth] < double(convergenceCriteria)){
 											calcFlagUp = 1;
 										}
 									}
@@ -1872,21 +1872,21 @@ int scalar_self_force_components_mkn_generic(List components, RealTensor &ssfIn,
                 if(calcFlagUp == 1){
                   ssfModeTermUp = self_force_amplitude(components[mu], teuk, l, m, jr*radialSampleRate, jth*polarSampleRate, Up);
 
-                  if( isnan(abs(ssfModeTermUp)) || isnan(abs(phaseR)) || isnan(abs(phaseTh)) ){
+                  if( isnan(std::abs(ssfModeTermUp)) || isnan(std::abs(phaseR)) || isnan(std::abs(phaseTh)) ){
                     if(returnFlag < 2){
                       std::cout << "(SSF) ERROR: (l,j,m,k,n) = ("<<l<<","<<j<<","<<m<<","<<k<<","<<n<<") returned NaN for Up mode of F_"<<components[mu]<<". Set mode to zero. \n";
                       returnFlag = 2;
                     }
                   }else{
-                    ssfUp[mu][l - abs(m)][jr*sampleSize + jth] += std::real(ssfModeTermUp*exp(-I*(phaseR + phaseTh)));
+                    ssfUp[mu][l - std::abs(m)][jr*sampleSize + jth] += std::real(ssfModeTermUp*exp(-I*(phaseR + phaseTh)));
                     if(jr > 0 && jth > 0 && jr < sampleSizeHalf && jth < sampleSizeHalf){
-                      ssfUp[mu][l - abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermUp*exp(-I*(phaseR - phaseTh)));
-                      ssfUp[mu][l - abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermUp*exp(I*(phaseR - phaseTh)));
-                      ssfUp[mu][l - abs(m)][(sampleSize - jr)*sampleSize + sampleSize - jth] += std::real(ssfModeTermUp*exp(I*(phaseR + phaseTh)));
+                      ssfUp[mu][l - std::abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermUp*exp(-I*(phaseR - phaseTh)));
+                      ssfUp[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermUp*exp(I*(phaseR - phaseTh)));
+                      ssfUp[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + sampleSize - jth] += std::real(ssfModeTermUp*exp(I*(phaseR + phaseTh)));
                     }else if(jr > 0 && jr < sampleSizeHalf){
-                      ssfUp[mu][l - abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermUp*exp(I*(phaseR - phaseTh)));
+                      ssfUp[mu][l - std::abs(m)][(sampleSize - jr)*sampleSize + jth] += std::real(ssfModeTermUp*exp(I*(phaseR - phaseTh)));
                     }else if(jth > 0 && jth < sampleSizeHalf){
-                      ssfUp[mu][l - abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermUp*exp(-I*(phaseR - phaseTh)));
+                      ssfUp[mu][l - std::abs(m)][jr*sampleSize + sampleSize - jth] += std::real(ssfModeTermUp*exp(-I*(phaseR - phaseTh)));
                     }
                   }
                 }
@@ -1979,9 +1979,9 @@ int save_ssf_data(List components, SelfForceData ssfData, int m, GeodesicSource 
 }
 
 int save_ssf_data(List components, RealTensor ssfData, int m, GeodesicSource geo, const std::string &dir, int lmFlag){
-  if(abs(geo.getInclination()) == 1. && geo.getEccentricity() == 0.){
+  if(std::abs(geo.getInclination()) == 1. && geo.getEccentricity() == 0.){
     return save_ssf_data_circular(components, ssfData, m, geo, dir, lmFlag);
-  }else if(abs(geo.getInclination()) == 1.){
+  }else if(std::abs(geo.getInclination()) == 1.){
     return save_ssf_data_equatorial(components, ssfData, m, geo, dir, lmFlag);
   }else if(geo.getEccentricity() == 0.){
     return save_ssf_data_spherical(components, ssfData, m, geo, dir, lmFlag);
@@ -2004,9 +2004,9 @@ int save_ssf_data_equatorial(List components, RealTensor ssfData, int m, Geodesi
     char buff[7];
 		if(lmFlag){
 			if(m < 0){
-	      std::snprintf(buff, 7, "%d_n%d", l + abs(m), -m);
+	      std::snprintf(buff, 7, "%d_n%d", l + std::abs(m), -m);
 	    }else{
-	      std::snprintf(buff, 7, "%d_%d", l + abs(m), m);
+	      std::snprintf(buff, 7, "%d_%d", l + std::abs(m), m);
 	    }
 		}else{
 			std::snprintf(buff, 7, "%d", l);
@@ -2092,9 +2092,9 @@ int save_ssf_data_spherical(List components, RealTensor ssfData, int m, Geodesic
     char buff[7];
 		if(lmFlag){
 			if(m < 0){
-	      std::snprintf(buff, 7, "%d_n%d", l + abs(m), -m);
+	      std::snprintf(buff, 7, "%d_n%d", l + std::abs(m), -m);
 	    }else{
-	      std::snprintf(buff, 7, "%d_%d", l + abs(m), m);
+	      std::snprintf(buff, 7, "%d_%d", l + std::abs(m), m);
 	    }
 		}else{
 			std::snprintf(buff, 7, "%d", l);
@@ -2178,9 +2178,9 @@ int save_ssf_data_circular(List components, RealTensor ssfData, int m, GeodesicS
     char buff[7];
 		if(lmFlag){
 			if(m < 0){
-	      std::snprintf(buff, 7, "%d_n%d", l + abs(m), -m);
+	      std::snprintf(buff, 7, "%d_n%d", l + std::abs(m), -m);
 	    }else{
-	      std::snprintf(buff, 7, "%d_%d", l + abs(m), m);
+	      std::snprintf(buff, 7, "%d_%d", l + std::abs(m), m);
 	    }
 		}else{
 			std::snprintf(buff, 7, "%d", l);
@@ -2242,9 +2242,9 @@ int save_ssf_data_generic(List components, RealTensor ssfData, int m, GeodesicSo
     char buff[7];
 		if(lmFlag){
 			if(m < 0){
-	      std::snprintf(buff, 7, "%d_n%d", l + abs(m), -m);
+	      std::snprintf(buff, 7, "%d_n%d", l + std::abs(m), -m);
 	    }else{
-	      std::snprintf(buff, 7, "%d_%d", l + abs(m), m);
+	      std::snprintf(buff, 7, "%d_%d", l + std::abs(m), m);
 	    }
 		}else{
 			std::snprintf(buff, 7, "%d", l);
@@ -2435,9 +2435,9 @@ ParamsFileContents load_params_file(const std::string &dir){
 SelfForceData load_ssf_data(const std::string &dir){
 	ParamsFileContents params	= load_params_file(dir);
 	int sfSampleSize = params.sfSampleNum;
-	if(params.e == 0. && abs(params.x) == 1.){
+	if(params.e == 0. && std::abs(params.x) == 1.){
 		sfSampleSize = 1;
-	}else if(params.e > 0. && abs(params.x) < 1.){
+	}else if(params.e > 0. && std::abs(params.x) < 1.){
 		sfSampleSize *= sfSampleSize;
 	}
 	int componentsNum = 5;
@@ -2518,10 +2518,10 @@ SelfForceData load_ssf_data(const std::string &dir){
 SelfForceData load_ssf_data(int m, const std::string &dir){
 	ParamsFileContents params	= load_params_file(dir);
 	int sfSampleSize = params.sfSampleNum;
-	int lsize = params.lmax + 1 - abs(m);
-	if(params.e == 0. && abs(params.x) == 1.){
+	int lsize = params.lmax + 1 - std::abs(m);
+	if(params.e == 0. && std::abs(params.x) == 1.){
 		sfSampleSize = 1;
-	}else if(params.e > 0. && abs(params.x) < 1.){
+	}else if(params.e > 0. && std::abs(params.x) < 1.){
 		sfSampleSize *= sfSampleSize;
 	}
 	int componentsNum = 5;
@@ -2532,9 +2532,9 @@ SelfForceData load_ssf_data(int m, const std::string &dir){
 	for(int l = 0; l < lsize; l++){
 		char buff[7];
 		if(m < 0){
-			std::snprintf(buff, 7, "%d_n%d", l + abs(m), -m);
+			std::snprintf(buff, 7, "%d_n%d", l + std::abs(m), -m);
 		}else{
-			std::snprintf(buff, 7, "%d_%d", l + abs(m), m);
+			std::snprintf(buff, 7, "%d_%d", l + std::abs(m), m);
 		}
 		std::string filename = "ssf_data_";
 		filename += buff;
@@ -2606,9 +2606,9 @@ SelfForceData load_ssf_data(int m, const std::string &dir){
 SelfForceData load_ssf_data(int l, int m, const std::string &dir){
 	ParamsFileContents params	= load_params_file(dir);
 	int sfSampleSize = params.sfSampleNum;
-	if(params.e == 0. && abs(params.x) == 1.){
+	if(params.e == 0. && std::abs(params.x) == 1.){
 		sfSampleSize = 1;
-	}else if(params.e > 0. && abs(params.x) < 1.){
+	}else if(params.e > 0. && std::abs(params.x) < 1.){
 		sfSampleSize *= sfSampleSize;
 	}
 	int componentsNum = 5;
@@ -2701,8 +2701,8 @@ SelfForceData load_and_construct_ssf_multipoles(const std::string &dir){
 		for(size_t mu = 0; mu < ssf.in.size(); mu++){
 			for(size_t lm = 0; lm < ssf.in[mu].size(); lm++){
 				for(size_t jj = 0; jj < ssf.in[mu][lm].size(); jj++){
-					ssfL.in[mu][lm + abs(m)][jj] += ssf.in[mu][lm][jj];
-					ssfL.up[mu][lm + abs(m)][jj] += ssf.up[mu][lm][jj];
+					ssfL.in[mu][lm + std::abs(m)][jj] += ssf.in[mu][lm][jj];
+					ssfL.up[mu][lm + std::abs(m)][jj] += ssf.up[mu][lm][jj];
 				}
 			}
 		}
@@ -2711,8 +2711,8 @@ SelfForceData load_and_construct_ssf_multipoles(const std::string &dir){
 		for(size_t mu = 0; mu < ssf.in.size(); mu++){
 			for(size_t lm = 0; lm < ssf.in[mu].size(); lm++){
 				for(size_t jj = 0; jj < ssf.in[mu][lm].size(); jj++){
-					ssfL.in[mu][lm + abs(m)][jj] += ssf.in[mu][lm][jj];
-					ssfL.up[mu][lm + abs(m)][jj] += ssf.up[mu][lm][jj];
+					ssfL.in[mu][lm + std::abs(m)][jj] += ssf.in[mu][lm][jj];
+					ssfL.up[mu][lm + std::abs(m)][jj] += ssf.up[mu][lm][jj];
 				}
 			}
 		}

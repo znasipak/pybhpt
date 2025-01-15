@@ -54,7 +54,7 @@ GeodesicSource::GeodesicSource(double a, double p, double e, double x, int Nsamp
 	double z1 = 0., z2 = 0.;
 	double upT = 0., upR = 0., upPh = 0., upTh = 0.;
 	double cR = 0., cTh = 0., cPh = 0.;
-	if(e == 0. && abs(x) == 1.){
+	if(e == 0. && std::abs(x) == 1.){
 		En = kerr_geo_energy_circ(a*x, p);
 		Lz = kerr_geo_momentum_circ(a*x, p);
 		upT = kerr_geo_time_frequency_circ(a*x, p);
@@ -95,7 +95,7 @@ GeodesicSource::GeodesicSource(double a, double p, double e, double x, int Nsamp
 		// std::cout << "Carter frequencies have been calculated \n";
 		// std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 	}
-	if( abs(x*x + z2 - 1.) > 1.e-10 ){
+	if( std::abs(x*x + z2 - 1.) > 1.e-10 ){
 		z2 = sqrt(1. - x*x);
 	}
 
@@ -131,8 +131,8 @@ GeodesicSource::GeodesicSource(double a, double p, double e, double x, int Nsamp
 	}
 
 	Vector fourier_polar, fourier_chi, fourier_tz, fourier_phiz;
-	if(abs(x) != 1.){
-		if(abs(a) > 0){
+	if(std::abs(x) != 1.){
+		if(std::abs(a) > 0){
 			fourier_polar = mino_of_chi_fourier(a, En, z1, z2);
 		}else{
 			fourier_polar = mino_of_chi_schw_fourier(Lz, Qc);
@@ -406,14 +406,14 @@ double GeodesicSource::getMinoTimeOfTime(double t){
 	double upsilonR = getMinoFrequency(1);
 	double upsilonTh = getMinoFrequency(2);
 	// double lambda_guess = t/upsilonT; recall that t \approx \Upsilon_t \times \lambda
-	if(getEccentricity() == 0. && abs(getInclination()) == 1.){
+	if(getEccentricity() == 0. && std::abs(getInclination()) == 1.){
 		return t/upsilonT;
 	}
-	// double deltaT = (abs(getTimeAccumulation(1,1)) + abs(getTimeAccumulation(1,2)))/double(getTimeAccumulation(1).size()) + (abs(getTimeAccumulation(2,1)) + abs(getTimeAccumulation(2,2)))/double(getTimeAccumulation(2).size());
+	// double deltaT = (std::abs(getTimeAccumulation(1,1)) + std::abs(getTimeAccumulation(1,2)))/double(getTimeAccumulation(1).size()) + (std::abs(getTimeAccumulation(2,1)) + std::abs(getTimeAccumulation(2,2)))/double(getTimeAccumulation(2).size());
 	// double lambda_lo = (t - 2.*deltaT)/upsilonT;
 	// double lambda_hi = (t + 2.*deltaT)/upsilonT;
-	double lambda_lo = (t - abs(t))/upsilonT;
-	double lambda_hi = (t + abs(t))/upsilonT;
+	double lambda_lo = (t - std::abs(t))/upsilonT;
+	double lambda_hi = (t + std::abs(t))/upsilonT;
 
 	// std::cout << "x_lo = " << lambda_lo << ", x_hi = " << lambda_hi << "\n";
 
@@ -732,7 +732,7 @@ GeodesicSource load_geodesic(std::string file){
 	inFile.close();
 
 	double cR = 0., cTh = 0., cPh = 0.;
-	if(e > 0. || abs(x) < 1.){
+	if(e > 0. || std::abs(x) < 1.){
 		kerr_geo_carter_frequencies(cR, cTh, cPh, upT, upR, upTh, upPh, a, En, Lz, Qc, z1, z2);
 	}
 
@@ -792,7 +792,7 @@ double kerr_geo_energy(double a, double p, double e, double x){
 	double deltaMax = rmax*rmax - 2.*rmax + a*a;
 	double deltaMin = rmin*rmin - 2.*rmin + a*a;
 
-	if(abs(e) < 1.e-14){
+	if(std::abs(e) < 1.e-14){
 		return kerr_geo_energy_circ(a, p, x);
 	}
 
@@ -846,7 +846,7 @@ void kerr_geo_orbital_constants(double &En, double &Lz, double &Qc, double a, do
 	double deltaMin = rmin*rmin - 2.*rmin + a*a;
 	double xsq = x*x;
 
-	if(abs(e) > 1.e-14){
+	if(std::abs(e) > 1.e-14){
 		double fmax = pow(rmax, 4) + a*a*(rmax*(rmax + 2.) + (1. - xsq)*deltaMax);
 		double fmin = pow(rmin, 4) + a*a*(rmin*(rmin + 2.) + (1. - xsq)*deltaMin);
 		double gmax = 2.*a*rmax;
@@ -899,7 +899,7 @@ void kerr_geo_radial_roots(double &r1, double &r2, double &r3, double &r4, doubl
 
 void kerr_geo_polar_roots(double &z1, double &z2, double a, double x, double En, double Lz, double Qc){
 	z2 = sqrt(1. - x*x);
-	if(abs(a) == 0.){
+	if(std::abs(a) == 0.){
 		z1 = 0.;
 	}else{
 		double beta = a*a*(1. - En*En);
@@ -1005,7 +1005,7 @@ void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &u
 	//std::cout << "r1 = "<<r1<<", r2 = "<<r2<<", r3 = "<<r3<<", r4 = "<<r4<<" \n";
 	double z1, z2;
 	kerr_geo_polar_roots(z1, z2, a, x, En, Lz, Qc);
-	if( abs(x*x + z2 - 1.) > 1.e-10 ){
+	if( std::abs(x*x + z2 - 1.) > 1.e-10 ){
 		z2 = sqrt(1. - x*x);
 	}
 	//std::cout << "z1 = "<<z1<<", z2 = "<<z2<<" \n";
@@ -1024,7 +1024,7 @@ void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &u
 
 void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &upPh, double a, double p, double e, double , double En, double Lz, double Qc, double , double , double r3, double r4, double z1, double z2){
 	kerr_geo_radial_mino_frequency(upR, a, p, e, En, r3, r4);
-	if(abs(a) > 0){
+	if(std::abs(a) > 0){
 		kerr_geo_polar_mino_frequency(upTh, a, En, z1, z2);
 	}else{
 		kerr_geo_polar_mino_frequency_schw(upTh, Lz, Qc);
@@ -1035,7 +1035,7 @@ void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &u
 
 void kerr_geo_carter_frequencies(double &cR, double &cTh, double &cPh, double upT, double upR, double upTh, double upPh, double a, double En, double Lz, double Qc, double z1, double z2){
 	double upTTh, upPhTh;
-	if(abs(a) > 0){
+	if(std::abs(a) > 0){
 		kerr_geo_time_mino_frequency_polar(upTTh, a, En, Lz, Qc, z1, z2);
 		kerr_geo_azimuthal_mino_frequency_polar(upPhTh, a, En, Lz, Qc, z1, z2);
 	}else{
@@ -1057,7 +1057,7 @@ void kerr_geo_radial_mino_period(double &LaR, double a, double p, double e, doub
 	}
 	LaR = 2.*M_PI*sum/Nsample;
 	double periodCompare = 0;
-	while(abs(1. - periodCompare/LaR) > FREQ_EPS && Nsample < pow(2, 15)){
+	while(std::abs(1. - periodCompare/LaR) > FREQ_EPS && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += dmino_dpsi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), a, p, e, En, r3, r4);
 		}
@@ -1087,7 +1087,7 @@ void kerr_geo_polar_mino_period(double &LaTh, double a, double En, double z1, do
 	}
 	LaTh = 2.*M_PI*sum/Nsample;
 	double periodCompare = 0.;
-	while(abs(1. - periodCompare/LaTh) > FREQ_EPS && Nsample < pow(2, 15)){
+	while(std::abs(1. - periodCompare/LaTh) > FREQ_EPS && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += dmino_dchi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), a, En, z1, z2);
 		}
@@ -1109,7 +1109,7 @@ void kerr_geo_time_mino_frequency_radial(double &upT, double a, double p, double
 	}
 	upT = sum/Nsample;
 	double periodCompare = 0;
-	while(abs(1. - periodCompare/upT) > FREQ_EPS && Nsample < pow(2, 15)){
+	while(std::abs(1. - periodCompare/upT) > FREQ_EPS && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += dVtrdMino(rp_psi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), p, e), a, En, Lz, Qc)*dmino_dpsi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), a, p, e, En, r3, r4);
 		}
@@ -1127,7 +1127,7 @@ void kerr_geo_time_mino_frequency_polar(double &upT, double a, double En, double
 	}
 	upT = sum/Nsample;
 	double periodCompare = 0.;
-	while(abs(1. - periodCompare/upT) > FREQ_EPS && Nsample < pow(2, 15)){
+	while(std::abs(1. - periodCompare/upT) > FREQ_EPS && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += dVtzdMino(zp_chi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), x), a, En, Lz, Qc)*dmino_dchi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), a, En, z1, z2);
 		}
@@ -1145,7 +1145,7 @@ void kerr_geo_time_mino_frequency_polar_schw(double &upT, double En, double Lz, 
 	}
 	upT = sum/Nsample;
 	double periodCompare = 0.;
-	while(abs(1. - periodCompare/upT) > FREQ_EPS && Nsample < pow(2, 15)){
+	while(std::abs(1. - periodCompare/upT) > FREQ_EPS && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += dVtzdMino(zp_chi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), x), 0., En, Lz, Qc)*dmino_dchi_schw(Lz, Qc);
 		}
@@ -1157,7 +1157,7 @@ void kerr_geo_time_mino_frequency_polar_schw(double &upT, double En, double Lz, 
 void kerr_geo_time_mino_frequency(double &upT, double a, double p, double e, double En, double Lz, double Qc, double z1, double z2, double r3, double r4, double upR, double upTh){
 	double upTR, upTTh;
 	kerr_geo_time_mino_frequency_radial(upTR, a, p, e, En, Lz, Qc, r3, r4);
-	if(abs(a) > 0.){
+	if(std::abs(a) > 0.){
 		kerr_geo_time_mino_frequency_polar(upTTh, a, En, Lz, Qc, z1, z2);
 	}else{
 		kerr_geo_time_mino_frequency_polar_schw(upTTh, En, Lz, Qc, z1, z2);
@@ -1173,7 +1173,7 @@ void kerr_geo_azimuthal_mino_frequency_radial(double &upPh, double a, double p, 
 	}
 	upPh = sum/Nsample;
 	double periodCompare = 0.;
-	while(abs(1. - periodCompare/upPh) > FREQ_EPS && Nsample < pow(2, 15)){
+	while(std::abs(1. - periodCompare/upPh) > FREQ_EPS && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += dVphirdMino(rp_psi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), p, e), a, En, Lz, Qc)*dmino_dpsi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), a, p, e, En, r3, r4);
 		}
@@ -1191,7 +1191,7 @@ void kerr_geo_azimuthal_mino_frequency_polar(double &upPh, double a, double En, 
 	}
 	upPh = sum/Nsample;
 	double periodCompare = 0.;
-	while(abs(1. - periodCompare/upPh) > FREQ_EPS && Nsample < pow(2, 15)){
+	while(std::abs(1. - periodCompare/upPh) > FREQ_EPS && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += dVphizdMino(zp_chi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), x), a, En, Lz, Qc)*dmino_dchi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), a, En, z1, z2);
 		}
@@ -1209,7 +1209,7 @@ void kerr_geo_azimuthal_mino_frequency_polar_schw(double &upPh, double En, doubl
 	}
 	upPh = sum/Nsample;
 	double periodCompare = 0.;
-	while(abs(1. - periodCompare/upPh) > FREQ_EPS && Nsample < pow(2, 15)){
+	while(std::abs(1. - periodCompare/upPh) > FREQ_EPS && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += dVphizdMino(zp_chi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), x), 0., En, Lz, Qc)*dmino_dchi_schw(Lz, Qc);
 		}
@@ -1221,7 +1221,7 @@ void kerr_geo_azimuthal_mino_frequency_polar_schw(double &upPh, double En, doubl
 void kerr_geo_azimuthal_mino_frequency(double &upPh, double a, double p, double e, double En, double Lz, double Qc, double z1, double z2, double r3, double r4, double upR, double upTh){
 	double upPhR, upPhTh;
 	kerr_geo_azimuthal_mino_frequency_radial(upPhR, a, p, e, En, Lz, Qc, r3, r4);
-	if(abs(a) > 0.){
+	if(std::abs(a) > 0.){
 		kerr_geo_azimuthal_mino_frequency_polar(upPhTh, a, En, Lz, Qc, z1, z2);
 	}else{
 		kerr_geo_azimuthal_mino_frequency_polar_schw(upPhTh, En, Lz, Qc, z1, z2);
@@ -1267,7 +1267,7 @@ Vector mino_of_psi_fourier(double a, double p, double e, double En, double r3, d
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample);
 	double fourierCompare = 0;
-	while((abs(fourierCompare - fourierTest) > FOURIER_EPS && abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
+	while((std::abs(fourierCompare - fourierTest) > FOURIER_EPS && std::abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*dmino_dpsi((M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)), a, p, e, En, r3, r4)*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
 		}
@@ -1288,8 +1288,8 @@ Vector mino_of_psi_fourier(double a, double p, double e, double En, double r3, d
 		}
 		fourier[i] /= double(Nsample - 1);
 		if(i > 0){
-			// std::cout << "f_" << i << " = " << abs(fourier[i])/i << "\n";
-			if(abs(fourier[i])/i < abs(fourier[1])*FOURIER_EPS){
+			// std::cout << "f_" << i << " = " << std::abs(fourier[i])/i << "\n";
+			if(std::abs(fourier[i])/i < std::abs(fourier[1])*FOURIER_EPS){
 				convergeFlag += 1; // if two consecutive Fourier coefficients fall below threshold, cutoff construction of higher-frequency coefficients
 			}else{
 				convergeFlag = 0;
@@ -1313,7 +1313,7 @@ Vector mino_of_chi_schw_fourier(double Lz, double Qc){
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample);
 	double fourierCompare = 0;
-	while((abs(fourierCompare - fourierTest) > FOURIER_EPS && abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
+	while((std::abs(fourierCompare - fourierTest) > FOURIER_EPS && std::abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*dminodchi*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
 		}
@@ -1335,7 +1335,7 @@ Vector mino_of_chi_schw_fourier(double Lz, double Qc){
 		}
 		fourier[i] /= double(Nsample - 1);
 		if(i > 0){
-			if(abs(fourier[i])/i < abs(fourier[1])*FOURIER_EPS){
+			if(std::abs(fourier[i])/i < std::abs(fourier[1])*FOURIER_EPS){
 				convergeFlag += 1; // if two consecutive Fourier coefficients fall below threshold, cutoff construction of higher-frequency coefficients
 			}else{
 				convergeFlag = 0;
@@ -1358,7 +1358,7 @@ Vector mino_of_chi_fourier(double a, double En, double z1, double z2){
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample);
 	double fourierCompare = 0;
-	while((abs(fourierCompare - fourierTest) > FOURIER_EPS && abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
+	while((std::abs(fourierCompare - fourierTest) > FOURIER_EPS && std::abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*dmino_dchi((M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)), a, En, z1, z2)*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
 		}
@@ -1380,7 +1380,7 @@ Vector mino_of_chi_fourier(double a, double En, double z1, double z2){
 		}
 		fourier[i] /= double(Nsample - 1);
 		if(i > 0){
-			if(abs(fourier[i])/i < abs(fourier[1])*FOURIER_EPS){
+			if(std::abs(fourier[i])/i < std::abs(fourier[1])*FOURIER_EPS){
 				convergeFlag += 1; // if two consecutive Fourier coefficients fall below threshold, cutoff construction of higher-frequency coefficients
 			}else{
 				convergeFlag = 0;
@@ -1418,7 +1418,7 @@ Vector kepler_phase_of_angle_fourier(Vector &fourier){
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample);
 	double fourierCompare = 0;
-	while((abs(fourierCompare - fourierTest) > FOURIER_EPS && abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
+	while((std::abs(fourierCompare - fourierTest) > FOURIER_EPS && std::abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*cos(double(nTest)*freq*mino_of_kepler_phase(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample), fourier));
 		}
@@ -1449,14 +1449,14 @@ Vector kepler_phase_of_angle_fourier(Vector &fourier){
 	}
 	int i = i0;
 	double tol = 1.e-14;
-	while(i < Nsample - 1 && (abs(0.5*psi_fourier[i - 1]/double(i - 1)) > tol || abs(0.5*psi_fourier[i - 2]/double(i - 2)) > tol)){
+	while(i < Nsample - 1 && (std::abs(0.5*psi_fourier[i - 1]/double(i - 1)) > tol || std::abs(0.5*psi_fourier[i - 2]/double(i - 2)) > tol)){
 		psi_fourier[i] = 1. + pow(-1., i);
 		for(int j = 1; j < Nsample - 1; j++){
 			psi_fourier[i] += 2.*cos(double(i)*freq*mino_phase[j]);
 		}
 		psi_fourier[i] /= double(Nsample - 1);
 		// std::cout << "f_"<<i<<" = "<< 0.5*psi_fourier[i] << "\n";
-		if(abs(psi_fourier[i - 2]/double(i - 2)) < abs(psi_fourier[i]/double(i)) && abs(psi_fourier[i - 3]/double(i - 3)) < abs(psi_fourier[i - 1]/double(i - 1))){
+		if(std::abs(psi_fourier[i - 2]/double(i - 2)) < std::abs(psi_fourier[i]/double(i)) && std::abs(psi_fourier[i - 3]/double(i - 3)) < std::abs(psi_fourier[i - 1]/double(i - 1))){
 			tol = 1.; // if the weighted (due to integration) fourier coefficients are not falling off, terminate
 		}
 		i++;
@@ -1485,7 +1485,7 @@ double kepler_phase_of_angle(double angle, Vector &fourier){
 double rp_of_angle(double angle, double p, double e, Vector &fourier){
 	// double test1 = rp_psi(kepler_phase_of_angle(angle, fourier), p, e);
 	// double test2 = rp_psi(kepler_phase_of_angle(angle, fourier), p, e);
-	// if(abs(test2-test1) > 0.){
+	// if(std::abs(test2-test1) > 0.){
 	// 	std::cout << "ERROR!!!\n";
 	// }
 	double psi = kepler_phase_of_angle(angle, fourier);
@@ -1517,7 +1517,7 @@ Vector tp_radial_of_angle_fourier(double a, double p, double e, double En, doubl
 	double fourierCompare = 0;
 	// std::cout << "Nsample = " << Nsample << ", test = " << fourierTest << "\n";
 	// std::cout << "Nsample = " << Nsample << ", comp = " << fourierTest - fourierCompare << "\n";
-	while((abs(fourierCompare - fourierTest) > FOURIER_EPS && abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
+	while((std::abs(fourierCompare - fourierTest) > FOURIER_EPS && std::abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*dVtrdMino(rp_of_angle((M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)), p, e, fourier), a, En, Lz, Qc)*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
 		}
@@ -1563,7 +1563,7 @@ Vector tp_polar_of_angle_fourier(double a, double x, double En, double Lz, doubl
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample)/upTh;
 	double fourierCompare = 0;
-	while((abs(fourierCompare - fourierTest) > FOURIER_EPS && abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
+	while((std::abs(fourierCompare - fourierTest) > FOURIER_EPS && std::abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*dVtzdMino(zp_of_angle((M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)), x, fourier), a, En, Lz, Qc)*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
 		}
@@ -1604,7 +1604,7 @@ Vector phip_radial_of_angle_fourier(double a, double p, double e, double En, dou
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample)/upR;
 	double fourierCompare = 0;
-	while((abs(fourierCompare - fourierTest) > FOURIER_EPS && abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
+	while((std::abs(fourierCompare - fourierTest) > FOURIER_EPS && std::abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*dVphirdMino(rp_of_angle((M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)), p, e, fourier), a, En, Lz, Qc)*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
 		}
@@ -1647,7 +1647,7 @@ Vector phip_polar_of_angle_fourier(double a, double x, double En, double Lz, dou
 	}
 	double fourierTest = (sum + endpoints)/double(Nsample)/upTh;
 	double fourierCompare = 0;
-	while((abs(fourierCompare - fourierTest) > FOURIER_EPS && abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
+	while((std::abs(fourierCompare - fourierTest) > FOURIER_EPS && std::abs(1. - fourierCompare/fourierTest) > FOURIER_EPS) && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
 			sum += 2.*dVphizdMino(zp_of_angle((M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)), x, fourier), a, En, Lz, Qc)*cos(nTest*(M_PI*double(i)/double(Nsample) + M_PI/double(2*Nsample)));
 		}
@@ -1681,7 +1681,7 @@ void kerr_trajectory(Vector& tR, Vector& tTh, Vector& rp, Vector& thetap, Vector
 	int halfSample = tR.size();
 	int Nsample = 2*(halfSample - 1);
 	if(e == 0.){
-		if(abs(x) == 1.){
+		if(std::abs(x) == 1.){
 			for(int i = 0; i < halfSample; i++){
 				tR[i] = 0.;
 				tTh[i] = 0.;
@@ -1700,7 +1700,7 @@ void kerr_trajectory(Vector& tR, Vector& tTh, Vector& rp, Vector& thetap, Vector
 				thetap[i] = acos(zp_of_angle(2.*M_PI*double(i)/double(Nsample), x, fourier_chi));
 			}
 		}
-	}else if(abs(x) == 1.){
+	}else if(std::abs(x) == 1.){
 		for(int i = 0; i < halfSample; i++){
 			tR[i] = tp_of_angle(2.*M_PI*double(i)/double(Nsample), fourier_tr);
 			tTh[i] = 0.;
@@ -1762,7 +1762,7 @@ void kerr_trajectory(Vector& tR, Vector& tTh, Vector& rp, Vector& thetap, Vector
 // }
 
 GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsample = pow(2, 9)){
-	// if(e == 0. && abs(x) == 1.){
+	// if(e == 0. && std::abs(x) == 1.){
 	// 	GeodesicSource geo = kerr_geo_circ(a, p, sgn(x));
 	// 	GeodesicTrajectory traj = geo.getTrajectory();
 	// 	double tR = geo.tR;
@@ -1779,7 +1779,7 @@ GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsampl
 	double z1 = 0., z2 = 0.;
 	double upT = 0., upR = 0., upPh = 0., upTh = 0.;
 	double cR = 0., cTh = 0., cPh = 0.;
-	if(e == 0. && abs(x) == 1.){
+	if(e == 0. && std::abs(x) == 1.){
 		En = kerr_geo_energy_circ(a*x, p);
 		Lz = kerr_geo_momentum_circ(a*x, p);
 		upT = kerr_geo_time_frequency_circ(a*x, p);
@@ -1796,7 +1796,7 @@ GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsampl
 		kerr_geo_carter_frequencies(cR, cTh, cPh, upT, upR, upTh, upPh, a, En, Lz, Qc, z1, z2);
 		std::cout << "Carter frequencies have been calculated \n";
 	}
-	if( abs(x*x + z2 - 1.) > 1.e-10 ){
+	if( std::abs(x*x + z2 - 1.) > 1.e-10 ){
 		z2 = sqrt(1. - x*x);
 	}
 
@@ -1813,7 +1813,7 @@ GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsampl
 	}
 
 	Vector fourier_polar, fourier_chi, fourier_tz, fourier_phiz;
-	if(abs(x) != 1.){
+	if(std::abs(x) != 1.){
 		fourier_polar = mino_of_chi_fourier(a, En, z1, z2);
 		fourier_chi = kepler_phase_of_angle_fourier(fourier_polar);
 		fourier_tz = tp_polar_of_angle_fourier(a, x, En, Lz, Qc, upTh, fourier_chi);
@@ -1948,7 +1948,7 @@ double kerr_geo_azimuthal_frequency_circ_time(double a, double r, int sgnX){
 	return sgnX*kerr_geo_azimuthal_frequency_circ_time(sgnX*a, r);
 }
 double kerr_geo_radius_circ(double a, double Omega){
-	double sgnOmega = Omega/abs(Omega);
+	double sgnOmega = Omega/std::abs(Omega);
 	return pow((1. - a*Omega)/(sgnOmega*Omega), 2./3.);
 }
 
@@ -2017,8 +2017,8 @@ double kerr_isco(double a, int sgnX){
 }
 
 double kerr_isco_frequency(double a){
-	int sgnX = int(a/abs(a));
-	return kerr_geo_azimuthal_frequency_circ_time(abs(a), kerr_isco(abs(a), sgnX), sgnX);
+	int sgnX = int(a/std::abs(a));
+	return kerr_geo_azimuthal_frequency_circ_time(std::abs(a), kerr_isco(std::abs(a), sgnX), sgnX);
 }
 
 void output_geodesic(GeodesicSource geo, std::string dir){

@@ -233,7 +233,7 @@ Complex gammaLn_cf(int n, const MstParameters &params){
 
 Complex gammaLn_recursion(int n, const MstParameters &params){
 	int n0 = n;
-	double absnu = abs(params.getRenormalizedAngularMomentum());
+	double absnu = std::abs(params.getRenormalizedAngularMomentum());
 
 	while(-n0 < absnu){
 		n0 --;
@@ -274,7 +274,7 @@ double nu_eqn_136_realnu(double nu, void* p){
 	}
 	double eqn136 = beta + std::real(alphaRn_cf(1, *params))
 		+ std::real(gammaLn_cf(-1, *params));
-	if(isinf(abs(eqn136)) || isnan(abs(eqn136))){
+	if(isinf(std::abs(eqn136)) || isnan(std::abs(eqn136))){
 		eqn136 = norm*(1.e+10);
 	}
 
@@ -288,11 +288,11 @@ double nu_eqn_136_realnu_absnorm(double nu, void* p){
 	if(beta == 0.){
 		norm = 1.;
 	}else{
-		norm = abs(beta);
+		norm = std::abs(beta);
 	}
 	double eqn136 = beta + std::real(alphaRn_cf(1, *params))
 		+ std::real(gammaLn_cf(-1, *params));
-	if(isinf(abs(eqn136)) || isnan(abs(eqn136))){
+	if(isinf(std::abs(eqn136)) || isnan(std::abs(eqn136))){
 		eqn136 = norm*(1.e+10);
 	}
 
@@ -303,10 +303,10 @@ Complex nu_eqn_136_complexnu_norm_full(double nu, void* p){
 	MstParameters *params = (MstParameters *) p;
 	(*params).setRenormalizedAngularMomentum(-I*nu);
 	Complex norm, beta = betaMST(0, *params);
-	if(abs(beta) == 0.){
+	if(std::abs(beta) == 0.){
 		norm = 1.;
 	}else{
-		norm = abs(beta);
+		norm = std::abs(beta);
 	}
 	Complex eqn136 = beta + alphaRn_cf(1, *params)
 		+ gammaLn_cf(-1, *params);
@@ -319,10 +319,10 @@ Complex nu_eqn_136_complexnu_norm_n10(double nu, void* p){
 	(*params).setRenormalizedAngularMomentum(-I*nu);
 	int n = (*params).getSpinWeightedSpheroidalModeNumber();
 	Complex norm, beta = betaMST(n, *params);
-	if(abs(beta) == 0.){
+	if(std::abs(beta) == 0.){
 		norm = 1.;
 	}else{
-		norm = abs(beta);
+		norm = std::abs(beta);
 	}
 	Complex eqn136 = beta + alphaRn_cf(n + 1, *params)
 		+ gammaLn_cf(n - 1, *params);
@@ -342,10 +342,10 @@ Complex nu_eqn_136_complexnu_half_norm_full(double nu, void* p){
 	MstParameters *params = (MstParameters *) p;
 	(*params).setRenormalizedAngularMomentum(- 0.5 - I*nu);
 	Complex norm, beta = betaMST(0, *params);
-	if(abs(beta) == 0.){
+	if(std::abs(beta) == 0.){
 		norm = 1.;
 	}else{
-		norm = abs(beta);
+		norm = std::abs(beta);
 	}
 	Complex eqn136 = beta + alphaRn_cf(1, *params)
 		+ gammaLn_cf(-1, *params);
@@ -358,10 +358,10 @@ Complex nu_eqn_136_complexnu_half_norm_n10(double nu, void* p){
 	(*params).setRenormalizedAngularMomentum(- 0.5 - I*nu);
 	int n = (*params).getSpinWeightedSpheroidalModeNumber();
 	Complex norm, beta = betaMST(n, *params);
-	if(abs(beta) == 0.){
+	if(std::abs(beta) == 0.){
 		norm = 1.;
 	}else{
-		norm = abs(beta);
+		norm = std::abs(beta);
 	}
 	Complex eqn136 = beta + alphaRn_cf(n + 1, *params)
 		+ gammaLn_cf(n - 1, *params);
@@ -462,7 +462,7 @@ int nu_solver(MstParameters &params){
 
 		// the monodromy calculation may return 0. if there is catastrophic cancellation that
 		// leads to an inaccurate numerical result. As long as we
-	  	if(abs(params.getRenormalizedAngularMomentum()) != 0.){
+	  	if(std::abs(params.getRenormalizedAngularMomentum()) != 0.){
 			nu_solver_guess(params);
 	  	}else if(eps < 0.5){
 	  		params.setRenormalizedAngularMomentum(nu_solver_low_freq(q, s, l, m, eps));
@@ -480,25 +480,25 @@ int nu_solver(MstParameters &params){
 
 int nu_solver_guess(MstParameters &params){
 	Complex nu0 = params.getRenormalizedAngularMomentum();
-	double nuTest = abs(nu_eqn_136(params)/nu0);
+	double nuTest = std::abs(nu_eqn_136(params)/nu0);
 	if(params.getMstEpsilon() < 1.e-2){
 		nuTest *= params.getMstEpsilon()/2.;
 	}
 	Complex cl = Complex(params.getSpinWeightedSpheroidalModeNumber());
 	if( nuTest > 1.e-4 ){
-		if( abs(cos(2*M_PI*nu0)) > 1 ){
+		if( std::abs(cos(2*M_PI*nu0)) > 1 ){
 			params.setRenormalizedAngularMomentum(std::real(nu0) - I*std::imag(nu0));
 		}else{
 			params.setRenormalizedAngularMomentum(2.*cl - nu0);
 		}
-		nuTest = abs(nu_eqn_136(params)/nu0);
+		nuTest = std::abs(nu_eqn_136(params)/nu0);
 		if( nuTest > 1.e-6 ){
 			return nu_solver_noguess(params);
 		}
 	}
-	double deltaNu = abs(cl - params.getRenormalizedAngularMomentum());
-	if(abs(deltaNu) < 1.){
-		nuTest *= abs(deltaNu);
+	double deltaNu = std::abs(cl - params.getRenormalizedAngularMomentum());
+	if(std::abs(deltaNu) < 1.){
+		nuTest *= std::abs(deltaNu);
 	}
 	if(nuTest < eqn_136_EPS){
 		// std::cout << "NUSOLVER: Using monodromy eigenvalue for renormalized angular momentum. \n";
@@ -520,7 +520,7 @@ int nu_solver_guess(MstParameters &params){
 	int iter = 0, max_iter = 100;
 	double r;
 
-	if(abs(cos(2.*M_PI*nu0)) < 1.){
+	if(std::abs(cos(2.*M_PI*nu0)) < 1.){
 		r = std::real(nu0);
 		F.function = &nu_eqn_136_realnu_absnorm;
 	}else if(std::real(cos(2.*M_PI*nu0)) < -1.){
@@ -561,7 +561,7 @@ int nu_solver_guess(MstParameters &params){
 
 	gsl_root_fsolver_free (s);
 
-	if(abs(cos(2.*M_PI*nu0)) < 1.){
+	if(std::abs(cos(2.*M_PI*nu0)) < 1.){
 		params.setRenormalizedAngularMomentum(r);
 	}else if(std::real(cos(2.*M_PI*nu0)) < -1.){
 		params.setRenormalizedAngularMomentum(- 0.5 - I*r);
@@ -661,22 +661,22 @@ int realnu_root_test(Complex& nu, double& nuError, MstParameters& params){
 	int l = params.getSpinWeightedSpheroidalModeNumber();
 
 	// weight points by how close they are to the singular points of the characteristic equation
-	double deltaNu = abs(l - realNu);
-	if( deltaNu > abs(realNu - l - 0.5) ){
-		deltaNu = abs(realNu - l - 0.5);
-	}else if( deltaNu > abs(realNu - l + 0.5) ){
-		deltaNu = abs(realNu - l + 0.5);
+	double deltaNu = std::abs(l - realNu);
+	if( deltaNu > std::abs(realNu - l - 0.5) ){
+		deltaNu = std::abs(realNu - l - 0.5);
+	}else if( deltaNu > std::abs(realNu - l + 0.5) ){
+		deltaNu = std::abs(realNu - l + 0.5);
 	}
 	double weight = 10./deltaNu; // penalize any roots that are found very close to integer and half integer values
 
-	if(abs(nu_test) == 0. || weight*abs(nu_test/realNu) < eqn_136_EPS){
+	if(std::abs(nu_test) == 0. || weight*std::abs(nu_test/realNu) < eqn_136_EPS){
 		nu = Complex(realNu);
-		nuError = abs(nu_test/realNu);
+		nuError = std::abs(nu_test/realNu);
 		return 1;
 	}else{
-		if(abs(nu_test/realNu) < nuError){
+		if(std::abs(nu_test/realNu) < nuError){
 			nu = Complex(realNu);
-			nuError = abs(nu_test/realNu);
+			nuError = std::abs(nu_test/realNu);
 		}
 	}
 
@@ -717,7 +717,7 @@ int realnu_interval_search_and_test(int stepNum, Complex& nu, double& nuError, d
 		}
 	}
 
-	while( testRoot == 0 && abs(x_hi - x_lo) > (1.e-5) ){
+	while( testRoot == 0 && std::abs(x_hi - x_lo) > (1.e-5) ){
 		x_lo = x_hi;
 		x_hi = x_hi_ref;
 		testSearch = realnu_interval_search(stepNum, x_lo, x_hi, params);
@@ -813,7 +813,7 @@ int nu_solver_real_noguess(int stepNum, MstParameters &params){
 		return 0;
 	}
 
-	double freq = abs(params.getMstEpsilon())/2.;
+	double freq = std::abs(params.getMstEpsilon())/2.;
 	double detectionThreshold = 1.e-10;
 	if( freq > 6.){
 		detectionThreshold *= 10;
@@ -884,23 +884,23 @@ int nu_solver_complex_noguess(MstParameters &params){
 		x_lo_test = nu_eqn_133_complexnu_half(x_lo, &params);
 		x_hi_test = nu_eqn_133_complexnu_half(x_hi, &params);
 
-		if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && abs(x_lo_test) > endpoint_min && abs(x_hi_test) > endpoint_min){
+		if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && std::abs(x_lo_test) > endpoint_min && std::abs(x_hi_test) > endpoint_min){
 			nu_solver_noguess_rootfinder(Fhalf, x_lo, x_hi, params);
 			r = std::real(params.getRenormalizedAngularMomentum()); // I call real part because nu_solver_guess_rootfinder only works with real variables
 			// therefore, even though I'm searching for the imaginary part of nu, it gets temporarily stored as the real part of nu by the root finder
-			r_test = abs(nu_eqn_136_complexnu_half_norm_full(r, &params)); // Complex form of nu is then properly stored by call to nu_eqn_136_complexnu_half_full
-			if(abs(r_test) == 0 || abs(r_test/r) < eqn_136_EPS){
+			r_test = std::abs(nu_eqn_136_complexnu_half_norm_full(r, &params)); // Complex form of nu is then properly stored by call to nu_eqn_136_complexnu_half_full
+			if(std::abs(r_test) == 0 || std::abs(r_test/r) < eqn_136_EPS){
 				return 0;
 			}else{
 				//std::cout << "NUSOLVER: Root found at nu = "<< -0.5 - I*r <<", but did not meet initial precision requirements \n";
-				if(abs(r_test/r) < potentialRootError){
+				if(std::abs(r_test/r) < potentialRootError){
 					potentialRoot = -0.5 - I*r;
-					potentialRootError = abs(r_test/r);
+					potentialRootError = std::abs(r_test/r);
 				}
 			}
 		}
 
-		if((abs(x_lo_test) > 1. && abs(x_hi_test) < 1.) || (abs(x_lo_test) < 1. && abs(x_hi_test) > 1.)){
+		if((std::abs(x_lo_test) > 1. && std::abs(x_hi_test) < 1.) || (std::abs(x_lo_test) < 1. && std::abs(x_hi_test) > 1.)){
 			// std::cout << "NUSOLVER: Evidence of zero crossing in region Im(nu) = ["<< x_lo << ", "<< x_hi << "] \n";
 			for(int j = 0; j < x_range_increase + 1; j++){
 				x_lo = x_range_val[x_range_inc-i-2] + j*x_inc/x_range_increase;
@@ -909,18 +909,18 @@ int nu_solver_complex_noguess(MstParameters &params){
 				x_lo_test = nu_eqn_133_complexnu_half(x_lo, &params);
 				x_hi_test = nu_eqn_133_complexnu_half(x_hi, &params);
 
-				if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && abs(x_lo_test) > endpoint_min && abs(x_hi_test) > endpoint_min)
+				if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && std::abs(x_lo_test) > endpoint_min && std::abs(x_hi_test) > endpoint_min)
 				{
 					nu_solver_noguess_rootfinder(Fhalf, x_lo, x_hi, params);
 					r = std::real(params.getRenormalizedAngularMomentum());
-					r_test = abs(nu_eqn_136_complexnu_half_norm_full(r, &params));
-					if(abs(r_test) == 0. || abs(r_test)/abs(r) < eqn_136_EPS){
+					r_test = std::abs(nu_eqn_136_complexnu_half_norm_full(r, &params));
+					if(std::abs(r_test) == 0. || std::abs(r_test)/std::abs(r) < eqn_136_EPS){
 						return 0;
 					}else{
 						//std::cout << "NUSOLVER: Root found at nu = "<< -0.5 - I*r <<", but did not meet initial precision requirements \n";
-						if(abs(r_test/r) < potentialRootError){
+						if(std::abs(r_test/r) < potentialRootError){
 							potentialRoot = -0.5 - I*r;
-							potentialRootError = abs(r_test/r);
+							potentialRootError = std::abs(r_test/r);
 						}
 					}
 				}
@@ -931,23 +931,23 @@ int nu_solver_complex_noguess(MstParameters &params){
 		x_lo_test = nu_eqn_136_complexnu_half(x_lo, &params);
 		x_hi_test = nu_eqn_136_complexnu_half(x_hi, &params);
 
-		if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && abs(x_lo_test) > endpoint_min && abs(x_hi_test) > endpoint_min){
+		if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && std::abs(x_lo_test) > endpoint_min && std::abs(x_hi_test) > endpoint_min){
 			nu_solver_noguess_rootfinder(Fhalf2, x_lo, x_hi, params);
 			r = std::real(params.getRenormalizedAngularMomentum()); // I call real part because nu_solver_guess_rootfinder only works with real variables
 			// therefore, even though I'm searching for the imaginary part of nu, it gets temporarily stored as the real part of nu by the root finder
-			r_test = abs(nu_eqn_136_complexnu_half_norm_full(r, &params)); // Complex form of nu is then properly stored by call to nu_eqn_136_complexnu_half_full
-			if(abs(r_test) == 0 || abs(r_test/r) < eqn_136_EPS){
+			r_test = std::abs(nu_eqn_136_complexnu_half_norm_full(r, &params)); // Complex form of nu is then properly stored by call to nu_eqn_136_complexnu_half_full
+			if(std::abs(r_test) == 0 || std::abs(r_test/r) < eqn_136_EPS){
 				return 0;
 			}else{
 				//std::cout << "NUSOLVER: Root found at nu = "<< -0.5 - I*r <<", but did not meet initial precision requirements \n";
-				if(abs(r_test/r) < potentialRootError){
+				if(std::abs(r_test/r) < potentialRootError){
 					potentialRoot = -0.5 - I*r;
-					potentialRootError = abs(r_test/r);
+					potentialRootError = std::abs(r_test/r);
 				}
 			}
 		}
 
-		if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && abs(x_lo_test) > endpoint_min && abs(x_hi_test) > endpoint_min){
+		if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && std::abs(x_lo_test) > endpoint_min && std::abs(x_hi_test) > endpoint_min){
 			// std::cout << "NUSOLVER: Evidence of zero crossing in region Im(nu) = ["<< x_lo << ", "<< x_hi << "] \n";
 			for(int j = 0; j < x_range_increase + 1; j++){
 				x_lo = x_range_val[x_range_inc-i-2] + j*x_inc/x_range_increase;
@@ -960,14 +960,14 @@ int nu_solver_complex_noguess(MstParameters &params){
 				{
 					nu_solver_noguess_rootfinder(Fhalf2, x_lo, x_hi, params);
 					r = std::real(params.getRenormalizedAngularMomentum());
-					r_test = abs(nu_eqn_136_complexnu_half_norm_full(r, &params));
-					if(abs(r_test) == 0. || abs(r_test)/abs(r) < eqn_136_EPS){
+					r_test = std::abs(nu_eqn_136_complexnu_half_norm_full(r, &params));
+					if(std::abs(r_test) == 0. || std::abs(r_test)/std::abs(r) < eqn_136_EPS){
 						return 0;
 					}else{
 						//std::cout << "NUSOLVER: Root found at nu = "<< -0.5 - I*r <<", but did not meet initial precision requirements \n";
-						if(abs(r_test/r) < potentialRootError){
+						if(std::abs(r_test/r) < potentialRootError){
 							potentialRoot = -0.5 - I*r;
-							potentialRootError = abs(r_test/r);
+							potentialRootError = std::abs(r_test/r);
 						}
 					}
 				}
@@ -978,22 +978,22 @@ int nu_solver_complex_noguess(MstParameters &params){
 		x_lo_test = nu_eqn_133_complexnu(x_lo, &params);
 		x_hi_test = nu_eqn_133_complexnu(x_hi, &params);
 
-		if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && abs(x_lo_test) > endpoint_min && abs(x_hi_test) > endpoint_min){
+		if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && std::abs(x_lo_test) > endpoint_min && std::abs(x_hi_test) > endpoint_min){
 			nu_solver_noguess_rootfinder(Fone, x_lo, x_hi, params);
 			r = std::real(params.getRenormalizedAngularMomentum());
-			r_test = abs(nu_eqn_136_complexnu_norm_full(r, &params));
-			if(abs(r_test) == 0 || abs(r_test)/abs(r) < eqn_136_EPS){
+			r_test = std::abs(nu_eqn_136_complexnu_norm_full(r, &params));
+			if(std::abs(r_test) == 0 || std::abs(r_test)/std::abs(r) < eqn_136_EPS){
 				return 0;
 			}else{
 				//std::cout << "NUSOLVER: Root found at nu = "<< -I*r <<", but did not meet initial precision requirements \n";
-				if(abs(r_test/r) < potentialRootError){
+				if(std::abs(r_test/r) < potentialRootError){
 					potentialRoot = - I*r;
-					potentialRootError = abs(r_test/r);
+					potentialRootError = std::abs(r_test/r);
 				}
 			}
 		}
 
-		if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && abs(x_lo_test) > endpoint_min && abs(x_hi_test) > endpoint_min){
+		if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && std::abs(x_lo_test) > endpoint_min && std::abs(x_hi_test) > endpoint_min){
 			// std::cout << "NUSOLVER: Evidence of zero crossing in region Im(nu) = ["<< x_lo << ", "<< x_hi << "] \n";
 			for(int j = 0; j < x_range_increase + 1; j++){
 				x_lo = x_range_val[x_range_inc-i-2] + j*x_inc/x_range_increase;
@@ -1006,14 +1006,14 @@ int nu_solver_complex_noguess(MstParameters &params){
 				{
 					nu_solver_noguess_rootfinder(Fone, x_lo, x_hi, params);
 					r = std::real(params.getRenormalizedAngularMomentum());
-					r_test = abs(nu_eqn_136_complexnu_norm_full(r, &params));
-					if(abs(r_test) == 0. || abs(r_test/r) < eqn_136_EPS){
+					r_test = std::abs(nu_eqn_136_complexnu_norm_full(r, &params));
+					if(std::abs(r_test) == 0. || std::abs(r_test/r) < eqn_136_EPS){
 						return 0;
 					}else{
 						//std::cout << "NUSOLVER: Root found at nu = "<< I*r <<", but did not meet initial precision requirements \n";
-						if(abs(r_test/r) < potentialRootError){
+						if(std::abs(r_test/r) < potentialRootError){
 							potentialRoot = - I*r;
-							potentialRootError = abs(r_test/r);
+							potentialRootError = std::abs(r_test/r);
 						}
 					}
 				}
@@ -1024,23 +1024,23 @@ int nu_solver_complex_noguess(MstParameters &params){
 		x_lo_test = nu_eqn_136_complexnu(x_lo, &params);
 		x_hi_test = nu_eqn_136_complexnu(x_hi, &params);
 
-		if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && abs(x_lo_test) > endpoint_min && abs(x_hi_test) > endpoint_min){
+		if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && std::abs(x_lo_test) > endpoint_min && std::abs(x_hi_test) > endpoint_min){
 			nu_solver_noguess_rootfinder(Fone2, x_lo, x_hi, params);
 			r = std::real(params.getRenormalizedAngularMomentum());
-			r_test = abs(nu_eqn_136_complexnu_norm_full(r, &params));
-			if(abs(r_test) == 0 || abs(r_test)/abs(r) < eqn_136_EPS){
+			r_test = std::abs(nu_eqn_136_complexnu_norm_full(r, &params));
+			if(std::abs(r_test) == 0 || std::abs(r_test)/std::abs(r) < eqn_136_EPS){
 				// std::cout << "Searching region endpoints x_lo_test = " << x_lo_test << ", x_hi_test = " << x_hi_test << "\n";
 				return 0;
 			}else{
 				//std::cout << "NUSOLVER: Root found at nu = "<< -I*r <<", but did not meet initial precision requirements \n";
-				if(abs(r_test/r) < potentialRootError){
+				if(std::abs(r_test/r) < potentialRootError){
 					potentialRoot = - I*r;
-					potentialRootError = abs(r_test/r);
+					potentialRootError = std::abs(r_test/r);
 				}
 			}
 		}
 
-		if((abs(x_lo_test) > 1. && abs(x_hi_test) < 1.) || (abs(x_lo_test) < 1. && abs(x_hi_test) > 1.)){
+		if((std::abs(x_lo_test) > 1. && std::abs(x_hi_test) < 1.) || (std::abs(x_lo_test) < 1. && std::abs(x_hi_test) > 1.)){
 			// std::cout << "NUSOLVER: Evidence of zero crossing in region Im(nu) = ["<< x_lo << ", "<< x_hi << "] \n";
 			for(int j = 0; j < x_range_increase + 1; j++){
 				x_lo = x_range_val[x_range_inc-i-2] + j*x_inc/x_range_increase;
@@ -1049,18 +1049,18 @@ int nu_solver_complex_noguess(MstParameters &params){
 				x_lo_test = nu_eqn_136_complexnu(x_lo, &params);
 				x_hi_test = nu_eqn_136_complexnu(x_hi, &params);
 
-				if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && abs(x_lo_test) > endpoint_min && abs(x_hi_test) > endpoint_min)
+				if(((x_lo_test > 0. && x_hi_test < 0.) || (x_lo_test < 0. && x_hi_test > 0.)) && std::abs(x_lo_test) > endpoint_min && std::abs(x_hi_test) > endpoint_min)
 				{
 					nu_solver_noguess_rootfinder(Fone2, x_lo, x_hi, params);
 					r = std::real(params.getRenormalizedAngularMomentum());
-					r_test = abs(nu_eqn_136_complexnu_norm_full(r, &params));
-					if(abs(r_test) == 0. || abs(r_test/r) < eqn_136_EPS){
+					r_test = std::abs(nu_eqn_136_complexnu_norm_full(r, &params));
+					if(std::abs(r_test) == 0. || std::abs(r_test/r) < eqn_136_EPS){
 						return 0;
 					}else{
 						//std::cout << "NUSOLVER: Root found at nu = "<< I*r <<", but did not meet initial precision requirements \n";
-						if(abs(r_test/r) < potentialRootError){
+						if(std::abs(r_test/r) < potentialRootError){
 							potentialRoot = - I*r;
-							potentialRootError = abs(r_test/r);
+							potentialRootError = std::abs(r_test/r);
 						}
 					}
 				}
@@ -1068,7 +1068,7 @@ int nu_solver_complex_noguess(MstParameters &params){
 		}
 	}
 
-	if(potentialRootError < abs(x_max*(1.e-10))){
+	if(potentialRootError < std::abs(x_max*(1.e-10))){
 		// std::cout << "NUSOLVER: Using less accurate root at nu = " << potentialRoot << " with precision of " << potentialRootError << ". \n";
 		params.setRenormalizedAngularMomentum(potentialRoot);
 	}else{
@@ -1085,18 +1085,18 @@ int nu_solver_noguess(MstParameters &params){
 	// std::cout << "NUSOLVER: Searching for renormalized angular momentum along the imaginary line. \n";
 	nu_solver_complex_noguess(params);
 
-	if( abs(params.getRenormalizedAngularMomentum()) == 0.){
+	if( std::abs(params.getRenormalizedAngularMomentum()) == 0.){
 		// std::cout << "NUSOLVER: Searching for renormalized angular momentum along the real line with "<< stepNum <<" steps. \n";
 		nu_solver_real_noguess(stepNum, params);
-		if( abs(params.getRenormalizedAngularMomentum()) == 0. ){
+		if( std::abs(params.getRenormalizedAngularMomentum()) == 0. ){
 			int resIncreaseMax = 0;
-			while( abs(params.getRenormalizedAngularMomentum()) == 0. && resIncreaseMax < 2){
+			while( std::abs(params.getRenormalizedAngularMomentum()) == 0. && resIncreaseMax < 2){
 				stepNum *= 4;
 				// std::cout << "NUSOLVER: Searching for renormalized angular momentum along the real line with "<< stepNum <<" steps. \n";
 				resIncreaseMax ++;
 				nu_solver_real_noguess(stepNum, params);
 			}
-			if( abs(params.getRenormalizedAngularMomentum()) == 0. ){
+			if( std::abs(params.getRenormalizedAngularMomentum()) == 0. ){
 				std::cout << "NUSOLVER: Root-finding methods failed for computing renormalized angular momentum. \n";
 			}
 		}
@@ -1113,27 +1113,27 @@ int nu_solver_noguess2(MstParameters &params){
 	Complex nuTemp = params.getRenormalizedAngularMomentum();
 	Complex l = Complex(params.getSpinWeightedSpheroidalModeNumber());
 	int nuFlag = 0;
-	if(abs(l + 0.5 - nuTemp) < 1.e-1 || abs(l - 0.5 - nuTemp) < 1.e-1 || abs(l - nuTemp) < 1.e-1 ){
+	if(std::abs(l + 0.5 - nuTemp) < 1.e-1 || std::abs(l - 0.5 - nuTemp) < 1.e-1 || std::abs(l - nuTemp) < 1.e-1 ){
 		nuFlag = 1;
 	}
 	//////////////////////////////
 	// FINISH SETTING THIS UP!!!! You left to go make dinner before you could finish this
 	//////////////////////////////
-	if( abs(params.getRenormalizedAngularMomentum()) == 0. || nuFlag == 1){
+	if( std::abs(params.getRenormalizedAngularMomentum()) == 0. || nuFlag == 1){
 		// std::cout << "NUSOLVER: Initial search for real nu inconclusive, searching for renormalized angular momentum along the imaginary line. \n";
 		nu_solver_complex_noguess(params);
-		if( abs(params.getRenormalizedAngularMomentum()) == 0. ){
+		if( std::abs(params.getRenormalizedAngularMomentum()) == 0. ){
 			if( nuFlag == 1 ){
 				params.setRenormalizedAngularMomentum(nuTemp);
 			}else{
 				int resIncreaseMax = 0;
-				while( abs(params.getRenormalizedAngularMomentum()) == 0. && resIncreaseMax < 2){
+				while( std::abs(params.getRenormalizedAngularMomentum()) == 0. && resIncreaseMax < 2){
 					stepNum *= 4;
 					// std::cout << "NUSOLVER: Searching for renormalized angular momentum along the real line with "<< stepNum <<" steps. \n";
 					resIncreaseMax ++;
 					nu_solver_real_noguess(stepNum, params);
 				}
-				if( abs(params.getRenormalizedAngularMomentum()) == 0. ){
+				if( std::abs(params.getRenormalizedAngularMomentum()) == 0. ){
 					std::cout << "NUSOLVER: Root-finding methods failed for computing renormalized angular momentum. \n";
 				}
 			}
@@ -1148,7 +1148,7 @@ int nu_solver_noguess2(MstParameters &params){
 //*************************************************************************************
 
 double nu_solver_low_freq(double q, int s, int l, int m, double eps){
-	if( abs(s) == 2 ){
+	if( std::abs(s) == 2 ){
 		return nu_solver_low_freq_s2(q, l, m, eps);
 	}else if( s == 0 ){
 		return nu_solver_low_freq_s0(q, l, m, eps);
@@ -1181,7 +1181,7 @@ double low_frequency_max_epsilon(double q, int l, int m){
 double max_epsilon_power_law(double q, int l, int m){
 	double alpha = -0.142;
 	double beta = -2.094;
-	double x = log10(abs(gen_l_last_term_s2(q, l, m)));
+	double x = log10(std::abs(gen_l_last_term_s2(q, l, m)));
 
 	return 1.2*pow(10., alpha*x + beta);
 }

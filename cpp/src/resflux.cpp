@@ -10,7 +10,7 @@
 int minimize_resonant_mode_numbers(int& k, int& n, int nth, int nr, int Nres){
 	k = round((nth*Nres)/(nr*nr + nth*nth));
 	n = Nres - nth*k;
-	while(abs(n) % nr != 0){
+	while(std::abs(n) % nr != 0){
 		k--;
 		n = Nres - nth*k;
 	}
@@ -21,7 +21,7 @@ int minimize_resonant_mode_numbers(int& k, int& n, int nth, int nr, int Nres){
 int minimize_resonant_polar_mode_number(int& k, int& n, int l, int m, int nth, int nr, int Nres){
 	k = l - m;
 	n = Nres - nth*k;
-	while(abs(n) % nr != 0){
+	while(std::abs(n) % nr != 0){
 		k--;
 		n = Nres - nth*k;
 	}
@@ -71,21 +71,21 @@ int minimum_resonant_harmonic(int m, int nth, int nr, GeodesicSource& geo){
 	double omegaM = geo.getTimeFrequency(m, 0, 0);
 	double omegaRes = geo.getTimeFrequency(1)/nr;
 	double omegaResCheck = geo.getTimeFrequency(2)/nth;
-	if(abs(omegaRes - omegaResCheck) > ZERO_FREQ_MAX ){std::cout << "(RESFLUX): Frequencies do not form a "<<nr<<":"<<nth<<" \n"; }
+	if(std::abs(omegaRes - omegaResCheck) > ZERO_FREQ_MAX ){std::cout << "(RESFLUX): Frequencies do not form a "<<nr<<":"<<nth<<" \n"; }
 	int Nres = 0;
 	if(omegaM > 0){
-		while(abs(omegaM + Nres*omegaRes) > ZERO_FREQ_MAX && (omegaM + Nres*omegaRes) > 0.){
+		while(std::abs(omegaM + Nres*omegaRes) > ZERO_FREQ_MAX && (omegaM + Nres*omegaRes) > 0.){
 			Nres--;
 		}
-		if(abs(omegaM + Nres*omegaRes) > ZERO_FREQ_MAX){
+		if(std::abs(omegaM + Nres*omegaRes) > ZERO_FREQ_MAX){
 			Nres++;
 		}
 	}else{
-		while(abs(omegaM + Nres*omegaRes) > ZERO_FREQ_MAX && (omegaM + Nres*omegaRes) < 0.){
+		while(std::abs(omegaM + Nres*omegaRes) > ZERO_FREQ_MAX && (omegaM + Nres*omegaRes) < 0.){
 			Nres++;
 		}
 	}
-	if(abs(omegaM + Nres*omegaRes) > ZERO_FREQ_MAX && (omegaM + Nres*omegaRes) < 0){
+	if(std::abs(omegaM + Nres*omegaRes) > ZERO_FREQ_MAX && (omegaM + Nres*omegaRes) < 0){
 		Nres++;
 	}
 
@@ -150,21 +150,21 @@ ResonantFluxList res_flux_l(int s, int L, int nth, int nr, GeodesicSource& geo){
 	int convergenceCheckQ = 0;
 	while(m > L - 2 && m > 0){
 		fluxMode = res_flux_lm(s, L, m, nth, nr, geo);
-		if(abs(fluxMode.Edot[0].infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].infinity < efluxPreviousInf || fluxMode.Edot[0].infinity < 1.e-18) && abs(fluxMode.Edot[0].horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].horizon < efluxPreviousHor || fluxMode.Edot[0].horizon < 1.e-18)){
+		if(std::abs(fluxMode.Edot[0].infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].infinity < efluxPreviousInf || fluxMode.Edot[0].infinity < 1.e-18) && std::abs(fluxMode.Edot[0].horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].horizon < efluxPreviousHor || fluxMode.Edot[0].horizon < 1.e-18)){
 			convergenceCheckE += 1;
 		}else{
 			if(convergenceCheckE < COUNT_MAX){
 				convergenceCheckE = 0;
 			}
 		}
-		if(abs(fluxMode.Ldot[0].infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].infinity < lfluxPreviousInf || fluxMode.Ldot[0].infinity < 1.e-18) && abs(fluxMode.Ldot[0].horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].horizon < lfluxPreviousHor || fluxMode.Ldot[0].horizon < 1.e-18)){
+		if(std::abs(fluxMode.Ldot[0].infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].infinity < lfluxPreviousInf || fluxMode.Ldot[0].infinity < 1.e-18) && std::abs(fluxMode.Ldot[0].horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].horizon < lfluxPreviousHor || fluxMode.Ldot[0].horizon < 1.e-18)){
 			convergenceCheckL += 1;
 		}else{
 			if(convergenceCheckL < COUNT_MAX){
 				convergenceCheckL = 0;
 			}
 		}
-		if(abs(fluxMode.Qdot[0].infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].infinity < qfluxPreviousInf || fluxMode.Qdot[0].infinity < 1.e-18) && abs(fluxMode.Qdot[0].horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].horizon < qfluxPreviousHor || fluxMode.Qdot[0].horizon < 1.e-18)){
+		if(std::abs(fluxMode.Qdot[0].infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].infinity < qfluxPreviousInf || fluxMode.Qdot[0].infinity < 1.e-18) && std::abs(fluxMode.Qdot[0].horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].horizon < qfluxPreviousHor || fluxMode.Qdot[0].horizon < 1.e-18)){
 			convergenceCheckQ += 1;
 		}else{
 			if(convergenceCheckQ < COUNT_MAX){
@@ -210,27 +210,27 @@ ResonantFluxList res_flux_l(int s, int L, int nth, int nr, GeodesicSource& geo){
 	}
 
 	int minM = -L;
-	if(geo.getEccentricity() < DBL_EPSILON && 1. - abs(geo.getInclination()) < DBL_EPSILON){
+	if(geo.getEccentricity() < DBL_EPSILON && 1. - std::abs(geo.getInclination()) < DBL_EPSILON){
 		minM = 1;
 	}
 
 	while(m >= minM && (convergenceCheckE < convergenceCriteria || convergenceCheckL < convergenceCriteria || convergenceCheckQ < convergenceCriteria)){
 		fluxMode = res_flux_lm(s, L, m, nth, nr, geo);
-		if(abs(fluxMode.Edot[0].infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].infinity < efluxPreviousInf || fluxMode.Edot[0].infinity < 1.e-18) && abs(fluxMode.Edot[0].horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].horizon < efluxPreviousHor || fluxMode.Edot[0].horizon < 1.e-18)){
+		if(std::abs(fluxMode.Edot[0].infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].infinity < efluxPreviousInf || fluxMode.Edot[0].infinity < 1.e-18) && std::abs(fluxMode.Edot[0].horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].horizon < efluxPreviousHor || fluxMode.Edot[0].horizon < 1.e-18)){
 			convergenceCheckE += 1;
 		}else{
 			if(convergenceCheckE < COUNT_MAX){
 				convergenceCheckE = 0;
 			}
 		}
-		if(abs(fluxMode.Ldot[0].infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].infinity < lfluxPreviousInf || fluxMode.Ldot[0].infinity < 1.e-18) && abs(fluxMode.Ldot[0].horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].horizon < lfluxPreviousHor || fluxMode.Ldot[0].horizon < 1.e-18)){
+		if(std::abs(fluxMode.Ldot[0].infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].infinity < lfluxPreviousInf || fluxMode.Ldot[0].infinity < 1.e-18) && std::abs(fluxMode.Ldot[0].horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].horizon < lfluxPreviousHor || fluxMode.Ldot[0].horizon < 1.e-18)){
 			convergenceCheckL += 1;
 		}else{
 			if(convergenceCheckL < COUNT_MAX){
 				convergenceCheckL = 0;
 			}
 		}
-		if(abs(fluxMode.Qdot[0].infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].infinity < qfluxPreviousInf || fluxMode.Qdot[0].infinity < 1.e-18) && abs(fluxMode.Qdot[0].horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].horizon < qfluxPreviousHor || fluxMode.Qdot[0].horizon < 1.e-18)){
+		if(std::abs(fluxMode.Qdot[0].infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].infinity < qfluxPreviousInf || fluxMode.Qdot[0].infinity < 1.e-18) && std::abs(fluxMode.Qdot[0].horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].horizon < qfluxPreviousHor || fluxMode.Qdot[0].horizon < 1.e-18)){
 			convergenceCheckQ += 1;
 		}else{
 			if(convergenceCheckQ < COUNT_MAX){
@@ -357,21 +357,21 @@ ResonantFluxList res_flux_lm(int s, int L, int m, int nth, int nr, GeodesicSourc
 	int convergenceCheckQ = 0;
 	while(Nres <= NMax && (convergenceCheckE < convergenceCriteria || convergenceCheckL < convergenceCriteria || convergenceCheckQ < convergenceCriteria)){
 		fluxMode = res_flux_lmN(s, L, m, Nres, nth, nr, geo);
-		if(abs(fluxMode.Edot[0].infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].infinity < efluxPreviousInf || fluxMode.Edot[0].infinity < 1.e-18) && abs(fluxMode.Edot[0].horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].horizon < efluxPreviousHor || fluxMode.Edot[0].horizon < 1.e-18)){
+		if(std::abs(fluxMode.Edot[0].infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].infinity < efluxPreviousInf || fluxMode.Edot[0].infinity < 1.e-18) && std::abs(fluxMode.Edot[0].horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].horizon < efluxPreviousHor || fluxMode.Edot[0].horizon < 1.e-18)){
 			convergenceCheckE += 1;
 		}else{
 			if(convergenceCheckE < COUNT_MAX){
 				convergenceCheckE = 0;
 			}
 		}
-		if(abs(fluxMode.Ldot[0].infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].infinity < lfluxPreviousInf || fluxMode.Ldot[0].infinity < 1.e-18) && abs(fluxMode.Ldot[0].horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].horizon < lfluxPreviousHor || fluxMode.Ldot[0].horizon < 1.e-18)){
+		if(std::abs(fluxMode.Ldot[0].infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].infinity < lfluxPreviousInf || fluxMode.Ldot[0].infinity < 1.e-18) && std::abs(fluxMode.Ldot[0].horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].horizon < lfluxPreviousHor || fluxMode.Ldot[0].horizon < 1.e-18)){
 			convergenceCheckL += 1;
 		}else{
 			if(convergenceCheckL < COUNT_MAX){
 				convergenceCheckL = 0;
 			}
 		}
-		if(abs(fluxMode.Qdot[0].infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].infinity < qfluxPreviousInf || fluxMode.Qdot[0].infinity < 1.e-18) && abs(fluxMode.Qdot[0].horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].horizon < qfluxPreviousHor || fluxMode.Qdot[0].horizon < 1.e-18)){
+		if(std::abs(fluxMode.Qdot[0].infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].infinity < qfluxPreviousInf || fluxMode.Qdot[0].infinity < 1.e-18) && std::abs(fluxMode.Qdot[0].horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].horizon < qfluxPreviousHor || fluxMode.Qdot[0].horizon < 1.e-18)){
 			convergenceCheckQ += 1;
 		}else{
 			if(convergenceCheckQ < COUNT_MAX){
@@ -446,21 +446,21 @@ ResonantFluxList res_flux_lm(int s, int L, int m, int nth, int nr, GeodesicSourc
 	convergenceCheckQ = 0;
 	while(Nres >= NMin && (convergenceCheckE < convergenceCriteria || convergenceCheckL < convergenceCriteria || convergenceCheckQ < convergenceCriteria)){
 		fluxMode = res_flux_lmN(s, L, m, Nres, nth, nr, geo);
-		if(abs(fluxMode.Edot[0].infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].infinity < efluxPreviousInf || fluxMode.Edot[0].infinity < 1.e-18) && abs(fluxMode.Edot[0].horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].horizon < efluxPreviousHor || fluxMode.Edot[0].horizon < 1.e-18)){
+		if(std::abs(fluxMode.Edot[0].infinity/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].infinity < efluxPreviousInf || fluxMode.Edot[0].infinity < 1.e-18) && std::abs(fluxMode.Edot[0].horizon/efluxRef) < FLUX_EPSILON/10 && (fluxMode.Edot[0].horizon < efluxPreviousHor || fluxMode.Edot[0].horizon < 1.e-18)){
 			convergenceCheckE += 1;
 		}else{
 			if(convergenceCheckE < COUNT_MAX){
 				convergenceCheckE = 0;
 			}
 		}
-		if(abs(fluxMode.Ldot[0].infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].infinity < lfluxPreviousInf || fluxMode.Ldot[0].infinity < 1.e-18) && abs(fluxMode.Ldot[0].horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].horizon < lfluxPreviousHor || fluxMode.Ldot[0].horizon < 1.e-18)){
+		if(std::abs(fluxMode.Ldot[0].infinity/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].infinity < lfluxPreviousInf || fluxMode.Ldot[0].infinity < 1.e-18) && std::abs(fluxMode.Ldot[0].horizon/lfluxRef) < FLUX_EPSILON/10 && (fluxMode.Ldot[0].horizon < lfluxPreviousHor || fluxMode.Ldot[0].horizon < 1.e-18)){
 			convergenceCheckL += 1;
 		}else{
 			if(convergenceCheckL < COUNT_MAX){
 				convergenceCheckL = 0;
 			}
 		}
-		if(abs(fluxMode.Qdot[0].infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].infinity < qfluxPreviousInf || fluxMode.Qdot[0].infinity < 1.e-18) && abs(fluxMode.Qdot[0].horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].horizon < qfluxPreviousHor || fluxMode.Qdot[0].horizon < 1.e-18)){
+		if(std::abs(fluxMode.Qdot[0].infinity/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].infinity < qfluxPreviousInf || fluxMode.Qdot[0].infinity < 1.e-18) && std::abs(fluxMode.Qdot[0].horizon/qfluxRef) < FLUX_EPSILON/10 && (fluxMode.Qdot[0].horizon < qfluxPreviousHor || fluxMode.Qdot[0].horizon < 1.e-18)){
 			convergenceCheckQ += 1;
 		}else{
 			if(convergenceCheckQ < COUNT_MAX){
@@ -525,7 +525,7 @@ ResonantFluxList res_flux_lmN(int s, int L, int m, int Nres, int nth, int nr, Ge
 
 	double a = geo.getBlackHoleSpin();
 	double omega = geo.getTimeFrequency(m, k0, n0);
-	if(abs(omega) < ZERO_FREQ_MAX){
+	if(std::abs(omega) < ZERO_FREQ_MAX){
 		return fluxes;
 	}
 
@@ -561,7 +561,7 @@ ResonantFluxList res_flux_lmN(int s, int L, int m, int Nres, int nth, int nr, Ge
 		double rpComp = Rt.getRadialPoints(10);
 		Complex BupComp = Rt.getSolution(In, 10)*std::conj(Rt.getDerivative(Up, 10)) - std::conj(Rt.getSolution(Up, 10))*Rt.getDerivative(In, 10);
 		BupComp *= (rpComp*rpComp - 2.*rpComp + pow(Rt.getBlackHoleSpin(), 2))/(-2.*I*omega);
-		if(abs(1. - Bup/BupComp) > 1.e-8){
+		if(std::abs(1. - Bup/BupComp) > 1.e-8){
 			std::cout << "(RESFLUX) Error: Bup calculation failed for ("<<m<<", "<<Nres<<")-mode\n";
 		}
 
@@ -570,7 +570,7 @@ ResonantFluxList res_flux_lmN(int s, int L, int m, int Nres, int nth, int nr, Ge
 		int PRINT_HOR_MODES = 0;
 
 		double Mmkn = 0.;
-		if( abs(nth*k0 + nr*n0 - Nres) > ZERO_FREQ_MAX ){
+		if( std::abs(nth*k0 + nr*n0 - Nres) > ZERO_FREQ_MAX ){
 			std::cout << "(RESFLUX) ERROR: Initial mode numbers ("<<k0<<", "<<n0<<") do not match frequency. \n";
 		}
 		for(int j = 0; j < modeMax; j++){
@@ -603,7 +603,7 @@ ResonantFluxList res_flux_lmN(int s, int L, int m, int Nres, int nth, int nr, Ge
 				baseAmplitudeInf = std::real(amps[j].up*std::conj(amps[jp].up));
 				baseAmplitudeHor = std::real(amps[j].in*std::conj(amps[jp].in));
 				baseAmplitudeMix = std::imag(Bup*amps[j].in*std::conj(amps[jp].up)) - std::imag(std::conj(Bup)*amps[j].up*std::conj(amps[jp].in));
-				// if(K == 2 && (kres % nth) == 0 && (nres % nr) == 0 && abs(Nres) < 30 && abs(baseAmplitudeMix) > 0.){
+				// if(K == 2 && (kres % nth) == 0 && (nres % nr) == 0 && std::abs(Nres) < 30 && std::abs(baseAmplitudeMix) > 0.){
 				// 	std::cout << Bup*amps[j].in*std::conj(amps[jp].up) << " vs " << std::conj(Bup)*amps[j].up*std::conj(amps[jp].in) << "\n";
 				// }
 			}
@@ -617,7 +617,7 @@ ResonantFluxList res_flux_lmN(int s, int L, int m, int Nres, int nth, int nr, Ge
 
 			QcAmplitudeMix += MmknMix*baseAmplitudeMix;
 
-			if(abs(baseAmplitudeInf) > 0. && abs(Mmkn) == 0.){
+			if(std::abs(baseAmplitudeInf) > 0. && std::abs(Mmkn) == 0.){
 				std::cout << "(RESFLUX) Error: Zero frequency Carter frequency for ("<<m<<", "<<kres/nth<<", "<<nres/nr<<") \n";
 			}
 
@@ -671,7 +671,7 @@ ResonantFluxList res_flux_lmN(int s, int L, int m, int Nres, int nth, int nr, Ge
 
 				QcAmplitudeMix += MmknMix*baseAmplitudeMix;
 
-				if(abs(baseAmplitudeInf) > 0. && abs(Mmkn) == 0.){
+				if(std::abs(baseAmplitudeInf) > 0. && std::abs(Mmkn) == 0.){
 					std::cout << "(RESFLUX) Error: Zero frequency Carter frequency for ("<<m<<", "<<kres/nth<<", "<<nres/nr<<") \n";
 				}
 
@@ -718,7 +718,7 @@ FieldAmplitudeVector resonant_flux_mode_coefficients(int s, int L, int m, int k0
 			resAmplitudes[j].up = teuk.getTeukolskyAmplitude(Up);
 			resAmplitudes[j].in = teuk.getTeukolskyAmplitude(In);
 			ampMagPrev = ampMag;
-			ampMag = abs(resAmplitudes[j].up);
+			ampMag = std::abs(resAmplitudes[j].up);
 		}
 	}
 	if(ampMag > AMP_EPSILON){
@@ -743,7 +743,7 @@ FieldAmplitudeVector resonant_flux_mode_coefficients(int s, int L, int m, int k0
 			resAmplitudes[2*MODEMAX - j].up = teuk.getTeukolskyAmplitude(Up);
 			resAmplitudes[2*MODEMAX - j].in = teuk.getTeukolskyAmplitude(In);
 			ampMagPrev = ampMag;
-			ampMag = abs(resAmplitudes[2*MODEMAX - j].up);
+			ampMag = std::abs(resAmplitudes[2*MODEMAX - j].up);
 		}
 	}
 	if(ampMag > AMP_EPSILON){
@@ -754,7 +754,7 @@ FieldAmplitudeVector resonant_flux_mode_coefficients(int s, int L, int m, int k0
 }
 
 void res_flux_parallel_l(int s, int nth, int nr, GeodesicSource geo, int modeMax, std::string dir){
-	int lMax = modeMax + abs(s) - 1;
+	int lMax = modeMax + std::abs(s) - 1;
 	// int modeNumMax = (lMax - 1)*(lMax + 4)/2;
 	int modeNumMax = modeMax;
 	std::vector<ResonantFluxList> fluxes(modeNumMax);
@@ -763,13 +763,13 @@ void res_flux_parallel_l(int s, int nth, int nr, GeodesicSource geo, int modeMax
 	#pragma omp parallel shared(geo, fluxes, modeNumMax) private(l)
 	{
 		#pragma omp for schedule(dynamic)
-			for(l = abs(s); l <= lMax; l++) {
+			for(l = std::abs(s); l <= lMax; l++) {
 				int th_id = omp_get_thread_num();
 				// std::cout << "Start flux calculation for ("<<l<<", "<<m<<")-mode on kernel " << th_id << "\n";
-				fluxes[l - abs(s)] = res_flux_l(s, l, nth, nr, geo);
+				fluxes[l - std::abs(s)] = res_flux_l(s, l, nth, nr, geo);
 				std::cout << "Flux calculation completed on kernel " << th_id << "\n";
-				std::cout << "Edot_inf ("<<l<<")-mode = " << fluxes[l - abs(s)].Edot[0].infinity << "\n";
-				std::cout << "Edot_h ("<<l<<")-mode = " << fluxes[l - abs(s)].Edot[0].horizon << "\n";
+				std::cout << "Edot_inf ("<<l<<")-mode = " << fluxes[l - std::abs(s)].Edot[0].infinity << "\n";
+				std::cout << "Edot_h ("<<l<<")-mode = " << fluxes[l - std::abs(s)].Edot[0].horizon << "\n";
 			}
 	}
 
@@ -803,7 +803,7 @@ void res_flux_parallel_l(int s, int nth, int nr, GeodesicSource geo, int modeMax
 	Vector LdotTotH(Kmax, 0.);
 	Vector QdotTotInf(Kmax, 0.);
 	Vector QdotTotH(Kmax, 0.);
-	for(int l = abs(s); l <= lMax; l++) {
+	for(int l = std::abs(s); l <= lMax; l++) {
 		for(int K = 0; K < Kmax; K++){
 			double EdotTotInfL = 0.;
 			double EdotTotHL = 0.;
@@ -813,12 +813,12 @@ void res_flux_parallel_l(int s, int nth, int nr, GeodesicSource geo, int modeMax
 			double QdotTotHL = 0.;
 			// std::cout << "Edot_inf ("<<l<<", 0)-mode = " << Edot[lm].infinity << "\n";
 			// std::cout << "Edot_h ("<<l<<", 0)-mode = " << Edot[lm].horizon << "\n";
-			EdotTotInfL += fluxes[l - abs(s)].Edot[K].infinity;
-			EdotTotHL += fluxes[l - abs(s)].Edot[K].horizon;
-			LdotTotInfL += fluxes[l - abs(s)].Ldot[K].infinity;
-			LdotTotHL += fluxes[l - abs(s)].Ldot[K].horizon;
-			QdotTotInfL += fluxes[l - abs(s)].Qdot[K].infinity;
-			QdotTotHL += fluxes[l - abs(s)].Qdot[K].horizon;
+			EdotTotInfL += fluxes[l - std::abs(s)].Edot[K].infinity;
+			EdotTotHL += fluxes[l - std::abs(s)].Edot[K].horizon;
+			LdotTotInfL += fluxes[l - std::abs(s)].Ldot[K].infinity;
+			LdotTotHL += fluxes[l - std::abs(s)].Ldot[K].horizon;
+			QdotTotInfL += fluxes[l - std::abs(s)].Qdot[K].infinity;
+			QdotTotHL += fluxes[l - std::abs(s)].Qdot[K].horizon;
 
 			EdotTotInf[K] += EdotTotInfL;
 			EdotTotH[K] += EdotTotHL;

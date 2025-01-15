@@ -128,8 +128,8 @@ int cf_lentz_iterate(cf_solver* cf, double tol){
 	Dn = bn + an*Dnm1;
 	Cn = bn + an/Cnm1;
 
-	double precisionLoss = abs(1. + bn*Cnm1/an);
-	precisionLoss = precisionLoss < abs(1. + bn/an/Dnm1) ? precisionLoss : abs(1. + bn/an/Dnm1);
+	double precisionLoss = std::abs(1. + bn*Cnm1/an);
+	precisionLoss = precisionLoss < std::abs(1. + bn/an/Dnm1) ? precisionLoss : std::abs(1. + bn/an/Dnm1);
 
 	if(precisionLoss <= 1.e-5 && j > 2){
 		//std::cout << "CF: Significant precision loss of " << precisionLoss << " encountered at n = "<< j;
@@ -147,7 +147,7 @@ int cf_lentz_iterate(cf_solver* cf, double tol){
 		Dnm1 = (bnm1 - anm1*Dnm2)/(bnm1*bnm1 - anm1*anm1*Dnm2*Dnm2);
 
 		/*
-		if(abs(1. + bn*Cnm1/an) <= 1.e-5 || abs(1. + bn/an/Dnm1) <= 1.e-5){
+		if(std::abs(1. + bn*Cnm1/an) <= 1.e-5 || std::abs(1. + bn/an/Dnm1) <= 1.e-5){
 			std::cout << "CF: Significant precision loss still encountered after skipping to next convergent. \n";
 		}else{
 			std::cout << "CF: Significant precision avoided by skipping to next convergent. \n";
@@ -158,11 +158,11 @@ int cf_lentz_iterate(cf_solver* cf, double tol){
 		Cn = bn + an/Cnm1;
 	}
 
-	if(abs(Cn) == 0. || abs(1. + bn*Cnm1/an) <= 1.e-14){
+	if(std::abs(Cn) == 0. || std::abs(1. + bn*Cnm1/an) <= 1.e-14){
 		Cn = LENTZ_SMALL;
 		modifyFlag = 1;
 	}
-	if(abs(Dn) == 0. || abs(1. + bn/an/Dnm1) <= 1.e-14){
+	if(std::abs(Dn) == 0. || std::abs(1. + bn/an/Dnm1) <= 1.e-14){
 		Dn = 1./LENTZ_SMALL;
 		modifyFlag = 1;
 	}else{
@@ -170,7 +170,7 @@ int cf_lentz_iterate(cf_solver* cf, double tol){
 	}
 
 	resn = resnm1*Dn*Cn;
-	cf_error = abs(1. - resnm1/resn);
+	cf_error = std::abs(1. - resnm1/resn);
 
 	cf->Cn = Cn;
 	cf->Dn = Dn;
@@ -209,7 +209,7 @@ int cf_lentz_x_iterate(cf_solver_x* cf, Complex x, double tol){
 	b = &(cf->b_coeff);
 	Complex bn = (*b)(j, x, params);
 
-	double SMALL = abs(bn)*LENTZ_SMALL;
+	double SMALL = std::abs(bn)*LENTZ_SMALL;
 	if( SMALL == 0. ){
 		SMALL = LENTZ_SMALL;
 	}
@@ -217,11 +217,11 @@ int cf_lentz_x_iterate(cf_solver_x* cf, Complex x, double tol){
 	Dn = bn + an*Dnm1;
 	Cn = bn + an/Cnm1;
 
-	if(abs(Cn) == 0.){
+	if(std::abs(Cn) == 0.){
 		Cn = SMALL;
 		modifyFlag = 1;
 	}
-	if(abs(Dn) == 0.){
+	if(std::abs(Dn) == 0.){
 		Dn = 1./SMALL;
 		modifyFlag = 1;
 	}else{
@@ -230,7 +230,7 @@ int cf_lentz_x_iterate(cf_solver_x* cf, Complex x, double tol){
 
 	resn = resnm1*Dn*Cn;
 
-	cf_error = abs(1. - resnm1/resn);
+	cf_error = std::abs(1. - resnm1/resn);
 
 	cf->Cn = Cn;
 	cf->Dn = Dn;

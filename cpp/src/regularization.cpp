@@ -48,9 +48,9 @@ int save_regB_data(Vector Bt, Vector Br, Vector Bth, Vector Bph, GeodesicSource 
 }
 
 int save_reg_data(Vector regT, Vector regR, Vector regTh, Vector regPh, GeodesicSource geo, const std::string &filename, const std::string &dir){
-  if(abs(geo.getInclination()) == 1. && geo.getEccentricity() == 0.){
+  if(std::abs(geo.getInclination()) == 1. && geo.getEccentricity() == 0.){
     return save_reg_data_circular(regT, regR, regTh, regPh, geo, filename, dir);
-  }else if(abs(geo.getInclination()) == 1.){
+  }else if(std::abs(geo.getInclination()) == 1.){
     return save_reg_data_equatorial(regT, regR, regTh, regPh, geo, filename, dir);
   }else if(geo.getEccentricity() == 0.){
     return save_reg_data_spherical(regT, regR, regTh, regPh, geo, filename, dir);
@@ -202,9 +202,9 @@ int save_reg_data_generic(Vector regT, Vector regR, Vector regTh, Vector regPh, 
 }
 
 Vector regularization_parameter_from_source(GeodesicSource &geo, const int &sampleSize, double (*reg_func)(const double &, const double &, const int &, const int &, GeodesicSource &)){
-  if(abs(geo.getInclination()) == 1. && geo.getEccentricity() == 0.){
+  if(std::abs(geo.getInclination()) == 1. && geo.getEccentricity() == 0.){
     return regularization_parameter_from_source_circular(geo, sampleSize, *reg_func);
-  }else if(abs(geo.getInclination()) == 1.){
+  }else if(std::abs(geo.getInclination()) == 1.){
     return regularization_parameter_from_source_equatorial(geo, sampleSize, *reg_func);
   }else if(geo.getEccentricity() == 0.){
     return regularization_parameter_from_source_spherical(geo, sampleSize, *reg_func);
@@ -510,7 +510,7 @@ double regularization_parameter_B_alpha(int alpha, const double &rp, const doubl
     ur = sgnUr*sqrt(ur)/sig;
   }
   double uth = kerr_geo_Vtheta(a, En, Lz, Qc, thp);
-  if(abs(uth/Qc) < DBL_EPSILON || uth < 0.){
+  if(std::abs(uth/Qc) < DBL_EPSILON || uth < 0.){
     uth = 0.;
   }else{
     uth = sgnUth*sqrt(uth)/sig;

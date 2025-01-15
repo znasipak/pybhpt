@@ -46,14 +46,14 @@ int RadialTeukolsky::ASYMsolveBoundary(BoundaryCondition bc){
 
 		int boundaryFlag = 0;
 		double rplus = (1. + sqrt(1. - _a*_a));
-		while( (abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundarySolution.getValue())) || isinf(abs(_horizonBoundarySolution.getValue())) || abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundaryDerivative.getValue())) || isinf(abs(_horizonBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
+		while( (std::abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundarySolution.getValue())) || isinf(std::abs(_horizonBoundarySolution.getValue())) || std::abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundaryDerivative.getValue())) || isinf(std::abs(_horizonBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
 			_horizonBoundary = rplus + 0.5*(_horizonBoundary - rplus);
 			teuk_in_ASYM_series(_horizonBoundarySolution, *this, _horizonBoundary);
 			teuk_in_derivative_ASYM_series(_horizonBoundaryDerivative, *this, _horizonBoundary);
 			boundaryFlag++;
 		}
 
-		if((abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundarySolution.getValue())) || isinf(abs(_horizonBoundarySolution.getValue())) || abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundaryDerivative.getValue())) || isinf(abs(_horizonBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
+		if((std::abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundarySolution.getValue())) || isinf(std::abs(_horizonBoundarySolution.getValue())) || std::abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundaryDerivative.getValue())) || isinf(std::abs(_horizonBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
 			success = 0; // consider method failed
 		}
 	}else{
@@ -61,14 +61,14 @@ int RadialTeukolsky::ASYMsolveBoundary(BoundaryCondition bc){
 		teuk_up_derivative_ASYM_series(_infinityBoundaryDerivative, *this, _infinityBoundary);
 
 		int boundaryFlag = 0;
-		while( (abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundarySolution.getValue())) || isinf(abs(_infinityBoundarySolution.getValue())) || abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundaryDerivative.getValue())) || isinf(abs(_infinityBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
+		while( (std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
 			_infinityBoundary *= 2;
 			teuk_up_ASYM_series(_infinityBoundarySolution, *this, _infinityBoundary);
 			teuk_up_derivative_ASYM_series(_infinityBoundaryDerivative, *this, _infinityBoundary);
 			boundaryFlag++;
 		}
 
-		if( (abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundarySolution.getValue())) || isinf(abs(_infinityBoundarySolution.getValue())) || abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundaryDerivative.getValue())) || isinf(abs(_infinityBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
+		if( (std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
 			success = 0; // consider method failed
 		}
 	}
@@ -84,26 +84,26 @@ int RadialTeukolsky::MSTsolveBoundary(BoundaryCondition bc){
 
 		int boundaryFlag = 0;
 		double rplus = 1. + sqrt(1. - _a*_a);
-		while( (abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || abs(_horizonBoundarySolution.getValue()) == 0. || isnan(abs(_horizonBoundarySolution.getValue())) || isinf(abs(_horizonBoundarySolution.getValue())) || abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundaryDerivative.getValue())) || isinf(abs(_horizonBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
+		while( (std::abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || std::abs(_horizonBoundarySolution.getValue()) == 0. || isnan(std::abs(_horizonBoundarySolution.getValue())) || isinf(std::abs(_horizonBoundarySolution.getValue())) || std::abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundaryDerivative.getValue())) || isinf(std::abs(_horizonBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
 			_horizonBoundary = rplus + 0.5*(_horizonBoundary - rplus);
 			teuk_in_MST_series_boundary(_horizonBoundarySolution, _horizonBoundaryDerivative, *this, _horizonBoundary);
 			boundaryFlag++;
 		}
 
-		if((abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || abs(_horizonBoundarySolution.getValue()) == 0. || isnan(abs(_horizonBoundarySolution.getValue())) || isinf(abs(_horizonBoundarySolution.getValue())) || abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundaryDerivative.getValue())) || isinf(abs(_horizonBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
+		if((std::abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || std::abs(_horizonBoundarySolution.getValue()) == 0. || isnan(std::abs(_horizonBoundarySolution.getValue())) || isinf(std::abs(_horizonBoundarySolution.getValue())) || std::abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundaryDerivative.getValue())) || isinf(std::abs(_horizonBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
 			success = 0; // consider method failed
 		}
 	}else{
 		teuk_up_MST_series_boundary(_infinityBoundarySolution, _infinityBoundaryDerivative, *this, _infinityBoundary);
 
 		int boundaryFlag = 0;
-		while( (abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || abs(_infinityBoundarySolution.getValue()) == 0. || isnan(abs(_infinityBoundarySolution.getValue())) || isinf(abs(_infinityBoundarySolution.getValue())) || abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundaryDerivative.getValue())) || isinf(abs(_infinityBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
+		while( (std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || std::abs(_infinityBoundarySolution.getValue()) == 0. || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
 			_infinityBoundary *= 2;
 			teuk_up_MST_series_boundary(_infinityBoundarySolution, _infinityBoundaryDerivative, *this, _infinityBoundary);
 			boundaryFlag++;
 		}
 
-		if( (abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || abs(_infinityBoundarySolution.getValue()) == 0. || isnan(abs(_infinityBoundarySolution.getValue())) || isinf(abs(_infinityBoundarySolution.getValue())) || abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundaryDerivative.getValue())) || isinf(abs(_infinityBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
+		if( (std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || std::abs(_infinityBoundarySolution.getValue()) == 0. || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
 			success = 0; // consider method failed
 		}
 	}
@@ -120,8 +120,8 @@ void RadialTeukolsky::solveBoundaryPoint(BoundaryCondition bc){
 		}
 	}else{
 		_infinityBoundary = R_INFINITY;
-		if(20./abs(_omega) > _infinityBoundary && abs(_omega) > DBL_EPSILON){
-			_infinityBoundary = 20./abs(_omega);
+		if(20./std::abs(_omega) > _infinityBoundary && std::abs(_omega) > DBL_EPSILON){
+			_infinityBoundary = 20./std::abs(_omega);
 			if(_infinityBoundary > 50*_radialPoints.back()){
 				_infinityBoundary = 50*_radialPoints.back();
 			}
@@ -178,8 +178,8 @@ void RadialTeukolsky::generateRetardedBoundaryConditions(SolutionMethod method){
 // 	// if AUTO or ASYM methods selected, first calculate boundary data using series expansions
 // 	// around singular points
 // 	if( flagHor == 0 && flagInf == 0 ){
-// 		if(20./abs(_omega) > _infinityBoundary && abs(_omega) > DBL_EPSILON){
-// 			_infinityBoundary = 20./abs(_omega);
+// 		if(20./std::abs(_omega) > _infinityBoundary && std::abs(_omega) > DBL_EPSILON){
+// 			_infinityBoundary = 20./std::abs(_omega);
 // 			if(_infinityBoundary/_radialPoints.back() > 50){
 // 				_infinityBoundary = 50*_radialPoints.back();
 // 			}
@@ -195,12 +195,12 @@ void RadialTeukolsky::generateRetardedBoundaryConditions(SolutionMethod method){
 // 		teuk_up_derivative_ASYM_series(_infinityBoundaryDerivative, *this, _infinityBoundary);
 
 // 		// if series expansion failed, try pushing out the boundary
-// 		if( abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundarySolution.getValue())) || isinf(abs(_infinityBoundarySolution.getValue())) || abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundaryDerivative.getValue())) || isinf(abs(_infinityBoundaryDerivative.getValue())) ){
+// 		if( std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue())) ){
 // 			_infinityBoundary *= 2;
 // 			teuk_up_ASYM_series(_infinityBoundarySolution, *this, _infinityBoundary);
 // 			teuk_up_derivative_ASYM_series(_infinityBoundaryDerivative, *this, _infinityBoundary);
 // 		}
-// 		if( abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundarySolution.getValue())) || isinf(abs(_horizonBoundarySolution.getValue())) || abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundaryDerivative.getValue())) || isinf(abs(_horizonBoundaryDerivative.getValue()))){
+// 		if( std::abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundarySolution.getValue())) || isinf(std::abs(_horizonBoundarySolution.getValue())) || std::abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundaryDerivative.getValue())) || isinf(std::abs(_horizonBoundaryDerivative.getValue()))){
 // 			_horizonBoundary = 0.5*(_horizonBoundary - (1. + sqrt(1. - _a*_a)));
 // 			teuk_in_ASYM_series(_horizonBoundarySolution, *this, _horizonBoundary);
 // 			teuk_in_derivative_ASYM_series(_horizonBoundaryDerivative, *this, _horizonBoundary);
@@ -212,14 +212,14 @@ void RadialTeukolsky::generateRetardedBoundaryConditions(SolutionMethod method){
 // 		if(method == AUTO && _omega < 0.3){
 // 			int boundaryFlag = 0;
 // 			// first try moving out the boundary twice to see if we can get a valid asymptotic expansion
-// 			while( (abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundarySolution.getValue())) || isinf(abs(_infinityBoundarySolution.getValue())) || abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundaryDerivative.getValue())) || isinf(abs(_infinityBoundaryDerivative.getValue()))) && boundaryFlag < 4){
+// 			while( (std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue()))) && boundaryFlag < 4){
 // 				_infinityBoundary *= 2;
 // 				teuk_up_ASYM_series(_infinityBoundarySolution, *this, _infinityBoundary);
 // 				teuk_up_derivative_ASYM_series(_infinityBoundaryDerivative, *this, _infinityBoundary);
 // 				boundaryFlag++;
 // 			}
 // 			boundaryFlag = 0;
-// 			while( (abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundarySolution.getValue())) || isinf(abs(_horizonBoundarySolution.getValue())) || abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundaryDerivative.getValue())) || isinf(abs(_horizonBoundaryDerivative.getValue()))) && boundaryFlag < 4){
+// 			while( (std::abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundarySolution.getValue())) || isinf(std::abs(_horizonBoundarySolution.getValue())) || std::abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundaryDerivative.getValue())) || isinf(std::abs(_horizonBoundaryDerivative.getValue()))) && boundaryFlag < 4){
 // 				_horizonBoundary = 0.5*(_horizonBoundary - (1. + sqrt(1. - _a*_a)));
 // 				teuk_in_ASYM_series(_horizonBoundarySolution, *this, _horizonBoundary);
 // 			 	teuk_in_derivative_ASYM_series(_horizonBoundaryDerivative, *this, _horizonBoundary);
@@ -227,19 +227,19 @@ void RadialTeukolsky::generateRetardedBoundaryConditions(SolutionMethod method){
 // 			}
 
 // 			// if that did not work, now try the MST method to generate boundary data
-// 			if( abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundarySolution.getValue())) || isinf(abs(_infinityBoundarySolution.getValue())) || abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundaryDerivative.getValue())) || isinf(abs(_infinityBoundaryDerivative.getValue())) ){
+// 			if( std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue())) ){
 // 				flagInf = 1;
 // 			}
-// 			if( abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundarySolution.getValue())) || isinf(abs(_horizonBoundarySolution.getValue())) || abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundaryDerivative.getValue())) || isinf(abs(_horizonBoundaryDerivative.getValue())) ){
+// 			if( std::abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundarySolution.getValue())) || isinf(std::abs(_horizonBoundarySolution.getValue())) || std::abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundaryDerivative.getValue())) || isinf(std::abs(_horizonBoundaryDerivative.getValue())) ){
 // 				flagHor = 1;
 // 			}
 // 		}else{
-// 			while( (abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundarySolution.getValue())) || isinf(abs(_infinityBoundarySolution.getValue())) || abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundaryDerivative.getValue())) || isinf(abs(_infinityBoundaryDerivative.getValue()))) && _infinityBoundary < pow(10, 6)*_radialPoints.back()){
+// 			while( (std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue()))) && _infinityBoundary < pow(10, 6)*_radialPoints.back()){
 // 				_infinityBoundary *= 2;
 // 				teuk_up_ASYM_series(_infinityBoundarySolution, *this, _infinityBoundary);
 // 				teuk_up_derivative_ASYM_series(_infinityBoundaryDerivative, *this, _infinityBoundary);
 // 			}
-// 			while( (abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundarySolution.getValue())) || isinf(abs(_horizonBoundarySolution.getValue())) || abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundaryDerivative.getValue())) || isinf(abs(_horizonBoundaryDerivative.getValue()))) && _horizonBoundary > (1. + sqrt(1. - _a*_a)) + 10.*DBL_EPSILON){
+// 			while( (std::abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundarySolution.getValue())) || isinf(std::abs(_horizonBoundarySolution.getValue())) || std::abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundaryDerivative.getValue())) || isinf(std::abs(_horizonBoundaryDerivative.getValue()))) && _horizonBoundary > (1. + sqrt(1. - _a*_a)) + 10.*DBL_EPSILON){
 // 				_horizonBoundary = 0.5*(_horizonBoundary - (1. + sqrt(1. - _a*_a)));
 // 				teuk_in_ASYM_series(_horizonBoundarySolution, *this, _horizonBoundary);
 // 			 	teuk_in_derivative_ASYM_series(_horizonBoundaryDerivative, *this, _horizonBoundary);
@@ -252,25 +252,25 @@ void RadialTeukolsky::generateRetardedBoundaryConditions(SolutionMethod method){
 // 	}
 
 // 	// these flags tell us which boundary data to calculate with MST expansions
-// 	if( flagHor && flagInf && abs(_omega) > ZERO_FREQ_MAX ){
+// 	if( flagHor && flagInf && std::abs(_omega) > ZERO_FREQ_MAX ){
 // 		std::cout << "(RADIALSOLVER) Using MST expansions to generate boundary data. \n";
-// 		if(abs(_omega) < 1. && abs(2.*_omega*_radialPoints.back()) >= 0.5){
-// 			_infinityBoundary = 20./abs(_omega);
-// 		}else if(abs(2.*_omega*_radialPoints.back()) < 0.5){
-// 			_infinityBoundary = 0.5/abs(_omega);
+// 		if(std::abs(_omega) < 1. && std::abs(2.*_omega*_radialPoints.back()) >= 0.5){
+// 			_infinityBoundary = 20./std::abs(_omega);
+// 		}else if(std::abs(2.*_omega*_radialPoints.back()) < 0.5){
+// 			_infinityBoundary = 0.5/std::abs(_omega);
 // 		}
 
 // 		teuk_MST_series_boundary(_horizonBoundarySolution, _horizonBoundaryDerivative, _infinityBoundarySolution, _infinityBoundaryDerivative, *this, _horizonBoundary, _infinityBoundary);
 
-// 	}else if(flagHor && abs(_omega) > ZERO_FREQ_MAX){
+// 	}else if(flagHor && std::abs(_omega) > ZERO_FREQ_MAX){
 // 		std::cout << "(RADIALSOLVER) Generating horizon side MST expansions. \n";
 // 		teuk_in_MST_series_boundary(_horizonBoundarySolution, _horizonBoundaryDerivative, *this, _horizonBoundary);
-// 	}else if(flagInf && abs(_omega) > ZERO_FREQ_MAX){
+// 	}else if(flagInf && std::abs(_omega) > ZERO_FREQ_MAX){
 // 		std::cout << "(RADIALSOLVER) Generating infinity side MST expansions. \n";
-// 		if(abs(_omega) < 1. && abs(2.*_omega*_radialPoints.back()) >= 0.5){
-// 			_infinityBoundary /= abs(_omega);
-// 		}else if(abs(2.*_omega*_radialPoints.back()) < 0.5){
-// 			_infinityBoundary = 0.5/abs(_omega);
+// 		if(std::abs(_omega) < 1. && std::abs(2.*_omega*_radialPoints.back()) >= 0.5){
+// 			_infinityBoundary /= std::abs(_omega);
+// 		}else if(std::abs(2.*_omega*_radialPoints.back()) < 0.5){
+// 			_infinityBoundary = 0.5/std::abs(_omega);
 
 // 		}
 // 		teuk_up_MST_series_boundary(_infinityBoundarySolution, _infinityBoundaryDerivative, *this, _infinityBoundary);
@@ -285,21 +285,21 @@ void RadialTeukolsky::generateRetardedBoundaryConditions(SolutionMethod method){
 // 	_upIncidenceAmplitude = 0.;
 // 	_upReflectionAmplitude = 0.;
 
-// 	while( (abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundarySolution.getValue())) || isinf(abs(_infinityBoundarySolution.getValue())) || abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundaryDerivative.getValue())) || isinf(abs(_infinityBoundaryDerivative.getValue()))) && _infinityBoundary < pow(10, 6)){
+// 	while( (std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue()))) && _infinityBoundary < pow(10, 6)){
 // 		_infinityBoundary *= 2;
 // 		teuk_up_ASYM_series(_infinityBoundarySolution, *this, _infinityBoundary);
 // 		teuk_up_derivative_ASYM_series(_infinityBoundaryDerivative, *this, _infinityBoundary);
 // 	}
-// 	while( (abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundarySolution.getValue())) || isinf(abs(_horizonBoundarySolution.getValue())) || (abs(_horizonBoundarySolution.getValue())) == 0. || abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundaryDerivative.getValue())) || isinf(abs(_horizonBoundaryDerivative.getValue()))) && _horizonBoundary > (1. + sqrt(1. - _a*_a)) + 10.*DBL_EPSILON){
+// 	while( (std::abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundarySolution.getValue())) || isinf(std::abs(_horizonBoundarySolution.getValue())) || (std::abs(_horizonBoundarySolution.getValue())) == 0. || std::abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundaryDerivative.getValue())) || isinf(std::abs(_horizonBoundaryDerivative.getValue()))) && _horizonBoundary > (1. + sqrt(1. - _a*_a)) + 10.*DBL_EPSILON){
 // 		_horizonBoundary = 0.5*(_horizonBoundary - (1. + sqrt(1. - _a*_a)));
 // 		teuk_in_ASYM_series(_horizonBoundarySolution, *this, _horizonBoundary);
 // 		teuk_in_derivative_ASYM_series(_horizonBoundaryDerivative, *this, _horizonBoundary);
 // 	}
 
-// 	if( (abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundarySolution.getValue())) || isinf(abs(_infinityBoundarySolution.getValue())) || abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_infinityBoundaryDerivative.getValue())) || isinf(abs(_infinityBoundaryDerivative.getValue()))) && _infinityBoundary > pow(10, 6)){
+// 	if( (std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue()))) && _infinityBoundary > pow(10, 6)){
 // 		std::cout << "(RADIALSOLVER) ERROR: Calculation of infinity side boundary value failed for L = "<<_L<<", m = "<<_m<<", omega = "<<_omega<<". Attempted to push boundary out to r = "<<_infinityBoundary<<" \n";
 // 	}
-// 	if( (abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundarySolution.getValue())) || isinf(abs(_horizonBoundarySolution.getValue())) || abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(abs(_horizonBoundaryDerivative.getValue())) || isinf(abs(_horizonBoundaryDerivative.getValue()))) && _horizonBoundary < (1. + sqrt(1. - _a*_a)) + 10.*DBL_EPSILON){
+// 	if( (std::abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundarySolution.getValue())) || isinf(std::abs(_horizonBoundarySolution.getValue())) || std::abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundaryDerivative.getValue())) || isinf(std::abs(_horizonBoundaryDerivative.getValue()))) && _horizonBoundary < (1. + sqrt(1. - _a*_a)) + 10.*DBL_EPSILON){
 // 		std::cout << "(RADIALSOLVER) ERROR: Calculation of horizon side boundary value failed for L = "<<_L<<", m = "<<_m<<", omega = "<<_omega<<". Attempted to push boundary out to r = "<<_horizonBoundary<<" \n";
 // 	}
 
@@ -325,7 +325,7 @@ void RadialTeukolsky::setBoundaryConditions(BoundaryCondition bc, Complex R, Com
 // Returns true if solution method failed, false if successful
 bool RadialTeukolsky::failCheck(){
 	for(size_t i = 0; i < _inSolution.size(); i++){
-		if(isnan(abs(_inSolution[i])) || abs(_inSolution[i]) == 0. || isnan(abs(_upSolution[i])) || abs(_upSolution[i]) == 0. || isnan(abs(_inDerivative[i])) || isnan(abs(_upDerivative[i]))){
+		if(isnan(std::abs(_inSolution[i])) || std::abs(_inSolution[i]) == 0. || isnan(std::abs(_upSolution[i])) || std::abs(_upSolution[i]) == 0. || isnan(std::abs(_inDerivative[i])) || isnan(std::abs(_upDerivative[i]))){
 			// std::cout << "Asymptotic series solution failed for r = "<< _radialPoints[i] <<" \n";
 			return true;
 		}
@@ -337,7 +337,7 @@ bool RadialTeukolsky::failCheck(){
 bool RadialTeukolsky::failCheck(BoundaryCondition bc){
 	if(bc == In){
 		for(size_t i = 0; i < _inSolution.size(); i++){
-			if(isnan(abs(_inSolution[i])) || abs(_inSolution[i]) == 0. || isnan(abs(_inDerivative[i]))){
+			if(isnan(std::abs(_inSolution[i])) || std::abs(_inSolution[i]) == 0. || isnan(std::abs(_inDerivative[i]))){
 				// std::cout << "Asymptotic series solution failed for r = "<< _radialPoints[i] <<" \n";
 				return true;
 			}
@@ -345,7 +345,7 @@ bool RadialTeukolsky::failCheck(BoundaryCondition bc){
 		return false;
 	}else{
 		for(size_t i = 0; i < _upSolution.size(); i++){
-			if(isnan(abs(_upSolution[i])) || abs(_upSolution[i]) == 0. || isnan(abs(_upDerivative[i]))){
+			if(isnan(std::abs(_upSolution[i])) || std::abs(_upSolution[i]) == 0. || isnan(std::abs(_upDerivative[i]))){
 				// std::cout << "Asymptotic series solution failed for r = "<< _radialPoints[i] <<" \n";
 				return true;
 			}
@@ -359,9 +359,11 @@ bool RadialTeukolsky::failCheck(BoundaryCondition bc){
 // of parameter space in which we want to evaluate
 bool RadialTeukolsky::validMethodDomain(SolutionMethod method){
 	if(method == ASYM){
-		return (abs(_omega*_radialPoints.front()) > ASYM_AUTO_RMIN);
+		return (std::abs(_omega*_radialPoints.front()) > ASYM_AUTO_RMIN);
 	}else if(method == MST){
-		return ((abs(_radialPoints.back()*_omega) < MST_AUTO_FREQ && _radialPoints.size() < MST_AUTO_POINTS_MAX) || abs(10.*_radialPoints.back()*_omega) < MST_AUTO_FREQ);
+		return ((std::abs(_radialPoints.back()*_omega) < MST_AUTO_FREQ && _radialPoints.size() < MST_AUTO_POINTS_MAX) || std::abs(10.*_radialPoints.back()*_omega) < MST_AUTO_FREQ);
+	}else{
+		return true;
 	}
 }
 
@@ -605,7 +607,7 @@ void RadialTeukolsky::AUTOsolve(BoundaryCondition bc){
 // integrate the Teukolsky equation using a stable choice of spin-weight and then generates the requested
 // solution via the Teukolsky-Starobinsky transformations
 void RadialTeukolsky::generateSolutions(SolutionMethod method, bool make_stable){
-	if(abs(_omega) <= ZERO_FREQ_MAX){
+	if(std::abs(_omega) <= ZERO_FREQ_MAX){
 		STATICsolve();
 	}else if(method == AUTO){
 		AUTOsolve();
@@ -623,7 +625,7 @@ void RadialTeukolsky::generateSolutions(SolutionMethod method, bool make_stable)
 		}else if(method == TEUK){
 			TEUKsolve(In, make_stable);
 			TEUKsolve(Up, make_stable);
-		}else if(method == GSN && abs(_s) == 2){
+		}else if(method == GSN && std::abs(_s) == 2){
 			GSNsolve(In);
 			GSNsolve(Up);
 		}else{
@@ -633,7 +635,7 @@ void RadialTeukolsky::generateSolutions(SolutionMethod method, bool make_stable)
 }
 
 void RadialTeukolsky::generateSolutions(BoundaryCondition bc, SolutionMethod method, bool make_stable){
-	if(abs(_omega) <= ZERO_FREQ_MAX){
+	if(std::abs(_omega) <= ZERO_FREQ_MAX){
 		STATICsolve(bc);
 	}else if(method == AUTO){
 		AUTOsolve(bc);
@@ -649,7 +651,7 @@ void RadialTeukolsky::generateSolutions(BoundaryCondition bc, SolutionMethod met
 			HBLsolve(bc, make_stable);
 		}else if(method == TEUK){
 			TEUKsolve(bc, make_stable);
-		}else if(method == GSN && abs(_s) == 2){
+		}else if(method == GSN && std::abs(_s) == 2){
 			GSNsolve(bc);
 		}else{
 			std::cout << "(RADIALSOLVER) ERROR: Method " << method << " is unknown or not yet implemented. Please choose another method.\n";
@@ -777,13 +779,13 @@ Result RadialTeukolsky::getBoundaryDerivative(BoundaryCondition bc){
 
 ComplexVector RadialTeukolsky::getSolution(BoundaryCondition bc){
 	if(bc == In){
-		// if( abs(_inSolution[0]) == 0. && abs(_inDerivative[0]) == 0. ){
+		// if( std::abs(_inSolution[0]) == 0. && std::abs(_inDerivative[0]) == 0. ){
 		// 	generateSolutions(bc);
 		// }
 
 		return _inSolution;
 	}else{
-		// if( abs(_upSolution[0]) == 0. && abs(_upDerivative[0]) == 0. ){
+		// if( std::abs(_upSolution[0]) == 0. && std::abs(_upDerivative[0]) == 0. ){
 		// 	generateSolutions(bc);
 		// }
 
@@ -793,13 +795,13 @@ ComplexVector RadialTeukolsky::getSolution(BoundaryCondition bc){
 
 Complex RadialTeukolsky::getSolution(BoundaryCondition bc, int pos){
 	if(bc == In){
-		// if( abs(_inSolution[0]) == 0. && abs(_inDerivative[0]) == 0. ){
+		// if( std::abs(_inSolution[0]) == 0. && std::abs(_inDerivative[0]) == 0. ){
 		// 	generateSolutions(bc);
 		// }
 
 		return _inSolution[pos];
 	}else{
-		// if( abs(_upSolution[0]) == 0. && abs(_upDerivative[0]) == 0. ){
+		// if( std::abs(_upSolution[0]) == 0. && std::abs(_upDerivative[0]) == 0. ){
 		// 	generateSolutions(bc);
 		// }
 
@@ -809,13 +811,13 @@ Complex RadialTeukolsky::getSolution(BoundaryCondition bc, int pos){
 
 ComplexVector RadialTeukolsky::getDerivative(BoundaryCondition bc){
 	if(bc == In){
-		// if( abs(_inSolution[0]) == 0. && abs(_inDerivative[0]) == 0. ){
+		// if( std::abs(_inSolution[0]) == 0. && std::abs(_inDerivative[0]) == 0. ){
 		// 	generateSolutions(bc);
 		// }
 
 		return _inDerivative;
 	}else{
-		// if( abs(_upSolution[0]) == 0. && abs(_upDerivative[0]) == 0. ){
+		// if( std::abs(_upSolution[0]) == 0. && std::abs(_upDerivative[0]) == 0. ){
 		// 	generateSolutions(bc);
 		// }
 
@@ -825,13 +827,13 @@ ComplexVector RadialTeukolsky::getDerivative(BoundaryCondition bc){
 
 Complex RadialTeukolsky::getDerivative(BoundaryCondition bc, int pos){
 	if(bc == In){
-		// if( abs(_inSolution[0]) == 0. && abs(_inDerivative[0]) == 0. ){
+		// if( std::abs(_inSolution[0]) == 0. && std::abs(_inDerivative[0]) == 0. ){
 		// 	generateSolutions(bc);
 		// }
 
 		return _inDerivative[pos];
 	}else{
-		// if( abs(_upSolution[0]) == 0. && abs(_upDerivative[0]) == 0. ){
+		// if( std::abs(_upSolution[0]) == 0. && std::abs(_upDerivative[0]) == 0. ){
 		// 	generateSolutions(bc);
 		// }
 
@@ -883,11 +885,11 @@ double teukolsky_starobinsky_spin_1_constant(int m, double a, double omega, doub
 // Squared norm of the Teukolsky-Starobinsky constant given in terms of (a, m, omega) 
 // and Chandrasekhar's spin-invariant eigenvalue lambdaCH = lambda_s + s(s+1)
 double teukolsky_starobinsky_constant(int s, int m, double a, double omega, double lambdaCH){
-	if(abs(s) == 2){
+	if(std::abs(s) == 2){
 		return teukolsky_starobinsky_spin_2_constant(m, a, omega, lambdaCH);
-	}else if(abs(s) == 1){
+	}else if(std::abs(s) == 1){
 		return teukolsky_starobinsky_spin_1_constant(m, a, omega, lambdaCH);
-	}else if(abs(s) == 0){
+	}else if(std::abs(s) == 0){
 		return 1.;
 	}else{
 		std::cout << "(ERROR) s = " << s << " is not currently supported for the TS constant\n";
@@ -952,11 +954,11 @@ Complex teukolsky_starobinsky_spin_1_amplitude(BoundaryCondition bc, int s, int 
 // The amplitudes of the homogeneous solutions after their spin-weights have been flipped by
 // the Teukolsky-Starobinsky radial transformation for s = pm 1, 2
 Complex teukolsky_starobinsky_amplitude(BoundaryCondition bc, int s, int m, double a, double omega, double lambdaCH){
-	if(abs(s) == 0){
+	if(std::abs(s) == 0){
 		return 1.;
-	}else if(abs(s) == 1){
+	}else if(std::abs(s) == 1){
 		return teukolsky_starobinsky_spin_1_amplitude(bc, s, m, a, omega, lambdaCH);
-	}else if(abs(s) == 2){
+	}else if(std::abs(s) == 2){
 		return teukolsky_starobinsky_spin_2_amplitude(bc, s, m, a, omega, lambdaCH);
 	}else{
 		std::cout << "(ERROR) s = " << s << " is not currently supported for the TS constant\n";
@@ -965,7 +967,7 @@ Complex teukolsky_starobinsky_amplitude(BoundaryCondition bc, int s, int m, doub
 }
 
 Complex teukolsky_starobinsky_plus_2_in(int m, double a, double omega, double){
-  if(abs(omega) > 0.){
+  if(std::abs(omega) > 0.){
 	double kappa = sqrt(1. - a*a);
 	double w = (2.*omega*(1. + kappa) - m*a)/kappa;
 	Complex iw = -I*w;
@@ -983,7 +985,7 @@ Complex teukolsky_starobinsky_plus_2_up(int m, double a, double omega, double la
 }
 
 Complex teukolsky_starobinsky_minus_2_up(int, double, double omega, double lambdaCH){
-  if(abs(omega) > 0.){
+  if(std::abs(omega) > 0.){
     return pow(2.*omega, 4);
   }
   return lambdaCH*(lambdaCH - 2.);
@@ -993,7 +995,7 @@ Complex teukolsky_starobinsky_plus_1_in(int m, double a, double omega, double){
   double kappa = sqrt(1. - a*a);
   double w = (2.*omega*(1. + kappa) - m*a)/kappa;
   Complex iw = -I*w;
-  if(abs(omega) > 0.){
+  if(std::abs(omega) > 0.){
     return pow(2.*kappa, 2)*(iw + 1.)*(iw);
   }
   return 1.;
@@ -1008,7 +1010,7 @@ Complex teukolsky_starobinsky_plus_1_up(int m, double a, double omega, double la
 }
 
 Complex teukolsky_starobinsky_minus_1_up(int, double, double omega, double lambdaCH){
-  if(abs(omega) > 0.){
+  if(std::abs(omega) > 0.){
     return -pow(2.*omega, 2);
   }
   return lambdaCH;
@@ -1080,15 +1082,15 @@ Complex spin_plus_2_df_coeff_TS_static(double a, double lambdaCH, double r){ // 
 }
 
 Complex f_coeff_TS(int s, int m, double a, double omega, double lambdaCH, double r){
-	if(abs(s) == 0){
+	if(std::abs(s) == 0){
 		return 1.;
-	}else if(abs(s) == 1){
+	}else if(std::abs(s) == 1){
 		if(s < 0){
 			return spin_minus_1_f_coeff_TS(m, a, omega, lambdaCH, r);
 		}else{
 			return spin_plus_1_f_coeff_TS(m, a, omega, lambdaCH, r);
 		}
-	}else if(abs(s) == 2){
+	}else if(std::abs(s) == 2){
 		if(s < 0){
 			return spin_minus_2_f_coeff_TS(m, a, omega, lambdaCH, r);
 		}else{
@@ -1101,15 +1103,15 @@ Complex f_coeff_TS(int s, int m, double a, double omega, double lambdaCH, double
 }
 
 Complex g_coeff_TS(int s, int m, double a, double omega, double lambdaCH, double r){
-	if(abs(s) == 0){
+	if(std::abs(s) == 0){
 		return 0.;
-	}else if(abs(s) == 1){
+	}else if(std::abs(s) == 1){
 		if(s < 0){
 			return spin_minus_1_g_coeff_TS(m, a, omega, lambdaCH, r);
 		}else{
 			return spin_plus_1_g_coeff_TS(m, a, omega, lambdaCH, r);
 		}
-	}else if(abs(s) == 2){
+	}else if(std::abs(s) == 2){
 		if(s < 0){
 			return spin_minus_2_g_coeff_TS(m, a, omega, lambdaCH, r);
 		}else{
@@ -1122,15 +1124,15 @@ Complex g_coeff_TS(int s, int m, double a, double omega, double lambdaCH, double
 }
 
 Complex df_coeff_TS_static(int s, double a, double lambdaCH, double r){
-	if(abs(s) == 0){
+	if(std::abs(s) == 0){
 		return 0.;
-	}else if(abs(s) == 1){
+	}else if(std::abs(s) == 1){
 		if(s < 0){
 			return spin_minus_1_df_coeff_TS_static(a, lambdaCH, r);
 		}else{
 			return spin_plus_1_df_coeff_TS_static(a, lambdaCH, r);
 		}
-	}else if(abs(s) == 2){
+	}else if(std::abs(s) == 2){
 		if(s < 0){
 			return spin_minus_2_df_coeff_TS_static(a, lambdaCH, r);
 		}else{
@@ -1159,12 +1161,12 @@ Complex df_coeff_TS_static(int s, double a, double lambdaCH, double r){
 
 void flip_spin_of_radial_teukolsky_TS_subfunc(Complex &RFlip, Complex &RPFlip, Complex Cm, Complex Cp, int s, int m, double a, double omega, double lambdaCH, double r, Complex R, Complex RP){
 	Complex g0p, f0p, g0m, f0m;
-	if(abs(s) == 2){
+	if(std::abs(s) == 2){
 		g0m = spin_minus_2_g_coeff_TS(m, a, omega, lambdaCH, r);
 		f0m = spin_minus_2_f_coeff_TS(m, a, omega, lambdaCH, r);
 		g0p = spin_plus_2_g_coeff_TS(m, a, omega, lambdaCH, r);
 		f0p = spin_plus_2_f_coeff_TS(m, a, omega, lambdaCH, r);
-	}else if(abs(s) == 1){
+	}else if(std::abs(s) == 1){
 		g0m = spin_minus_1_g_coeff_TS(m, a, omega, lambdaCH, r);
 		f0m = spin_minus_1_f_coeff_TS(m, a, omega, lambdaCH, r);
 		g0p = spin_plus_1_g_coeff_TS(m, a, omega, lambdaCH, r);
@@ -1179,7 +1181,7 @@ void flip_spin_of_radial_teukolsky_TS_subfunc(Complex &RFlip, Complex &RPFlip, C
 	double delta = r*r - 2.*r + a*a;
 	if(s < 0){
 		RFlip = (f0m*R + g0m*RP)/Cp;
-		if(abs(g0p) > 0. && abs(omega) > ZERO_FREQ_MAX){
+		if(std::abs(g0p) > 0. && std::abs(omega) > ZERO_FREQ_MAX){
 			RPFlip = (Cm*R - f0p*RFlip)/g0p;
 		}else{
 			Complex df0m = df_coeff_TS_static(s, a, lambdaCH, r);
@@ -1187,7 +1189,7 @@ void flip_spin_of_radial_teukolsky_TS_subfunc(Complex &RFlip, Complex &RPFlip, C
 		}
 	}else{
 		RFlip = (f0p*R + g0p*RP)/Cm;
-		if(abs(g0m) > 0. && abs(omega) > ZERO_FREQ_MAX){
+		if(std::abs(g0m) > 0. && std::abs(omega) > ZERO_FREQ_MAX){
 			RPFlip = (Cp*R - f0m*RFlip)/g0m;
 		}else{
 			Complex df0p = df_coeff_TS_static(s, a, lambdaCH, r);
@@ -1198,15 +1200,15 @@ void flip_spin_of_radial_teukolsky_TS_subfunc(Complex &RFlip, Complex &RPFlip, C
 
 void flip_spin_of_radial_teukolsky_TS(Complex &RFlip, Complex &RPFlip, BoundaryCondition bc, int s, int m, double a, double omega, double lambdaCH, double r, Complex R, Complex RP){
   	Complex Cp, Cm;
-	Cp = teukolsky_starobinsky_amplitude(bc, abs(s), m, a, omega, lambdaCH);
-	Cm = teukolsky_starobinsky_amplitude(bc, -abs(s), m, a, omega, lambdaCH);
+	Cp = teukolsky_starobinsky_amplitude(bc, std::abs(s), m, a, omega, lambdaCH);
+	Cm = teukolsky_starobinsky_amplitude(bc, -std::abs(s), m, a, omega, lambdaCH);
 	flip_spin_of_radial_teukolsky_TS_subfunc(RFlip, RPFlip, Cm, Cp, s, m, a, omega, lambdaCH, r, R, RP);
 }
 
 void flip_spin_of_radial_teukolsky_TS(ComplexVector &RFlip, ComplexVector &RPFlip, BoundaryCondition bc, int s, int m, double a, double omega, double lambdaCH, Vector r, ComplexVector R, ComplexVector RP){
   	Complex Cp, Cm;
-	Cp = teukolsky_starobinsky_amplitude(bc, abs(s), m, a, omega, lambdaCH);
-	Cm = teukolsky_starobinsky_amplitude(bc, -abs(s), m, a, omega, lambdaCH);
+	Cp = teukolsky_starobinsky_amplitude(bc, std::abs(s), m, a, omega, lambdaCH);
+	Cm = teukolsky_starobinsky_amplitude(bc, -std::abs(s), m, a, omega, lambdaCH);
 	for(size_t i = 0; i < r.size(); i++){
 		flip_spin_of_radial_teukolsky_TS_subfunc(RFlip[i], RPFlip[i], Cm, Cp, s, m, a, omega, lambdaCH, r[i], R[i], RP[i]);
 	}
@@ -1227,7 +1229,7 @@ void flip_spin_of_radial_teukolsky_TS(ComplexVector &RFlip, ComplexVector &RPFli
 //   RinFlip = (f0*Rin + g0*RinP)/Cp2in;
 //   RupFlip = (f0*Rup + g0*RupP)/Cp2up;
 
-//   if(abs(g0) > 0.){
+//   if(std::abs(g0) > 0.){
 //     RinPFlip = (Cm2in*pow(delta, -4)*Rin - std::conj(f0 + 4.*(r - 1.)/delta*g0)*RinFlip)/std::conj(g0);
 //     RupPFlip = (Cm2up*pow(delta, -4)*Rup - std::conj(f0 + 4.*(r - 1.)/delta*g0)*RupFlip)/std::conj(g0);
 //   }else{
@@ -1630,7 +1632,7 @@ Result teuk_in_static_solution(const double &a, const int &s, const int &l, cons
 	double kappa = sqrt(1. - a*a);
 	double tau = -(m*a)/kappa;
 	double x = (1. + kappa - r)/(2.*kappa);
-	if(abs(tau) > 0 || s <= 0){
+	if(std::abs(tau) > 0 || s <= 0){
 		return pow(-2.*kappa*x, -double(s) - 0.5*I*tau)*pow(2.*kappa*(1. - x), -0.5*I*tau)*hypergeo_2F1(double(-l) - I*tau, double(l+1) - I*tau, double(1 - s) - I*tau, x)/cgamma(double(1 - s) - I*tau);
 	}else{
 		return pow(2.*kappa, -s)*phammer(double(l - s + 1), 2*s)/double(factorial(s))*hypergeo_2F1(double(-l + s), double(l+1+s), double(1 + s), x);
@@ -1641,7 +1643,7 @@ Result teuk_in_static_derivative(const double &a, const int &s, const int &l, co
 	double kappa = sqrt(1. - a*a);
 	double x = (1. + kappa - r)/(2.*kappa);
 	double tau = -(m*a)/kappa;
-	if(abs(tau) > 0 || s <= 0){
+	if(std::abs(tau) > 0 || s <= 0){
 		Result f1 = hypergeo_2F1(double(-l) - I*tau, double(l+1) - I*tau, double(1 - s) - I*tau, x);
 		Result df1 = dhypergeo_2F1(double(-l) - I*tau, double(l+1) - I*tau, double(1 - s) - I*tau, x);
 		return pow(-2.*kappa*x, -double(s) - 0.5*I*tau)*pow(2.*kappa*(1. - x), -0.5*I*tau)*((2.*double(s)*(1. - x) - (2.*x - 1.)*I*tau)*f1 - 2.*(1. - x)*x*df1)/(cgamma(double(1 - s) - I*tau)*4.*kappa*x*(1. - x));
@@ -1770,11 +1772,11 @@ int teuk_integrate_gsl(ComplexVector &psi, ComplexVector &dpsidr, int (*sys)(dou
 	double h = TEUK_ODE_STEP_SIZE_INIT*sqrt(Psi[0]*Psi[0] + Psi[1]*Psi[1])/sqrt(Psi[2]*Psi[2] + Psi[3]*Psi[3]);
 	// double h = TEUK_ODE_STEP_SIZE_INIT;
 	double rTest = r[0];
-	if(abs(rTest - r0) <= 1.e-14){
+	if(std::abs(rTest - r0) <= 1.e-14){
 		rTest = r[1];
 	}
-	if(h > abs(r0 - rTest)){
-		h = (1.e-6)*abs(r0 - rTest);
+	if(h > std::abs(r0 - rTest)){
+		h = (1.e-6)*std::abs(r0 - rTest);
 	}
 	if(rTest < r0){
 		h *= -1;
@@ -1827,11 +1829,11 @@ int teuk_integrate_gsl(ComplexVector &psi, ComplexVector &dpsidr, int (*sys)(dou
 
 	double h = TEUK_ODE_STEP_SIZE_INIT/sqrt(Psi[2]*Psi[2] + Psi[3]*Psi[3]);
 	double rTest = r[0];
-	if(abs(rTest - r0) <= 1.e-14){
+	if(std::abs(rTest - r0) <= 1.e-14){
 		rTest = r[1];
 	}
-	if(h > abs(r0 - rTest)){
-		h = 0.1*abs(r0 - rTest);
+	if(h > std::abs(r0 - rTest)){
+		h = 0.1*std::abs(r0 - rTest);
 	}
 	if(rTest < r0){
 		h *= -1;
@@ -1910,7 +1912,7 @@ int teuk_in_TEUK_integrate(ComplexVector &R_return, ComplexVector &Rp_return, Ra
 	Complex Rp = teuk.getBoundaryDerivative(In).getValue();
 	double r0 = teuk.getBoundaryPoint(In);
 
-	double norm = abs(R);
+	double norm = std::abs(R);
 	R = R/norm;
 	Rp = Rp/norm;
 
@@ -1971,7 +1973,7 @@ int teuk_up_TEUK_integrate(ComplexVector &R_return, ComplexVector &Rp_return, Ra
 	// 	teuk_spin_minus_transform_solution(R, r0, params);
 	// 	teuk_spin_minus_transform_parameters(params);
 	// }
-	double norm = abs(R);
+	double norm = std::abs(R);
 	R = R/norm;
 	Rp = Rp/norm;
 
@@ -2105,8 +2107,8 @@ int teuk_in_GSN_integrate(ComplexVector &R_return, ComplexVector &Rp_return, Rad
 	// std::cout << "(RADIALSOLVER) Psi(r = "<< r0 << ") = " << Psi << "\n";
 	// std::cout << "(RADIALSOLVER) Psi'(r = "<< r0 << ") = " << dPsi << "\n";
 
-	// std::cout << "(RADIALSOLVER) Reverse transformation returns with accuracy " << abs(1. - R/GSN_X_to_teuk_R(Psi, dPsi, r0, params)) << "\n";
-	// std::cout << "(RADIALSOLVER) Reverse transformation returns with accuracy " << abs(1. - RP/GSN_dX_to_teuk_RP(Psi, dPsi, r0, params)) << "\n";
+	// std::cout << "(RADIALSOLVER) Reverse transformation returns with accuracy " << std::abs(1. - R/GSN_X_to_teuk_R(Psi, dPsi, r0, params)) << "\n";
+	// std::cout << "(RADIALSOLVER) Reverse transformation returns with accuracy " << std::abs(1. - RP/GSN_dX_to_teuk_RP(Psi, dPsi, r0, params)) << "\n";
 
 	double psiR, psiI, dpsiR, dpsiI;
 	psiR = std::real(Psi/norm);
@@ -2168,7 +2170,7 @@ int teuk_up_GSN_integrate(ComplexVector &R_return, ComplexVector &Rp_return, Rad
 	Complex dPsi = gsn_up_derivative_asymptotic_infinity(r0, params).getValue();
 	Complex norm = 1.;
 
-	while((isnan(abs(Psi)) || isnan(abs(dPsi))) && r0 < 1.e6*r.back()){
+	while((isnan(std::abs(Psi)) || isnan(std::abs(dPsi))) && r0 < 1.e6*r.back()){
 		r0 *= 1.5;
 		Psi = gsn_up_asymptotic_infinity(r0, params).getValue();
 		dPsi = gsn_up_derivative_asymptotic_infinity(r0, params).getValue();
@@ -3135,10 +3137,10 @@ Result teuk_up_asymptotic_infinity(const double &a, const int &s, const int &, c
 
 	term = c0*pow(arg, k);
 	sum += term;
-	maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+	maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 	k++;
 	Complex previousTerm = term;
-	while( (abs(term/sum) > DBL_EPSILON && abs(previousTerm/sum) > DBL_EPSILON && k < 100) || k <= 6 ){
+	while( (std::abs(term/sum) > DBL_EPSILON && std::abs(previousTerm/sum) > DBL_EPSILON && k < 100) || k <= 6 ){
 		cm2 = cm1;
 		cm1 = c0;
 		c0 = -(alphaCH + epsilonCH*(Complex(k) - 2.))*(alphaCH + epsilonCH*(Complex(k) - gammaCH - 1.))*cm2;
@@ -3149,13 +3151,13 @@ Result teuk_up_asymptotic_infinity(const double &a, const int &s, const int &, c
 		previousTerm = term;
 		term = c0*pow(arg, k);
 		sum += term;
-		maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+		maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 		k++;
 		// std::cout << "term = "<< term << ", sum = " << sum << "\n";
 	}
 
-	double error = abs(maxTerm/sum)*DBL_EPSILON;
-	error = (abs(term/sum) < error)? error : abs(term/sum);
+	double error = std::abs(maxTerm/sum)*DBL_EPSILON;
+	error = (std::abs(term/sum) < error)? error : std::abs(term/sum);
 
 	return Result(Ctrans*prefactor*sum, Ctrans*prefactor*sum*error);
 }
@@ -3203,10 +3205,10 @@ Result teuk_up_derivative_asymptotic_infinity(const double &a, const int &s, con
 
 	term = c0*(gr - Complex(k)/(r - rm))*pow(arg, k);
 	sum += term;
-	maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+	maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 	k++;
 	Complex previousTerm = term;
-	while( (abs(term/sum) > DBL_EPSILON && abs(previousTerm/sum) > DBL_EPSILON && k < 100 ) || k <= 5 ){
+	while( (std::abs(term/sum) > DBL_EPSILON && std::abs(previousTerm/sum) > DBL_EPSILON && k < 100 ) || k <= 5 ){
 		cm2 = cm1;
 		cm1 = c0;
 		c0 = -(alphaCH + epsilonCH*(Complex(k) - 2.))*(alphaCH + epsilonCH*(Complex(k) - gammaCH - 1.))*cm2;
@@ -3217,12 +3219,12 @@ Result teuk_up_derivative_asymptotic_infinity(const double &a, const int &s, con
 		previousTerm = term;
 		term = c0*(gr - Complex(k)/(r - rm))*pow(arg, k);
 		sum += term;
-		maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+		maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 		k++;
 	}
 
-	double error = abs(maxTerm/sum)*DBL_EPSILON;
-	error = (abs(term/sum) < error)? error : abs(term/sum);
+	double error = std::abs(maxTerm/sum)*DBL_EPSILON;
+	error = (std::abs(term/sum) < error)? error : std::abs(term/sum);
 
 	// Asymptotic amplitude chosen to match normalization of MST solutions
 	Complex Ctrans = pow(2., -2.*I*omega);
@@ -3275,10 +3277,10 @@ Result teuk_in_asymptotic_horizon(const double &a, const int &s, const int &, co
 
 	term = c0*pow(arg, k);
 	sum += term;
-	maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+	maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 	k++;
 	Complex previousTerm = term;
-	while( (abs(term/sum) > DBL_EPSILON && abs(previousTerm/sum) > DBL_EPSILON && k < 300) || k <= 4 ){
+	while( (std::abs(term/sum) > DBL_EPSILON && std::abs(previousTerm/sum) > DBL_EPSILON && k < 300) || k <= 4 ){
 		cm2 = cm1;
 		cm1 = c0;
 		c0 = -(alphaCH + epsilonCH*(Complex(k) - deltaCH - 1.))*cm2;
@@ -3289,13 +3291,13 @@ Result teuk_in_asymptotic_horizon(const double &a, const int &s, const int &, co
 		previousTerm = term;
 		term = c0*pow(arg, k);
 		sum += term;
-		maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+		maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 		//std::cout << "sum_" << k << " = " << sum << " \n";
 		k++;
 	}
 
-	double error = abs(maxTerm/sum)*DBL_EPSILON;
-	error = (abs(term/sum) < error)? error : abs(term/sum);
+	double error = std::abs(maxTerm/sum)*DBL_EPSILON;
+	error = (std::abs(term/sum) < error)? error : std::abs(term/sum);
 
 	// Asymptotic amplitude chosen to match normalization of MST solutions
 	Complex Btrans = pow(2., I*kfreq*rp/kappa - cs)*pow(kappa, I*kfreq*rm/kappa - cs)*exp(-I*kfreq*rp);
@@ -3353,7 +3355,7 @@ Result teuk_in_derivative_asymptotic_horizon(const double &a, const int &s, cons
 	k++;
 
 	Complex previousTerm = term;
-	while( (abs(term/sum) > DBL_EPSILON && abs(previousTerm/sum) > DBL_EPSILON && k < 300) || k <= 4 ){
+	while( (std::abs(term/sum) > DBL_EPSILON && std::abs(previousTerm/sum) > DBL_EPSILON && k < 300) || k <= 4 ){
 		cm2 = cm1;
 		cm1 = c0;
 		c0 = -(alphaCH + epsilonCH*(Complex(k) - deltaCH - 1.))*cm2;
@@ -3364,12 +3366,12 @@ Result teuk_in_derivative_asymptotic_horizon(const double &a, const int &s, cons
 		previousTerm = term;
 		term = c0*(gr*pow(arg, k) + Complex(k)/(2.*kappa)*pow(arg, k-1));
 		sum += term;
-		maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+		maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 		k++;
 	}
 
-	double error = abs(maxTerm/sum)*DBL_EPSILON;
-	error = (abs(term/sum) < error)? error : abs(term/sum);
+	double error = std::abs(maxTerm/sum)*DBL_EPSILON;
+	error = (std::abs(term/sum) < error)? error : std::abs(term/sum);
 
 	// Asymptotic amplitude chosen to match normalization of MST solutions
 	Complex Btrans = pow(2., I*kfreq*rp/kappa - cs)*pow(kappa, I*kfreq*rm/kappa - cs)*exp(-I*kfreq*rp);
@@ -3393,7 +3395,7 @@ Complex gsn_asymptotic_initial_sum(const double &r, hbl_parameters params){
 
 Complex gsn_asymptotic_initial_sum(const double &a, const int &, const int &m, const double &omega, const double &lambda, const double &r){
 	double kappa = sqrt(1. - pow(a, 2));
-	if(abs(a) < DBL_EPSILON){
+	if(std::abs(a) < DBL_EPSILON){
 		return (Complex(0.,-0.02083333333333333333)*pow(omega,-3)*pow(r,-2)*(-8. + 12.*r -
 			6.*pow(r,2) + pow(r,3))*(r*(2.*lambda - Complex(0.,12.)*omega + pow(lambda,2))*(-12.*(2. + lambda)
 				+ r*(12. + 8.*lambda + Complex(0.,36.)*omega + pow(lambda,2)) - Complex(0.,12.)*omega*pow(r,2)))*pow((-2. + r)*r,-3));
@@ -3500,10 +3502,10 @@ Result gsn_up_asymptotic_infinity_chi_series(const double &a, const int &s, cons
 	k = 4;
 	term = c0*(alphaBetaGSN - betaGSN*Complex(k)/(r - rm))*pow(arg, k);
 	sum += term;
-	maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+	maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 	k++;
 	Complex previousTerm = term;
-	while( (abs(term/sum) > DBL_EPSILON || abs(previousTerm/sum) > DBL_EPSILON) && k < 300){
+	while( (std::abs(term/sum) > DBL_EPSILON || std::abs(previousTerm/sum) > DBL_EPSILON) && k < 300){
 		cm2 = cm1;
 		cm1 = c0;
 		c0 = -(alphaCH + epsilonCH*(Complex(k) - 2.))*(alphaCH + epsilonCH*(Complex(k) - gammaCH - 1.))*cm2;
@@ -3514,7 +3516,7 @@ Result gsn_up_asymptotic_infinity_chi_series(const double &a, const int &s, cons
 		previousTerm = term;
 		term = c0*(alphaBetaGSN - betaGSN*Complex(k)/(r - rm))*pow(arg, k);
 		sum += term;
-		maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+		maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 		k++;
 	}
 	cm2 = cm1;
@@ -3527,9 +3529,9 @@ Result gsn_up_asymptotic_infinity_chi_series(const double &a, const int &s, cons
 	previousTerm = term;
 	term = c0*(alphaBetaGSN - betaGSN*Complex(k)/(r - rm))*pow(arg, k);
 	sum += term;
-	maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+	maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 	k++;
-	while( (abs(term/sum) > DBL_EPSILON || abs(previousTerm/sum) > DBL_EPSILON) && k < 300){
+	while( (std::abs(term/sum) > DBL_EPSILON || std::abs(previousTerm/sum) > DBL_EPSILON) && k < 300){
 		cm2 = cm1;
 		cm1 = c0;
 		c0 = -(alphaCH + epsilonCH*(Complex(k) - 2.))*(alphaCH + epsilonCH*(Complex(k) - gammaCH - 1.))*cm2;
@@ -3540,12 +3542,12 @@ Result gsn_up_asymptotic_infinity_chi_series(const double &a, const int &s, cons
 		previousTerm = term;
 		term = c0*(alphaBetaGSN - betaGSN*Complex(k)/(r - rm))*pow(arg, k);
 		sum += term;
-		maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+		maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 		k++;
 	}
 
-	double error = abs(maxTerm/sum)*DBL_EPSILON;
-	error = (abs(term/sum) < error)? error : abs(term/sum);
+	double error = std::abs(maxTerm/sum)*DBL_EPSILON;
+	error = (std::abs(term/sum) < error)? error : std::abs(term/sum);
 
 	return Result(Ctrans*prefactor*sum, Ctrans*prefactor*sum*error);
 }
@@ -3586,7 +3588,7 @@ Complex gsn_asymptotic_derivative_initial_sum(const double &r, hbl_parameters pa
 
 Complex gsn_asymptotic_derivative_initial_sum(const double &a, const int &, const int &mTemp, const double &omega, const double &lambda, const double &r){
 	double kappa = sqrt(1. - pow(a, 2));
-	if(abs(a) < DBL_EPSILON){
+	if(std::abs(a) < DBL_EPSILON){
 		kappa = 1.;
 	}
 	Complex m = Complex(mTemp);
@@ -3671,10 +3673,10 @@ Result gsn_up_derivative_asymptotic_infinity_chi_series(const double &a, const i
 	k = 5;
 	term = c0*(alphaBetaGSN - betaGSN*Complex(k)/(r - rm))*pow(arg, k);
 	sum += term;
-	maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+	maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 	k++;
 	Complex previousTerm = term;
-	while( (abs(term/sum) > DBL_EPSILON || abs(previousTerm/sum) > DBL_EPSILON) && k < 300){
+	while( (std::abs(term/sum) > DBL_EPSILON || std::abs(previousTerm/sum) > DBL_EPSILON) && k < 300){
 		cm2 = cm1;
 		cm1 = c0;
 		c0 = -(alphaCH + epsilonCH*(Complex(k) - 2.))*(alphaCH + epsilonCH*(Complex(k) - gammaCH - 1.))*cm2;
@@ -3685,7 +3687,7 @@ Result gsn_up_derivative_asymptotic_infinity_chi_series(const double &a, const i
 		previousTerm = term;
 		term = c0*(alphaBetaGSN - betaGSN*Complex(k)/(r - rm))*pow(arg, k);
 		sum += term;
-		maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+		maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 		k++;
 	}
 	cm2 = cm1;
@@ -3698,9 +3700,9 @@ Result gsn_up_derivative_asymptotic_infinity_chi_series(const double &a, const i
 	previousTerm = term;
 	term = c0*(alphaBetaGSN - betaGSN*Complex(k)/(r - rm))*pow(arg, k);
 	sum += term;
-	maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+	maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 	k++;
-	while( (abs(term/sum) > DBL_EPSILON || abs(previousTerm/sum) > DBL_EPSILON) && k < 300){
+	while( (std::abs(term/sum) > DBL_EPSILON || std::abs(previousTerm/sum) > DBL_EPSILON) && k < 300){
 		cm2 = cm1;
 		cm1 = c0;
 		c0 = -(alphaCH + epsilonCH*(Complex(k) - 2.))*(alphaCH + epsilonCH*(Complex(k) - gammaCH - 1.))*cm2;
@@ -3711,12 +3713,12 @@ Result gsn_up_derivative_asymptotic_infinity_chi_series(const double &a, const i
 		previousTerm = term;
 		term = c0*(alphaBetaGSN - betaGSN*Complex(k)/(r - rm))*pow(arg, k);
 		sum += term;
-		maxTerm = (abs(term) < abs(maxTerm))? maxTerm : term;
+		maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 		k++;
 	}
 
-	double error = abs(maxTerm/sum)*DBL_EPSILON;
-	error = (abs(term/sum) < error)? error : abs(term/sum);
+	double error = std::abs(maxTerm/sum)*DBL_EPSILON;
+	error = (std::abs(term/sum) < error)? error : std::abs(term/sum);
 
 	Result term1 = Result(Ctrans*prefactor*sum, Ctrans*prefactor*sum*error);
 

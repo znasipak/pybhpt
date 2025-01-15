@@ -2,7 +2,7 @@
 
 #include "hertz.hpp"
 
-HertzMode::HertzMode(TeukolskyMode& teuk, Gauge gauge): _gauge(gauge), _s(teuk.getSpinWeight()), _L(teuk.getSpheroidalModeNumber()), _m(teuk.getAzimuthalModeNumber()), _k(teuk.getPolarModeNumber()), _n(teuk.getRadialModeNumber()), _sampleSize(teuk.getSampleSize()), _a(teuk.getBlackHoleSpin()), _omega(teuk.getFrequency()), _lambda(teuk.getEigenvalue()), _lmin(teuk.getMinCouplingModeNumber()), _coupling(teuk.getCouplingCoefficient()), _scalarCoupling(teuk.getCouplingCoefficient().size() - 2 + (_lmin - abs(_m))), _theta(teuk.getPolarPoints()), _Slm(teuk.getPolarSolution()), _SlmP(teuk.getPolarDerivative()), _SlmPP(teuk.getPolarDerivative().size()), _r(teuk.getRadialPoints()), _Rin(teuk.getHomogeneousRadialSolution(In)), _RinP(teuk.getHomogeneousRadialDerivative(In)), _RinPP(teuk.getHomogeneousRadialDerivative(In)), _Rup(teuk.getHomogeneousRadialSolution(Up)), _RupP(teuk.getHomogeneousRadialDerivative(Up)), _RupPP(teuk.getHomogeneousRadialDerivative(Up)), _PsilmIn(teuk.getTeukolskyAmplitude(In)), _PsilmUp(teuk.getTeukolskyAmplitude(Up)){ }
+HertzMode::HertzMode(TeukolskyMode& teuk, Gauge gauge): _gauge(gauge), _s(teuk.getSpinWeight()), _L(teuk.getSpheroidalModeNumber()), _m(teuk.getAzimuthalModeNumber()), _k(teuk.getPolarModeNumber()), _n(teuk.getRadialModeNumber()), _sampleSize(teuk.getSampleSize()), _a(teuk.getBlackHoleSpin()), _omega(teuk.getFrequency()), _lambda(teuk.getEigenvalue()), _lmin(teuk.getMinCouplingModeNumber()), _coupling(teuk.getCouplingCoefficient()), _scalarCoupling(teuk.getCouplingCoefficient().size() - 2 + (_lmin - std::abs(_m))), _theta(teuk.getPolarPoints()), _Slm(teuk.getPolarSolution()), _SlmP(teuk.getPolarDerivative()), _SlmPP(teuk.getPolarDerivative().size()), _r(teuk.getRadialPoints()), _Rin(teuk.getHomogeneousRadialSolution(In)), _RinP(teuk.getHomogeneousRadialDerivative(In)), _RinPP(teuk.getHomogeneousRadialDerivative(In)), _Rup(teuk.getHomogeneousRadialSolution(Up)), _RupP(teuk.getHomogeneousRadialDerivative(Up)), _RupPP(teuk.getHomogeneousRadialDerivative(Up)), _PsilmIn(teuk.getTeukolskyAmplitude(In)), _PsilmUp(teuk.getTeukolskyAmplitude(Up)){ }
 
 HertzMode::~HertzMode(){}
 
@@ -190,8 +190,8 @@ int HertzMode::getMaxCouplingModeNumber(){
 
 Vector HertzMode::getScalarCouplingCoefficient(){ return _scalarCoupling; }
 double HertzMode::getScalarCouplingCoefficient(int l){
-	if(l <= getMaxScalarCouplingModeNumber() && l >= abs(_m)){
-		return _scalarCoupling[l - abs(_m)];
+	if(l <= getMaxScalarCouplingModeNumber() && l >= std::abs(_m)){
+		return _scalarCoupling[l - std::abs(_m)];
 	}else{
     // if(l <= getMaxScalarCouplingModeNumber()){
     //   std::cout << "Requested coupling between j = "<<_L<<" and l = "<<l<<" mode too high\n";
@@ -201,10 +201,10 @@ double HertzMode::getScalarCouplingCoefficient(int l){
 	}
 }
 int HertzMode::getMinScalarCouplingModeNumber(){
-	return abs(_m);
+	return std::abs(_m);
 }
 int HertzMode::getMaxScalarCouplingModeNumber(){
-	return _scalarCoupling.size() + abs(_m) - 1;
+	return _scalarCoupling.size() + std::abs(_m) - 1;
 }
 
 Vector HertzMode::getRadialPoints(){ return _r; }
@@ -320,7 +320,7 @@ void test_hertz_mode(int j, int m, int k, int n, GeodesicSource& geo){
   double Slm = 0.;
   double theta = 0.4*M_PI;
   double SlmRef = Sslm(2, j, m, teuk.getBlackHoleSpin()*teuk.getFrequency(), theta);
-  for(int l = abs(m); l <= hertz.getMaxScalarCouplingModeNumber(); l++){
+  for(int l = std::abs(m); l <= hertz.getMaxScalarCouplingModeNumber(); l++){
     // std::cout << "A^{l="<<l<<"}_{jm} = " << hertz.getScalarCouplingCoefficient(l) << "\n";
     Slm += hertz.getScalarCouplingCoefficient(l)*Ylm(l, m, theta);
   }
@@ -328,7 +328,7 @@ void test_hertz_mode(int j, int m, int k, int n, GeodesicSource& geo){
 
   std::cout << "S_{+2"<<j<<""<<m<<""<<k<<""<<n<<"}(theta = "<<theta<<") reference value = " << SlmRef << "\n";
   std::cout << "S_{+2"<<j<<""<<m<<""<<k<<""<<n<<"}(theta = "<<theta<<") coupling value = " << Slm << "\n";
-  std::cout << "Fractional error = " << abs(1. - Slm/SlmRef) << "\n";
+  std::cout << "Fractional error = " << std::abs(1. - Slm/SlmRef) << "\n";
 }
 
 void teukolsky_to_hertz_ORG(Complex &Psi, Complex Zteuk, int L, int m, int k, double a, double omega, double lambdaCH){
@@ -430,13 +430,13 @@ void flip_spin_of_spheroidal_eigenvalue(double &lambdaFlip, int s, double lambda
 void generate_scalar_spherical_spheroidal_coupling(Vector &Bljm, int s, int lmin, int m, Vector bljm){
   int bsize = bljm.size();
   int blmax = bsize + lmin - 1;
-  int lmax = Bljm.size() + abs(m) - 1;
+  int lmax = Bljm.size() + std::abs(m) - 1;
   if(lmax > blmax) lmax = blmax;
 
-  for(int lp = abs(m); lp <= lmax; lp++){
-    for(int i = -abs(s); i <= abs(s); i++){
+  for(int lp = std::abs(m); lp <= lmax; lp++){
+    for(int i = -std::abs(s); i <= std::abs(s); i++){
       if(lp + i >= lmin){
-        Bljm[lp - abs(m)] += bljm[lp - lmin + i]*Asljm(s, lp + i, lp, m);
+        Bljm[lp - std::abs(m)] += bljm[lp - lmin + i]*Asljm(s, lp + i, lp, m);
       }
     }
   }

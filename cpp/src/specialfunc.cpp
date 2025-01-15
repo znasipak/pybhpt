@@ -3,7 +3,7 @@
 #include "specialfunc.hpp"
 
 void set_max_compare(double& num, double comp){
-	num = ( abs(comp) < num ) ? num : abs(comp);
+	num = ( std::abs(comp) < num ) ? num : std::abs(comp);
 }
 
 //////////////////
@@ -11,7 +11,7 @@ void set_max_compare(double& num, double comp){
 //////////////////
 //Result::Result(): _realValue(0.), _imaginaryValue(0.), _realAccuracy(DBL_EPSILON), _imaginaryAccuracy(DBL_EPSILON) { }
 //Result::Result(Complex value): _realValue(std::real(value)), _imaginaryValue(std::imag(value)), _realAccuracy(DBL_EPSILON), _imaginaryAccuracy(DBL_EPSILON) { }
-Result::Result(Complex value, Complex precision): _realValue(std::real(value)), _imaginaryValue(std::imag(value)), _realAccuracy(abs(std::real(precision))), _imaginaryAccuracy(abs(std::imag(precision))) {}
+Result::Result(Complex value, Complex precision): _realValue(std::real(value)), _imaginaryValue(std::imag(value)), _realAccuracy(std::abs(std::real(precision))), _imaginaryAccuracy(std::abs(std::imag(precision))) {}
 
 Result::~Result() {}
 
@@ -110,7 +110,7 @@ Result& Result::operator*=(const Complex& rhs){
 
 // define behavior under division
 Result& Result::operator/=(const Result& rhs){
-	double magnitude = abs(rhs.getValue());
+	double magnitude = std::abs(rhs.getValue());
 	double temp = sqrt(pow(rhs.getRealValue()*_realAccuracy/magnitude, 2)
 		+ pow(rhs.getImaginaryValue()*_imaginaryAccuracy/magnitude, 2)
 		+ pow(rhs.getRealAccuracy()*rhs.getImaginaryValue()*(rhs.getImaginaryValue()*_realValue - rhs.getRealValue()*_imaginaryValue)/pow(magnitude, 3), 2)
@@ -129,7 +129,7 @@ Result& Result::operator/=(const Result& rhs){
 }
 //convert 1/(x + iy) => (x - iy)/sqrt(x^2 + y^2)
 Result& Result::operator/=(const Complex& rhs){
-	*this *= (std::real(rhs) - I*std::imag(rhs))/pow(abs(rhs), 2);
+	*this *= (std::real(rhs) - I*std::imag(rhs))/pow(std::abs(rhs), 2);
 	return *this;
 }
 // Result& Result::operator/=(const Complex& rhs){
@@ -186,7 +186,7 @@ Result operator/(Result lhs, const Result& rhs){
 }
 bool operator==(Result lhs, const Result& rhs){
 	lhs -= rhs;
-	return (abs(lhs.getRealValue()) <= lhs.getRealAccuracy()) && (abs(lhs.getImaginaryValue()) <= lhs.getImaginaryAccuracy());
+	return (std::abs(lhs.getRealValue()) <= lhs.getRealAccuracy()) && (std::abs(lhs.getImaginaryValue()) <= lhs.getImaginaryAccuracy());
 }
 
 Result operator+(Result lhs, const Complex& rhs){
@@ -229,7 +229,7 @@ Result operator/(const Complex& lhs, Result rhs){
 ////////////////////////////////////
 
 Result abs(Result result){
-	return Result(abs(result.getValue()), abs(result.getAccuracy()));
+	return Result(std::abs(result.getValue()), std::abs(result.getAccuracy()));
 }
 
 Result real(Result result){
@@ -252,16 +252,16 @@ Result conjugate(Result result){
 
 // this will only track the accuracy of the magnitude
 Result exp(const Result& result){
-	return Result(exp(result.getValue()), result.getAccuracy()*abs(exp(result.getValue())));
+	return Result(exp(result.getValue()), result.getAccuracy()*std::abs(exp(result.getValue())));
 }
 
 // this will only track the accuracy of the magnitude
 Result log(const Result& result){
-	return Result(log(result.getValue()), result.getAccuracy()/abs(result.getValue()));
+	return Result(log(result.getValue()), result.getAccuracy()/std::abs(result.getValue()));
 }
 
 Result pow(const Result& result, const Complex a){
-	if( abs(a) == 0. ){
+	if( std::abs(a) == 0. ){
 		return Result(1., 0);
 	}else if( std::real(a) < 1. ){
 		return pow(result, a + 1.)/result;
@@ -291,7 +291,7 @@ Result sqrt(const Result& result){
 /////////////////////
 
 int is_integer(double x){
-	double iter = abs(x);
+	double iter = std::abs(x);
 	while(iter > 0.){
 		iter -= 1;
 	}
@@ -307,7 +307,7 @@ int is_negative_integer(double x){
 }
 
 int is_negative_integer(Complex x){
-	return is_integer(std::real(x)) && (std::real(x) <= 0) && abs(std::imag(x)) == 0.;
+	return is_integer(std::real(x)) && (std::real(x) <= 0) && std::abs(std::imag(x)) == 0.;
 }
 
 Complex lgamma(Complex z){
@@ -326,15 +326,15 @@ Complex lgamma(Complex z){
 		printf("Error\n");
 	}
 
-	if(isnan(abs(lnr.val)) && abs(z) < 1.e-5){
+	if(isnan(std::abs(lnr.val)) && std::abs(z) < 1.e-5){
 		return log(1./(z + 0.5772156649015329*z*z - 0.6558780715202539*z*z*z));
 	}
 
-	if(std::real(z) < 0 && isnan(abs(lnr.val))){
+	if(std::real(z) < 0 && isnan(std::abs(lnr.val))){
 		return log(M_PI) - log(sin(M_PI*z)) - lgamma(1. - z);
 	}
 
-	// if(isnan(abs(lnr.val))){
+	// if(isnan(std::abs(lnr.val))){
 	// 	std::cout << "Gamma("<<z<<") is nan \n";
 	// }
 
@@ -420,7 +420,7 @@ Complex phammer_ratio(Complex f, Complex a, int n)
 
 // Coupling between scalar and derivatives of spin-weighted harmonics
 double clm(const int &l, const int &m){
-	if( abs(m) > l ) return 0.;
+	if( std::abs(m) > l ) return 0.;
 	// return sqrt(double(l*l - m*m)/(2.*l + 1.)/(2.*l - 1.));
 	return sqrt(double(l - m)/(2.*l + 1.))*sqrt(double(l + m)/(2.*l - 1.));
 }
@@ -430,9 +430,9 @@ Complex Ylm(const int &l, const int &m, const double &th, const double &ph){
 }
 
 double Ylm(const int &l, const int &m, const double &th){
-	if( m < 0 && l >= abs(m) ){
+	if( m < 0 && l >= std::abs(m) ){
 		return pow(-1, m)*gsl_sf_legendre_sphPlm(l, -m, cos(th));
-	}else if(l >= abs(m)){
+	}else if(l >= std::abs(m)){
 		return gsl_sf_legendre_sphPlm(l, m, cos(th));
 	}else{
 		return 0.;

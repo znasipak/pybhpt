@@ -3279,7 +3279,7 @@ ComplexMatrix tetrad_velocity_polar(Complex (*subfunc)(double, double, double, d
     rp = r[0];
     zp = z[jz];
 	// the minus sign is because we start with utheta > 0 ==> uz < 0
-	double uz = -sqrt(abs(kerr_geo_Vz(a, En, Lz, Qc, zp)))/(1. - zp*zp);
+	double uz = -sqrt(std::abs(kerr_geo_Vz(a, En, Lz, Qc, zp)))/(1. - zp*zp);
     ua[0][jz] = subfunc(a, En, Lz, Qc, rp, zp, uz, 0., 0.);
     ua[0][u1zSize - jz] = subfunc(a, En, Lz, Qc, rp, zp, -uz, 0., 0.);
 
@@ -3309,7 +3309,7 @@ ComplexMatrix tetrad_velocity_polar(Complex (*subfunc)(double, double, double, d
     for(size_t jz = 1; jz < z.size() - 1; jz++){
       rp = r[jr];
       zp = z[jz];
-      double uz = -sqrt(abs(kerr_geo_Vz(a, En, Lz, Qc, zp)))/(1. - zp*zp);
+      double uz = -sqrt(std::abs(kerr_geo_Vz(a, En, Lz, Qc, zp)))/(1. - zp*zp);
       // take into account when the radial velocity is positive
       ua[jr][jz] = subfunc(a, En, Lz, Qc, rp, zp, uz, 0., 0.);
       ua[jr][u1zSize - jz] = subfunc(a, En, Lz, Qc, rp, zp, -uz, 0., 0.);
