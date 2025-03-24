@@ -168,6 +168,30 @@ class HertzMode:
         return self.base.hertz_amplitude(bc)
     
     @property
+    def couplingcoefficients(self):
+        return self.base.couplingcoefficients
+    
+    @property
+    def scalarcouplingcoefficients(self):
+        return self.base.scalarcouplingcoefficients
+    
+    @property
+    def polarpoints(self):
+        return self.base.polarpoints
+    
+    @property
+    def polarsolutions(self):
+        return self.base.polarsolutions
+    
+    @property
+    def polarderivatives(self):
+        return self.base.polarderivatives
+    
+    @property
+    def polarderivatives2(self):
+        return self.base.polarderivatives2
+    
+    @property
     def radialpoints(self):
         return self.base.radialpoints
     

@@ -364,17 +364,17 @@ void teukolsky_to_hertz_SAAB(Complex &Psi, Complex Zteuk, int L, int m, int k, d
 
 void teukolsky_to_hertz_SAAB(Complex &PsiIn, Complex &PsiUp, Complex ZteukIn, Complex ZteukUp, int L, int m, int k, double a, double omega, double lambdaCH){
   double D = teukolsky_starobinsky_constant_D(m, a, omega, lambdaCH);
-  PsiIn = pow(-1., L + m + k)*ZteukIn/D;
-  PsiUp = pow(-1., L + m + k)*ZteukUp/D;
+  PsiIn = pow(-1., L + m + k)*4.*ZteukIn/D;
+  PsiUp = pow(-1., L + m + k)*4.*ZteukUp/D;
 }
 
 void teukolsky_to_hertz_ASAAB(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambdaCH){
-  Psi = Zteuk/(-I*omega);
+  Psi = Zteuk/(-3.*I*omega);
 }
 
 void teukolsky_to_hertz_ASAAB(Complex &PsiIn, Complex &PsiUp, Complex ZteukIn, Complex ZteukUp, int L, int m, double a, double omega, double lambdaCH){
-  PsiIn = ZteukIn/(-I*omega);
-  PsiUp = ZteukUp/(-I*omega);
+  PsiIn = ZteukIn/(-3.*I*omega);
+  PsiUp = ZteukUp/(-3.*I*omega);
 }
 
 // void teukolsky_to_hertz_amplitude_in(Complex &Psi, Complex Zteuk, int L, int m, double a, double omega, double lambda){

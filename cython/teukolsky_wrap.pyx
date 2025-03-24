@@ -417,6 +417,30 @@ cdef class HertzMode:
         return self.hertzcpp.getPolarSecondDerivative(i)
 
     @property
+    def couplingcoefficients(self):
+        return np.array([self.couplingcoefficient(i) for i in range(self.mincouplingmode, self.maxcouplingmode+1)])
+
+    @property
+    def scalarcouplingcoefficients(self):
+        return np.array([self.scalarcouplingcoefficient(i) for i in range(self.minscalarcouplingmode, self.maxscalarcouplingmode+1)])
+
+    @property
+    def polarpoints(self):
+        return np.array([self.polarpoint(i) for i in range(self.sampleTh)])
+    
+    @property
+    def polarsolutions(self):
+        return np.array([self.polarsolution(i) for i in range(self.sampleTh)])
+        
+    @property
+    def polarderivatives(self):
+        return np.array([self.polarderivative(i) for i in range(self.sampleTh)])
+
+    @property
+    def polarderivatives2(self):
+        return np.array([self.polarderivative2(i) for i in range(self.sampleTh)])
+    
+    @property
     def radialpoints(self):
         return np.array([self.radialpoint(i) for i in range(self.sampleR)])
     @property
