@@ -49,6 +49,8 @@ class HertzMode:
     def __init__(self, teuk, gauge):
         self.base = HertzModeCython(teuk.base, gauge)
         self.gauge = gauge
+        self.sampleR = self.base.sampleR
+        self.sampleTh = self.base.sampleTh
 
     @property
     def spinweight(self):
