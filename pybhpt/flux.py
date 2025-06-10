@@ -32,6 +32,15 @@ class FluxList:
 
     
 class FluxMode:
+    """
+    Class that computes the mode-contribution to the fluxes :math:`\dot{E}`, :math:`\dot{L}`, :math:`\dot{Q}`
+    produced by a point-particle on a bound geodesic
+
+    :param geo:
+    :type geo: KerrGeodesic class
+    :param teuk:
+    :type teuk: TeukolskyMode class
+    """
     def __init__(self, geo, teuk):
         self.base = FluxCython(teuk.spinweight, geo.base, teuk.base)
 
@@ -59,7 +68,6 @@ class FluxMode:
     
     @property
     def fluxes(self):
-
         return FluxList([self.energy, self.angularmomentum, self.carterconstant])
 
     @property
@@ -74,8 +82,8 @@ class FluxMode:
     def totalfluxes(self):
         return [self.energy["I"] + self.energy["H"], self.angularmomentum["I"] + self.angularmomentum["H"], self.carterconstant["I"] + self.carterconstant["H"]]
 
-def parallel_flux(s, geo, lMax = 16, dir = "temp/"):
-    if dir[-1] == "/":
-        full_flux_parallel_l_py(s, geo.base, lMax, dir)
-    else:
-        full_flux_parallel_l_py(s, geo.base, lMax, dir + "/")
+# def parallel_flux(s, geo, lMax = 16, dir = "temp/"):
+#     if dir[-1] == "/":
+#         full_flux_parallel_l_py(s, geo.base, lMax, dir)
+#     else:
+#         full_flux_parallel_l_py(s, geo.base, lMax, dir + "/")

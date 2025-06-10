@@ -75,7 +75,7 @@ setup(
     name="pybhpt",
     author="Zach Nasipak",
     author_email="znasipak@gmail.com",
-    version = "0.1.0",
+    version = "0.9.0",
     description = "Black Hole Perturbation Theory and Self-Force Algorithms in Python",
     ext_modules = cythonize(ext_modules, language_level = "3"),
     packages=["pybhpt"],
