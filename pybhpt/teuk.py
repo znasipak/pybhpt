@@ -17,6 +17,8 @@ class TeukolskyMode:
         The radial harmonic mode number.
     geo : KerrGeodesic class instance
         KerrGeodesic object containing the background motion of the point-particle source.
+    auto_solve : bool, optional
+        If True, the Teukolsky equation is automatically solved upon initialization. Default is False
 
     Attributes
     ----------
@@ -92,7 +94,7 @@ class TeukolskyMode:
     precision(bc)
         Compute the precision of the Teukolsky amplitude for the given boundary condition.
     """
-    def __init__(self, s, j, m, k, n, geo):
+    def __init__(self, s, j, m, k, n, geo, auto_solve = False):
         self.base = TeukolskyModeCython(s, j, m, k, n, geo.base)
         if auto_solve:
             self.solve(geo)
