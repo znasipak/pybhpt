@@ -142,10 +142,10 @@ cdef extern from "metriccoeffs.hpp":
 cdef dict gauge_dict = {
     "ORG" : Gauge.ORG, 
     "IRG" : Gauge.IRG, 
-    "SAAB0" : Gauge.SAAB0, 
-    "SAAB4" : Gauge.SAAB4, 
-    "ASAAB0" : Gauge.ASAAB0, 
-    "ASAAB4" : Gauge.ASAAB4,
+    "SRG0" : Gauge.SAAB0, 
+    "SRG4" : Gauge.SAAB4, 
+    "ARG0" : Gauge.ASAAB0, 
+    "ARG4" : Gauge.ASAAB4,
     # "SAAB" : Gauge.SAAB, 
     # "ASAAB" : Gauge.ASAAB,
 }
@@ -169,6 +169,14 @@ cdef class TeukolskyMode:
 
     def __dealloc__(self):
         del self.teukcpp
+
+    @property
+    def radialsamplenumber(self):
+        return self.sampleR
+    
+    @property
+    def polarsamplenumber(self):
+        return self.sampleTh
 
     @property
     def spinweight(self):
@@ -309,6 +317,14 @@ cdef class HertzMode:
         
     def __dealloc__(self):
         del self.hertzcpp
+
+    @property
+    def radialsamplenumber(self):
+        return self.sampleR
+    
+    @property
+    def polarsamplenumber(self):
+        return self.sampleTh
 
     @property
     def gauge(self):
@@ -482,13 +498,13 @@ def teuk_to_hertz_IRG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, i
     teukolsky_to_hertz_IRG(PsiIn, PsiUp, ZIn, ZUp, j, m, k, a, omega, lambdaCH)
     return (PsiIn, PsiUp)
 
-def teuk_to_hertz_SAAB(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
+def teuk_to_hertz_SRG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
     cdef cpp_complex[double] PsiIn
     cdef cpp_complex[double] PsiUp
     teukolsky_to_hertz_SAAB(PsiIn, PsiUp, ZIn, ZUp, j, m, k, a, omega, lambdaCH)
     return (PsiIn, PsiUp)
 
-def teuk_to_hertz_ASAAB(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
+def teuk_to_hertz_ARG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
     cdef cpp_complex[double] PsiIn
     cdef cpp_complex[double] PsiUp
     teukolsky_to_hertz_ASAAB(PsiIn, PsiUp, ZIn, ZUp, j, m, a, omega, lambdaCH)
@@ -507,25 +523,25 @@ cdef dict metric_component_gauge_dict = {
         (2, 4): None,
         (3, 3): None,
         (4, 4): None}, 
-    "SAAB0" : {
+    "SRG0" : {
         (2, 2): None, 
         (2, 3): None, 
         (2, 4): None,
         (3, 3): None,
         (4, 4): None}, 
-    "SAAB4" : {
+    "SRG4" : {
         (1, 1): None, 
         (1, 3): None, 
         (1, 4): None,
         (3, 3): None,
         (4, 4): None}, 
-    "ASAAB0" : {
+    "ARG0" : {
         (2, 2): None, 
         (2, 3): None,
         (2, 4): None,
         (3, 3): None,
         (4, 4): None}, 
-    "ASAAB4" : {
+    "ARG4" : {
         (1, 1): None, 
         (1, 3): None, 
         (1, 4): None,

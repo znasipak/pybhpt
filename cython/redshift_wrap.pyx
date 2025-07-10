@@ -36,10 +36,10 @@ cdef extern from "metric.hpp":
         int getMaxDerivativeCouplingModeNumber()
 
 
-def metric_coefficients_cython_ORG(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):
+def metric_coefficients_cython_S4dagger(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):
     return metric_coefficient_ORG(ai, bi, nt, nr, nz, nphi, a, r, z)
 
-def metric_coefficients_cython_IRG(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):
+def metric_coefficients_cython_S0dagger(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):
     return metric_coefficient_IRG(ai, bi, nt, nr, nz, nphi, a, r, z)
 
 def circular_redshift(unicode filename, unicode gauge, int lmax, KerrGeodesic geo):

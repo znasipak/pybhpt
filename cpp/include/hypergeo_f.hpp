@@ -35,6 +35,7 @@ Complex hypergeo_2F1_group2to3(Complex a, Complex c, Complex x);
 int hypergeo_2F1_special_value(Complex a, Complex b, Complex c, Complex z, Complex &hypergeo);
 
 Result hypergeo_2F1(Complex a, Complex b, Complex c, Complex z);
+Complex hypergeo_2F1_complex(Complex a, Complex b, Complex c, Complex z);
 Result dhypergeo_2F1(Complex a, Complex b, Complex c, Complex z);
 int hypergeo_2F1_series(solution_hypergeo_2F1* sol2F1, Complex a, Complex b, Complex c, Complex z);
 

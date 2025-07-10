@@ -34,6 +34,10 @@ double hypergeo_2F1_real(double a, double b, double c, double x){
 	}
 }
 
+Complex hypergeo_2F1_complex(Complex a, Complex b, Complex c, Complex x){
+	return hypergeo_2F1(a, b, c, x).getValue();
+}
+
 int hypergeo_2F1_special_value(Complex a, Complex b, Complex c, Complex z, Complex &hypergeo){
 	if( a == c){
 		hypergeo = pow(1. - z, -b);

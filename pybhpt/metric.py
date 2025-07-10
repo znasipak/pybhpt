@@ -1,4 +1,4 @@
-from cybhpt_full import metric_coefficients_cython_ORG, metric_coefficients_cython_IRG
+from cybhpt_full import metric_coefficients_cython_S4dagger, metric_coefficients_cython_S0dagger
 import numpy as np
 from pybhpt.hertz import available_gauges
 from pybhpt.swsh import Yslm, spin_operator_normalization
@@ -7,35 +7,178 @@ def gauge_check(gauge):
     if gauge not in available_gauges:
         TypeError("{} is not a supported gauge.".format(gauge))
 
-S0_gauges = ["IRG", "ASAAB0", "SAAB0"]
-S4_gauges = ["ORG", "ASAAB4", "SAAB4"]
+S0_gauges = ["IRG", "ARG0", "SRG0"]
+S4_gauges = ["ORG", "ARG4", "SRG4"]
 
-def metric_coefficients_S4_ab(ai, bi, nt, nr, nz, nph, a, r, z):
-    return metric_coefficients_cython_ORG(ai, bi, nt, nr, nz, nph, a, r, z)
+def metric_coefficients_S4dagger_ab(ai, bi, nt, nr, nz, nph, a, r, z):
+    """Compute the metric coefficients for the reconstructed perturbation associated with the
+    S4dagger reconstruction operator.
+    
+    Parameters
+    ----------
+    ai, bi : int
+        The indices of the tetrad-projected components of the metric perturbation.
+    nt, nr, nz, nph : int
+        The indices associated with the time, radial, spin, and azimuthal derivative operators.
+    a : float
+        The black hole spin parameter.
+    r : float
+        The radial coordinate.
+    z : float
+        The polar coordinate (cosine of the polar angle).
+    
+    Returns
+    -------
+    float
+        The computed metric coefficient."""
+    return metric_coefficients_cython_S4dagger(ai, bi, nt, nr, nz, nph, a, r, z)
 
-def metric_coefficients_S0_ab(ai, bi, nt, nr, nz, nph, a, r, z):
-    return metric_coefficients_cython_IRG(ai, bi, nt, nr, nz, nph, a, r, z)
+def metric_coefficients_S0dagger_ab(ai, bi, nt, nr, nz, nph, a, r, z):
+    """Compute the metric coefficients for the reconstructed perturbation associated with the
+    S0dagger reconstruction operator.
+    
+    Parameters
+    ----------
+    ai, bi : int
+        The indices of the tetrad-projected components of the metric perturbation.
+    nt, nr, nz, nph : int
+        The indices associated with the time, radial, spin, and azimuthal derivative operators.
+    a : float
+        The black hole spin parameter.
+    r : float
+        The radial coordinate.
+    z : float
+        The polar coordinate (cosine of the polar angle).
+    
+    Returns
+    -------
+    float
+        The computed metric coefficient."""
+    return metric_coefficients_cython_S0dagger(ai, bi, nt, nr, nz, nph, a, r, z)
 
-def metric_coefficients_S0(a, b, c, d, q, rvals, zvals):
-    h22 = np.array([[metric_coefficients_S0_ab(2, 2, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
-    h24 = np.array([[metric_coefficients_S0_ab(2, 4, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
-    h44 = np.array([[metric_coefficients_S0_ab(4, 4, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
+def metric_coefficients_S0dagger(a, b, c, d, q, rvals, zvals):
+    """Compute the metric coefficients for the reconstructed perturbation associated with the
+    S0dagger reconstruction operator.
+    
+    Parameters
+    ----------
+    a, b, c, d : int
+        The indices associated with the time, radial, spin, and azimuthal derivative operators.
+    q : float
+        The black hole spin parameter.
+    rvals : numpy.ndarray
+        The radial coordinate.
+    zvals : np.ndarray
+        The polar coordinate (cosine of the polar angle).
+    
+    Returns
+    -------
+    numpy.ndarray
+        A 3D array containing the computed metric coefficients for the S0dagger operator."""
+    h22 = np.array([[metric_coefficients_S0dagger_ab(2, 2, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
+    h24 = np.array([[metric_coefficients_S0dagger_ab(2, 4, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
+    h44 = np.array([[metric_coefficients_S0dagger_ab(4, 4, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
     return np.array([2.*h22, h24, h44])
 
-def metric_coefficients_S4(a, b, c, d, q, rvals, zvals):
-    h11 = np.array([[metric_coefficients_S4_ab(1, 1, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
-    h13 = np.array([[metric_coefficients_S4_ab(1, 3, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
-    h33 = np.array([[metric_coefficients_S4_ab(3, 3, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
+def metric_coefficients_S4dagger(a, b, c, d, q, rvals, zvals):
+    """Compute the metric coefficients for the reconstructed perturbation associated with the
+    S4dagger reconstruction operator.
+    
+    Parameters
+    ----------
+    a, b, c, d : int
+        The indices associated with the time, radial, spin, and azimuthal derivative operators.
+    q : float
+        The black hole spin parameter.
+    rvals : numpy.ndarray
+        The radial coordinate.
+    zvals : np.ndarray
+        The polar coordinate (cosine of the polar angle).
+    
+    Returns
+    -------
+    numpy.ndarray
+        A 3D array containing the computed metric coefficients for the S0dagger operator."""
+    h11 = np.array([[metric_coefficients_S4dagger_ab(1, 1, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
+    h13 = np.array([[metric_coefficients_S4dagger_ab(1, 3, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
+    h33 = np.array([[metric_coefficients_S4dagger_ab(3, 3, a, b, c, d, q, r, z) for z in zvals] for r in rvals])
     return np.array([2.*h11, h13, h33])
 
 def metric_coefficients(gauge, a, b, c, d, q, rvals, zvals):
+    """Compute the metric coefficients for the reconstructed perturbation associated with the
+    specified gauge.
+
+    Parameters
+    ----------
+    gauge : str
+        The gauge to use for the reconstruction. Must be one of the available gauges.
+    a, b, c, d : int
+        The indices associated with the time, radial, spin, and azimuthal derivative operators.
+    q : float
+        The black hole spin parameter.
+    rvals : numpy.ndarray
+        The radial coordinate.
+    zvals : np.ndarray
+        The polar coordinate (cosine of the polar angle).
+
+    Returns
+    -------
+    numpy.ndarray
+        A 3D array containing the computed metric coefficients for the specified gauge.
+    """
     gauge_check(gauge)
     if gauge in S0_gauges:
-        return metric_coefficients_S0(a, b, c, d, q, rvals, zvals)
+        return metric_coefficients_S0dagger(a, b, c, d, q, rvals, zvals)
     else:
-        return metric_coefficients_S4(a, b, c, d, q, rvals, zvals)
+        return metric_coefficients_S4dagger(a, b, c, d, q, rvals, zvals)
 
 class MetricCoefficients:
+    """
+    A class for computing the metric coefficients of the reconstructed perturbation
+    associated with the S0dagger or S4dagger reconstruction operator based on the specified gauge.
+
+    Parameters
+    ----------
+    gauge : str
+        The gauge to use for the reconstruction. Must be one of the available gauges.
+    q : float
+        The black hole spin parameter.
+    r : numpy.ndarray
+        The radial coordinate values.
+    th : numpy.ndarray
+        The polar coordinate values (cosine of the polar angle).
+
+    Attributes
+    ----------
+    gauge : str
+        The gauge used for the reconstruction.
+    blackholespin : float
+        The black hole spin parameter.
+    radialpoints : numpy.ndarray
+        The radial coordinate values.
+    polarpoints : numpy.ndarray
+        The polar coordinate values (cosine of the polar angle).
+    storedcomponents : dict
+        A dictionary mapping pairs of indices (a, b) to the index of the stored component
+        in the coefficients array.
+    conjugatecomponents : dict
+        A dictionary mapping pairs of indices (a, b) to the index of the conjugate component
+        in the coefficients array.
+    coeffs : numpy.ndarray
+        A 7D array containing the computed metric coefficients for the specified gauge.
+    zeros : numpy.ndarray
+        A 2D array of zeros with the same shape as the radial and polar coordinate arrays.
+
+    Methods
+    -------
+    hab(a, b, nt, nr, ns, nphi):
+        Returns the metric coefficient for the specified indices (a, b) and derivative orders
+        (nt, nr, ns, nphi). If the indices are not found in the stored or conjugate components,
+        it returns a zero array.
+    __call__(a, b, nt, nr, ns, nphi):
+        Calls the `hab` method to retrieve the metric coefficient for the specified indices
+        and derivative orders.
+    """
     def __init__(self, gauge, q, r, th):
         gauge_check(gauge)
         self.gauge = gauge
@@ -61,6 +204,23 @@ class MetricCoefficients:
                         self.coeffs[ai, bi, ci, di] = metric_coefficients(self.gauge, ai, bi, ci, di, q, r, z)
 
     def hab(self, a, b, nt, nr, ns, nphi):
+        """
+        Returns the metric coefficient for the specified indices (a, b) and derivative orders
+        (nt, nr, ns, nphi). If the indices are not found in the stored or conjugate components,
+        it returns a zero array.
+
+        Parameters
+        ----------
+        a, b : int
+            The indices of the tetrad-projected components of the metric perturbation.
+        nt, nr, ns, nphi : int
+            The indices associated with the time, radial, spin, and azimuthal derivative operators.
+
+        Returns
+        -------
+        numpy.ndarray
+            The computed metric coefficient for the specified indices and derivative orders.
+        """
         if b < a:
             atemp = a
             a = b
@@ -73,6 +233,21 @@ class MetricCoefficients:
             return self.zeros
 
     def __call__(self, a, b, nt, nr, ns, nphi):
+        """ Calls the `hab` method to retrieve the metric coefficient for the specified indices
+        and derivative orders.
+
+        Parameters
+        ----------
+        a, b : int
+            The indices of the tetrad-projected components of the metric perturbation.
+        nt, nr, ns, nphi : int
+            The indices associated with the time, radial, spin, and azimuthal derivative operators.
+
+        Returns
+        -------
+        numpy.ndarray
+            The computed metric coefficient for the specified indices and derivative orders.
+        """
         return self.hab(a, b, nt, nr, ns, nphi)
     
 def tetrad_project_l(a, r, z, mu):
@@ -150,43 +325,3 @@ def hmunu_BL(gauge, mu, nu, q, r, hab):
         h13 = -e1mu*e3nu*hab[1] - e1nu*e3mu*hab[1]
         h33 = e3mu*e3nu*hab[2]
         return (h11.real + 2.*h13.real + 2.*h33.real)
-
-# class MetricMode:
-#     def __init__(self, hertz):
-#         self.phi = hertz
-
-#     def construct_coefficients(self, r, th):
-#         coeffs = MetricCoefficients(self.phi.gauge, self.phi.blackholespin, r, th)
-#         return coeffs
-
-#     def solve(self, r, th):
-#         self.coeffs = self.construct_coefficients(r, th)
-#         q = self.phi.blackholespin
-#         omega = self.phi.frequency
-#         m = self.phi.azimuthalmode
-#         gauge = self.phi.gauge
-#         s_sgn = 1
-#         if gauge in S0_gauges:
-#             s_sgn = -1
-#         habl = []
-#         lmax = self.phi.maxcouplingmode
-#         lmin = self.phi.mincouplingmode
-#         for l in range(lmin, lmax + 1):
-#             hab = np.zeros((3, r.shape[0], th.shape[0]), dtype=np.complex128)
-#             for ns in range(0, 3):
-#                 Jterm = spin_operator_normalization(s_sgn*2, ns, l)
-#                 yslm = Jterm*self.phi.couplingcoefficient(l)*np.real(Yslm(s_sgn*(2-ns), l, m, th))
-#                 for nt in range(0, 3):
-#                     for nph in range(0, 3):
-#                         pref = (1.j*m)**nph*(-1.j*omega)**nt
-#                         for nr in range(0, 3):
-#                             if nt + nr + ns + nph <= 2:
-#                                 hNabcds = self.coeffs(nt, nr, ns, nph)
-#                                 habTerm = []
-#                                 phiTimesY = np.outer(yslm, )
-#                                 for hNabcd in hNabcds:
-#                                     habTerm.append(-pref*hNabcd[0]*yslm*hertzMode(l, m, deriv=nr)[0])
-#                                 hab += np.array(habTerm)
-#             habl.append(hab)
-
-#         self.hab = habl

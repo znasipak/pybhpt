@@ -1,12 +1,6 @@
-from cybhpt_full import circular_redshift, run_tests, metric_coefficients_cython_ORG, metric_coefficients_cython_IRG
+from cybhpt_full import circular_redshift, run_tests
 from cybhpt_full import RedshiftCoefficients as RedshiftCoefficientsCython
 from cybhpt_full import SphericalHarmonicCoupling as SphericalHarmonicCouplingCython
-
-# def metric_coefficients_ORG(ai, bi, nt, nr, nz, np, a, r, z):
-#     return metric_coefficients_cython_ORG(ai, bi, nt, nr, nz, np, a, r, z)
-
-# def metric_coefficients_IRG(ai, bi, nt, nr, nz, np, a, r, z):
-#     return metric_coefficients_cython_IRG(ai, bi, nt, nr, nz, np, a, r, z)
 
 class RedshiftCoefficients:
     def __init__(self, gauge, geo):

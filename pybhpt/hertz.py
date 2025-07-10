@@ -1,39 +1,48 @@
 from cybhpt_full import HertzMode as HertzModeCython
 from cybhpt_full import test_hertz_mode_cython
-from cybhpt_full import teuk_to_hertz_ORG, teuk_to_hertz_IRG, teuk_to_hertz_SAAB, teuk_to_hertz_ASAAB
+from cybhpt_full import teuk_to_hertz_ORG, teuk_to_hertz_IRG, teuk_to_hertz_SRG, teuk_to_hertz_ARG
 from pybhpt.radial import RadialTeukolsky
 import numpy as np
 
 available_gauges = [
     "IRG",
     "ORG",
-    "SAAB0", 
-    "SAAB4", 
-    "ASAAB0", 
-    "ASAAB4",
+    "SRG0", 
+    "SRG4", 
+    "ARG0", 
+    "ARG4",
 ]
 
 def hertz_IRG(Zin, Zup, j, m, k, a, omega, lambdaCH):
+    """
+    Convert Teukolsky amplitudes to Hertz potential in the IRG gauge.
+    """
     return teuk_to_hertz_IRG(Zin, Zup, j, m, k, a, omega, lambdaCH)
 
 def hertz_ORG(Zin, Zup, j, m, k, a, omega, lambdaCH):
+    """Convert Teukolsky amplitudes to Hertz potential in the ORG gauge.
+    """
     return teuk_to_hertz_ORG(Zin, Zup, j, m, k, a, omega, lambdaCH)
 
-def hertz_SAAB(Zin, Zup, j, m, k, a, omega, lambdaCH):
-    return teuk_to_hertz_SAAB(Zin, Zup, j, m, k, a, omega, lambdaCH)
+def hertz_SRG(Zin, Zup, j, m, k, a, omega, lambdaCH):
+    """Convert Teukolsky amplitudes to Hertz potential in the SRG gauge.
+    """
+    return teuk_to_hertz_SRG(Zin, Zup, j, m, k, a, omega, lambdaCH)
 
-def hertz_ASAAB(Zin, Zup, j, m, k, a, omega, lambdaCH):
-    return teuk_to_hertz_ASAAB(Zin, Zup, j, m, k, a, omega, lambdaCH)
+def hertz_ARG(Zin, Zup, j, m, k, a, omega, lambdaCH):
+    """Convert Teukolsky amplitudes to Hertz potential in the ARG gauge.
+    """
+    return teuk_to_hertz_ARG(Zin, Zup, j, m, k, a, omega, lambdaCH)
 
 def teuk_to_hertz_amplitude(gauge, Zin, Zup, j, m, k, a, omega, lambdaCH):
     if gauge == "IRG":
         return hertz_IRG(Zin, Zup, j, m, k, a, omega, lambdaCH)
     elif gauge == "ORG":
         return hertz_ORG(Zin, Zup, j, m, k, a, omega, lambdaCH)
-    elif gauge == "SAAB0" or gauge == "SAAB4":
-        return hertz_SAAB(Zin, Zup, j, m, k, a, omega, lambdaCH)
-    elif gauge == "ASAAB0" or gauge == "ASAAB4":
-        return hertz_ASAAB(Zin, Zup, j, m, k, a, omega, lambdaCH)
+    elif gauge == "SRG0" or gauge == "SRG4":
+        return hertz_SRG(Zin, Zup, j, m, k, a, omega, lambdaCH)
+    elif gauge == "ARG0" or gauge == "ARG4":
+        return hertz_ARG(Zin, Zup, j, m, k, a, omega, lambdaCH)
     else:
         return (0.j, 0.j)
 
@@ -41,16 +50,147 @@ def test_hertz_mode(j, m, k, n, geo):
     test_hertz_mode_cython(j, m, k, n, geo.base)
 
 def gauge_check(gauge):
+    """ Check if the provided gauge is supported. 
+    Raises a TypeError if the gauge is not supported.
+    """
     if gauge not in available_gauges:
         TypeError("{} is not a supported gauge.".format(gauge))
 
 
 class HertzMode:
+    """
+    Class that produces a Hertz potential mode given a Teukolsky object and a gauge.
+    This class is a wrapper around the Cython implementation of the Hertz potential
+    and provides a Python interface to the underlying C++ code.
+
+    Parameters
+    ----------
+    teuk : Teukolsky
+        The Teukolsky object to be used for the Hertz potential.
+    gauge : str
+        The gauge to be used for the Hertz potential. Must be one of the following:
+        - "IRG"
+        - "ORG"
+        - "SRG0"
+        - "SRG4"
+        - "ARG0"
+        - "ARG4"
+
+    Attributes
+    ----------
+    base : HertzModeCython
+        The underlying Cython implementation of the Hertz potential mode.
+    gauge : str
+        The gauge used for the Hertz potential.
+    sampleR : int
+        The number of radial samples used in the Hertz potential mode solutions
+    sampleTh : int
+        The number of polar samples used in the Hertz potential mode solutions
+    spinweight : int
+        The spin weight of the Hertz potential mode.
+    spheroidalmode : int
+        The spheroidal mode number of the Hertz potential mode.
+    azimuthalmode : int
+        The azimuthal mode number of the Hertz potential mode.
+    radialmode : int
+        The radial mode number of the Hertz potential mode.
+    polarmode : int
+        The polar mode number of the Hertz potential mode.
+    blackholespin : float
+        The spin of the black hole associated with the background spacetime.
+    frequency : float
+        The frequency of the Hertz potential mode.
+    horizonfrequency : float
+        The frequency of the Hertz potential mode at the horizon.
+    eigenvalue : complex
+        The spheroidal eigenvalue associated with the Hertz potential mode.
+    mincouplingmode : int
+        The minimum l-mode used for coupling the spherical and spheroidal harmonics
+    maxcouplingmode : int
+        The maximum l-mode used for coupling the spherical and spheroidal harmonics
+    minscalarcouplingmode : int
+        The minimum l-mode used for coupling the scalar harmonics
+    maxscalarcouplingmode : int
+        The maximum l-mode used for coupling the scalar harmonics
+    j : int
+        Alias for spheroidalmode.
+    m : int
+        Alias for azimuthalmode.
+    k : int
+        Alias for polarmode.
+    n : int
+        Alias for radialmode.
+    omega : float
+        Alias for frequency.
+    a : float
+        Alias for blackholespin.
+    
+    Properties
+    ----------
+    couplingcoefficients : np.ndarray
+        The coupling coefficients for the Hertz potential mode.
+    scalarcouplingcoefficients : np.ndarray
+        The scalar coupling coefficients for the Hertz potential mode.
+    polarpoints : np.ndarray
+        The polar points used in the Hertz potential mode solutions.
+    polarsolutions : np.ndarray
+        The polar mode solutions of the Hertz potential.
+    polarderivatives : np.ndarray
+        Derivatives of the polar mode solutions of the Hertz potential.
+    polarderivatives2 : np.ndarray
+        Second derivatives of the polar mode solutions of the Hertz potential.
+    radialpoints : np.ndarray
+        The radial points used in the Hertz potential mode solutions.
+    radialsolutions : np.ndarray
+        The radial mode solutions of the Hertz potential.
+    radialderivatives : np.ndarray
+        Derivatives of the radial mode solutions of the Hertz potential.
+    radialderivatives2 : np.ndarray
+        Second derivatives of the radial mode solutions of the Hertz potential.
+
+    Methods
+    -------
+    solve()
+        Solve the Hertz potential mode equations.
+    couplingcoefficient(l)
+        Returns the coupling coefficient for the given l-mode.
+    scalarcouplingcoefficient(l)
+        Returns the scalar coupling coefficient for the given l-mode.
+    radialpoint(pos)
+        Returns the radial point corresponding to the given position.
+    radialsolution(bc, pos)
+        Returns the radial solution for the given boundary condition and position.
+    radialderivative(bc, pos)
+        Returns the radial derivative for the given boundary condition and position.
+    radialderivative2(bc, pos)
+        Returns the second radial derivative for the given boundary condition and position.
+    homogeneousradialsolution(bc, pos)
+        Returns the homogeneous radial solution for the given boundary condition and position.
+    homogeneousradialderivative(bc, pos)
+        Returns the homogeneous radial derivative for the given boundary condition and position.
+    homogeneousradialderivative2(bc, pos)
+        Returns the second homogeneous radial derivative for the given boundary condition and position.
+    polarpoint(pos)
+        Returns the polar point corresponding to the given position.
+    polarsolution(pos)
+        Returns the polar solution for the given position.
+    polarderivative(pos)
+        Returns the polar derivative for the given position.
+    polarderivative2(pos)
+        Returns the second polar derivative for the given position.
+    amplitude(bc)
+        Returns the Hertz amplitude for the given boundary condition.
+    __call__(r, deriv=0)
+        Returns the radial Hertz potential mode evaluated at the given radial values `r`.
+        Alternatively, it can return the radial derivative if `deriv` is set to 1 or 2.
+        The radial values `r` must lie outside the source region defined by the radial points.
+        If r contains values inside the source region, a ValueError is raised.
+    """
     def __init__(self, teuk, gauge):
         self.base = HertzModeCython(teuk.base, gauge)
         self.gauge = gauge
-        self.sampleR = self.base.sampleR
-        self.sampleTh = self.base.sampleTh
+        self.sampleR = self.base.radialsamplenumber
+        self.sampleTh = self.base.polarsamplenumber
 
     @property
     def spinweight(self):
@@ -124,6 +264,50 @@ class HertzMode:
     def a(self):
         return self.blackholespin
     
+    @property
+    def couplingcoefficients(self):
+        return self.base.couplingcoefficients
+    
+    @property
+    def scalarcouplingcoefficients(self):
+        return self.base.scalarcouplingcoefficients
+    
+    @property
+    def polarpoints(self):
+        return self.base.polarpoints
+    
+    @property
+    def polarsolutions(self):
+        return self.base.polarsolutions
+    
+    @property
+    def polarderivatives(self):
+        return self.base.polarderivatives
+    
+    @property
+    def polarderivatives2(self):
+        return self.base.polarderivatives2
+    
+    @property
+    def radialpoints(self):
+        return self.base.radialpoints
+    
+    @property
+    def radialsolutions(self):
+        return self.base.radialsolutions
+    
+    @property
+    def radialderivatives(self):
+        return self.base.radialderivatives
+    
+    @property
+    def radialderivatives2(self):
+        return self.base.radialderivatives2
+    
+    @property
+    def amplitudes(self):
+        return {"In": self.amplitude('In'), "Up": self.amplitude('Up')}
+    
     def solve(self):
         self.base.solve()
 
@@ -168,50 +352,6 @@ class HertzMode:
     
     def amplitude(self, bc):
         return self.base.hertz_amplitude(bc)
-    
-    @property
-    def couplingcoefficients(self):
-        return self.base.couplingcoefficients
-    
-    @property
-    def scalarcouplingcoefficients(self):
-        return self.base.scalarcouplingcoefficients
-    
-    @property
-    def polarpoints(self):
-        return self.base.polarpoints
-    
-    @property
-    def polarsolutions(self):
-        return self.base.polarsolutions
-    
-    @property
-    def polarderivatives(self):
-        return self.base.polarderivatives
-    
-    @property
-    def polarderivatives2(self):
-        return self.base.polarderivatives2
-    
-    @property
-    def radialpoints(self):
-        return self.base.radialpoints
-    
-    @property
-    def radialsolutions(self):
-        return self.base.radialsolutions
-    
-    @property
-    def radialderivatives(self):
-        return self.base.radialderivatives
-    
-    @property
-    def radialderivatives2(self):
-        return self.base.radialderivatives2
-    
-    @property
-    def amplitudes(self):
-        return {"In": self.amplitude('In'), "Up": self.amplitude('Up')}
     
     def __call__(self, r, deriv = 0):
         rmin = self.radialpoints[0]

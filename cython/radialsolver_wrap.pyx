@@ -59,6 +59,12 @@ cdef extern from "nusolver.hpp":
 cdef extern from "monodromy.hpp":
     cpp_complex[double] nu_solver(double q, int s, int l, int m, double epsilon)
 
+cdef extern from "hypergeo_f.hpp":
+    cpp_complex[double] hypergeo_2F1_complex(cpp_complex[double] a, cpp_complex[double] b, cpp_complex[double] c, cpp_complex[double] x)
+
+def hypergeo_2F1(cpp_complex[double] a, cpp_complex[double] b, cpp_complex[double] c, cpp_complex[double] x):
+    return hypergeo_2F1_complex(a, b, c, x)
+
 def renormalized_angular_momentum(double a, int s, int l, int m, double omega):
     return nu_solver(a, s, l, m, 2.*omega)
 
