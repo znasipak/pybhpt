@@ -94,6 +94,8 @@ class TeukolskyMode:
     """
     def __init__(self, s, j, m, k, n, geo):
         self.base = TeukolskyModeCython(s, j, m, k, n, geo.base)
+        if auto_solve:
+            self.solve(geo)
 
     @property
     def spinweight(self):
@@ -180,12 +182,24 @@ class TeukolskyMode:
         else:
             self.base.solve(geo.base, method, nsamples, teuk.base, swsh.base)
 
+    """
+    Flips the spin-weight of the Teukolsky solutions from :math:`s \rightarrow -s`
+    """
     def flipspinweight(self):
         self.base.flip_spinweight()
 
+    """
+    Flips the spin-weight and frequency of the Teukolsky solutions from :math:`s \rightarrow -s` and :math:`\omega \rightarrow -\omega`
+    """
     def flipspinweightandfrequency(self):
         self.base.flip_spinweight_frequency()
 
+    """
+    Spherical-spheroidal mixing coefficient between a spherical harmonic :math:`l` mode with a spheroidal :math:`j` mode
+
+    :param l: spherical harmonic mode
+    :type l: int
+    """
     def couplingcoefficient(self, l):
         return self.base.couplingcoefficient(l)
 

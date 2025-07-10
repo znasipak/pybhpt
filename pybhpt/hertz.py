@@ -354,6 +354,27 @@ class HertzMode:
         return self.base.hertz_amplitude(bc)
     
     def __call__(self, r, deriv = 0):
+        """
+        Evaluate the radial Hertz potential mode at the given radial values `r`.
+        If `deriv` is set to 0, it returns the Hertz potential mode.
+        If `deriv` is set to 1, it returns the first radial derivative.
+        If `deriv` is set to 2, it returns the second radial derivative.
+        
+        Parameters
+        ----------
+        r : array-like
+            The radial values at which to evaluate the Hertz potential mode.
+        deriv : int, optional
+            The order of the radial derivative to compute. Default is 0 (no derivative). 
+        Returns
+        -------
+        numpy.ndarray
+            The evaluated Hertz potential mode or its radial derivative at the given radial values `r`.
+        Raises
+        ------
+        ValueError
+            If any of the radial values `r` lie within the source region defined by the radialpoints.
+        """
         rmin = self.radialpoints[0]
         rmax = self.radialpoints[-1]
         rinner = r[r < rmin]
