@@ -28,9 +28,13 @@ with the necessary dependencies to install `pybhpt`:
 conda create -n pybhpt-env -c conda-forge gsl boost-cpp Cython numpy scipy python=3.7
 conda activate pybhpt-env
 ```
-To include the necessary compiler on MACOSX run:
+To include the necessary compiler on MACOSX Intel run:
 ```
 conda install clang_osx-64 clangxx_osx-64
+```
+To include the necessary compiler on MACOSX silicon run:
+```
+conda install clang_osx-arm64 clangxx_osx-arm64
 ```
 To include the necessary compiler on linux run:
 ```
