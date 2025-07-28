@@ -138,3 +138,4 @@ test-temp/
 dev_compile.sh
 setup_dev.py
 cython/*.cpp
+deprecated/

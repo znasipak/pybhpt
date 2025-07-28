@@ -1,0 +1,122 @@
+name: Run tests and build
+
+on:
+    push:
+      branches:
+        - main
+    release:
+      types:
+        - published
+
+jobs:
+  build_and_run_tests:
+    name: Build and run unit tests
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -el {0}
+    strategy:
+      matrix:
+        # macos-13 is an intel runner, macos-14 is apple silicon
+        os: [ubuntu-latest, macos-13, macos-14]
+  
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install package and run tests
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          python -m pip install .
+          python -m unittest discover      
+
+  build_wheels:
+    needs: build_and_run_tests
+    name: Build wheels on ${{ matrix.os }} ${{ matrix.arch_linux }} ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-14]
+        include:
+          - os: ubuntu-latest
+            arch_linux: x86_64
+            cibw_skip: pp* *manylinux*
+            target: musllinux
+          - os: ubuntu-latest
+            arch_linux: i686
+            cibw_skip: pp* *manylinux*
+            target: musllinux
+          - os: ubuntu-latest
+            arch_linux: x86_64
+            cibw_skip: pp* *musllinux*
+            target: manylinux
+          - os: ubuntu-latest
+            arch_linux: i686
+            cibw_skip: pp* *musllinux*
+            target: manylinux
+          - os: ubuntu-latest
+            arch_linux: aarch64
+            cibw_skip: pp* *musllinux*
+            target: manylinux
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        if: runner.os == 'Linux'
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: all
+
+      - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
+        if: ${{ matrix.arch_linux }}
+        uses: pypa/cibuildwheel@v2.22.0
+        env:
+          CIBW_ARCHS_LINUX: ${{ matrix.arch_linux }}
+          CIBW_SKIP: ${{ matrix.cibw_skip }}
+      
+      - name: Build wheels (macOS)
+        if: runner.os == 'macOS'
+        uses: pypa/cibuildwheel@v2.22.0
+        env:
+          CIBW_ARCHS_MACOS: x86_64 universal2 arm64
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
+          path: ./wheelhouse/*.whl
+
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build sdist
+        run: pipx run build --sdist
+
+      - uses: actions/upload-artifact@v4
+        with:
+            name: cibw-sdist
+            path: dist/*.tar.gz
+
+  upload_pypi:
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    if: github.event_name == 'release' && github.event.action == 'published'
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          # unpacks all CIBW artifacts into dist/
+          pattern: cibw-*
+          path: dist
+          merge-multiple: true
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          # repository-url: https://test.pypi.org/legacy/
+          verbose: true

@@ -1,0 +1,35 @@
+[build-system]
+requires = [ "cython", "numpy", "scikit-build-core" ]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "pybhpt"
+version = "0.9.3"
+description = "Black Hole Perturbation Theory and Self-Force Algorithms in Python"
+authors = [
+  { name = "Zach Nasipak", email = "znasipak@gmail.com" }
+]
+readme = "README.md"
+license = { text = "GPL" }
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Cython",
+  "Programming Language :: C++",
+  "License :: OSI Approved :: GNU General Public License (GPL)",
+  "Natural Language :: English"
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy"
+]
+
+[tool.cibuildwheel]
+# Disable building PyPy wheels on all platforms
+skip = "pp*"
+
+[tool.scikit-build]
+sdist.include = [ "cpp/", 'cython/' ]
+sdist.exclude = ["tutorial*", ".github/", ".gitignore" ]
+wheel.packages = [ "pybhpt" ]
+wheel.exclude = [ "**.cpp", "**.hpp", "**.pyx", "**/CMakeLists.txt"]
+
