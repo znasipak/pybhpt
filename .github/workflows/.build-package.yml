@@ -3,6 +3,7 @@ name: Run tests and build
 on:
     push:
       branches:
+        - feature-pyproject
         - main
     release:
       types:
