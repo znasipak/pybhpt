@@ -23,6 +23,15 @@ jobs:
   
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Install GSL
+        run: |
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            brew install gsl
+          elif [[ "$RUNNER_OS" == "Linux" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y libgsl-dev
+          fi
 
       - name: Install package and run tests
         run: |
@@ -92,6 +101,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # - uses: awalsh128/cache-apt-pkgs-action@latest
+      #   with:
+      #     packages: libgsl-dev
+      #     version: 1.0
 
       - name: Build sdist
         run: pipx run build --sdist
