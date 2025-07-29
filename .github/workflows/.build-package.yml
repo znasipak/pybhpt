@@ -139,17 +139,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
+      
+      - name: Set up QEMU
+        if: runner.os == 'Linux'
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: all
 
       - name: "Create directory '${{ env.VCPKG_DEFAULT_BINARY_CACHE }}'"
         run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
         shell: bash
-
-      # - name: Set up vcpkg
-      #   run: |
-      #     git clone https://github.com/microsoft/vcpkg.git
-      #     ./vcpkg/bootstrap-vcpkg.sh
-      #     echo "CMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
-      #     ./install-vcpkg.sh
 
       - name: Restore vcpkg
         uses: actions/cache@v4
@@ -167,12 +166,6 @@ jobs:
           key: |
             ${{ hashFiles( '.git/modules/vcpkg/HEAD' )}}
 
-      - name: Set up QEMU
-        if: runner.os == 'Linux'
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: all
-
       - name: Set up install script
         run: |
           ${{ env._VCPKG_ }}/bootstrap-vcpkg.sh
@@ -181,17 +174,10 @@ jobs:
       - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
         if: ${{ matrix.arch_linux }}
         uses: pypa/cibuildwheel@v2.22.0
-        env:
-          CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
-          CIBW_ARCHS_LINUX: ${{ matrix.arch_linux }}
-          CIBW_SKIP: ${{ matrix.cibw_skip }}
       
       - name: Build wheels (macOS)
         if: runner.os == 'macOS'
         uses: pypa/cibuildwheel@v2.22.0
-        env:
-          CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
-          CIBW_ARCHS_MACOS: x86_64 universal2 arm64
 
       - uses: actions/upload-artifact@v4
         with:
