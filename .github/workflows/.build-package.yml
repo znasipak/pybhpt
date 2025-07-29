@@ -20,9 +20,33 @@ jobs:
       matrix:
         # macos-13 is an intel runner, macos-14 is apple silicon
         os: [ubuntu-latest, macos-13, macos-14]
+    env:
+      # Indicates the location of the vcpkg as a Git submodule of the project repository.
+      # Not using "VCPKG_ROOT" because a variable with the same name is defined in the VS's
+      # Developer Command Prompt environment in VS 2022 17.6, which would override this one
+      # if it had the same name.
+      _VCPKG_: ${{ github.workspace }}/vcpkg
+      # Tells vcpkg where binary packages are stored.
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg/bincache
+      # Let's use GitHub Action cache as storage for the vcpkg Binary Caching feature.
+      VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
   
     steps:
+      # Set env vars needed for vcpkg to leverage the GitHub Action cache as a storage
+      # for Binary Caching.
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+      
       - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: "Create directory '${{ env.VCPKG_DEFAULT_BINARY_CACHE }}'"
+        run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
+        shell: bash
 
       # - name: Set up vcpkg
       #   run: |
@@ -30,10 +54,26 @@ jobs:
       #     ./vcpkg/bootstrap-vcpkg.sh
       #     echo "CMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
       #     ./install-vcpkg.sh
-      - name: Restore artifacts, or setup vcpkg for building artifacts
-        uses: lukka/run-vcpkg@v10
-        with: 
-          vcpkgGitCommitId: 49d19a16f0c6a637ba4c649e3ad6d0639cde466b
+      # - name: Restore artifacts, or setup vcpkg for building artifacts
+      #   uses: lukka/run-vcpkg@v10
+      #   with: 
+      #     vcpkgGitCommitId: 49d19a16f0c6a637ba4c649e3ad6d0639cde466b
+
+      - name: Restore vcpkg
+        uses: actions/cache@v4
+        with:
+          # The first path is the location of vcpkg: it contains the vcpkg executable and data files, as long as the
+          # built package archives (aka binary cache) which are located by VCPKG_DEFAULT_BINARY_CACHE env var.
+          # The other paths starting with '!' are exclusions: they contain termporary files generated during the build of the installed packages.
+          path: |
+            ${{ env._VCPKG_ }}
+            !${{ env._VCPKG_ }}/buildtrees
+            !${{ env._VCPKG_ }}/packages
+            !${{ env._VCPKG_ }}/downloads
+            !${{ env._VCPKG_ }}/installed
+          # The key is composed in a way that it gets properly invalidated whenever a different version of vcpkg is being used.
+          key: |
+            ${{ hashFiles( '.git/modules/vcpkg/HEAD' )}}
 
       - name: Set up install script
         run: |
@@ -74,9 +114,60 @@ jobs:
             arch_linux: aarch64
             cibw_skip: pp* *musllinux*
             target: manylinux
+    env:
+      # Indicates the location of the vcpkg as a Git submodule of the project repository.
+      # Not using "VCPKG_ROOT" because a variable with the same name is defined in the VS's
+      # Developer Command Prompt environment in VS 2022 17.6, which would override this one
+      # if it had the same name.
+      _VCPKG_: ${{ github.workspace }}/vcpkg
+      # Tells vcpkg where binary packages are stored.
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg/bincache
+      # Let's use GitHub Action cache as storage for the vcpkg Binary Caching feature.
+      VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
 
     steps:
+      # Set env vars needed for vcpkg to leverage the GitHub Action cache as a storage
+      # for Binary Caching.
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+      
       - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: "Create directory '${{ env.VCPKG_DEFAULT_BINARY_CACHE }}'"
+        run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
+        shell: bash
+
+      # - name: Set up vcpkg
+      #   run: |
+      #     git clone https://github.com/microsoft/vcpkg.git
+      #     ./vcpkg/bootstrap-vcpkg.sh
+      #     echo "CMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
+      #     ./install-vcpkg.sh
+      # - name: Restore artifacts, or setup vcpkg for building artifacts
+      #   uses: lukka/run-vcpkg@v10
+      #   with: 
+      #     vcpkgGitCommitId: 49d19a16f0c6a637ba4c649e3ad6d0639cde466b
+
+      - name: Restore vcpkg
+        uses: actions/cache@v4
+        with:
+          # The first path is the location of vcpkg: it contains the vcpkg executable and data files, as long as the
+          # built package archives (aka binary cache) which are located by VCPKG_DEFAULT_BINARY_CACHE env var.
+          # The other paths starting with '!' are exclusions: they contain termporary files generated during the build of the installed packages.
+          path: |
+            ${{ env._VCPKG_ }}
+            !${{ env._VCPKG_ }}/buildtrees
+            !${{ env._VCPKG_ }}/packages
+            !${{ env._VCPKG_ }}/downloads
+            !${{ env._VCPKG_ }}/installed
+          # The key is composed in a way that it gets properly invalidated whenever a different version of vcpkg is being used.
+          key: |
+            ${{ hashFiles( '.git/modules/vcpkg/HEAD' )}}
 
       - name: Set up QEMU
         if: runner.os == 'Linux'
@@ -84,10 +175,10 @@ jobs:
         with:
           platforms: all
 
-      - name: Restore artifacts, or setup vcpkg for building artifacts
-        uses: lukka/run-vcpkg@v10
-        with: 
-          vcpkgGitCommitId: 49d19a16f0c6a637ba4c649e3ad6d0639cde466b
+      # - name: Restore artifacts, or setup vcpkg for building artifacts
+      #   uses: lukka/run-vcpkg@v10
+      #   with: 
+      #     vcpkgGitCommitId: 49d19a16f0c6a637ba4c649e3ad6d0639cde466b
 
       - name: Set up install script
         run: |
