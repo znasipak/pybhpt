@@ -37,7 +37,7 @@ jobs:
 
       - name: Set up install script
         run: |
-          ./install-vcpkg.sh
+          cp pyproject-vcpkg.toml pyproject.toml
 
       - name: Install package and run tests
         run: |
@@ -91,7 +91,7 @@ jobs:
 
       - name: Set up install script
         run: |
-          ./install-vcpkg.sh
+          cp pyproject-vcpkg.toml pyproject.toml
 
       - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
         if: ${{ matrix.arch_linux }}
