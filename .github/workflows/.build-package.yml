@@ -32,6 +32,8 @@ jobs:
       #     ./install-vcpkg.sh
       - name: Restore artifacts, or setup vcpkg for building artifacts
         uses: lukka/run-vcpkg@v10
+        with: 
+          vcpkgGitCommitId: 49d19a16f0c6a637ba4c649e3ad6d0639cde466b
 
       - name: Install package and run tests
         run: |
@@ -74,6 +76,8 @@ jobs:
 
       - name: Restore artifacts, or setup vcpkg for building artifacts
         uses: lukka/run-vcpkg@v10
+        with: 
+          vcpkgGitCommitId: 49d19a16f0c6a637ba4c649e3ad6d0639cde466b
 
       - name: Set up QEMU
         if: runner.os == 'Linux'
