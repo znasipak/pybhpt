@@ -32,6 +32,7 @@ skip = "pp*"
 
 [tool.scikit-build]
 # Set cmake.args dynamically in pyproject.toml using Python script
+cmake.args = ["-DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake"]
 sdist.include = [ "cpp/", 'cython/' , 'vcpkg.json']
 sdist.exclude = ["tutorial*", ".github/", ".gitignore" ]
 wheel.packages = [ "pybhpt" ]

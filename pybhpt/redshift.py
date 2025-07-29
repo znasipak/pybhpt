@@ -1,4 +1,3 @@
-from cybhpt_full import circular_redshift, run_tests
 from cybhpt_full import RedshiftCoefficients as RedshiftCoefficientsCython
 from cybhpt_full import SphericalHarmonicCoupling as SphericalHarmonicCouplingCython
 
@@ -19,9 +18,3 @@ class SphericalHarmonicCoupling:
 
     def dzcouplingcoefficient(self, n, i, l):
         return self.base.dzcouplingcoefficient(n, i, l)
-
-def circular_redshift_export(filename, gauge, lmax, geo):
-    return circular_redshift(filename, gauge, lmax, geo.base)
-
-def run_unit_tests():
-    run_tests()
