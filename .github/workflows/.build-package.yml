@@ -35,6 +35,10 @@ jobs:
         with: 
           vcpkgGitCommitId: 49d19a16f0c6a637ba4c649e3ad6d0639cde466b
 
+      - name: Set up install script
+        run: |
+          ./install-vcpkg.sh
+
       - name: Install package and run tests
         run: |
           python -m venv venv
@@ -84,6 +88,10 @@ jobs:
         uses: lukka/run-vcpkg@v10
         with: 
           vcpkgGitCommitId: 49d19a16f0c6a637ba4c649e3ad6d0639cde466b
+
+      - name: Set up install script
+        run: |
+          ./install-vcpkg.sh
 
       - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
         if: ${{ matrix.arch_linux }}
