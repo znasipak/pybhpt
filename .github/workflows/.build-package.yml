@@ -74,16 +74,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Restore artifacts, or setup vcpkg for building artifacts
-        uses: lukka/run-vcpkg@v10
-        with: 
-          vcpkgGitCommitId: 49d19a16f0c6a637ba4c649e3ad6d0639cde466b
-
       - name: Set up QEMU
         if: runner.os == 'Linux'
         uses: docker/setup-qemu-action@v3
         with:
           platforms: all
+
+      - name: Restore artifacts, or setup vcpkg for building artifacts
+        uses: lukka/run-vcpkg@v10
+        with: 
+          vcpkgGitCommitId: 49d19a16f0c6a637ba4c649e3ad6d0639cde466b
 
       - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
         if: ${{ matrix.arch_linux }}
@@ -92,7 +92,6 @@ jobs:
           CMAKE_TOOLCHAIN_FILE: ${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
           CIBW_ARCHS_LINUX: ${{ matrix.arch_linux }}
           CIBW_SKIP: ${{ matrix.cibw_skip }}
-
       
       - name: Build wheels (macOS)
         if: runner.os == 'macOS'

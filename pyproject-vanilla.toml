@@ -1,5 +1,5 @@
 [build-system]
-requires = [ "cython", "numpy", "scikit-build-core", "scipy" ]
+requires = [ "cython", "numpy", "scikit-build-core" ]
 build-backend = "scikit_build_core.build"
 
 [project]
