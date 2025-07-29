@@ -131,9 +131,14 @@ else()
   target_link_libraries(cybhpt_full PRIVATE ${GSL_LIB} ${GSLCBLAS_LIB} ${BOOST_FILESYSTEM_LIB})
 endif()
 
+# Manually add Boost headers to include path if not already done
 if(Boost_FOUND AND Boost_INCLUDE_DIRS)
-    target_include_directories(cybhpt_full PRIVATE ${Boost_INCLUDE_DIRS})
-  endif()
+  target_include_directories(cybhpt_full PRIVATE ${Boost_INCLUDE_DIRS})
+  message(STATUS "Added Boost include directory: ${Boost_INCLUDE_DIRS}")
+else()
+  message(WARNING "Boost headers not found, proceeding without Boost headers")
+endif()
+
 
 
 # Install (optional)
