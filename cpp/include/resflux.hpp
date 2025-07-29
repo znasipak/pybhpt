@@ -2,7 +2,6 @@
 #define RESFLUXES_HPP
 
 #include "fluxes.hpp"
-#include "omp.h"
 
 struct ResonantFluxList{
   ResonantFluxList(): Edot(9), Ldot(9), Qdot(9) {}
@@ -24,7 +23,5 @@ ResonantFluxList res_flux_l(int s, int L, int nth, int nr, GeodesicSource& geo);
 ResonantFluxList res_flux_lm(int s, int L, int m, int nth, int nr, GeodesicSource& geo);
 ResonantFluxList res_flux_lmN(int s, int L, int m, int Nres, int nth, int nr, GeodesicSource& geo);
 FieldAmplitudeVector resonant_flux_mode_coefficients(int s, int L, int m, int k0, int n0, int nth, int nr, SpinWeightedHarmonic& Slm, RadialTeukolsky& Rt, GeodesicSource& geo);
-void res_flux_parallel_l(int s, int nth, int nr, GeodesicSource geo, int modeMax, std::string dir);
-
 
 #endif // RESFLUXES_HPP

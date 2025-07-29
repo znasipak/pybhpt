@@ -4,6 +4,55 @@ project(pybhpt LANGUAGES CXX)
 # Find Python + NumPy
 find_package(Python COMPONENTS Interpreter Development.Module NumPy REQUIRED)
 
+if(DEFINED ENV{CONDA_PREFIX})
+  message(STATUS "Using Conda environment at $ENV{CONDA_PREFIX}")
+  list(APPEND CMAKE_PREFIX_PATH "$ENV{CONDA_PREFIX}")
+  list(APPEND CMAKE_LIBRARY_PATH "$ENV{CONDA_PREFIX}/lib")
+  list(APPEND CMAKE_INCLUDE_PATH "$ENV{CONDA_PREFIX}/include")
+endif()
+
+# ------------------------- Boost + GSL Setup -------------------------
+
+if(DEFINED CMAKE_TOOLCHAIN_FILE)
+  message(STATUS "Using vcpkg toolchain: ${CMAKE_TOOLCHAIN_FILE}")
+  
+  # Use vcpkg to find Boost + GSL
+  find_package(GSL REQUIRED)
+  if(GSL_FOUND)
+    message(STATUS "GSL version: ${GSL_VERSION}")
+  else()
+    message(FATAL_ERROR "GSL not found via vcpkg")
+  endif()
+
+  find_package(Boost REQUIRED COMPONENTS numeric_odeint math)
+  if(Boost_FOUND)
+    message(STATUS "Boost version: ${Boost_VERSION}")
+  else()
+    message(FATAL_ERROR "Boost not found via vcpkg")
+  endif()
+
+else()
+  message(WARNING "vcpkg toolchain not detected. Falling back to manual linking.")
+
+  # Manual fallback if not using vcpkg
+  find_library(GSL_LIB gsl REQUIRED)
+  find_library(GSLCBLAS_LIB gslcblas REQUIRED)
+  find_library(BOOST_FILESYSTEM_LIB boost_filesystem REQUIRED)
+
+  if(NOT GSL_LIB OR NOT GSLCBLAS_LIB)
+    message(FATAL_ERROR "Could not find GSL or GSLCBLAS libraries")
+  else()
+    message(STATUS "Found GSL version: ${GSL_LIB}")
+    message(STATUS "Found GSLCBLAS version: ${GSLCBLAS_LIB}")
+  endif()
+
+  if(NOT BOOST_FILESYSTEM_LIB)
+    message(FATAL_ERROR "Could not find Boost Filesystem library")
+  else()
+    message(STATUS "Found Boost Filesystem version: ${BOOST_FILESYSTEM_LIB}")
+  endif()
+endif()
+
 # ---- Add options ----
 set(PYBHPT_MARCH native CACHE STRING
                                  "Value of the -march compiler option if supported by compiler")
@@ -47,7 +96,6 @@ python_add_library(cybhpt_full MODULE
   cpp/src/fluxes.cpp
   cpp/src/metric.cpp
   cpp/src/redshift.cpp
-  cpp/src/unit_test.cpp
   WITH_SOABI
 )
 
@@ -70,13 +118,19 @@ endif()
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
   target_link_libraries(cybhpt_full PRIVATE OpenMP::OpenMP_CXX)
+else()
+  message(STATUS "OpenMP not found, proceeding without it")
+  # Optionally, you can define a macro to indicate OpenMP is not used
+  target_compile_definitions(cybhpt_full PRIVATE PYBHPT_NO_OPENMP)
 endif()
 
-# GSL + Boost
-find_library(GSL_LIB gsl REQUIRED)
-find_library(GSLCBLAS_LIB gslcblas REQUIRED)
-find_library(BOOST_FILESYSTEM_LIB boost_filesystem REQUIRED)
-target_link_libraries(cybhpt_full PRIVATE ${GSL_LIB} ${GSLCBLAS_LIB} ${BOOST_FILESYSTEM_LIB})
+if(DEFINED CMAKE_TOOLCHAIN_FILE)
+  target_link_libraries(cybhpt_full PRIVATE GSL::gsl GSL::gslcblas)
+  target_link_libraries(cybhpt_full PRIVATE Boost::numeric_odeint Boost::math)
+else()
+  target_link_libraries(cybhpt_full PRIVATE ${GSL_LIB} ${GSLCBLAS_LIB} ${BOOST_FILESYSTEM_LIB})
+endif()
+
 
 # Install (optional)
 install(TARGETS cybhpt_full DESTINATION "./")

@@ -7,7 +7,6 @@
 #include <chrono>
 #include "specialfunc.hpp"
 #include <gsl/gsl_roots.h>
-#include "boost/filesystem.hpp"
 
 class GeodesicTrajectory{
 public:
@@ -128,7 +127,7 @@ public:
 		double En, double Lz, double Qc, double r1, double r2, double r3, double r4, double z1, double z2, double upT, double upR, double upTh, double upPhi, double cR, double cTh, double cPh);
 	void setTrajectory(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta);
 	void setCoefficients(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta);
-	void save(std::string dir);
+	// void save(std::string dir);
 
 private:
 	GeodesicConstants _geoConstants;
@@ -137,7 +136,7 @@ private:
 };
 
 // void output_geodesic(GeodesicSource geo, std::string dir);
-GeodesicSource load_geodesic(std::string dir);
+// GeodesicSource load_geodesic(std::string dir);
 
 double kerr_geo_energy(double a, double p, double e, double x);
 double kerr_geo_momentum(double a, double p, double e, double x);

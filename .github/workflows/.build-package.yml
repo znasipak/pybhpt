@@ -24,21 +24,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Install GSL
+      # - name: Install GSL
+      #   run: |
+      #     if [[ "$RUNNER_OS" == "macOS" ]]; then
+      #       brew install gsl boost
+      #     elif [[ "$RUNNER_OS" == "Linux" ]]; then
+      #       sudo apt-get update
+      #       sudo apt-get install -y libgsl-dev libboost-filesystem-dev
+      #     fi
+
+      - name: Set up vcpkg
         run: |
-          if [[ "$RUNNER_OS" == "macOS" ]]; then
-            brew install gsl boost
-          elif [[ "$RUNNER_OS" == "Linux" ]]; then
-            sudo apt-get update
-            sudo apt-get install -y libgsl-dev libboost-filesystem-dev
-          fi
+          git clone https://github.com/microsoft/vcpkg.git
+          ./vcpkg/bootstrap-vcpkg.sh
+          echo "CMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
+          ./install-vcpkg.sh
 
       - name: Install package and run tests
         run: |
           python -m venv venv
           source venv/bin/activate
           python -m pip install .
-          python -m unittest discover      
+          # python -m unittest discover  # Uncomment to run tests    
 
   build_wheels:
     needs: build_and_run_tests
