@@ -49,17 +49,6 @@ jobs:
         run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
         shell: bash
 
-      # - name: Set up vcpkg
-      #   run: |
-      #     git clone https://github.com/microsoft/vcpkg.git
-      #     ./vcpkg/bootstrap-vcpkg.sh
-      #     echo "CMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
-      #     ./install-vcpkg.sh
-      # - name: Restore artifacts, or setup vcpkg for building artifacts
-      #   uses: lukka/run-vcpkg@v10
-      #   with: 
-      #     vcpkgGitCommitId: 49d19a16f0c6a637ba4c649e3ad6d0639cde466b
-
       - name: Restore vcpkg
         uses: actions/cache@v4
         with:
@@ -150,6 +139,18 @@ jobs:
         run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
         shell: bash
 
+      - name: Install zip
+        run: |
+          if [[ "$RUNNER_OS" == "Linux" ]]; then
+            if command -v yum &> /dev/null; then
+              sudo yum install -y zip
+            elif command -v apt-get &> /dev/null; then
+              sudo apt-get update && sudo apt-get install -y zip
+            else
+              echo "Unsupported Linux distro"
+            fi
+          fi
+
       - name: Restore vcpkg
         uses: actions/cache@v4
         with:
@@ -164,11 +165,11 @@ jobs:
             !${{ env._VCPKG_ }}/installed
           # The key is composed in a way that it gets properly invalidated whenever a different version of vcpkg is being used.
           key: |
-            ${{ hashFiles( '.git/modules/vcpkg/HEAD' )}}
+            vcpkg-${{ runner.os }}-${{ hashFiles('.git/modules/vcpkg/HEAD') }}
 
       - name: Set up install script
         run: |
-          ${{ env._VCPKG_ }}/bootstrap-vcpkg.sh
+          ${{ env._VCPKG_ }}/bootstrap-vcpkg.sh -disableMetrics 
           cp pyproject-vcpkg.toml pyproject.toml
 
       - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
