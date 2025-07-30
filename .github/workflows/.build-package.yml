@@ -102,19 +102,19 @@ jobs:
             arch_linux: x86_64
             cibw_skip: pp* *musllinux*
             target: manylinux
-            vcpkg_triplet: x64
+            vcpkg_triplet: x64-linux
             cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
           - os: ubuntu-latest
             arch_linux: i686
             cibw_skip: pp* *musllinux*
             target: manylinux
-            vcpkg_triplet: x86
+            vcpkg_triplet: x86-linux
             cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
           - os: ubuntu-latest
             arch_linux: aarch64
             cibw_skip: pp* *musllinux*
             target: manylinux
-            vcpkg_triplet: arm64
+            vcpkg_triplet: arm64-linux
             cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
     env:
       # Indicates the location of the vcpkg as a Git submodule of the project repository.
