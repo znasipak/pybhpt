@@ -111,7 +111,7 @@ jobs:
             vcpkg_triplet: x86
             cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
           - os: ubuntu-latest
-            arch_linux: auto aarch64
+            arch_linux: aarch64
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: arm64
