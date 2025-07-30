@@ -63,11 +63,11 @@ jobs:
             !${{ env._VCPKG_ }}/installed
           # The key is composed in a way that it gets properly invalidated whenever a different version of vcpkg is being used.
           key: |
-            ${{ hashFiles( '.git/modules/vcpkg/HEAD' )}}
+            vcpkg-${{ runner.os }}-${{ hashFiles('.git/modules/vcpkg/HEAD') }}
 
       - name: Set up install script
         run: |
-          ${{ env._VCPKG_ }}/bootstrap-vcpkg.sh
+          ${{ env._VCPKG_ }}/bootstrap-vcpkg.sh -disableMetrics 
           cp pyproject-vcpkg.toml pyproject.toml
 
       - name: Install package and run tests
@@ -90,13 +90,13 @@ jobs:
             cibw_skip: pp* *manylinux*
             target: musllinux
             vcpkg_triplet: x64-linux
-            cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
+            cibw_before_all: apk && apk add zip
           - os: ubuntu-latest
             arch_linux: i686
             cibw_skip: pp* *manylinux*
             target: musllinux
             vcpkg_triplet: x86-linux
-            cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
+            cibw_before_all: apk && apk add zip
           - os: ubuntu-latest
             arch_linux: x86_64
             cibw_skip: pp* *musllinux*
