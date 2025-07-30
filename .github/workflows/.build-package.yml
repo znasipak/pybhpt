@@ -89,13 +89,13 @@ jobs:
             arch_linux: x86_64
             cibw_skip: pp* *manylinux*
             target: musllinux
-            vcpkg_triplet: x64-linux
+            vcpkg_triplet: x64-linux-musl
             cibw_before_all: apk add zip
           - os: ubuntu-latest
             arch_linux: i686
             cibw_skip: pp* *manylinux*
             target: musllinux
-            vcpkg_triplet: x86-linux
+            vcpkg_triplet: x86-linux-musl
             cibw_before_all: apk add zip
           - os: ubuntu-latest
             arch_linux: x86_64
@@ -182,6 +182,8 @@ jobs:
       - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
         if: ${{ matrix.arch_linux }}
         uses: pypa/cibuildwheel@v2.22.0
+        env:
+          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
       
       - name: Build wheels (macOS)
         if: runner.os == 'macOS'
