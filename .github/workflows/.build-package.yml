@@ -185,8 +185,8 @@ jobs:
           # The command is run before the build starts, so it is not needed to run it in the cibuildwheel config.
           CIBW_BEFORE_ALL: |
             ${{ matrix.cibw_before_all }}
-          CIBW_BEFORE_BUILD: |
-            bash /project/vcpkg/bootstrap-vcpkg.sh -disableMetrics
+          # CIBW_BEFORE_BUILD: |
+          #   bash /project/vcpkg/bootstrap-vcpkg.sh -disableMetrics
           CIBW_SKIP: ${{ matrix.cibw_skip }}
           CIBW_ARCHS_LINUX: ${{ matrix.arch_linux }}
       
