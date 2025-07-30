@@ -95,7 +95,7 @@ jobs:
             arch_linux: i686
             cibw_skip: pp* *manylinux*
             target: musllinux
-            vcpkg_triplet: x86-linux-musl
+            vcpkg_triplet: x86-linux
             cibw_before_all: apk add zip
           - os: ubuntu-latest
             arch_linux: x86_64
@@ -125,15 +125,9 @@ jobs:
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg/bincache
       # Let's use GitHub Action cache as storage for the vcpkg Binary Caching feature.
       VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
-        # <-- tell vcpkg exactly which triplet to use:
+      # <-- tell vcpkg exactly which triplet to use:
+      VCPKG_DEFAULT_TRIPLET: ${{ matrix.vcpkg_triplet }}
       VCPKG_TARGET_TRIPLET: ${{ matrix.vcpkg_triplet }}
-      # CIBW_BEFORE_ALL is a CIBW environment variable that allows to run commands before the build starts.
-      # It is used here to install zip, which is needed by cibuildwheel to create the wheel files.
-      # The command is run only on Linux, because macOS runners already have zip installed.
-      # The command is run before the build starts, so it is not needed to run it in the cibuildwheel config.
-      CIBW_BEFORE_ALL: ${{ matrix.cibw_before_all }}
-      CIBW_SKIP: ${{ matrix.cibw_skip || '' }}
-      CIBW_ARCHS_LINUX: ${{ matrix.arch_linux || '' }}
 
     steps:
       # Set env vars needed for vcpkg to leverage the GitHub Action cache as a storage
@@ -184,6 +178,18 @@ jobs:
         uses: pypa/cibuildwheel@v2.22.0
         env:
           CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
+          # CIBW_BEFORE_ALL is a CIBW environment variable that allows to run commands before the build starts.
+          # It is used here to install zip, which is needed by cibuildwheel to create the wheel files.
+          # The command is run only on Linux, because macOS runners already have zip installed.
+          # The command is run before the build starts, so it is not needed to run it in the cibuildwheel config.
+          CIBW_BEFORE_ALL: >
+            ${{ matrix.cibw_before_all }} &&
+            # export VCPKG_ROOT=${{ env._VCPKG_ }} &&
+            # export VCPKG_DEFAULT_BINARY_CACHE=${{ env.VCPKG_DEFAULT_BINARY_CACHE }} &&
+            # export VCPKG_BINARY_SOURCES=${{ env.VCPKG_BINARY_SOURCES }} &&
+            project/bootstrap-vcpkg.sh -disableMetrics
+          CIBW_SKIP: ${{ matrix.cibw_skip }}
+          CIBW_ARCHS_LINUX: ${{ matrix.arch_linux }}
       
       - name: Build wheels (macOS)
         if: runner.os == 'macOS'
