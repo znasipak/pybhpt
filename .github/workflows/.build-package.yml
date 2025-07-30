@@ -132,6 +132,8 @@ jobs:
       # The command is run only on Linux, because macOS runners already have zip installed.
       # The command is run before the build starts, so it is not needed to run it in the cibuildwheel config.
       CIBW_BEFORE_ALL: ${{ matrix.cibw_before_all }}
+      CIBW_SKIP: ${{ matrix.cibw_skip || '' }}
+      CIBW_ARCHS_LINUX: ${{ matrix.arch_linux || '' }}
 
     steps:
       # Set env vars needed for vcpkg to leverage the GitHub Action cache as a storage
