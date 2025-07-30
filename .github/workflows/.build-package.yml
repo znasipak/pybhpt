@@ -85,18 +85,19 @@ jobs:
       matrix:
         os: [macos-14]
         include:
-          - os: ubuntu-latest
-            arch_linux: x86_64
-            cibw_skip: pp* *manylinux*
-            target: musllinux
-            vcpkg_triplet: x64-linux-musl
-            cibw_before_all: apk add zip
-          - os: ubuntu-latest
-            arch_linux: i686
-            cibw_skip: pp* *manylinux*
-            target: musllinux
-            vcpkg_triplet: x86-linux
-            cibw_before_all: apk add zip
+          # TODO: Add musllinux support
+          # - os: ubuntu-latest
+          #   arch_linux: x86_64
+          #   cibw_skip: pp* *manylinux*
+          #   target: musllinux
+          #   vcpkg_triplet: x64-linux-musl
+          #   cibw_before_all: apk add zip
+          # - os: ubuntu-latest
+          #   arch_linux: i686
+          #   cibw_skip: pp* *manylinux*
+          #   target: musllinux
+          #   vcpkg_triplet: x86-linux
+          #   cibw_before_all: apk add zip
           - os: ubuntu-latest
             arch_linux: x86_64
             cibw_skip: pp* *musllinux*
@@ -110,7 +111,7 @@ jobs:
             vcpkg_triplet: x86-linux
             cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
           - os: ubuntu-latest
-            arch_linux: aarch64
+            arch_linux: auto aarch64
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: arm64-linux
@@ -142,11 +143,11 @@ jobs:
         with:
           submodules: true
       
-      - name: Set up QEMU
-        if: runner.os == 'Linux'
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: all
+      # - name: Set up QEMU
+      #   if: runner.os == 'Linux'
+      #   uses: docker/setup-qemu-action@v3
+      #   with:
+      #     platforms: all
 
       - name: "Create directory '${{ env.VCPKG_DEFAULT_BINARY_CACHE }}'"
         run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
