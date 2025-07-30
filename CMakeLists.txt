@@ -24,14 +24,12 @@ if(DEFINED CMAKE_TOOLCHAIN_FILE)
     message(FATAL_ERROR "GSL not found via vcpkg")
   endif()
 
-  set(Boost_NO_BOOST_CMAKE ON)
-  find_package(Boost REQUIRED COMPONENTS headers)
+  find_package(Boost REQUIRED COMPONENTS math numeric_odeint)
   if(Boost_FOUND)
     message(STATUS "Boost version: ${Boost_VERSION}")
   else()
     message(FATAL_ERROR "Boost not found via vcpkg")
   endif()
-  include_directories(${Boost_INCLUDE_DIRS})
 
 else()
   message(WARNING "vcpkg toolchain not detected. Falling back to manual linking.")
@@ -128,23 +126,10 @@ endif()
 
 if(DEFINED CMAKE_TOOLCHAIN_FILE)
   target_link_libraries(cybhpt_full PRIVATE GSL::gsl GSL::gslcblas)
-  target_link_libraries(cybhpt_full PRIVATE Boost::headers)
-  add_library(boost_headers INTERFACE)
-  target_include_directories(boost_headers INTERFACE ${Boost_INCLUDE_DIRS})
-  target_link_libraries(cybhpt_full PRIVATE boost_headers)
+  target_link_libraries(cybhpt_full PRIVATE Boost::math Boost::numeric_odeint)
 else()
   target_link_libraries(cybhpt_full PRIVATE ${GSL_LIB} ${GSLCBLAS_LIB} ${BOOST_FILESYSTEM_LIB})
 endif()
-
-# Manually add Boost headers to include path if not already done
-if(Boost_FOUND AND Boost_INCLUDE_DIRS)
-  target_include_directories(cybhpt_full PRIVATE ${Boost_INCLUDE_DIRS})
-  message(STATUS "Added Boost include directory: ${Boost_INCLUDE_DIRS}")
-else()
-  message(WARNING "Boost headers not found, proceeding without Boost headers")
-endif()
-
-
 
 # Install (optional)
 install(TARGETS cybhpt_full DESTINATION "./")

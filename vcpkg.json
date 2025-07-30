@@ -3,6 +3,7 @@
   "version": "0.9.3",
   "dependencies": [
     "gsl",
-    "boost-headers"
+    "boost-math",
+    "boost-odeint"
   ]
 }
