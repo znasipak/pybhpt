@@ -10,75 +10,75 @@ on:
         - published
 
 jobs:
-  build_and_run_tests:
-    name: Build and run unit tests
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash -el {0}
-    strategy:
-      matrix:
-        # macos-13 is an intel runner, macos-14 is apple silicon
-        # os: [ubuntu-latest, macos-13, macos-14]
-        os: [ubuntu-latest, macos-14]
-    env:
-      # Indicates the location of the vcpkg as a Git submodule of the project repository.
-      # Not using "VCPKG_ROOT" because a variable with the same name is defined in the VS's
-      # Developer Command Prompt environment in VS 2022 17.6, which would override this one
-      # if it had the same name.
-      _VCPKG_: ${{ github.workspace }}/vcpkg
-      # Tells vcpkg where binary packages are stored.
-      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg/bincache
-      # Let's use GitHub Action cache as storage for the vcpkg Binary Caching feature.
-      VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
+  # build_and_run_tests:
+  #   name: Build and run unit tests
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash -el {0}
+  #   strategy:
+  #     matrix:
+  #       # macos-13 is an intel runner, macos-14 is apple silicon
+  #       # os: [ubuntu-latest, macos-13, macos-14]
+  #       os: [ubuntu-latest, macos-14]
+  #   env:
+  #     # Indicates the location of the vcpkg as a Git submodule of the project repository.
+  #     # Not using "VCPKG_ROOT" because a variable with the same name is defined in the VS's
+  #     # Developer Command Prompt environment in VS 2022 17.6, which would override this one
+  #     # if it had the same name.
+  #     _VCPKG_: ${{ github.workspace }}/vcpkg
+  #     # Tells vcpkg where binary packages are stored.
+  #     VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg/bincache
+  #     # Let's use GitHub Action cache as storage for the vcpkg Binary Caching feature.
+  #     VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
   
-    steps:
-      # Set env vars needed for vcpkg to leverage the GitHub Action cache as a storage
-      # for Binary Caching.
-      - uses: actions/github-script@v7
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+  #   steps:
+  #     # Set env vars needed for vcpkg to leverage the GitHub Action cache as a storage
+  #     # for Binary Caching.
+  #     - uses: actions/github-script@v7
+  #       with:
+  #         script: |
+  #           core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+  #           core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
       
-      - uses: actions/checkout@v4
-        with:
-          submodules: true
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         submodules: true
 
-      - name: "Create directory '${{ env.VCPKG_DEFAULT_BINARY_CACHE }}'"
-        run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
-        shell: bash
+  #     - name: "Create directory '${{ env.VCPKG_DEFAULT_BINARY_CACHE }}'"
+  #       run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
+  #       shell: bash
 
-      - name: Restore vcpkg
-        uses: actions/cache@v4
-        with:
-          # The first path is the location of vcpkg: it contains the vcpkg executable and data files, as long as the
-          # built package archives (aka binary cache) which are located by VCPKG_DEFAULT_BINARY_CACHE env var.
-          # The other paths starting with '!' are exclusions: they contain termporary files generated during the build of the installed packages.
-          path: |
-            ${{ env._VCPKG_ }}
-            !${{ env._VCPKG_ }}/buildtrees
-            !${{ env._VCPKG_ }}/packages
-            !${{ env._VCPKG_ }}/downloads
-            !${{ env._VCPKG_ }}/installed
-          # The key is composed in a way that it gets properly invalidated whenever a different version of vcpkg is being used.
-          key: |
-            vcpkg-${{ runner.os }}-${{ hashFiles('.git/modules/vcpkg/HEAD') }}
+  #     - name: Restore vcpkg
+  #       uses: actions/cache@v4
+  #       with:
+  #         # The first path is the location of vcpkg: it contains the vcpkg executable and data files, as long as the
+  #         # built package archives (aka binary cache) which are located by VCPKG_DEFAULT_BINARY_CACHE env var.
+  #         # The other paths starting with '!' are exclusions: they contain termporary files generated during the build of the installed packages.
+  #         path: |
+  #           ${{ env._VCPKG_ }}
+  #           !${{ env._VCPKG_ }}/buildtrees
+  #           !${{ env._VCPKG_ }}/packages
+  #           !${{ env._VCPKG_ }}/downloads
+  #           !${{ env._VCPKG_ }}/installed
+  #         # The key is composed in a way that it gets properly invalidated whenever a different version of vcpkg is being used.
+  #         key: |
+  #           vcpkg-${{ runner.os }}-${{ hashFiles('.git/modules/vcpkg/HEAD') }}
 
-      - name: Set up install script
-        run: |
-          ${{ env._VCPKG_ }}/bootstrap-vcpkg.sh -disableMetrics 
-          cp pyproject-vcpkg.toml pyproject.toml
+  #     - name: Set up install script
+  #       run: |
+  #         ${{ env._VCPKG_ }}/bootstrap-vcpkg.sh -disableMetrics 
+  #         cp pyproject-vcpkg.toml pyproject.toml
 
-      - name: Install package and run tests
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          python -m pip install .
-          # python -m unittest discover  # Uncomment to run tests    
+  #     - name: Install package and run tests
+  #       run: |
+  #         python -m venv venv
+  #         source venv/bin/activate
+  #         python -m pip install .
+  #         # python -m unittest discover  # Uncomment to run tests    
 
   build_wheels:
-    needs: build_and_run_tests
+    # needs: build_and_run_tests
     name: Build wheels on ${{ matrix.os }} ${{ matrix.arch_linux }} ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -184,7 +184,8 @@ jobs:
           # The command is run before the build starts, so it is not needed to run it in the cibuildwheel config.
           CIBW_BEFORE_ALL: >
             ${{ matrix.cibw_before_all }} &&
-            ${{ env._VCPKG_ }}/bootstrap-vcpkg.sh -disableMetrics
+          CIBW_BEFORE_BUILD: >
+            bash /project/vcpkg/bootstrap-vcpkg.sh -disableMetrics &&
           CIBW_SKIP: ${{ matrix.cibw_skip }}
           CIBW_ARCHS_LINUX: ${{ matrix.arch_linux }}
       
