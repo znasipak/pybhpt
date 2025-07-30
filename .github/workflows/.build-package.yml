@@ -102,19 +102,19 @@ jobs:
             arch_linux: x86_64
             cibw_skip: pp* *musllinux*
             target: manylinux
-            vcpkg_triplet: x64-linux
+            vcpkg_triplet: x64
             cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
           - os: ubuntu-latest
             arch_linux: i686
             cibw_skip: pp* *musllinux*
             target: manylinux
-            vcpkg_triplet: x86-linux
+            vcpkg_triplet: x86
             cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
           - os: ubuntu-latest
             arch_linux: auto aarch64
             cibw_skip: pp* *musllinux*
             target: manylinux
-            vcpkg_triplet: arm64-linux
+            vcpkg_triplet: arm64
             cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
     env:
       # Indicates the location of the vcpkg as a Git submodule of the project repository.
@@ -178,7 +178,6 @@ jobs:
         if: ${{ matrix.arch_linux }}
         uses: pypa/cibuildwheel@v2.22.0
         env:
-          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
           # CIBW_BEFORE_ALL is a CIBW environment variable that allows to run commands before the build starts.
           # It is used here to install zip, which is needed by cibuildwheel to create the wheel files.
           # The command is run only on Linux, because macOS runners already have zip installed.
