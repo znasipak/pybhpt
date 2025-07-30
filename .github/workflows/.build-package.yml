@@ -89,26 +89,31 @@ jobs:
             arch_linux: x86_64
             cibw_skip: pp* *manylinux*
             target: musllinux
+            vcpkg_triplet: x64-linux
             cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
           - os: ubuntu-latest
             arch_linux: i686
             cibw_skip: pp* *manylinux*
             target: musllinux
+            vcpkg_triplet: x86-linux
             cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
           - os: ubuntu-latest
             arch_linux: x86_64
             cibw_skip: pp* *musllinux*
             target: manylinux
+            vcpkg_triplet: x64-linux
             cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
           - os: ubuntu-latest
             arch_linux: i686
             cibw_skip: pp* *musllinux*
             target: manylinux
+            vcpkg_triplet: x86-linux
             cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
           - os: ubuntu-latest
             arch_linux: aarch64
             cibw_skip: pp* *musllinux*
             target: manylinux
+            vcpkg_triplet: arm64-linux
             cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
     env:
       # Indicates the location of the vcpkg as a Git submodule of the project repository.
@@ -120,6 +125,12 @@ jobs:
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg/bincache
       # Let's use GitHub Action cache as storage for the vcpkg Binary Caching feature.
       VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
+        # <-- tell vcpkg exactly which triplet to use:
+      VCPKG_TARGET_TRIPLET: ${{ matrix.vcpkg_triplet }}
+      # CIBW_BEFORE_ALL is a CIBW environment variable that allows to run commands before the build starts.
+      # It is used here to install zip, which is needed by cibuildwheel to create the wheel files.
+      # The command is run only on Linux, because macOS runners already have zip installed.
+      # The command is run before the build starts, so it is not needed to run it in the cibuildwheel config.
       CIBW_BEFORE_ALL: ${{ matrix.cibw_before_all }}
 
     steps:
