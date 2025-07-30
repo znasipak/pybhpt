@@ -89,22 +89,27 @@ jobs:
             arch_linux: x86_64
             cibw_skip: pp* *manylinux*
             target: musllinux
+            cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
           - os: ubuntu-latest
             arch_linux: i686
             cibw_skip: pp* *manylinux*
             target: musllinux
+            cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
           - os: ubuntu-latest
             arch_linux: x86_64
             cibw_skip: pp* *musllinux*
             target: manylinux
+            cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
           - os: ubuntu-latest
             arch_linux: i686
             cibw_skip: pp* *musllinux*
             target: manylinux
+            cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
           - os: ubuntu-latest
             arch_linux: aarch64
             cibw_skip: pp* *musllinux*
             target: manylinux
+            cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
     env:
       # Indicates the location of the vcpkg as a Git submodule of the project repository.
       # Not using "VCPKG_ROOT" because a variable with the same name is defined in the VS's
@@ -115,6 +120,7 @@ jobs:
       VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg/bincache
       # Let's use GitHub Action cache as storage for the vcpkg Binary Caching feature.
       VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
+      CIBW_BEFORE_ALL: ${{ matrix.cibw_before_all }}
 
     steps:
       # Set env vars needed for vcpkg to leverage the GitHub Action cache as a storage
@@ -138,18 +144,6 @@ jobs:
       - name: "Create directory '${{ env.VCPKG_DEFAULT_BINARY_CACHE }}'"
         run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
         shell: bash
-
-      - name: Install zip
-        run: |
-          if [[ "$RUNNER_OS" == "Linux" ]]; then
-            if command -v yum &> /dev/null; then
-              sudo yum install -y zip
-            elif command -v apt-get &> /dev/null; then
-              sudo apt-get update && sudo apt-get install -y zip
-            else
-              echo "Unsupported Linux distro"
-            fi
-          fi
 
       - name: Restore vcpkg
         uses: actions/cache@v4
