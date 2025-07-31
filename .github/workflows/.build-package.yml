@@ -93,20 +93,20 @@ jobs:
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: x64-linux
-            cibw_before_build: bash build_gsl.sh
+            cibw_before_build: yum install -y wget && bash build_gsl.sh
           - os: ubuntu-latest
             arch_linux: i686
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: x86-linux
-            cibw_before_build: bash build_gsl.sh
+            cibw_before_build: yum install -y wget && bash build_gsl.sh
           - os: ubuntu-latest
             arch_linux: aarch64
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: arm64-linux
             # cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
-            cibw_before_build: bash build_gsl.sh
+            cibw_before_build: yum install -y wget && bash build_gsl.sh
           - os: macos-14
             cibw_before_build: (brew update && brew install gsl)
     env:
