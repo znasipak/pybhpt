@@ -18,14 +18,8 @@ if(NOT GSL_FOUND)
   message(FATAL_ERROR "GSL not found. Please install GSL development files.")
 else()
   message(STATUS "Found GSL: ${GSL_VERSION}")
+  message(STATUS "GSL include directories: ${GSL_INCLUDE_DIRS}")
   message(STATUS "GSL include directory: ${GSL_INCLUDE_DIR}")
-endif()
-
-if(NOT GSL_INCLUDE_DIR)
-  if(GSL_INCLUDE_DIRS)
-    set(GSL_INCLUDE_DIR ${GSL_INCLUDE_DIRS})
-    message(STATUS "Using GSL_INCLUDE_DIRS: ${GSL_INCLUDE_DIR}")
-  endif()
 endif()
 
 # ------------------------- Boost Headers Only -------------------------
@@ -77,7 +71,7 @@ python_add_library(cybhpt_full MODULE
 target_include_directories(cybhpt_full PRIVATE
   ${Python_NumPy_INCLUDE_DIRS}
   ${BOOST_INCLUDE_DIR}
-  ${GSL_INCLUDE_DIR}           # <-- Added to ensure GSL headers are found
+  ${GSL_INCLUDE_DIRS}           # <-- Added to ensure GSL headers are found
   ${CMAKE_CURRENT_SOURCE_DIR}/cpp/include
 )
 
@@ -99,9 +93,6 @@ else()
   message(STATUS "OpenMP not found, proceeding without it")
   target_compile_definitions(cybhpt_full PRIVATE PYBHPT_NO_OPENMP)
 endif()
-
-# Link GSL
-target_link_libraries(cybhpt_full PRIVATE GSL::gsl GSL::gslcblas)
 
 # Optional install
 install(TARGETS cybhpt_full DESTINATION "./")
