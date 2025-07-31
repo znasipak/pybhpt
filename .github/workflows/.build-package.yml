@@ -110,8 +110,6 @@ jobs:
           - os: macos-14
             cibw_before_build: brew install gsl
     env:
-      # CIBW_BEFORE_BUILD: bash /project/build_gsl.sh
-      CIBW_ENVIRONMENT: CMAKE_PREFIX_PATH=/project/gsl-install
       CIBW_BEFORE_BUILD: |
         ${{ matrix.cibw_before_build }}
 
@@ -150,7 +148,9 @@ jobs:
         if: ${{ matrix.arch_linux }}
         uses: pypa/cibuildwheel@v3.1.2
         env:
-          CIBW_ENVIRONMENT: CMAKE_PREFIX_PATH=/opt/gsl-install
+          CIBW_ENVIRONMENT: |
+            CMAKE_PREFIX_PATH=/opt/gsl-install
+            LD_LIBRARY_PATH=/opt/gsl-install/lib:$LD_LIBRARY_PATH
           CIBW_SKIP: ${{ matrix.cibw_skip }}
           CIBW_ARCHS_LINUX: ${{ matrix.arch_linux }}
       
