@@ -1,88 +1,44 @@
 cmake_minimum_required(VERSION 3.15)
 project(pybhpt LANGUAGES CXX)
 
-# Find Python + NumPy
+# Python & NumPy
 find_package(Python COMPONENTS Interpreter Development.Module NumPy REQUIRED)
 
-# Auto-detect Conda and set search paths
+# Conda detection
 if(DEFINED ENV{CONDA_PREFIX})
   message(STATUS "Using Conda environment at $ENV{CONDA_PREFIX}")
   list(APPEND CMAKE_PREFIX_PATH "$ENV{CONDA_PREFIX}")
-  list(APPEND CMAKE_PREFIX_PATH "$ENV{CONDA_PREFIX}/lib/cmake")
   list(APPEND CMAKE_LIBRARY_PATH "$ENV{CONDA_PREFIX}/lib")
   list(APPEND CMAKE_INCLUDE_PATH "$ENV{CONDA_PREFIX}/include")
 endif()
 
-# ------------------------- Boost + GSL Setup -------------------------
+# ------------------------- GSL Detection -------------------------
+find_path(GSL_INCLUDE_DIR gsl/gsl_math.h REQUIRED PATHS ${CMAKE_INCLUDE_PATH})
+find_library(GSL_LIB NAMES gsl REQUIRED PATHS ${CMAKE_LIBRARY_PATH})
+find_library(GSLCBLAS_LIB NAMES gslcblas REQUIRED PATHS ${CMAKE_LIBRARY_PATH})
 
-if(DEFINED CMAKE_TOOLCHAIN_FILE)
-  message(STATUS "Using vcpkg toolchain: ${CMAKE_TOOLCHAIN_FILE}")
-  find_package(GSL REQUIRED)
-  if(GSL_FOUND)
-    message(STATUS "GSL version: ${GSL_VERSION}")
-  else()
-    message(FATAL_ERROR "GSL not found via vcpkg")
-  endif()
-  # Assume Boost was installed and found by vcpkg
-  find_package(Boost REQUIRED COMPONENTS math numeric_odeint)
-  if(Boost_FOUND)
-    message(STATUS "Boost version: ${Boost_VERSION}")
-  else()
-    message(FATAL_ERROR "Boost not found via vcpkg")
-  endif()
-else()
-  message(WARNING "vcpkg toolchain not detected. Falling back to FetchContent Boost and manual GSL")
+add_library(GSL::gsl UNKNOWN IMPORTED)
+set_target_properties(GSL::gsl PROPERTIES
+  IMPORTED_LOCATION "${GSL_LIB}"
+  INTERFACE_INCLUDE_DIRECTORIES "${GSL_INCLUDE_DIR}"
+)
 
-  include(FetchContent)
+add_library(GSL::gslcblas UNKNOWN IMPORTED)
+set_target_properties(GSL::gslcblas PROPERTIES
+  IMPORTED_LOCATION "${GSLCBLAS_LIB}"
+  INTERFACE_INCLUDE_DIRECTORIES "${GSL_INCLUDE_DIR}"
+)
 
-  # --------- Find GSL manually ---------
-  find_path(GSL_INCLUDE_DIR gsl/gsl_math.h PATHS ${CMAKE_INCLUDE_PATH} REQUIRED)
-  find_library(GSL_LIB NAMES gsl PATHS ${CMAKE_LIBRARY_PATH} REQUIRED)
-  find_library(GSLCBLAS_LIB NAMES gslcblas PATHS ${CMAKE_LIBRARY_PATH} REQUIRED)
+message(STATUS "GSL found at ${GSL_INCLUDE_DIR}")
 
-  if(NOT GSL_INCLUDE_DIR OR NOT GSL_LIB OR NOT GSLCBLAS_LIB)
-    message(FATAL_ERROR "Could not find GSL libraries or headers")
-  else()
-    message(STATUS "Found GSL include: ${GSL_INCLUDE_DIR}")
-    message(STATUS "Found GSL lib: ${GSL_LIB}")
-    message(STATUS "Found GSL CBLAS lib: ${GSLCBLAS_LIB}")
-  endif()
+# ------------------------- Boost Headers Only -------------------------
+set(BOOST_MATH_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost/math/include")
+set(BOOST_ODEINT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost/numeric/odeint/include")
+set(BOOST_CONFIG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost/config/include")
+set(BOOST_UBLAS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost/numeric/ublas/include")
+set(BOOST_CORE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost/core/include")
 
-  add_library(GSL::gsl UNKNOWN IMPORTED)
-  set_target_properties(GSL::gsl PROPERTIES
-    IMPORTED_LOCATION "${GSL_LIB}"
-    INTERFACE_INCLUDE_DIRECTORIES "${GSL_INCLUDE_DIR}"
-  )
-
-  add_library(GSL::gslcblas UNKNOWN IMPORTED)
-  set_target_properties(GSL::gslcblas PROPERTIES
-    IMPORTED_LOCATION "${GSLCBLAS_LIB}"
-    INTERFACE_INCLUDE_DIRECTORIES "${GSL_INCLUDE_DIR}"
-  )
-
-  # --------- Fetch Boost headers ---------
-  set(BOOST_VERSION "boost-1.84.0")
-
-  FetchContent_Declare(
-    boost
-    GIT_REPOSITORY https://github.com/boostorg/boost.git
-    GIT_TAG ${BOOST_VERSION}
-    GIT_SHALLOW TRUE
-    GIT_SUBMODULES ""
-  )
-
-  FetchContent_MakeAvailable(boost)
-
-  set(BOOST_ROOT ${boost_SOURCE_DIR})
-  set(BOOST_MATH_INCLUDE_DIR ${BOOST_ROOT}/libs/math/include)
-  set(BOOST_NUMERIC_ODEINT_INCLUDE_DIR ${BOOST_ROOT}/libs/numeric/odeint/include)
-
-endif()
-
-# ---- Add options ----
-set(PYBHPT_MARCH native CACHE STRING "Value of the -march compiler option if supported by compiler")
-
-# Use Cython to compile the .pyx to .cpp
+# ------------------------- Cython -------------------------
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/cython")
 
 add_custom_command(
@@ -97,7 +53,7 @@ add_custom_command(
   VERBATIM
 )
 
-# Create the extension module
+# ------------------------- Extension Module -------------------------
 python_add_library(cybhpt_full MODULE
   "${CMAKE_CURRENT_BINARY_DIR}/cython/redshift_wrap.cpp"
   cpp/src/utils.cpp
@@ -124,25 +80,20 @@ python_add_library(cybhpt_full MODULE
   WITH_SOABI
 )
 
-# Include paths
-if(DEFINED CMAKE_TOOLCHAIN_FILE)
-  target_include_directories(cybhpt_full PRIVATE ${Boost_INCLUDE_DIRS})
-else()
-  target_include_directories(cybhpt_full PRIVATE
-    ${BOOST_ROOT}
-    ${BOOST_MATH_INCLUDE_DIR}
-    ${BOOST_NUMERIC_ODEINT_INCLUDE_DIR}
-  )
-endif()
-
+# ------------------------- Include Paths -------------------------
 target_include_directories(cybhpt_full PRIVATE
   ${Python_NumPy_INCLUDE_DIRS}
+  ${BOOST_MATH_INCLUDE_DIR}
+  ${BOOST_ODEINT_INCLUDE_DIR}
+  ${BOOST_CONFIG_INCLUDE_DIR}
+  ${BOOST_UBLAS_INCLUDE_DIR}
+  ${BOOST_CORE_INCLUDE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/cpp/include
 )
 
+# C++ flags
 set_property(TARGET cybhpt_full PROPERTY CXX_STANDARD 14)
-
-# Compiler flags
+set(PYBHPT_MARCH native CACHE STRING "Value of the -march compiler option")
 include(CheckCXXCompilerFlag)
 set(MARCH_OPT "-march=${PYBHPT_MARCH}")
 check_cxx_compiler_flag("${MARCH_OPT}" COMPILER_SUPPORTS_MARCH)
@@ -150,7 +101,7 @@ if(COMPILER_SUPPORTS_MARCH)
   target_compile_options(cybhpt_full PRIVATE "${MARCH_OPT}")
 endif()
 
-# OpenMP (optional)
+# OpenMP
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
   target_link_libraries(cybhpt_full PRIVATE OpenMP::OpenMP_CXX)
@@ -159,8 +110,8 @@ else()
   target_compile_definitions(cybhpt_full PRIVATE PYBHPT_NO_OPENMP)
 endif()
 
-# Link libraries
+# Link GSL
 target_link_libraries(cybhpt_full PRIVATE GSL::gsl GSL::gslcblas)
 
-# Install (optional)
+# Optional install
 install(TARGETS cybhpt_full DESTINATION "./")
