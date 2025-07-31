@@ -47,6 +47,14 @@ jobs:
           chmod +x bootstrap.sh
           ./bootstrap.sh
           ./b2 headers
+      
+      - name: Check Boost headers
+        run: |
+          if [ ! -d extern/boost ]; then
+            echo "Boost headers not found. Please run 'git submodule update --init --recursive extern/boost'."
+            exit 1
+          fi
+          ls -l extern/boost/boost
 
       - name: Remove broken Git submodule metadata before cleanup
         run: |
