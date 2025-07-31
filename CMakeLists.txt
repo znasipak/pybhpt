@@ -13,23 +13,7 @@ if(DEFINED ENV{CONDA_PREFIX})
 endif()
 
 # ------------------------- GSL Detection -------------------------
-find_path(GSL_INCLUDE_DIR gsl/gsl_math.h REQUIRED PATHS ${CMAKE_INCLUDE_PATH})
-find_library(GSL_LIB NAMES gsl REQUIRED PATHS ${CMAKE_LIBRARY_PATH})
-find_library(GSLCBLAS_LIB NAMES gslcblas REQUIRED PATHS ${CMAKE_LIBRARY_PATH})
-
-add_library(GSL::gsl UNKNOWN IMPORTED)
-set_target_properties(GSL::gsl PROPERTIES
-  IMPORTED_LOCATION "${GSL_LIB}"
-  INTERFACE_INCLUDE_DIRECTORIES "${GSL_INCLUDE_DIR}"
-)
-
-add_library(GSL::gslcblas UNKNOWN IMPORTED)
-set_target_properties(GSL::gslcblas PROPERTIES
-  IMPORTED_LOCATION "${GSLCBLAS_LIB}"
-  INTERFACE_INCLUDE_DIRECTORIES "${GSL_INCLUDE_DIR}"
-)
-
-message(STATUS "GSL found at ${GSL_INCLUDE_DIR}")
+find_package(GSL REQUIRED)
 
 # ------------------------- Boost Headers Only -------------------------
 set(BOOST_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost")
