@@ -48,13 +48,13 @@ jobs:
           ./bootstrap.sh
           ./b2 headers
       
-      - name: Check Boost headers
-        run: |
-          if [ ! -d extern/boost ]; then
-            echo "Boost headers not found. Please run 'git submodule update --init --recursive extern/boost'."
-            exit 1
-          fi
-          ls -l extern/boost/boost
+      # - name: Check Boost headers
+      #   run: |
+      #     if [ ! -d extern/boost ]; then
+      #       echo "Boost headers not found. Please run 'git submodule update --init --recursive extern/boost'."
+      #       exit 1
+      #     fi
+      #     ls -l extern/boost/boost
 
       - name: Remove broken Git submodule metadata before cleanup
         run: |
@@ -111,7 +111,9 @@ jobs:
     env:
       # CIBW_BEFORE_BUILD: bash /project/build_gsl.sh
       # CIBW_ENVIRONMENT: CMAKE_PREFIX_PATH=/project/gsl-install
-      CIBW_BEFORE_BUILD: ${{ matrix.cibw_before_build }}
+      CIBW_BEFORE_BUILD: |
+        ${{ matrix.cibw_before_build }}
+        ls extern/boost/boost
 
     steps:
       - uses: actions/checkout@v4
