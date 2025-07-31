@@ -107,7 +107,6 @@ jobs:
           - os: macos-14
             cibw_before_build: brew install gsl
             arch: arm64
-            macos_ver: 14.0
     env:
       CIBW_BEFORE_BUILD: |
         ${{ matrix.cibw_before_build }}
@@ -161,8 +160,8 @@ jobs:
       - name: Build wheels (macOS)
         if: runner.os == 'macOS'
         uses: pypa/cibuildwheel@v3.1.2
-        # env:
-        #   CIBW_ENVIRONMENT: MACOSX_DEPLOYMENT_TARGET=14.0
+        env:
+          CIBW_ENVIRONMENT: MACOSX_DEPLOYMENT_TARGET=14.0
 
       - name: Remove broken Git submodule metadata before cleanup
         run: |
