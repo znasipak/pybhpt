@@ -70,35 +70,27 @@ jobs:
 
   build_wheels:
     needs: build_and_run_tests
-    name: Build wheels on ${{ matrix.os }} ${{ matrix.arch_linux }} ${{ matrix.target }}
+    name: Build wheels on ${{ matrix.os }} ${{ matrix.arch }} ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         include:
-          # TODO: Add musllinux support
-          # - os: ubuntu-latest
-          #   arch_linux: x86_64
-          #   cibw_skip: pp* *manylinux*
-          #   target: musllinux
-          #   vcpkg_triplet: x64-linux-musl
-          #   cibw_before_all: apk add zip
-          # - os: ubuntu-latest
-          #   arch_linux: i686
-          #   cibw_skip: pp* *manylinux*
-          #   target: musllinux
-          #   vcpkg_triplet: x86-linux
-          #   cibw_before_all: apk add zip
           - os: ubuntu-latest
             arch: x86_64
-            target: manylinux
-            vcpkg_triplet: x64-linux
-            cibw_before_build: bash build_gsl.sh
+            cibw_skip: *manylinux*
+            target: musllinux
+            cibw_before_all: bash build_gsl.sh
           - os: ubuntu-latest
-            arch: aarch64
+            arch: x86_64
+            cibw_skip: *musllinux*
             target: manylinux
-            vcpkg_triplet: arm64-linux
-            # cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
             cibw_before_build: bash build_gsl.sh
+          # Takes too long, so skip for now
+          # - os: ubuntu-latest
+          #   arch: aarch64
+          #   target: manylinux
+          #   # cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
+          #   cibw_before_build: bash build_gsl.sh
           - os: macos-14
             cibw_before_build: brew install gsl
             arch: arm64
@@ -151,6 +143,7 @@ jobs:
             CMAKE_PREFIX_PATH=/opt/gsl-install
             LD_LIBRARY_PATH=/opt/gsl-install/lib:$LD_LIBRARY_PATH
           CIBW_ARCHS_LINUX: ${{ matrix.arch }}
+          CIBW_SKIP: ${{ matrix.cibw_skip }}
       
       - name: Build wheels (macOS)
         if: runner.os == 'macOS'
