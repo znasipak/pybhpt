@@ -18,4 +18,4 @@ make -j$(nproc) > /dev/null
 echo "Installing..."
 make install > /dev/null
 
-
+echo "CMAKE_PREFIX_PATH=${INSTALL_DIR}" >> "$GITHUB_ENV"
