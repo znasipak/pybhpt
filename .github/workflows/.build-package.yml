@@ -77,12 +77,12 @@ jobs:
         include:
           - os: ubuntu-latest
             arch: x86_64
-            cibw_skip: *manylinux*
+            cibw_skip: "*manylinux*"
             target: musllinux
             cibw_before_all: bash build_gsl.sh
           - os: ubuntu-latest
             arch: x86_64
-            cibw_skip: *musllinux*
+            cibw_skip: "*musllinux*"
             target: manylinux
             cibw_before_build: bash build_gsl.sh
           # Takes too long, so skip for now
