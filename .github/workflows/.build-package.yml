@@ -114,9 +114,6 @@ jobs:
       # CIBW_ENVIRONMENT: CMAKE_PREFIX_PATH=/project/gsl-install
       CIBW_BEFORE_BUILD: |
         ${{ matrix.cibw_before_build }}
-        ls
-        ls /project/extern
-        ls /project/extern/boost
 
     steps:
       - uses: actions/checkout@v4
@@ -145,9 +142,9 @@ jobs:
           ./bootstrap.sh
           ./b2 headers
 
-      - name: Check Boost headers
-        run: |
-          ls -l extern/boost
+      # - name: Check Boost headers
+      #   run: |
+      #     ls -l extern/boost
 
       - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
         if: ${{ matrix.arch_linux }}
