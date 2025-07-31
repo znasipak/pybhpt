@@ -144,14 +144,9 @@ jobs:
           ./bootstrap.sh
           ./b2 headers
 
-      - name: Remove broken Git submodule metadata before cleanup
-        run: |
-          git submodule deinit --force --all || true
-          rm -rf .git/modules/extern || true
-
       - name: Check Boost headers
         run: |
-          ls -l extern/boost/boost
+          ls -l extern/boost
 
       - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
         if: ${{ matrix.arch_linux }}
@@ -163,6 +158,11 @@ jobs:
       - name: Build wheels (macOS)
         if: runner.os == 'macOS'
         uses: pypa/cibuildwheel@v3.1.2
+
+      - name: Remove broken Git submodule metadata before cleanup
+        run: |
+          git submodule deinit --force --all || true
+          rm -rf .git/modules/extern || true
 
       - uses: actions/upload-artifact@v4
         with:
