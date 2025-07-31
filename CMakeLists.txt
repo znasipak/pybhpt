@@ -20,6 +20,7 @@ else()
   message(STATUS "Found GSL: ${GSL_VERSION}")
   message(STATUS "GSL include directories: ${GSL_INCLUDE_DIRS}")
   message(STATUS "GSL include directory: ${GSL_INCLUDE_DIR}")
+  set(GSL_INCLUDE_DIR_STR "${GSL_INCLUDE_DIRS}")
 endif()
 
 # ------------------------- Boost Headers Only -------------------------
@@ -71,7 +72,7 @@ python_add_library(cybhpt_full MODULE
 target_include_directories(cybhpt_full PRIVATE
   ${Python_NumPy_INCLUDE_DIRS}
   ${BOOST_INCLUDE_DIR}
-  "${GSL_INCLUDE_DIR}"           # <-- Added to ensure GSL headers are found
+  ${GSL_INCLUDE_DIR_STR}           # <-- Added to ensure GSL headers are found
   ${CMAKE_CURRENT_SOURCE_DIR}/cpp/include
 )
 

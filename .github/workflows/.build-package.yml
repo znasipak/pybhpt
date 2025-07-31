@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: false  # do NOT checkout submodules here, we'll handle them manually
+          submodules: true  # do NOT checkout submodules here, we'll handle them manually
 
       - name: Get Boost submodule commit
         id: boost_commit
@@ -104,7 +104,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: false  # do NOT checkout submodules here, we'll handle them manually
+          submodules: true  # do NOT checkout submodules here, we'll handle them manually
 
       - name: Get Boost submodule commit
         id: boost_commit
