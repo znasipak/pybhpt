@@ -13,58 +13,71 @@ if(DEFINED ENV{CONDA_PREFIX})
   list(APPEND CMAKE_INCLUDE_PATH "$ENV{CONDA_PREFIX}/include")
 endif()
 
-# ------------------------- GSL Setup -------------------------
-# Expect GSL installed by CI or system package manager
-find_path(GSL_INCLUDE_DIR gsl/gsl_math.h PATHS ${CMAKE_INCLUDE_PATH} REQUIRED)
-find_library(GSL_LIB NAMES gsl PATHS ${CMAKE_LIBRARY_PATH} REQUIRED)
-find_library(GSLCBLAS_LIB NAMES gslcblas PATHS ${CMAKE_LIBRARY_PATH} REQUIRED)
+# ------------------------- Boost + GSL Setup -------------------------
 
-if(NOT GSL_INCLUDE_DIR OR NOT GSL_LIB OR NOT GSLCBLAS_LIB)
-  message(FATAL_ERROR "Could not find GSL libraries or headers")
+if(DEFINED CMAKE_TOOLCHAIN_FILE)
+  message(STATUS "Using vcpkg toolchain: ${CMAKE_TOOLCHAIN_FILE}")
+  find_package(GSL REQUIRED)
+  if(GSL_FOUND)
+    message(STATUS "GSL version: ${GSL_VERSION}")
+  else()
+    message(FATAL_ERROR "GSL not found via vcpkg")
+  endif()
+  # Assume Boost was installed and found by vcpkg
+  find_package(Boost REQUIRED COMPONENTS math numeric_odeint)
+  if(Boost_FOUND)
+    message(STATUS "Boost version: ${Boost_VERSION}")
+  else()
+    message(FATAL_ERROR "Boost not found via vcpkg")
+  endif()
 else()
-  message(STATUS "Found GSL include: ${GSL_INCLUDE_DIR}")
-  message(STATUS "Found GSL lib: ${GSL_LIB}")
-  message(STATUS "Found GSL CBLAS lib: ${GSLCBLAS_LIB}")
-endif()
+  message(WARNING "vcpkg toolchain not detected. Falling back to FetchContent Boost and manual GSL")
 
-add_library(GSL::gsl UNKNOWN IMPORTED)
-set_target_properties(GSL::gsl PROPERTIES
-  IMPORTED_LOCATION "${GSL_LIB}"
-  INTERFACE_INCLUDE_DIRECTORIES "${GSL_INCLUDE_DIR}"
-)
+  include(FetchContent)
 
-add_library(GSL::gslcblas UNKNOWN IMPORTED)
-set_target_properties(GSL::gslcblas PROPERTIES
-  IMPORTED_LOCATION "${GSLCBLAS_LIB}"
-  INTERFACE_INCLUDE_DIRECTORIES "${GSL_INCLUDE_DIR}"
-)
+  # --------- Find GSL manually ---------
+  find_path(GSL_INCLUDE_DIR gsl/gsl_math.h PATHS ${CMAKE_INCLUDE_PATH} REQUIRED)
+  find_library(GSL_LIB NAMES gsl PATHS ${CMAKE_LIBRARY_PATH} REQUIRED)
+  find_library(GSLCBLAS_LIB NAMES gslcblas PATHS ${CMAKE_LIBRARY_PATH} REQUIRED)
 
-# ------------------------- Boost Headers Setup -------------------------
-include(FetchContent)
+  if(NOT GSL_INCLUDE_DIR OR NOT GSL_LIB OR NOT GSLCBLAS_LIB)
+    message(FATAL_ERROR "Could not find GSL libraries or headers")
+  else()
+    message(STATUS "Found GSL include: ${GSL_INCLUDE_DIR}")
+    message(STATUS "Found GSL lib: ${GSL_LIB}")
+    message(STATUS "Found GSL CBLAS lib: ${GSLCBLAS_LIB}")
+  endif()
 
-set(BOOST_VERSION "boost-1.84.0")
-set(BOOST_MODULES math numeric_odeint)
+  add_library(GSL::gsl UNKNOWN IMPORTED)
+  set_target_properties(GSL::gsl PROPERTIES
+    IMPORTED_LOCATION "${GSL_LIB}"
+    INTERFACE_INCLUDE_DIRECTORIES "${GSL_INCLUDE_DIR}"
+  )
 
-# Fetch boost root (header-only)
-FetchContent_Declare(
-  boost_headers
-  GIT_REPOSITORY https://github.com/boostorg/boost.git
-  GIT_TAG ${BOOST_VERSION}
-  GIT_SHALLOW TRUE
-  GIT_SUBMODULES ""
-)
-FetchContent_MakeAvailable(boost_headers)
+  add_library(GSL::gslcblas UNKNOWN IMPORTED)
+  set_target_properties(GSL::gslcblas PROPERTIES
+    IMPORTED_LOCATION "${GSLCBLAS_LIB}"
+    INTERFACE_INCLUDE_DIRECTORIES "${GSL_INCLUDE_DIR}"
+  )
 
-# Fetch each needed Boost module (header-only)
-foreach(module IN LISTS BOOST_MODULES)
+  # --------- Fetch Boost headers ---------
+  set(BOOST_VERSION "boost-1.84.0")
+
   FetchContent_Declare(
-    boost_${module}
-    GIT_REPOSITORY https://github.com/boostorg/${module}.git
+    boost
+    GIT_REPOSITORY https://github.com/boostorg/boost.git
     GIT_TAG ${BOOST_VERSION}
     GIT_SHALLOW TRUE
+    GIT_SUBMODULES ""
   )
-  FetchContent_MakeAvailable(boost_${module})
-endforeach()
+
+  FetchContent_MakeAvailable(boost)
+
+  set(BOOST_ROOT ${boost_SOURCE_DIR})
+  set(BOOST_MATH_INCLUDE_DIR ${BOOST_ROOT}/libs/math/include)
+  set(BOOST_NUMERIC_ODEINT_INCLUDE_DIR ${BOOST_ROOT}/libs/numeric/odeint/include)
+
+endif()
 
 # ---- Add options ----
 set(PYBHPT_MARCH native CACHE STRING "Value of the -march compiler option if supported by compiler")
@@ -111,10 +124,18 @@ python_add_library(cybhpt_full MODULE
   WITH_SOABI
 )
 
+# Include paths
+if(DEFINED CMAKE_TOOLCHAIN_FILE)
+  target_include_directories(cybhpt_full PRIVATE ${Boost_INCLUDE_DIRS})
+else()
+  target_include_directories(cybhpt_full PRIVATE
+    ${BOOST_ROOT}
+    ${BOOST_MATH_INCLUDE_DIR}
+    ${BOOST_NUMERIC_ODEINT_INCLUDE_DIR}
+  )
+endif()
+
 target_include_directories(cybhpt_full PRIVATE
-  ${boost_headers_SOURCE_DIR}
-  ${boost_math_SOURCE_DIR}/include
-  ${boost_numeric_odeint_SOURCE_DIR}/include
   ${Python_NumPy_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/cpp/include
 )
@@ -141,5 +162,5 @@ endif()
 # Link libraries
 target_link_libraries(cybhpt_full PRIVATE GSL::gsl GSL::gslcblas)
 
-# Install target (optional)
+# Install (optional)
 install(TARGETS cybhpt_full DESTINATION "./")

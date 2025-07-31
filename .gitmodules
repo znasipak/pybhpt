@@ -1,0 +1,6 @@
+[submodule "extern/boost/math"]
+	path = extern/boost/math
+	url = https://github.com/boostorg/math.git
+[submodule "extern/boost/numeric/odeint"]
+	path = extern/boost/numeric/odeint
+	url = https://github.com/boostorg/odeint.git

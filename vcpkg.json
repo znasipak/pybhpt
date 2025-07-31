@@ -1,9 +1,0 @@
-{
-  "name": "pybhpt",
-  "version": "0.9.3",
-  "dependencies": [
-    "gsl",
-    "boost-math",
-    "boost-odeint"
-  ]
-}
