@@ -89,23 +89,25 @@ jobs:
           #   vcpkg_triplet: x86-linux
           #   cibw_before_all: apk add zip
           - os: ubuntu-latest
-            arch_linux: x86_64
+            arch: x86_64
             target: manylinux
             vcpkg_triplet: x64-linux
             cibw_before_build: bash build_gsl.sh
           - os: ubuntu-latest
-            arch_linux: i686
+            arch: i686
             target: manylinux
             vcpkg_triplet: x86-linux
             cibw_before_build: bash build_gsl.sh
           - os: ubuntu-latest
-            arch_linux: aarch64
+            arch: aarch64
             target: manylinux
             vcpkg_triplet: arm64-linux
             # cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
             cibw_before_build: bash build_gsl.sh
           - os: macos-14
             cibw_before_build: brew install gsl
+            arch: arm64
+            macos_ver: 14.0
     env:
       CIBW_BEFORE_BUILD: |
         ${{ matrix.cibw_before_build }}
@@ -141,20 +143,26 @@ jobs:
       #   run: |
       #     ls -l extern/boost
 
-      - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
-        if: ${{ matrix.arch_linux }}
+      - name: Set up QEMU
+        if: matrix.os == 'ubuntu-latest' && matrix.arch != 'x86_64'
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: all
+
+      - name: Build wheels (Linux ${{ matrix.arch }}-${{ matrix.target }} )
+        if: ${{ matrix.arch }}
         uses: pypa/cibuildwheel@v3.1.2
         env:
           CIBW_ENVIRONMENT: |
             CMAKE_PREFIX_PATH=/opt/gsl-install
             LD_LIBRARY_PATH=/opt/gsl-install/lib:$LD_LIBRARY_PATH
-          CIBW_ARCHS_LINUX: ${{ matrix.arch_linux }}
+          CIBW_ARCHS_LINUX: ${{ matrix.arch }}
       
       - name: Build wheels (macOS)
         if: runner.os == 'macOS'
         uses: pypa/cibuildwheel@v3.1.2
-        env:
-          CIBW_ENVIRONMENT: MACOSX_DEPLOYMENT_TARGET=14.0
+        # env:
+        #   CIBW_ENVIRONMENT: MACOSX_DEPLOYMENT_TARGET=14.0
 
       - name: Remove broken Git submodule metadata before cleanup
         run: |
