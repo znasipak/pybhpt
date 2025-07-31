@@ -14,6 +14,18 @@ endif()
 
 # ------------------------- GSL Detection -------------------------
 find_package(GSL REQUIRED)
+if(NOT GSL_FOUND)
+  message(FATAL_ERROR "GSL not found. Please install GSL development files.")
+else()
+  message(STATUS "Found GSL: ${GSL_VERSION}")
+  message(STATUS "GSL include directory: ${GSL_INCLUDE_DIR}")
+endif()
+
+if(NOT GSL_INCLUDE_DIR)
+  if(GSL_INCLUDE_DIRS)
+    set(GSL_INCLUDE_DIR ${GSL_INCLUDE_DIRS})
+    message(STATUS "Using GSL_INCLUDE_DIRS: ${GSL_INCLUDE_DIR}")
+endif()
 
 # ------------------------- Boost Headers Only -------------------------
 set(BOOST_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost")
