@@ -8,10 +8,14 @@ cd /tmp/gsl-src
 curl -LO https://ftp.gnu.org/gnu/gsl/gsl-${GSL_VERSION}.tar.gz
 tar -xzf gsl-${GSL_VERSION}.tar.gz
 cd gsl-${GSL_VERSION}
-./configure --prefix="${INSTALL_DIR}"
-make -j$(nproc)
-make install
 
-echo "CMAKE_PREFIX_PATH=${INSTALL_DIR}" >> $GITHUB_ENV
+echo "Configuring..."
+./configure --prefix="${INSTALL_DIR}" > /dev/null
+
+echo "Building..."
+make -j$(nproc) > /dev/null
+
+echo "Installing..."
+make install > /dev/null
 
 

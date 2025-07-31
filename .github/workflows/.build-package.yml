@@ -108,7 +108,7 @@ jobs:
             # cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
             cibw_before_build: bash build_gsl.sh
           - os: macos-14
-            cibw_before_build: (brew update && brew install gsl)
+            cibw_before_build: brew install gsl
     env:
       # CIBW_BEFORE_BUILD: bash /project/build_gsl.sh
       # CIBW_ENVIRONMENT: CMAKE_PREFIX_PATH=/project/gsl-install
