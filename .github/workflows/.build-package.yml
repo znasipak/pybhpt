@@ -113,7 +113,9 @@ jobs:
       # CIBW_ENVIRONMENT: CMAKE_PREFIX_PATH=/project/gsl-install
       CIBW_BEFORE_BUILD: |
         ${{ matrix.cibw_before_build }}
-        ls extern/boost/boost
+        ls
+        ls /project/extern
+        ls /project/extern/boost/boost
 
     steps:
       - uses: actions/checkout@v4
