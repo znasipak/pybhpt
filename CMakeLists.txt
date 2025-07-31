@@ -89,6 +89,11 @@ endif()
 
 # GSL
 target_link_libraries(cybhpt_full PRIVATE GSL::gsl GSL::gslcblas)
+set_target_properties(cybhpt_full PROPERTIES
+  INSTALL_RPATH "$ORIGIN/../../opt/gsl-install/lib"
+  BUILD_WITH_INSTALL_RPATH TRUE
+)
+
 
 # Optional install
 install(TARGETS cybhpt_full DESTINATION "./")
