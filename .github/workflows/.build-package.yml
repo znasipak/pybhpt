@@ -51,13 +51,6 @@ jobs:
           ./bootstrap.sh
           ./b2 headers
 
-      - name: Setup Miniconda with environment and caching
-        uses: mamba-org/setup-micromamba@v2
-        with:
-          environment-file: environment.yml
-          cache-environment: true
-          cache-downloads: true
-
   #     - name: Install package and run tests
   #       run: |
   #         python -m venv venv
@@ -79,17 +72,35 @@ jobs:
           #   target: musllinux
           #   vcpkg_triplet: x64-linux-musl
           #   cibw_before_all: apk add zip
+          # - os: ubuntu-latest
+          #   arch_linux: i686
+          #   cibw_skip: pp* *manylinux*
+          #   target: musllinux
+          #   vcpkg_triplet: x86-linux
+          #   cibw_before_all: apk add zip
           - os: ubuntu-latest
             arch_linux: x86_64
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: x64-linux
+            # cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
+          - os: ubuntu-latest
+            arch_linux: i686
+            cibw_skip: pp* *musllinux*
+            target: manylinux
+            vcpkg_triplet: x86-linux
+            # cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
           - os: ubuntu-latest
             arch_linux: aarch64
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: arm64-linux
+            # cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
           - os: macos-14
+            # cibw_before_build: (brew update && brew install gsl)
+    env:
+      CIBW_BEFORE_BUILD: bash /project/build_gsl.sh
+      CIBW_ENVIRONMENT: CMAKE_PREFIX_PATH=/project/gsl-install
 
     steps:
       - uses: actions/checkout@v4
@@ -121,13 +132,40 @@ jobs:
           ./bootstrap.sh
           ./b2 headers
 
-      - name: Setup Miniconda with environment and caching
-        uses: mamba-org/setup-micromamba@v2
-        with:
-          environment-file: environment.yml
-          cache-environment: true
-          cache-downloads: true
+      # # Cache GSL installation
+      # - name: Cache GSL installation
+      #   id: cache-gsl
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       /usr/local/include/gsl
+      #       /usr/local/lib/libgsl*
+      #     key: gsl-install-${{ runner.os }}-${{ hashFiles('path/to/gsl-source/**') }}
+      
+      # - name: Install GSL on Linux
+      #   if: runner.os == 'Linux' && steps.cache-gsl.outputs.cache-hit != 'true'
+      #   run: |
+      #     set -e
+      #     if command -v apt-get >/dev/null; then
+      #       sudo apt-get update
+      #       sudo apt-get install -y libgsl-dev
+      #     elif command -v yum >/dev/null; then
+      #       sudo yum install -y gsl-devel
+      #     elif command -v apk >/dev/null; then
+      #       sudo apk add --no-cache gsl-dev
+      #     else
+      #       echo "No supported package manager found for GSL installation"
+      #       exit 1
+      #     fi
+      #   shell: bash
 
+      # - name: Install GSL on macOS
+      #   if: runner.os == 'macOS' && steps.cache-gsl.outputs.cache-hit != 'true'
+      #   run: |
+      #     brew update
+      #     brew install gsl
+      #   shell: bash
+      
       - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
         if: ${{ matrix.arch_linux }}
         uses: pypa/cibuildwheel@v2.22.0
