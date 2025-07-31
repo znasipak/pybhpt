@@ -144,7 +144,7 @@ jobs:
           platforms: all
 
       - name: Build wheels (Linux ${{ matrix.arch }}-${{ matrix.target }} )
-        if: ${{ matrix.arch }}
+        if: runner.os == 'Linux'
         uses: pypa/cibuildwheel@v3.1.2
         env:
           CIBW_ENVIRONMENT: |
