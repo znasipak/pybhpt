@@ -29,6 +29,9 @@ jobs:
       - name: Get Boost submodule commit
         id: boost_commit
         run: echo "boost_commit=$(git rev-parse HEAD:extern/boost)" >> $GITHUB_OUTPUT
+      
+      # - name: Cleanup Boost git submodule metadata
+      #   run: rm -rf .git/modules/extern/boost || true
 
       - name: Cache Boost headers build
         id: cache-boost
@@ -40,7 +43,7 @@ jobs:
       - name: Fully update Boost submodule if cache miss
         if: steps.cache-boost.outputs.cache-hit != 'true'
         run: |
-          git submodule init extern/boost
+          git submodule sync --recursive
           git submodule update --init --recursive extern/boost
           cd extern/boost
           chmod +x bootstrap.sh
@@ -117,10 +120,13 @@ jobs:
           path: extern/boost
           key: boost-${{ runner.os }}-${{ steps.boost_commit.outputs.boost_commit }}
 
+      # - name: Cleanup Boost git submodule metadata
+      #   run: rm -rf .git/modules/extern/boost || true
+
       - name: Fully update Boost submodule if cache miss
         if: steps.cache-boost.outputs.cache-hit != 'true'
         run: |
-          git submodule init extern/boost
+          git submodule sync --recursive
           git submodule update --init --recursive extern/boost
           cd extern/boost
           chmod +x bootstrap.sh
