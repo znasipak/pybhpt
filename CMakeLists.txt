@@ -25,6 +25,7 @@ if(NOT GSL_INCLUDE_DIR)
   if(GSL_INCLUDE_DIRS)
     set(GSL_INCLUDE_DIR ${GSL_INCLUDE_DIRS})
     message(STATUS "Using GSL_INCLUDE_DIRS: ${GSL_INCLUDE_DIR}")
+  endif()
 endif()
 
 # ------------------------- Boost Headers Only -------------------------
