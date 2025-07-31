@@ -71,7 +71,7 @@ python_add_library(cybhpt_full MODULE
 target_include_directories(cybhpt_full PRIVATE
   ${Python_NumPy_INCLUDE_DIRS}
   ${BOOST_INCLUDE_DIR}
-  "${GSL_INCLUDE_DIRS}"           # <-- Added to ensure GSL headers are found
+  "${GSL_INCLUDE_DIR}"           # <-- Added to ensure GSL headers are found
   ${CMAKE_CURRENT_SOURCE_DIR}/cpp/include
 )
 
