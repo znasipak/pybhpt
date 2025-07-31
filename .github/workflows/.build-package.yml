@@ -59,27 +59,27 @@ jobs:
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: x64-linux
-            cibw_before_all: yum install -y zip gsl-devel || (apt-get update && apt-get install -y zip libgsl-dev)
+            cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
           - os: ubuntu-latest
             arch_linux: i686
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: x86-linux
-            cibw_before_all: yum install -y zip gsl-devel || (apt-get update && apt-get install -y zip libgsl-dev)
+            cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
           - os: ubuntu-latest
             arch_linux: aarch64
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: arm64-linux
-            cibw_before_all: yum install -y zip gsl-devel || (apt-get update && apt-get install -y zip libgsl-dev)
+            cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
           - os: macos-14
-            cibw_before_all: (brew update && brew install gsl)
+            cibw_before_build: (brew update && brew install gsl)
     env:
       # CIBW_BEFORE_ALL is a CIBW environment variable that allows to run commands before the build starts.
       # It is used here to install zip, which is needed by cibuildwheel to create the wheel files.
       # The command is run only on Linux, because macOS runners already have zip installed.
       # The command is run before the build starts, so it is not needed to run it in the cibuildwheel config.
-      CIBW_BEFORE_ALL: ${{ matrix.cibw_before_all }}
+      CIBW_BEFORE_BUILD: ${{ matrix.cibw_before_build }}
 
     steps:
       - uses: actions/checkout@v4
@@ -164,8 +164,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Build sdist
         run: pipx run build --sdist
