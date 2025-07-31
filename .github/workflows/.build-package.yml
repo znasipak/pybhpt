@@ -25,6 +25,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: false  # do NOT checkout submodules here, we'll handle them manually
+          fetch-depth: 1 # shallow clone to speed up the process
 
       - name: Get Boost submodule commit
         id: boost_commit
@@ -37,10 +38,6 @@ jobs:
           path: extern/boost
           key: boost-${{ runner.os }}-${{ steps.boost_commit.outputs.boost_commit }}
 
-      - name: Cleanup Boost git submodule metadata of cache hit
-        if: steps.cache-boost.outputs.cache-hit == 'true'
-        run: rm -rf .git/modules/extern/boost || true
-
       - name: Fully update Boost submodule if cache miss
         if: steps.cache-boost.outputs.cache-hit != 'true'
         run: |
@@ -50,6 +47,11 @@ jobs:
           chmod +x bootstrap.sh
           ./bootstrap.sh
           ./b2 headers
+
+      - name: Remove broken Git submodule metadata before cleanup
+        run: |
+          git submodule deinit --force --all || true
+          rm -rf .git/modules/extern || true
 
   #     - name: Install package and run tests
   #       run: |
@@ -83,19 +85,19 @@ jobs:
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: x64-linux
-            cibw_before_build: yum install -y gsl-devel=2.7.1-11.el10_0 || (apt-get update && apt-get install -y libgsl-dev=2.8+dfsg-5)
+            cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
           - os: ubuntu-latest
             arch_linux: i686
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: x86-linux
-            cibw_before_build: yum install -y gsl-devel=2.7.1-11.el10_0 || (apt-get update && apt-get install -y libgsl-dev=2.8+dfsg-5)
+            cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
           - os: ubuntu-latest
             arch_linux: aarch64
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: arm64-linux
-            cibw_before_build: yum install -y gsl-devel=2.7.1-11.el10_0 || (apt-get update && apt-get install -y libgsl-dev=2.8+dfsg-5)
+            cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
           - os: macos-14
             cibw_before_build: (brew update && brew install gsl)
     env:
@@ -107,6 +109,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: false  # do NOT checkout submodules here, we'll handle them manually
+          fetch-depth: 1 # shallow clone to speed up the process
 
       - name: Get Boost submodule commit
         id: boost_commit
@@ -119,10 +122,6 @@ jobs:
           path: extern/boost
           key: boost-${{ runner.os }}-${{ steps.boost_commit.outputs.boost_commit }}
 
-      - name: Cleanup Boost git submodule metadata of cache hit
-        if: steps.cache-boost.outputs.cache-hit == 'true'
-        run: rm -rf .git/modules/extern/boost || true
-
       - name: Fully update Boost submodule if cache miss
         if: steps.cache-boost.outputs.cache-hit != 'true'
         run: |
@@ -132,6 +131,11 @@ jobs:
           chmod +x bootstrap.sh
           ./bootstrap.sh
           ./b2 headers
+
+      - name: Remove broken Git submodule metadata before cleanup
+        run: |
+          git submodule deinit --force --all || true
+          rm -rf .git/modules/extern || true
       
       - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
         if: ${{ matrix.arch_linux }}
