@@ -148,7 +148,11 @@ jobs:
         run: |
           git submodule deinit --force --all || true
           rm -rf .git/modules/extern || true
-      
+
+      - name: Check Boost headers
+        run: |
+          ls -l extern/boost/boost
+
       - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
         if: ${{ matrix.arch_linux }}
         uses: pypa/cibuildwheel@v3.1.2
