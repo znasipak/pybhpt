@@ -115,7 +115,7 @@ jobs:
         ${{ matrix.cibw_before_build }}
         ls
         ls /project/extern
-        ls /project/extern/boost/boost
+        ls /project/extern/boost
 
     steps:
       - uses: actions/checkout@v4
