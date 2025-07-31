@@ -32,11 +32,7 @@ set_target_properties(GSL::gslcblas PROPERTIES
 message(STATUS "GSL found at ${GSL_INCLUDE_DIR}")
 
 # ------------------------- Boost Headers Only -------------------------
-set(BOOST_MATH_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost/math/include")
-set(BOOST_ODEINT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost/numeric/odeint/include")
-set(BOOST_CONFIG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost/config/include")
-set(BOOST_UBLAS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost/numeric/ublas/include")
-set(BOOST_CORE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost/core/include")
+set(BOOST_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost")
 
 # ------------------------- Cython -------------------------
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/cython")
@@ -83,11 +79,7 @@ python_add_library(cybhpt_full MODULE
 # ------------------------- Include Paths -------------------------
 target_include_directories(cybhpt_full PRIVATE
   ${Python_NumPy_INCLUDE_DIRS}
-  ${BOOST_MATH_INCLUDE_DIR}
-  ${BOOST_ODEINT_INCLUDE_DIR}
-  ${BOOST_CONFIG_INCLUDE_DIR}
-  ${BOOST_UBLAS_INCLUDE_DIR}
-  ${BOOST_CORE_INCLUDE_DIR}
+  ${BOOST_INCLUDE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/cpp/include
 )
 

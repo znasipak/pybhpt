@@ -21,54 +21,11 @@ jobs:
   #       # macos-13 is an intel runner, macos-14 is apple silicon
   #       # os: [ubuntu-latest, macos-13, macos-14]
   #       os: [ubuntu-latest, macos-14]
-  #   env:
-  #     # Indicates the location of the vcpkg as a Git submodule of the project repository.
-  #     # Not using "VCPKG_ROOT" because a variable with the same name is defined in the VS's
-  #     # Developer Command Prompt environment in VS 2022 17.6, which would override this one
-  #     # if it had the same name.
-  #     _VCPKG_: ${{ github.workspace }}/vcpkg
-  #     # Tells vcpkg where binary packages are stored.
-  #     VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg/bincache
-  #     # Let's use GitHub Action cache as storage for the vcpkg Binary Caching feature.
-  #     VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
   
   #   steps:
-  #     # Set env vars needed for vcpkg to leverage the GitHub Action cache as a storage
-  #     # for Binary Caching.
-  #     - uses: actions/github-script@v7
-  #       with:
-  #         script: |
-  #           core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-  #           core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
-      
   #     - uses: actions/checkout@v4
   #       with:
   #         submodules: true
-
-  #     - name: "Create directory '${{ env.VCPKG_DEFAULT_BINARY_CACHE }}'"
-  #       run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
-  #       shell: bash
-
-  #     - name: Restore vcpkg
-  #       uses: actions/cache@v4
-  #       with:
-  #         # The first path is the location of vcpkg: it contains the vcpkg executable and data files, as long as the
-  #         # built package archives (aka binary cache) which are located by VCPKG_DEFAULT_BINARY_CACHE env var.
-  #         # The other paths starting with '!' are exclusions: they contain termporary files generated during the build of the installed packages.
-  #         path: |
-  #           ${{ env._VCPKG_ }}
-  #           !${{ env._VCPKG_ }}/buildtrees
-  #           !${{ env._VCPKG_ }}/packages
-  #           !${{ env._VCPKG_ }}/downloads
-  #           !${{ env._VCPKG_ }}/installed
-  #         # The key is composed in a way that it gets properly invalidated whenever a different version of vcpkg is being used.
-  #         key: |
-  #           vcpkg-${{ runner.os }}-${{ hashFiles('.git/modules/vcpkg/HEAD') }}
-
-  #     - name: Set up install script
-  #       run: |
-  #         ${{ env._VCPKG_ }}/bootstrap-vcpkg.sh -disableMetrics 
-  #         cp pyproject-vcpkg.toml pyproject.toml
 
   #     - name: Install package and run tests
   #       run: |
@@ -83,7 +40,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-14]
+        os: [macos-14, macos-13]
         include:
           # TODO: Add musllinux support
           # - os: ubuntu-latest
@@ -116,32 +73,11 @@ jobs:
             target: manylinux
             vcpkg_triplet: arm64-linux
             cibw_before_all: yum install -y zip || (apt-get update && apt-get install -y zip)
-    env:
-      # Indicates the location of the vcpkg as a Git submodule of the project repository.
-      # Not using "VCPKG_ROOT" because a variable with the same name is defined in the VS's
-      # Developer Command Prompt environment in VS 2022 17.6, which would override this one
-      # if it had the same name.
-      _VCPKG_: ${{ github.workspace }}/vcpkg
-      # Tells vcpkg where binary packages are stored.
-      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg/bincache
-      # Let's use GitHub Action cache as storage for the vcpkg Binary Caching feature.
-      VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
-      # <-- tell vcpkg exactly which triplet to use:
-      VCPKG_DEFAULT_TRIPLET: ${{ matrix.vcpkg_triplet }}
-      VCPKG_TARGET_TRIPLET: ${{ matrix.vcpkg_triplet }}
 
     steps:
-      # Set env vars needed for vcpkg to leverage the GitHub Action cache as a storage
-      # for Binary Caching.
-      - uses: actions/github-script@v7
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
-      
       - uses: actions/checkout@v4
         with:
-          submodules: true
+          submodules: recursive
       
       # - name: Set up QEMU
       #   if: runner.os == 'Linux'
@@ -149,31 +85,57 @@ jobs:
       #   with:
       #     platforms: all
 
-      - name: "Create directory '${{ env.VCPKG_DEFAULT_BINARY_CACHE }}'"
-        run: mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
-        shell: bash
-
-      - name: Restore vcpkg
+      # Cache Boost headers build (b2 headers)
+      - name: Cache Boost headers build
+        id: cache-boost
         uses: actions/cache@v4
         with:
-          # The first path is the location of vcpkg: it contains the vcpkg executable and data files, as long as the
-          # built package archives (aka binary cache) which are located by VCPKG_DEFAULT_BINARY_CACHE env var.
-          # The other paths starting with '!' are exclusions: they contain termporary files generated during the build of the installed packages.
-          path: |
-            ${{ env._VCPKG_ }}
-            !${{ env._VCPKG_ }}/buildtrees
-            !${{ env._VCPKG_ }}/packages
-            !${{ env._VCPKG_ }}/downloads
-            !${{ env._VCPKG_ }}/installed
-          # The key is composed in a way that it gets properly invalidated whenever a different version of vcpkg is being used.
-          key: |
-            vcpkg-${{ matrix.vcpkg_triplet }}-${{ runner.os }}-${{ hashFiles('vcpkg.json', '.git/modules/vcpkg/HEAD') }}"
+          path: extern/boost/boost # b2 headers output directory
+          key: boost-headers-${{ runner.os }}-${{ hashFiles('extern/boost/bootstrap.sh', 'extern/boost/libs/**/include/**') }}
 
-      - name: Set up install script
+      - name: Build Boost headers
+        if: steps.cache-boost.outputs.cache-hit != 'true'
         run: |
-          ${{ env._VCPKG_ }}/bootstrap-vcpkg.sh -disableMetrics 
-          cp pyproject-vcpkg.toml pyproject.toml
+          cd extern/boost
+          chmod +x bootstrap.sh
+          ./bootstrap.sh
+          ./b2 headers
+        shell: bash
 
+              # Cache GSL installation
+      - name: Cache GSL installation
+        id: cache-gsl
+        uses: actions/cache@v4
+        with:
+          path: |
+            /usr/local/include/gsl
+            /usr/local/lib/libgsl*
+          key: gsl-install-${{ runner.os }}-${{ hashFiles('path/to/gsl-source/**') }}
+      
+      - name: Install GSL on Linux
+        if: runner.os == 'Linux' && steps.cache-gsl.outputs.cache-hit != 'true'
+        run: |
+          set -e
+          if command -v apt-get >/dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y libgsl-dev
+          elif command -v yum >/dev/null; then
+            sudo yum install -y gsl-devel
+          elif command -v apk >/dev/null; then
+            sudo apk add --no-cache gsl-dev
+          else
+            echo "No supported package manager found for GSL installation"
+            exit 1
+          fi
+        shell: bash
+
+      - name: Install GSL on macOS
+        if: runner.os == 'macOS' && steps.cache-gsl.outputs.cache-hit != 'true'
+        run: |
+          brew update
+          brew install gsl
+        shell: bash
+      
       - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
         if: ${{ matrix.arch_linux }}
         uses: pypa/cibuildwheel@v2.22.0
@@ -182,14 +144,9 @@ jobs:
           # It is used here to install zip, which is needed by cibuildwheel to create the wheel files.
           # The command is run only on Linux, because macOS runners already have zip installed.
           # The command is run before the build starts, so it is not needed to run it in the cibuildwheel config.
-          CIBW_BEFORE_ALL: |
-            ${{ matrix.cibw_before_all }}
+          CIBW_BEFORE_ALL: ${{ matrix.cibw_before_all }}
           CIBW_SKIP: ${{ matrix.cibw_skip }}
           CIBW_ARCHS_LINUX: ${{ matrix.arch_linux }}
-          # Making sure the vcpkg triplet is set correctly for the cibuildwheel build.
-          CIBW_ENVIRONMENT: >-
-            VCPKG_DEFAULT_TRIPLET=${{ matrix.vcpkg_triplet }}
-            VCPKG_TARGET_TRIPLET=${{ matrix.vcpkg_triplet }}
       
       - name: Build wheels (macOS)
         if: runner.os == 'macOS'
