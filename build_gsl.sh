@@ -1,7 +1,7 @@
 #!/bin/bash
 
 GSL_VERSION=2.8
-INSTALL_DIR="/opt/gsl-${GSL_VERSION}"
+INSTALL_DIR="/opt/gsl-install"
 
 mkdir -p /tmp/gsl-src
 cd /tmp/gsl-src
@@ -18,4 +18,4 @@ make -j$(nproc) > /dev/null
 echo "Installing..."
 make install > /dev/null
 
-echo "CMAKE_PREFIX_PATH=${INSTALL_DIR}" >> "$GITHUB_ENV"
+echo "GSL ${GSL_VERSION} installed to ${INSTALL_DIR}"
