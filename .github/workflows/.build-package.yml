@@ -24,14 +24,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: true  # do NOT checkout submodules here, we'll handle them manually
+          submodules: false  # do NOT checkout submodules here, we'll handle them manually
 
       - name: Get Boost submodule commit
         id: boost_commit
         run: echo "boost_commit=$(git rev-parse HEAD:extern/boost)" >> $GITHUB_OUTPUT
-      
-      # - name: Cleanup Boost git submodule metadata
-      #   run: rm -rf .git/modules/extern/boost || true
 
       - name: Cache Boost headers build
         id: cache-boost
@@ -39,6 +36,10 @@ jobs:
         with:
           path: extern/boost
           key: boost-${{ runner.os }}-${{ steps.boost_commit.outputs.boost_commit }}
+
+      - name: Cleanup Boost git submodule metadata of cache hit
+        if: steps.cache-boost.outputs.cache-hit == 'true'
+        run: rm -rf .git/modules/extern/boost || true
 
       - name: Fully update Boost submodule if cache miss
         if: steps.cache-boost.outputs.cache-hit != 'true'
@@ -49,6 +50,13 @@ jobs:
           chmod +x bootstrap.sh
           ./bootstrap.sh
           ./b2 headers
+
+      - name: Setup Miniconda with environment and caching
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          cache-environment: true
+          cache-downloads: true
 
   #     - name: Install package and run tests
   #       run: |
@@ -71,43 +79,22 @@ jobs:
           #   target: musllinux
           #   vcpkg_triplet: x64-linux-musl
           #   cibw_before_all: apk add zip
-          # - os: ubuntu-latest
-          #   arch_linux: i686
-          #   cibw_skip: pp* *manylinux*
-          #   target: musllinux
-          #   vcpkg_triplet: x86-linux
-          #   cibw_before_all: apk add zip
           - os: ubuntu-latest
             arch_linux: x86_64
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: x64-linux
-            cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
-          - os: ubuntu-latest
-            arch_linux: i686
-            cibw_skip: pp* *musllinux*
-            target: manylinux
-            vcpkg_triplet: x86-linux
-            cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
           - os: ubuntu-latest
             arch_linux: aarch64
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: arm64-linux
-            cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
           - os: macos-14
-            cibw_before_build: (brew update && brew install gsl)
-    env:
-      # CIBW_BEFORE_ALL is a CIBW environment variable that allows to run commands before the build starts.
-      # It is used here to install zip, which is needed by cibuildwheel to create the wheel files.
-      # The command is run only on Linux, because macOS runners already have zip installed.
-      # The command is run before the build starts, so it is not needed to run it in the cibuildwheel config.
-      CIBW_BEFORE_BUILD: ${{ matrix.cibw_before_build }}
 
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: true  # do NOT checkout submodules here, we'll handle them manually
+          submodules: false  # do NOT checkout submodules here, we'll handle them manually
 
       - name: Get Boost submodule commit
         id: boost_commit
@@ -120,8 +107,9 @@ jobs:
           path: extern/boost
           key: boost-${{ runner.os }}-${{ steps.boost_commit.outputs.boost_commit }}
 
-      # - name: Cleanup Boost git submodule metadata
-      #   run: rm -rf .git/modules/extern/boost || true
+      - name: Cleanup Boost git submodule metadata of cache hit
+        if: steps.cache-boost.outputs.cache-hit == 'true'
+        run: rm -rf .git/modules/extern/boost || true
 
       - name: Fully update Boost submodule if cache miss
         if: steps.cache-boost.outputs.cache-hit != 'true'
@@ -133,40 +121,13 @@ jobs:
           ./bootstrap.sh
           ./b2 headers
 
-      # # Cache GSL installation
-      # - name: Cache GSL installation
-      #   id: cache-gsl
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: |
-      #       /usr/local/include/gsl
-      #       /usr/local/lib/libgsl*
-      #     key: gsl-install-${{ runner.os }}-${{ hashFiles('path/to/gsl-source/**') }}
-      
-      # - name: Install GSL on Linux
-      #   if: runner.os == 'Linux' && steps.cache-gsl.outputs.cache-hit != 'true'
-      #   run: |
-      #     set -e
-      #     if command -v apt-get >/dev/null; then
-      #       sudo apt-get update
-      #       sudo apt-get install -y libgsl-dev
-      #     elif command -v yum >/dev/null; then
-      #       sudo yum install -y gsl-devel
-      #     elif command -v apk >/dev/null; then
-      #       sudo apk add --no-cache gsl-dev
-      #     else
-      #       echo "No supported package manager found for GSL installation"
-      #       exit 1
-      #     fi
-      #   shell: bash
+      - name: Setup Miniconda with environment and caching
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          cache-environment: true
+          cache-downloads: true
 
-      # - name: Install GSL on macOS
-      #   if: runner.os == 'macOS' && steps.cache-gsl.outputs.cache-hit != 'true'
-      #   run: |
-      #     brew update
-      #     brew install gsl
-      #   shell: bash
-      
       - name: Build wheels (Linux ${{ matrix.arch_linux }}-${{ matrix.target }} )
         if: ${{ matrix.arch_linux }}
         uses: pypa/cibuildwheel@v2.22.0

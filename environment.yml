@@ -1,0 +1,17 @@
+name: pybhpt-env
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python >= 3.8
+  - pip
+  - numpy
+  - scipy
+  - pandas
+  - matplotlib
+  - jupyter
+  - ipykernel
+  - pytest
+  - gsl >= 2.7.1
+  - cython
