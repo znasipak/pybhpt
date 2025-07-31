@@ -84,30 +84,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: recursive
-      
-      # - name: Set up QEMU
-      #   if: runner.os == 'Linux'
-      #   uses: docker/setup-qemu-action@v3
-      #   with:
-      #     platforms: all
+          submodules: false  # do NOT checkout submodules here, we'll handle them manually
 
-      # Cache Boost headers build (b2 headers)
+      - name: Get Boost submodule commit
+        id: boost_commit
+        run: echo "boost_commit=$(git rev-parse HEAD:extern/boost)" >> $GITHUB_OUTPUT
+
       - name: Cache Boost headers build
         id: cache-boost
         uses: actions/cache@v4
         with:
-          path: extern/boost/boost # b2 headers output directory
-          key: boost-headers-${{ runner.os }}-${{ hashFiles('extern/boost/bootstrap.sh', 'extern/boost/libs/**/include/**') }}
+          path: extern/boost
+          key: boost-${{ runner.os }}-${{ steps.boost_commit.outputs.boost_commit }}
 
-      - name: Build Boost headers
+      - name: Fully update Boost submodule if cache miss
         if: steps.cache-boost.outputs.cache-hit != 'true'
         run: |
+          git submodule init extern/boost
+          git submodule update --init --recursive extern/boost
           cd extern/boost
           chmod +x bootstrap.sh
           ./bootstrap.sh
           ./b2 headers
-        shell: bash
 
       # # Cache GSL installation
       # - name: Cache GSL installation
