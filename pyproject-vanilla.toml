@@ -1,5 +1,10 @@
 [build-system]
-requires = [ "cython", "numpy", "scikit-build-core" ]
+requires = [
+  "cython",
+  "numpy",
+  "scikit-build-core",
+  "cmake>=3.18"
+]
 build-backend = "scikit_build_core.build"
 
 [project]
@@ -18,23 +23,20 @@ classifiers = [
   "License :: OSI Approved :: GNU General Public License (GPL)",
   "Natural Language :: English"
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 dependencies = [
-    "numpy",
-    "scipy",
-    "cython",
-    "scikit-build-core",
+  "numpy",
+  "scipy",
+  "cython",
+  "scikit-build-core"
 ]
 
-[tool.cibuildwheel]
-# Disable building PyPy wheels on all platforms
-skip = "pp*"
-
 [tool.scikit-build]
-# Set cmake.args dynamically in pyproject.toml using Python script
-sdist.include = [ "cpp/", 'cython/']
-sdist.exclude = ["tutorial*", ".github/", ".gitignore" ]
+cmake.minimum-version = "3.18"
+cmake.build-type = "Release"
+cmake.verbose = true
+
+# Source/package layout
+sdist.include = [ "cpp/", "cython/", "CMakeLists.txt" ]
+sdist.exclude = [ ".github/", "tutorial*", ".gitignore" ]
 wheel.packages = [ "pybhpt" ]
-wheel.exclude = [ "**.cpp", "**.hpp", "**.pyx", "**/CMakeLists.txt"]
-
-

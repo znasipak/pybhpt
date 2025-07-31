@@ -4,58 +4,70 @@ project(pybhpt LANGUAGES CXX)
 # Find Python + NumPy
 find_package(Python COMPONENTS Interpreter Development.Module NumPy REQUIRED)
 
+# Auto-detect Conda and set search paths
 if(DEFINED ENV{CONDA_PREFIX})
   message(STATUS "Using Conda environment at $ENV{CONDA_PREFIX}")
   list(APPEND CMAKE_PREFIX_PATH "$ENV{CONDA_PREFIX}")
+  list(APPEND CMAKE_PREFIX_PATH "$ENV{CONDA_PREFIX}/lib/cmake")
   list(APPEND CMAKE_LIBRARY_PATH "$ENV{CONDA_PREFIX}/lib")
   list(APPEND CMAKE_INCLUDE_PATH "$ENV{CONDA_PREFIX}/include")
 endif()
 
-# ------------------------- Boost + GSL Setup -------------------------
+# ------------------------- GSL Setup -------------------------
+# Expect GSL installed by CI or system package manager
+find_path(GSL_INCLUDE_DIR gsl/gsl_math.h PATHS ${CMAKE_INCLUDE_PATH} REQUIRED)
+find_library(GSL_LIB NAMES gsl PATHS ${CMAKE_LIBRARY_PATH} REQUIRED)
+find_library(GSLCBLAS_LIB NAMES gslcblas PATHS ${CMAKE_LIBRARY_PATH} REQUIRED)
 
-if(DEFINED CMAKE_TOOLCHAIN_FILE)
-  message(STATUS "Using vcpkg toolchain: ${CMAKE_TOOLCHAIN_FILE}")
-  
-  # Use vcpkg to find Boost + GSL
-  find_package(GSL REQUIRED)
-  if(GSL_FOUND)
-    message(STATUS "GSL version: ${GSL_VERSION}")
-  else()
-    message(FATAL_ERROR "GSL not found via vcpkg")
-  endif()
-
-  find_package(Boost REQUIRED COMPONENTS math numeric_odeint)
-  if(Boost_FOUND)
-    message(STATUS "Boost version: ${Boost_VERSION}")
-  else()
-    message(FATAL_ERROR "Boost not found via vcpkg")
-  endif()
-
+if(NOT GSL_INCLUDE_DIR OR NOT GSL_LIB OR NOT GSLCBLAS_LIB)
+  message(FATAL_ERROR "Could not find GSL libraries or headers")
 else()
-  message(WARNING "vcpkg toolchain not detected. Falling back to manual linking.")
-
-  # Manual fallback if not using vcpkg
-  find_library(GSL_LIB gsl REQUIRED)
-  find_library(GSLCBLAS_LIB gslcblas REQUIRED)
-  find_library(BOOST_FILESYSTEM_LIB boost_filesystem REQUIRED)
-
-  if(NOT GSL_LIB OR NOT GSLCBLAS_LIB)
-    message(FATAL_ERROR "Could not find GSL or GSLCBLAS libraries")
-  else()
-    message(STATUS "Found GSL version: ${GSL_LIB}")
-    message(STATUS "Found GSLCBLAS version: ${GSLCBLAS_LIB}")
-  endif()
-
-  if(NOT BOOST_FILESYSTEM_LIB)
-    message(FATAL_ERROR "Could not find Boost Filesystem library")
-  else()
-    message(STATUS "Found Boost Filesystem version: ${BOOST_FILESYSTEM_LIB}")
-  endif()
+  message(STATUS "Found GSL include: ${GSL_INCLUDE_DIR}")
+  message(STATUS "Found GSL lib: ${GSL_LIB}")
+  message(STATUS "Found GSL CBLAS lib: ${GSLCBLAS_LIB}")
 endif()
 
+add_library(GSL::gsl UNKNOWN IMPORTED)
+set_target_properties(GSL::gsl PROPERTIES
+  IMPORTED_LOCATION "${GSL_LIB}"
+  INTERFACE_INCLUDE_DIRECTORIES "${GSL_INCLUDE_DIR}"
+)
+
+add_library(GSL::gslcblas UNKNOWN IMPORTED)
+set_target_properties(GSL::gslcblas PROPERTIES
+  IMPORTED_LOCATION "${GSLCBLAS_LIB}"
+  INTERFACE_INCLUDE_DIRECTORIES "${GSL_INCLUDE_DIR}"
+)
+
+# ------------------------- Boost Headers Setup -------------------------
+include(FetchContent)
+
+set(BOOST_VERSION "boost-1.84.0")
+set(BOOST_MODULES math numeric_odeint)
+
+# Fetch boost root (header-only)
+FetchContent_Declare(
+  boost_headers
+  GIT_REPOSITORY https://github.com/boostorg/boost.git
+  GIT_TAG ${BOOST_VERSION}
+  GIT_SHALLOW TRUE
+  GIT_SUBMODULES ""
+)
+FetchContent_MakeAvailable(boost_headers)
+
+# Fetch each needed Boost module (header-only)
+foreach(module IN LISTS BOOST_MODULES)
+  FetchContent_Declare(
+    boost_${module}
+    GIT_REPOSITORY https://github.com/boostorg/${module}.git
+    GIT_TAG ${BOOST_VERSION}
+    GIT_SHALLOW TRUE
+  )
+  FetchContent_MakeAvailable(boost_${module})
+endforeach()
+
 # ---- Add options ----
-set(PYBHPT_MARCH native CACHE STRING
-                                 "Value of the -march compiler option if supported by compiler")
+set(PYBHPT_MARCH native CACHE STRING "Value of the -march compiler option if supported by compiler")
 
 # Use Cython to compile the .pyx to .cpp
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/cython")
@@ -100,6 +112,9 @@ python_add_library(cybhpt_full MODULE
 )
 
 target_include_directories(cybhpt_full PRIVATE
+  ${boost_headers_SOURCE_DIR}
+  ${boost_math_SOURCE_DIR}/include
+  ${boost_numeric_odeint_SOURCE_DIR}/include
   ${Python_NumPy_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/cpp/include
 )
@@ -120,17 +135,11 @@ if(OpenMP_CXX_FOUND)
   target_link_libraries(cybhpt_full PRIVATE OpenMP::OpenMP_CXX)
 else()
   message(STATUS "OpenMP not found, proceeding without it")
-  # Optionally, you can define a macro to indicate OpenMP is not used
   target_compile_definitions(cybhpt_full PRIVATE PYBHPT_NO_OPENMP)
 endif()
 
-if(DEFINED CMAKE_TOOLCHAIN_FILE)
-  target_link_libraries(cybhpt_full PRIVATE GSL::gsl GSL::gslcblas)
-  # target_link_libraries(cybhpt_full PRIVATE Boost::math Boost::numeric_odeint)
-  target_include_directories(cybhpt_full PRIVATE ${Boost_INCLUDE_DIRS})
-else()
-  target_link_libraries(cybhpt_full PRIVATE ${GSL_LIB} ${GSLCBLAS_LIB} ${BOOST_FILESYSTEM_LIB})
-endif()
+# Link libraries
+target_link_libraries(cybhpt_full PRIVATE GSL::gsl GSL::gslcblas)
 
-# Install (optional)
+# Install target (optional)
 install(TARGETS cybhpt_full DESTINATION "./")
