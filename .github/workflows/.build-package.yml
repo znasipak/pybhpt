@@ -83,19 +83,19 @@ jobs:
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: x64-linux
-            cibw_before_build: yum install -y gsl-devel=2.7.1 || (apt-get update && apt-get install -y libgsl-dev=2.7.1)
+            cibw_before_build: yum install -y gsl-devel=2.7.1-11.el10_0 || (apt-get update && apt-get install -y libgsl-dev=2.8+dfsg-5)
           - os: ubuntu-latest
             arch_linux: i686
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: x86-linux
-            cibw_before_build: yum install -y gsl-devel=2.7.1 || (apt-get update && apt-get install -y libgsl-dev=2.7.1)
+            cibw_before_build: yum install -y gsl-devel=2.7.1-11.el10_0 || (apt-get update && apt-get install -y libgsl-dev=2.8+dfsg-5)
           - os: ubuntu-latest
             arch_linux: aarch64
             cibw_skip: pp* *musllinux*
             target: manylinux
             vcpkg_triplet: arm64-linux
-            cibw_before_build: yum install -y gsl-devel=2.7.1 || (apt-get update && apt-get install -y libgsl-dev=2.7.1)
+            cibw_before_build: yum install -y gsl-devel=2.7.1-11.el10_0 || (apt-get update && apt-get install -y libgsl-dev=2.8+dfsg-5)
           - os: macos-14
             cibw_before_build: (brew update && brew install gsl)
     env:
@@ -139,6 +139,9 @@ jobs:
         env:
           CIBW_SKIP: ${{ matrix.cibw_skip }}
           CIBW_ARCHS_LINUX: ${{ matrix.arch_linux }}
+          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
+          CIBW_MANYLINUX_I686_IMAGE: manylinux_2_28
+          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
       
       - name: Build wheels (macOS)
         if: runner.os == 'macOS'
