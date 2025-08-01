@@ -47,14 +47,6 @@ jobs:
           chmod +x bootstrap.sh
           ./bootstrap.sh
           ./b2 headers
-      
-      # - name: Check Boost headers
-      #   run: |
-      #     if [ ! -d extern/boost ]; then
-      #       echo "Boost headers not found. Please run 'git submodule update --init --recursive extern/boost'."
-      #       exit 1
-      #     fi
-      #     ls -l extern/boost/boost
 
       - name: Remove broken Git submodule metadata before cleanup
         run: |
@@ -85,15 +77,14 @@ jobs:
             cibw_skip: "*musllinux*"
             target: manylinux
             cibw_before_build: bash build_gsl.sh
-          # Takes too long, so skip for now
-          # - os: ubuntu-latest
-          #   arch: aarch64
-          #   target: manylinux
-          #   # cibw_before_build: yum install -y gsl-devel || (apt-get update && apt-get install -y libgsl-dev)
-          #   cibw_before_build: bash build_gsl.sh
           - os: macos-14
             cibw_before_build: brew install gsl
+            macosx_deployment_target: 14.0
             arch: arm64
+          - os: macos-13
+            cibw_before_build: brew install gsl
+            macosx_deployment_target: 14.0
+            arch: x86_64
     env:
       CIBW_BEFORE_BUILD: |
         ${{ matrix.cibw_before_build }}
@@ -125,16 +116,6 @@ jobs:
           ./bootstrap.sh
           ./b2 headers
 
-      # - name: Check Boost headers
-      #   run: |
-      #     ls -l extern/boost
-
-      - name: Set up QEMU
-        if: matrix.os == 'ubuntu-latest' && matrix.arch != 'x86_64'
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: all
-
       - name: Build wheels (Linux ${{ matrix.arch }}-${{ matrix.target }} )
         if: runner.os == 'Linux'
         uses: pypa/cibuildwheel@v3.1.2
@@ -149,7 +130,7 @@ jobs:
         if: runner.os == 'macOS'
         uses: pypa/cibuildwheel@v3.1.2
         env:
-          CIBW_ENVIRONMENT: MACOSX_DEPLOYMENT_TARGET=14.0
+          CIBW_ENVIRONMENT: MACOSX_DEPLOYMENT_TARGET=${{ matrix.macosx_deployment_target }}
 
       - name: Remove broken Git submodule metadata before cleanup
         run: |
