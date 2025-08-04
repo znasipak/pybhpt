@@ -21,11 +21,75 @@ def kerrgeo_Vphi_radial(a, En, Lz, Q, r):
 def kerrgeo_Vphi_polar(a, En, Lz, Q, theta):
     return kerr_geo_V32(a, En, Lz, Q, theta)
 
-def kerrgeo_mino_frequencies(a, p, e, x):
+def kerr_mino_frequencies(a, p, e, x):
+    """
+    Returns the Mino frequencies of a Kerr geodesic.
+
+    Parameters
+    ----------
+    a : float
+        The black hole spin parameter.
+    p : float
+        The semilatus rectum of the orbit.
+    e : float
+        The eccentricity of the orbit.
+    x : float
+        The inclination of the orbit.
+    
+    Returns
+    -------
+    numpy.ndarray
+        The Mino time frequencies of the orbit.
+    """
     return kerr_mino_frequencies_wrapper(a, p, e, x)
 
+def kerr_fundamental_frequencies(a, p, e, x):
+    """
+    Returns the fundamental (time) frequencies of a Kerr geodesic.
+    
+    Parameters
+    ----------
+    a : float
+        The black hole spin parameter.
+    p : float
+        The semilatus rectum of the orbit.
+    e : float
+        The eccentricity of the orbit.
+    x : float
+        The inclination of the orbit.
+    
+    Returns
+    -------
+    numpy.ndarray
+        The fundamental frequencies of the orbit.
+    """
+    Ups = kerr_mino_frequencies(a, p, e, x)
+    return Ups[1:]/Ups[0]
+
 def kerr_orbital_constants(a, p, e, x):
+    """
+    Returns the orbital constants of a Kerr geodesic (En, Lz, Qc).
+
+    Parameters
+    ----------
+    a : float
+        The black hole spin parameter.
+    p : float
+        The semilatus rectum of the orbit.
+    e : float
+        The eccentricity of the orbit.
+    x : float
+        The inclination of the orbit. 
+
+    Returns
+    -------
+    numpy.ndarray
+        The orbital constants (En, Lz, Qc) of the orbit.
+    """
     return kerr_orbital_constants_wrapper(a, p, e, x)
+
+def is_power_of_two(n: int) -> bool:
+    return n > 0 and (n & (n - 1)) == 0
 
 class KerrGeodesic:
     """
@@ -43,8 +107,8 @@ class KerrGeodesic:
     x : float
         The inclination of the orbit.
     nsamples : int
-        The number of samples to use for the geodesic. Default is 256.
-    
+        The number of samples to use for the geodesic. Must be a power of two. Default is 256.
+
     Attributes
     ----------
     blackholespin : float
@@ -89,6 +153,11 @@ class KerrGeodesic:
         The Fourier coefficients of azimuthal position with respect to the polar Mino phase.  
     """
     def __init__(self, a, p, e, x, nsamples = 2**8):
+        if a < 0 or a > 1:
+            raise ValueError(f"Black hole spin parameter {a} must be in the range [0, 1].")
+        if not is_power_of_two(nsamples):
+            raise ValueError(f"Number of samples {nsamples} must be a power of 2.")
+
         self.base = KerrGeodesicCython(a, p, e, x, nsamples)
         """The base class that contains the Cython implementation of the Kerr geodesic."""
         self.timeradial = self.base.get_time_accumulation(1)
@@ -98,6 +167,9 @@ class KerrGeodesic:
         self.azimuthalradial = self.base.get_azimuthal_accumulation(1)
         self.azimuthalpolar = self.base.get_azimuthal_accumulation(2)
         self.nsamples = self.base.nsamples
+
+        if np.isnan(self.frequencies).any():
+            raise ValueError(f"Orbital parameters (a, p, e, x) = {self.apex} do not represent a valid bound non-plunging orbit.")
 
     @property
     def blackholespin(self):
@@ -126,6 +198,48 @@ class KerrGeodesic:
         The cosine of the inclination angle of the orbit with respect to the equatorial plane.
         """
         return self.base.inclination
+    
+    @property
+    def a(self):
+        """
+        The black hole spin parameter.
+        """
+        return self.blackholespin
+    
+    @property
+    def p(self):
+        """
+        The semilatus rectum of the orbit.
+        """
+        return self.semilatusrectum
+    
+    @property
+    def e(self):
+        """
+        The eccentricity of the orbit.
+        """
+        return self.eccentricity
+    
+    @property
+    def x(self):
+        """
+        The inclination of the orbit.
+        """
+        return self.inclination
+    
+    @property
+    def apex(self):
+        """
+        The parameters of the orbit (a, p, e, x).
+        """
+        return np.array([self.blackholespin, self.semilatusrectum, self.eccentricity, self.inclination])
+    
+    @property
+    def orbitaparameters(self):
+        """
+        The parameters of the orbit (a, p, e, x).
+        """
+        return self.apex
 
     @property
     def orbitalenergy(self):
@@ -147,7 +261,7 @@ class KerrGeodesic:
         The Carter constant Qc of the orbit.
         """
         return self.base.carterconstant
-    
+
     @property
     def orbitalconstants(self):
         """

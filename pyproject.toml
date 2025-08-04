@@ -9,7 +9,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "pybhpt"
-version = "0.9.3"
+version = "0.9.4"
 description = "Black Hole Perturbation Theory and Self-Force Algorithms in Python"
 authors = [
   { name = "Zach Nasipak", email = "znasipak@gmail.com" }
@@ -26,17 +26,59 @@ classifiers = [
 requires-python = ">=3.8"
 dependencies = [
   "numpy",
-  "scipy",
-  "cython",
-  "scikit-build-core"
+  "scipy"
 ]
+
+[project.optional-dependencies]
+jupyter = [
+  "jupyter",
+  "ipython",
+  "ipykernel"
+]
+dev = [
+  "pytest",
+  "pytest-cov",
+  "matplotlib"
+]
+visualization = [
+  "matplotlib",
+  "jupyter",
+  "ipython",
+  "ipykernel"
+]
+extended = [
+  "pandas",
+  "spherical",
+  "tqdm"
+]
+all = [
+  "jupyter",
+  "ipython",
+  "ipykernel",
+  "pytest",
+  "pytest-cov",
+  "matplotlib",
+  "pandas",
+  "spherical",
+  "tqdm"
+]
+
+[project.urls]
+Github = "https://github.com/znasipak/pybhpt"
+"Bug Tracker" = "https://github.com/znasipak/pybhpt/issues"
 
 [tool.scikit-build]
 cmake.minimum-version = "3.18"
 cmake.build-type = "Release"
 cmake.verbose = true
 
-# Source/package layout
-sdist.include = [ "cpp/", "cython/", "CMakeLists.txt" ]
-sdist.exclude = [ ".github/", "tutorial*", ".gitignore" ]
-wheel.packages = [ "pybhpt" ]
+[tool.scikit-build.sdist]
+include = [ "cpp/", "cython/", "CMakeLists.txt" ]
+exclude = [ ".github/", "tutorial*", ".gitignore" ]
+
+[tool.scikit-build.wheel]
+packages = [ "pybhpt" ]
+
+[tool.pytest.ini_options]
+addopts = "--ignore=pybhpt/extern"
+norecursedirs = "extern"

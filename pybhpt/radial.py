@@ -4,10 +4,10 @@ from cybhpt_full import renormalized_angular_momentum_monodromy as nu_2_cython
 from cybhpt_full import hypergeo_2F1 as hypergeo_2F1_cython
 import numpy as np
 
-def renormalized_angular_momentum(a, s, l, m, omega):
+def renormalized_angular_momentum(s, l, m, a, omega):
     return nu_cython(a, s, l, m, omega)
 
-def renormalized_angular_momentum_monodromy(a, s, l, m, omega, la):
+def renormalized_angular_momentum_monodromy(s, l, m, a, omega, la):
     return nu_2_cython(a, s, l, m, omega, la)
 
 def hypergeo_2F1(a, b, c, x):
