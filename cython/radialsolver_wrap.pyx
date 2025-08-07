@@ -79,12 +79,17 @@ cdef dict bc_dict = {
 cdef dict method_dict = {
     "AUTO" : SolutionMethod.AUTO, 
     "MST" : SolutionMethod.MST, 
-    "ASYM" : SolutionMethod.ASYM, 
+    "ASYMP" : SolutionMethod.ASYM, 
     "HBL" : SolutionMethod.HBL, 
     "GSN" : SolutionMethod.GSN, 
     "TEUK" : SolutionMethod.TEUK
 }
 
+def available_methods():
+    """
+    Returns a list of available solution methods.
+    """
+    return list(method_dict.keys())
 
 def flip_spin_of_solutions(unicode bc, int s, double a, int m, double omega, double la, double r, cpp_complex[double] R, cpp_complex[double] Rp):
     cdef cpp_complex[double] R0, RP0
@@ -95,13 +100,13 @@ cdef BoundaryCondition str_to_bc(unicode bc_str):
     if bc_str in bc_dict.keys():
         return bc_dict[bc_str]
     else:
-        raise TypeError("{} is not a supported boundary condition.".format(bc_str))
+        raise ValueError("{} is not a supported boundary condition.".format(bc_str))
 
 cdef SolutionMethod str_to_method(unicode method_str):
     if method_str in method_dict.keys():
         return method_dict[method_str]
     else:
-        raise TypeError("{} is not a supported solution method.".format(method_str))
+        raise ValueError("{} is not a supported solution method.".format(method_str))
 
 def teukolsky_starobinsky_transformation_amplitude(unicode bc, int s, int m, double a, double omega, double lambdaCH):
     return teukolsky_starobinsky_amplitude(str_to_bc(bc), s, m, a, omega, lambdaCH)

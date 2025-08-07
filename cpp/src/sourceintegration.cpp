@@ -2,9 +2,9 @@
 
 #include "sourceintegration.hpp"
 
-#define PRECISION_THRESHOLD 500.
+#define PRECISION_THRESHOLD 1.e-2
 
-SummationHelper::SummationHelper(): _sum(0.), _previousSum(0.), _maxTerm(0.), _precisionLoss(1.), _basePrecision(DBL_EPSILON) {}
+SummationHelper::SummationHelper(): _sum(0.), _previousSum(0.), _maxTerm(0.), _error(1.), _basePrecision(DBL_EPSILON) {}
 SummationHelper::~SummationHelper() {}
 
 void SummationHelper::add(Complex val){
@@ -13,25 +13,7 @@ void SummationHelper::add(Complex val){
 	_previousSum = _sum;
 	_sum += val;
 
-	// could never really get the following to work, so I'll stick with the method of maxValue/std::abs(sum)
-
-	// double loss = 1.;
-	// // std::cout << "previousSum = " << _previousSum << "\n";
-	// // std::cout << "sum = " << _sum << "\n";
-	// if(std::abs(_sum) > 0.){
-	// 	loss = pow(10, int(std::log10(0.5*(std::abs(_previousSum) + std::abs(val))/std::abs(_sum)))); // floor to the nearest power of 10
-	// }else if(std::abs(_previousSum) > 0.){
-	// 	loss = std::log10(std::abs(_previousSum));
-	// }
-	// if(loss >= 10.){ // if we lose an order of magnitude due to cancellations, record it
-	// 	_precisionLoss *= loss;
-	// }else if(std::abs(_previousSum) < 0.1*std::abs(val)){ // if we add a big number back, we regain precision
-	// 	_precisionLoss *= pow(10., std::floor(std::log10(std::abs(_previousSum)/std::abs(val))));
-	// }
-	// if(_precisionLoss < 1.) _precisionLoss = 1.;
-
-	_precisionLoss = 1.;
-	// std::cout << "precisionLoss = " << _precisionLoss << "\n";
+	_error = _basePrecision*_maxTerm; // conservative estimate of absolute error
 }
 
 void SummationHelper::setBasePrecision(double val){
@@ -46,9 +28,14 @@ double SummationHelper::getMaxTerm(){
 	return _maxTerm;
 }
 
+double SummationHelper::getError(){
+	// provides some measure of cancellation error
+	return _error;
+}
+
 double SummationHelper::getPrecision(){
-	// std::cout << _basePrecision << ", " << _precisionLoss << ", " << _maxTerm << ", " << std::abs(_sum) << "\n";
-	return _basePrecision*std::max(_precisionLoss, _maxTerm/std::abs(_sum));
+	// provides some measure of cancellation error
+	return getError()/std::abs(_sum);
 }
 
 int integrand_convergence(Complex old_value, Complex new_value, double eps1, double eps2){
@@ -164,7 +151,7 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 
 	Complex W = wronskian(s, geoConstants.a, rp[0], R0[0], Rp0[0], R1[0], Rp1[0]);
 
-	int NsampleR = pow(2, 2), NsampleTh = pow(2, 2);
+	int NsampleR = pow(2, 3), NsampleTh = pow(2, 2);
 	while(NsampleR < 2*std::abs(n) + 2){
 		NsampleR *= 2;
 	}
@@ -299,11 +286,10 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 
 	ZlmUp = sumUp.getSum()/double(halfSampleR*halfSampleTh);
 	ZlmIn = sumIn.getSum()/double(halfSampleR*halfSampleTh);
+	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
+	// std::cout << ZlmIn << ", " << ZlmUp << " for " << NsampleR << ", " << NsampleTh << "\n";
 
 	double errorTolerance = 5.e-11;
-	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
-	// std::cout << "Teukolsky Up amplitude = " << ZlmUp << " with "<< NsampleR*NsampleTh <<" samples \n";
-	// std::cout << "Precision of Teukolsky Up amplitude = " << std::abs(1. - ZlmUpCompare/ZlmUp) << " with "<<NsampleR*NsampleTh<<" samples \n";
 	int convergenceTest = 0;
 	while(NsampleR < NsampleMaxR && convergenceTest < 2){
 		// needs to pass the convergence test twice
@@ -311,6 +297,54 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 			convergenceTest += 1;
 		}else{
 			convergenceTest = 0;
+		}
+
+		Complex ZlmUpCompareTh = 0., ZlmInCompareTh = 0.;
+		Complex ZlmUpTh = ZlmUp, ZlmInTh = ZlmIn;
+		int convergenceTestTh = 0;
+		while(NsampleTh < NsampleMaxTh && convergenceTestTh < 2){
+			// needs to pass the convergence test twice
+			if(integrand_convergence(ZlmUpCompareTh, ZlmUpTh, errorTolerance, 10.*sumUp.getPrecision()) && integrand_convergence(ZlmInCompareTh, ZlmInTh, errorTolerance, 10.*sumIn.getPrecision())){
+				convergenceTestTh += 1;
+			}else{
+				convergenceTestTh = 0;
+			}
+			for(int j = 0; j < halfSampleTh; j++){
+				samplePosTh = j*sampleDiffTh + sampleDiffTh/2;
+				qth = double(samplePosTh)*deltaQTh;
+
+				samplePosR = 0.;
+				qr = double(samplePosR)*deltaQR;
+				integrandRadialTurningPoint(sumInTerm, sumUpTerm, L, m, k, n, geoConstants, 0., tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], 0., phiTh[samplePosTh], qr, qth,
+					R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
+				sumUp.add(0.5*sumUpTerm);
+				sumIn.add(0.5*sumInTerm);
+
+				samplePosR = halfSampleR*sampleDiffR;
+				qr = double(samplePosR)*deltaQR;
+				integrandRadialTurningPoint(sumInTerm, sumUpTerm, L, m, k, n, geoConstants, 0., tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], 0., phiTh[samplePosTh], qr, qth,
+					R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
+				sumUp.add(pow(-1., n)*0.5*sumUpTerm);
+				sumIn.add(pow(-1., n)*0.5*sumInTerm);
+
+				for(int i = 1; i < halfSampleR; i++){
+					samplePosR = i*sampleDiffR;
+					qr = double(samplePosR)*deltaQR;
+					integrand(sumInTerm, sumUpTerm, L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth,
+						R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
+					sumUp.add(sumUpTerm);
+					sumIn.add(sumInTerm);
+				}
+			}
+
+			NsampleTh *= 2;
+			halfSampleTh *= 2;
+			sampleDiffTh /= 2;
+			ZlmUpCompareTh = ZlmUpTh;
+			ZlmInCompareTh = ZlmInTh;
+			ZlmUpTh = sumUp.getSum()/double(halfSampleR*halfSampleTh);
+			ZlmInTh = sumIn.getSum()/double(halfSampleR*halfSampleTh);
+			// std::cout << ZlmInTh << ", " << ZlmUpTh << " for " << NsampleR << ", " << NsampleTh << "\n";
 		}
 		// additional qr sample points for fixed qth = 0. and qth = pi
 		for(int i = 0; i < halfSampleR; i++){
@@ -344,7 +378,7 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 				sumIn.add(sumInTerm);
 			}
 		}
-		// std::cout << "Teukolsky Up sum = " << sumUp << " with "<<NsampleR<<" samples \n";
+
 		NsampleR *= 2;
 		halfSampleR *= 2;
 		sampleDiffR /= 2;
@@ -352,75 +386,18 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 		ZlmInCompare = ZlmIn;
 		ZlmUp = sumUp.getSum()/double(halfSampleR*halfSampleTh);
 		ZlmIn = sumIn.getSum()/double(halfSampleR*halfSampleTh);
+		// std::cout << ZlmIn << ", " << ZlmUp << " for " << NsampleR << ", " << NsampleTh << "\n";
 		// std::cout << "Teukolsky Up amplitude = " << ZlmUp << " with "<<NsampleR*NsampleTh<<" samples \n";
 		// std::cout << "Precision of Teukolsky Up amplitude = " << std::abs(1. - ZlmUpCompare/ZlmUp) << " with "<<NsampleR*NsampleTh<<" samples \n";
 	}
-
-	ZlmUpCompare = 0.; ZlmInCompare = 0.;
-	convergenceTest = 0;
-	while(NsampleTh < NsampleMaxTh && convergenceTest < 2){
-		// needs to pass the convergence test twice
-		if(integrand_convergence(ZlmUpCompare, ZlmUp, errorTolerance, 10.*sumUp.getPrecision()) && integrand_convergence(ZlmInCompare, ZlmIn, errorTolerance, 10.*sumIn.getPrecision())){
-			convergenceTest += 1;
-		}else{
-			convergenceTest = 0;
-		}
-		for(int j = 0; j < halfSampleTh; j++){
-			samplePosTh = j*sampleDiffTh + sampleDiffTh/2;
-			qth = double(samplePosTh)*deltaQTh;
-
-			samplePosR = 0.;
-			qr = double(samplePosR)*deltaQR;
-			integrandRadialTurningPoint(sumInTerm, sumUpTerm, L, m, k, n, geoConstants, 0., tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], 0., phiTh[samplePosTh], qr, qth,
-				R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-			sumUp.add(0.5*sumUpTerm);
-			sumIn.add(0.5*sumInTerm);
-
-			samplePosR = halfSampleR*sampleDiffR;
-			qr = double(samplePosR)*deltaQR;
-			integrandRadialTurningPoint(sumInTerm, sumUpTerm, L, m, k, n, geoConstants, 0., tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], 0., phiTh[samplePosTh], qr, qth,
-				R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-			sumUp.add(pow(-1., n)*0.5*sumUpTerm);
-			sumIn.add(pow(-1., n)*0.5*sumInTerm);
-
-			for(int i = 1; i < halfSampleR; i++){
-				samplePosR = i*sampleDiffR;
-				qr = double(samplePosR)*deltaQR;
-				integrand(sumInTerm, sumUpTerm, L, m, k, n, geoConstants, tR[samplePosR], tTh[samplePosTh], rp[samplePosR], thp[samplePosTh], phiR[samplePosR], phiTh[samplePosTh], qr, qth,
-					R0[samplePosR], Rp0[samplePosR], Rpp0[samplePosR], R1[samplePosR], Rp1[samplePosR], Rpp1[samplePosR], S[samplePosTh], Sp[samplePosTh], Spp[samplePosTh]);
-				sumUp.add(sumUpTerm);
-				sumIn.add(sumInTerm);
-			}
-		}
-
-		NsampleTh *= 2;
-		halfSampleTh *= 2;
-		sampleDiffTh /= 2;
-		ZlmUpCompare = ZlmUp;
-		ZlmInCompare = ZlmIn;
-		ZlmUp = sumUp.getSum()/double(halfSampleR*halfSampleTh);
-		ZlmIn = sumIn.getSum()/double(halfSampleR*halfSampleTh);
-		// std::cout << "Teukolsky Up amplitude = " << ZlmUp << " with "<<NsampleR*NsampleTh<<" samples \n";
-		// std::cout << "Precision of Teukolsky Up amplitude = " << std::abs(1. - ZlmUpCompare/ZlmUp) << " with "<<NsampleR*NsampleTh<<" samples and precision loss = "<<precisionLossUp<<"\n";
-	}
-	// std::cout << "Precision of Teukolsky In amplitude = " << std::abs(1. - ZlmInCompare/ZlmIn) << "\n";
-	// std::cout << "Precision of Teukolsky Up amplitude = " << std::abs(1. - ZlmUpCompare/ZlmUp) << "\n";
-	// std::cout << "Estimated precision of In sum = " << sumIn.getPrecision() << "\n";
-	// std::cout << "Estimated precision of Up sum = " << sumUp.getPrecision() << "\n";
-	// std::cout << halfSampleR << "\n";
-	// std::cout << halfSampleTh << "\n";
 	
 	double precisionIn = std::abs(1. - ZlmInCompare/ZlmIn);
 	double precisionUp = std::abs(1. - ZlmUpCompare/ZlmUp);
-	if(precisionIn < PRECISION_THRESHOLD){
+	if(precisionIn > PRECISION_THRESHOLD){
 		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
-	}else{
-		precisionIn = sumIn.getPrecision();
 	}
-	if(precisionUp < PRECISION_THRESHOLD){
+	if(precisionUp > PRECISION_THRESHOLD){
 		precisionUp = std::max(sumUp.getPrecision(), precisionUp);
-	}else{
-		precisionUp = sumUp.getPrecision();
 	}
 
 	ZlmUp *= -8.*M_PI/W/geoConstants.upsilonT;
@@ -542,8 +519,14 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	ZlmIn = sumIn.getSum()/double(halfSample);
 
 	double errorTolerance = 5.e-12;
+	double convergenceTest = 0;
 	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
-	while(Nsample < NsampleMax && (!integrand_convergence(ZlmUpCompare, ZlmUp, errorTolerance, 10.*sumUp.getPrecision()) ||  !integrand_convergence(ZlmInCompare, ZlmIn, errorTolerance, 10.*sumIn.getPrecision()))){
+	while(convergenceTest < 2 && Nsample < NsampleMax){
+		if(integrand_convergence(ZlmUpCompare, ZlmUp, errorTolerance, 10.*sumUp.getPrecision()) && integrand_convergence(ZlmInCompare, ZlmIn, errorTolerance, 10.*sumIn.getPrecision())){
+			convergenceTest += 1;
+		}else{
+			convergenceTest = 0;
+		}
 		for(int i = 0; i < halfSample; i++){
 			samplePos = i*sampleDiff + sampleDiff/2;
 			qr = double(samplePos)*deltaQ;
@@ -571,20 +554,11 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	double precisionIn = std::abs(1. - ZlmInCompare/ZlmIn);
 	double precisionUp = std::abs(1. - ZlmUpCompare/ZlmUp);
 
-	double precision_cut = PRECISION_THRESHOLD;
-	// if(precision_cut < 1./geoConstants.getTimeFrequency(m, 0, n)){
-	// 	precision_cut = 1./geoConstants.getTimeFrequency(m, 0, n);
-	// }
-
-	if(precisionIn < precision_cut){
+	if(precisionIn > PRECISION_THRESHOLD){
 		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
-	}else{
-		precisionIn = sumIn.getPrecision();
 	}
-	if(precisionUp < precision_cut){
+	if(precisionUp > PRECISION_THRESHOLD){
 		precisionUp = std::max(sumUp.getPrecision(), precisionUp);
-	}else{
-		precisionUp = sumUp.getPrecision();
 	}
 
 	ZlmUp *= -rescaleUp*8.*M_PI/W/geoConstants.upsilonT;
@@ -598,15 +572,12 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
 	std::function<void(Complex &, Complex &, int const &, int const &, int const &, int const &, GeodesicConstants &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, Complex const &, Complex const &, Complex const &,  Complex const &, Complex const &, Complex const &, double const &, double const &, double const &)> integrand;
 	std::function<void(Complex &, Complex &, int const &, int const &, int const &, int const &, GeodesicConstants &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, Complex const &, Complex const &, Complex const &,  Complex const &, Complex const &, Complex const &, double const &, double const &, double const &)> integrandTurningPoint;
-	// std::function<Complex(int const &, int const &, int const &, int const &, GeodesicConstants &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, double const &, Complex const &, Complex const &, Complex const &, double const &, double const &, double const &)> integrandCompare;
 	if(s == -2){
 		integrand = teukolskyIntegrandMinus2RadialTurningPoint;
 		integrandTurningPoint = teukolskyIntegrandMinus2RadialPolarTurningPoint;
-		// integrandCompare = teukolskyIntegrand;
 	}else{
 		integrand = teukolskyIntegrandPlus2RadialTurningPoint;
 		integrandTurningPoint = teukolskyIntegrandPlus2RadialPolarTurningPoint;
-		// integrandCompare = teukolskyIntegrandPlus;
 	}
 	
 	Complex R0 = (Rin.solution)[0];
@@ -669,7 +640,6 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 	for(int i = 1; i < halfSample; i++){
 		samplePos = i*sampleDiff;
 		qth = samplePos*deltaQ;
-		// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
 		// first sum performs integration between qr = 0 to qr = pi
 		integrand(sumInTerm, sumUpTerm, L, m, k, 0, geoConstants, 0., tTh[samplePos], rp, thp[samplePos], 0., phiTh[samplePos], qr, qth,
 			R0, Rp0, Rpp0, R1, Rp1, Rpp1, S[samplePos], Sp[samplePos], Spp[samplePos]);
@@ -681,13 +651,17 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 	ZlmIn = sumIn.getSum()/double(halfSample);
 
 	double errorTolerance = 5.e-12;
+	double convergenceTest = 0;
 	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
-	while(Nsample < NsampleMax && (!integrand_convergence(ZlmUpCompare, ZlmUp, errorTolerance, 10.*sumUp.getPrecision()) ||  !integrand_convergence(ZlmInCompare, ZlmIn, errorTolerance, 10.*sumIn.getPrecision()))){
-		// std::cout << "Precision of Teukolsky amplitude = " << std::abs(1. - ZlmUpCompare/ZlmUp) << " with "<<Nsample<<" samples \n";
+	while(convergenceTest < 2 && Nsample < NsampleMax){
+		if(integrand_convergence(ZlmUpCompare, ZlmUp, errorTolerance, sumUp.getPrecision()) && integrand_convergence(ZlmInCompare, ZlmIn, errorTolerance, sumIn.getPrecision())){
+			convergenceTest += 1;
+		}else{
+			convergenceTest = 0;
+		}
 		for(int i = 0; i < halfSample; i++){
 			samplePos = i*sampleDiff + sampleDiff/2;
 			qth = samplePos*deltaQ;
-			// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
 			integrand(sumInTerm, sumUpTerm, L, m, k, 0, geoConstants, 0., tTh[samplePos], rp, thp[samplePos], 0., phiTh[samplePos], qr, qth,
 				R0, Rp0, Rpp0, R1, Rp1, Rpp1, S[samplePos], Sp[samplePos], Spp[samplePos]);
 			sumUp.add(sumUpTerm);
@@ -705,20 +679,11 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 	double precisionIn = std::abs(1. - ZlmInCompare/ZlmIn);
 	double precisionUp = std::abs(1. - ZlmUpCompare/ZlmUp);
 
-	double precision_cut = PRECISION_THRESHOLD;
-	// if(precision_cut < 1./geoConstants.getTimeFrequency(m, k, 0)){
-	// 	precision_cut = 1./geoConstants.getTimeFrequency(m, k, 0);
-	// }
-
-	if(precisionIn < precision_cut){
+	if(precisionIn > PRECISION_THRESHOLD){
 		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
-	}else{
-		precisionIn = sumIn.getPrecision();
 	}
-	if(precisionUp < precision_cut){
+	if(precisionUp > PRECISION_THRESHOLD){
 		precisionUp = std::max(sumUp.getPrecision(), precisionUp);
-	}else{
-		precisionUp = sumUp.getPrecision();
 	}
 
 	ZlmUp *= -8.*M_PI/W/geoConstants.upsilonT;
