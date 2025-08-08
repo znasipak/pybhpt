@@ -49,6 +49,11 @@ jobs:
           chmod +x bootstrap.sh
           ./bootstrap.sh
           ./b2 headers
+          # Debug: Check if the problematic header was created
+          echo "Checking if boost math headers exist after b2 headers:"
+          ls -la boost/math/special_functions/ellint_1.hpp || echo "ellint_1.hpp not found after b2 headers"
+          echo "Files in boost/math/special_functions/:"
+          ls boost/math/special_functions/ | head -10 || echo "No files found in special_functions directory"
 
       - name: Cache GSL installation
         id: cache-gsl
