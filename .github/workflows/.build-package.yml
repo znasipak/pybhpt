@@ -83,9 +83,9 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
-          cd ..
           python -m pip install '.[testing]'
-          pytest .
+          cd $GITHUB_WORKSPACE
+          pytest pybhpt/tests
 
       - name: Remove broken Git submodule metadata before cleanup
         run: |
