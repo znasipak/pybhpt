@@ -35,10 +35,17 @@ jupyter = [
   "ipython",
   "ipykernel"
 ]
+testing = [
+  "pytest",
+  "pytest-cov"
+]
 dev = [
   "pytest",
   "pytest-cov",
-  "matplotlib"
+  "matplotlib",
+  "jupyter",
+  "ipython",
+  "ipykernel"
 ]
 visualization = [
   "matplotlib",

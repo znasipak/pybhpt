@@ -1785,7 +1785,7 @@ int teuk_integrate_gsl(ComplexVector &psi, ComplexVector &dpsidr, int (*sys)(dou
 
 	gsl_odeiv2_system gsl_sys = {sys, NULL, dim, params};
 
-	double abs_error = 0.;
+	double abs_error = sqrt(Psi[0]*Psi[0] + Psi[1]*Psi[1])*TEUK_ODE_REL_ERR*(1.e-5);
 	const gsl_odeiv2_step_type *T = gsl_odeiv2_step_rk8pd;
 	gsl_odeiv2_step* s = gsl_odeiv2_step_alloc(T, dim);
 	gsl_odeiv2_control* c = gsl_odeiv2_control_y_new(abs_error, TEUK_ODE_REL_ERR);
