@@ -4,8 +4,4 @@ channels:
   - conda-forge
 
 dependencies:
-  - pandas
-  - matplotlib
-  - jupyter
-  - ipykernel
   - gsl >= 2.7.1

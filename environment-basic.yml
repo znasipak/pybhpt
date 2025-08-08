@@ -1,7 +1,0 @@
-name: pybhpt-env
-
-channels:
-  - conda-forge
-
-dependencies:
-  - gsl >= 2.7.1

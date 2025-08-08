@@ -30,41 +30,17 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-jupyter = [
-  "jupyter",
-  "ipython",
-  "ipykernel"
-]
 testing = [
   "pytest",
   "pytest-cov"
 ]
 dev = [
-  "pytest",
-  "pytest-cov",
-  "matplotlib",
-  "jupyter",
-  "ipython",
-  "ipykernel"
-]
-visualization = [
   "matplotlib",
   "jupyter",
   "ipython",
   "ipykernel"
 ]
 extended = [
-  "pandas",
-  "spherical",
-  "tqdm"
-]
-all = [
-  "jupyter",
-  "ipython",
-  "ipykernel",
-  "pytest",
-  "pytest-cov",
-  "matplotlib",
   "pandas",
   "spherical",
   "tqdm"

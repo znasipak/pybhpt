@@ -1,0 +1,13 @@
+name: pybhpt-env
+
+channels:
+  - conda-forge
+
+dependencies:
+  - pandas
+  - matplotlib
+  - jupyter
+  - ipykernel
+  - pytest
+  - pytest-cov
+  - gsl >= 2.7.1

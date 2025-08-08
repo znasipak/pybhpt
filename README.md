@@ -24,16 +24,13 @@ python3 -m pip install pybhpt
 
 `pybhpt` relies on several dependencies to install and run, namely a C/C++ compiler (e.g., `g++`), `gsl`, `boost`, `Cython`, `numpy`, `scipy`, and `python >= 3.8`. To reduce package conflicts and ensure that the proper dependencies are installed, we recommend using [conda](https://docs.conda.io/en/latest/) (paricularly through [Miniforge](https://github.com/conda-forge/miniforge)) and its virtual environments.
 
-To create a conda environment `pybhpt-env` with just the necessary dependencies use `environment-basic.yml`:
-```
-conda env create -f environment-basic.yml
-conda activate pybhpt-env
-```
-For an environment with the extended recommended software dependencies use `environment.yml`:
+To create a conda environment `pybhpt-env` with just the necessary dependencies use `environment.yml`:
 ```
 conda env create -f environment.yml
 conda activate pybhpt-env
 ```
+For an environment with the extended recommended software dependencies, one can replace `environment.yml` with `environment-extended.yml` or follow the extended `pip` install instructions below. 
+
 Next clone the `pybhpt` repository from GitHub:
 ```
 git clone https://github.com/znasipak/pybhpt.git
@@ -53,6 +50,18 @@ chmod +x bootstrap.sh
 Finally, we recommend installing the package via `pip`:
 ```
 pip install .
+```
+or to get the basic development dependencies:
+```
+pip install '.[dev, testing]'
+```
+To get all recommended software:
+```
+pip install '.[dev, testing, extended]'
+```
+To ensure the package installed properly, run the unit tests via `pytest`:
+```
+pytest .
 ```
 
 ## Conda Environments with Jupyter
