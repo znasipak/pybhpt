@@ -70,7 +70,7 @@ To run the code in a Jupyter notebook, we recommend `pip` installing the followi
 ```
 pip install ipykernel matplotlib
 ```
-These dependencies are already included in `environment.yml`. To make the environment accessible within Jupyter:
+These dependencies are already included in `environment-extended.yml` or in the optional `pip install` dependencies. To make the environment accessible within Jupyter:
 ```
 python -m ipykernel install --user --name=pybhpt-env
 ```
@@ -81,7 +81,7 @@ If the package is installed using `pip`, then one can easily uninstall the packa
 ```
 pip uninstall pybhpt
 ```
-To clean the repository, one will also need to remove the directories `build/` and `pybhpt.egg.info/` from the main repository 
+Developers may also need to remove the directories `build/` and `pybhpt.egg.info/` from the main repository.
 
 ## Troubleshooting compiling from source
 

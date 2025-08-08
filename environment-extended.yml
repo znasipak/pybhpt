@@ -5,9 +5,12 @@ channels:
 
 dependencies:
   - pandas
+  - spherical
+  - tqdm
   - matplotlib
   - jupyter
   - ipykernel
+  - ipython
   - pytest
   - pytest-cov
   - gsl >= 2.7.1
