@@ -45,9 +45,6 @@ jobs:
         run: |
           git submodule sync --recursive
           git submodule update --init --recursive extern/boost
-
-      - name: Ensure Boost headers are ready
-        run: |
           cd extern/boost
           chmod +x bootstrap.sh
           ./bootstrap.sh
@@ -141,9 +138,6 @@ jobs:
         run: |
           git submodule sync --recursive
           git submodule update --init --recursive extern/boost
-
-      - name: Ensure Boost headers are ready
-        run: |
           cd extern/boost
           chmod +x bootstrap.sh
           ./bootstrap.sh
@@ -166,6 +160,7 @@ jobs:
           CIBW_ENVIRONMENT: MACOSX_DEPLOYMENT_TARGET=${{ matrix.macosx_deployment_target }}
 
       - name: Remove broken Git submodule metadata before cleanup
+        if: steps.cache-boost.outputs.cache-hit == 'true'
         run: |
           git submodule deinit --force --all || true
           rm -rf .git/modules/extern || true
