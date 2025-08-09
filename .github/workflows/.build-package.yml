@@ -81,6 +81,7 @@ jobs:
 
       - name: Install package and run tests
         run: |
+          ls /opt/
           python -m venv venv
           source venv/bin/activate
           python -m pip install '.[testing]'
