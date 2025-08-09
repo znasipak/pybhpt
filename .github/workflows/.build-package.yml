@@ -45,6 +45,9 @@ jobs:
         run: |
           git submodule sync --recursive
           git submodule update --init --recursive extern/boost
+
+      - name: Ensure Boost headers are ready
+        run: |
           cd extern/boost
           chmod +x bootstrap.sh
           ./bootstrap.sh
@@ -138,6 +141,9 @@ jobs:
         run: |
           git submodule sync --recursive
           git submodule update --init --recursive extern/boost
+
+      - name: Ensure Boost headers are ready
+        run: |
           cd extern/boost
           chmod +x bootstrap.sh
           ./bootstrap.sh
