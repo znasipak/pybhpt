@@ -81,7 +81,9 @@ jobs:
 
       - name: Install package and run tests
         run: |
-          ls /opt/
+          ls /opt/homebrew/
+          ls /opt/homebrew/lib/
+          ls /opt/homebrew/include/
           python -m venv venv
           source venv/bin/activate
           python -m pip install '.[testing]'
