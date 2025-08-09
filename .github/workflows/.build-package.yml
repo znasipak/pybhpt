@@ -54,36 +54,25 @@ jobs:
         id: cache-gsl
         uses: actions/cache@v4
         with:
-          path: |
-            /opt/gsl-install
-            /opt/homebrew/lib/libgsl*
-            /opt/homebrew/include/gsl
-            /opt/homebrew/bin/gsl-config
-          key: gsl-${{ runner.os }}-${{ runner.arch }}-v2.7.1
+          path: /opt/gsl-install
+          key: gsl-${{ runner.os }}-${{ runner.arch }}-v2.8
           restore-keys: |
             gsl-${{ runner.os }}-${{ runner.arch }}-
 
-      - name: Install GSL (Linux)
-        if: runner.os == 'Linux' && steps.cache-gsl.outputs.cache-hit != 'true'
+      - name: Install GSL (Linux & macOS)
+        if: steps.cache-gsl.outputs.cache-hit != 'true'
         run: |
           bash build_gsl.sh
-          
-      - name: Install GSL (macOS)
-        if: runner.os == 'macOS' && steps.cache-gsl.outputs.cache-hit != 'true'
-        run: |
-          brew install gsl
 
-      - name: Set GSL environment variables (Linux)
-        if: runner.os == 'Linux'
+      - name: Set GSL environment variables
         run: |
           echo "CMAKE_PREFIX_PATH=/opt/gsl-install" >> $GITHUB_ENV
-          echo "LD_LIBRARY_PATH=/opt/gsl-install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            echo "LD_LIBRARY_PATH=/opt/gsl-install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+          fi
 
       - name: Install package and run tests
         run: |
-          ls /opt/homebrew/
-          ls /opt/homebrew/lib/
-          ls /opt/homebrew/include/
           python -m venv venv
           source venv/bin/activate
           python -m pip install '.[testing]'
