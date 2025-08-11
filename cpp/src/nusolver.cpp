@@ -461,14 +461,14 @@ int nu_solver(MstParameters &params){
 		params.setRenormalizedAngularMomentum(nu_solver_monodromy(s, l, m, q, eps, la));
 		// the monodromy calculation may return 0. if there is catastrophic cancellation that
 		// leads to an inaccurate numerical result.
-	  	// if(std::abs(params.getRenormalizedAngularMomentum()) != 0.){
-		// 	nu_solver_guess(params);
-	  	// }else if(eps < 0.5){
-	  	// 	params.setRenormalizedAngularMomentum(nu_solver_low_freq(q, s, l, m, eps));
-		// 	nu_solver_guess(params);
-	  	// }else{
-	    // 	nu_solver_noguess(params);
-	  	// }
+	  	if(std::abs(params.getRenormalizedAngularMomentum()) != 0.){
+			nu_solver_guess(params);
+	  	}else if(eps < 0.5){
+	  		params.setRenormalizedAngularMomentum(nu_solver_low_freq(q, s, l, m, eps));
+			nu_solver_guess(params);
+	  	}else{
+	    	nu_solver_noguess(params);
+	  	}
 	}
   	// std::cout << std::setprecision(15);
   	// std::cout << "NUSOLVER: nu = " << params.getRenormalizedAngularMomentum() << "\n";
@@ -510,7 +510,6 @@ int nu_solver_guess(MstParameters &params){
 	double deltaX = sqrt(nuTest);
 	deltaX = deltaX < 0.01 ? deltaX : 0.01;
 
-
 	const gsl_root_fsolver_type *T;
 	gsl_root_fsolver *s;
 	gsl_function F;
@@ -550,7 +549,7 @@ int nu_solver_guess(MstParameters &params){
 		// handle failure gracefully
 		return -1;
 	}
-	if (x_lo >= x_hi) { gsl_root_fsolver_free(s); return -1; }
+	if (x_lo*x_hi > 0) { gsl_root_fsolver_free(s); return -1; }
 
 	T = gsl_root_fsolver_brent;
 	s = gsl_root_fsolver_alloc(T);
@@ -593,7 +592,7 @@ int nu_solver_noguess_rootfinder(gsl_function F, const double &x_lo, const doubl
 		// handle failure gracefully
 		return -1;
 	}
-	if (xlo >= xhi) { gsl_root_fsolver_free(s); return -1; }
+	if (xlo*xhi > 0) { gsl_root_fsolver_free(s); return -1; }
 
 	T = gsl_root_fsolver_brent;
 	s = gsl_root_fsolver_alloc(T);
