@@ -461,14 +461,14 @@ int nu_solver(MstParameters &params){
 		params.setRenormalizedAngularMomentum(nu_solver_monodromy(s, l, m, q, eps, la));
 		// the monodromy calculation may return 0. if there is catastrophic cancellation that
 		// leads to an inaccurate numerical result.
-	  	if(std::abs(params.getRenormalizedAngularMomentum()) != 0.){
-			nu_solver_guess(params);
-	  	}else if(eps < 0.5){
-	  		params.setRenormalizedAngularMomentum(nu_solver_low_freq(q, s, l, m, eps));
-			nu_solver_guess(params);
-	  	}else{
-	    	nu_solver_noguess(params);
-	  	}
+	  	// if(std::abs(params.getRenormalizedAngularMomentum()) != 0.){
+		// 	nu_solver_guess(params);
+	  	// }else if(eps < 0.5){
+	  	// 	params.setRenormalizedAngularMomentum(nu_solver_low_freq(q, s, l, m, eps));
+		// 	nu_solver_guess(params);
+	  	// }else{
+	    // 	nu_solver_noguess(params);
+	  	// }
 	}
   	// std::cout << std::setprecision(15);
   	// std::cout << "NUSOLVER: nu = " << params.getRenormalizedAngularMomentum() << "\n";
