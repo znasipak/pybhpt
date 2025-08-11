@@ -547,9 +547,13 @@ int nu_solver_guess(MstParameters &params){
 	if (!std::isfinite(x_lo) || !std::isfinite(x_hi)) {
 		gsl_root_fsolver_free(s);
 		// handle failure gracefully
-		return -1;
+		std::cerr << "NUSOLVER ERROR: Root solver bounds invalid, exiting." << std::endl;
+		std::exit(EXIT_FAILURE);
 	}
-	if (x_lo*x_hi > 0) { gsl_root_fsolver_free(s); return -1; }
+	if (x_lo*x_hi > 0) { 
+		std::cerr << "NUSOLVER ERROR: Root solver bounds invalid, exiting." << std::endl;
+		std::exit(EXIT_FAILURE);
+	}
 
 	T = gsl_root_fsolver_brent;
 	s = gsl_root_fsolver_alloc(T);
@@ -565,7 +569,7 @@ int nu_solver_guess(MstParameters &params){
 	}
 	while (status == GSL_CONTINUE && iter < max_iter);
 
-	gsl_root_fsolver_free (s);
+	gsl_root_fsolver_free(s);
 
 	if(std::abs(cos(2.*M_PI*nu0)) < 1.){
 		params.setRenormalizedAngularMomentum(r);
@@ -587,12 +591,16 @@ int nu_solver_noguess_rootfinder(gsl_function F, const double &x_lo, const doubl
 	double r;
 	double xlo = x_lo, xhi = x_hi;
 
-	if (!std::isfinite(xlo) || !std::isfinite(xhi)) {
+	if (!std::isfinite(x_lo) || !std::isfinite(x_hi)) {
 		gsl_root_fsolver_free(s);
 		// handle failure gracefully
-		return -1;
+		std::cerr << "NUSOLVER ERROR: Root solver bounds invalid, exiting." << std::endl;
+		std::exit(EXIT_FAILURE);
 	}
-	if (xlo*xhi > 0) { gsl_root_fsolver_free(s); return -1; }
+	if (x_lo*x_hi > 0) { 
+		std::cerr << "NUSOLVER ERROR: Root solver bounds invalid, exiting." << std::endl;
+		std::exit(EXIT_FAILURE);
+	}
 
 	T = gsl_root_fsolver_brent;
 	s = gsl_root_fsolver_alloc(T);
