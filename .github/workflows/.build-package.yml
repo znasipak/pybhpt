@@ -79,6 +79,7 @@ jobs:
           # pytest ../.
 
       - name: Remove broken Git submodule metadata before cleanup
+        if: steps.cache-boost.outputs.cache-hit == 'true'
         run: |
           git submodule deinit --force --all || true
           rm -rf .git/modules/extern || true
