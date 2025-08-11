@@ -5,14 +5,18 @@
 
 #include "specialfunc.hpp"
 
-#define SERIES_COEFF_NMAX 2000
-
 // declare structure
-typedef struct series_coeff_struct{
-	int nmax;
-	int ndata;
-	ComplexVector coeffs;
-} series_coeff;
+struct series_coeff_struct {
+    int nmax;
+    int ndata;
+    ComplexVector coeffs;
+
+    // Constructor
+    series_coeff_struct(int max_n) : nmax(max_n), ndata(1), coeffs(max_n + 1, Complex(0.0)) {
+        coeffs[0] = Complex(1.0);
+    }
+};
+typedef series_coeff_struct series_coeff;
 
 typedef struct confluent_heun_parameters_struct{
 	Complex aCH;

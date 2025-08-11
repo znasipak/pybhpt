@@ -37,8 +37,8 @@ Complex nu_solver_monodromy(int s, int l, int m, double q, double eps, double la
 
 	// std::cout << "MONODROMY: Using monodromy methods for (s,l,m,om) = ("<<s<<","<<l<<","<<m<<","<<eps/2.<<"). \n";
 
-	series_coeff a1 = series_coeff_init(n);
-	series_coeff a2 = series_coeff_init(n);
+	series_coeff a1(n);
+	series_coeff a2(n);
 
 	stokesTest = 0;
 	stokes = monodromy_eigenvalue(a1, a2, params);
@@ -121,16 +121,6 @@ Complex monodromy_eigenvalue(series_coeff &a1, series_coeff &a2, const CH_parame
 
 	return stokes;
 }
-
-series_coeff series_coeff_init(int nmax) {
-    series_coeff a;
-    a.nmax = nmax;
-    a.ndata = 1;
-    a.coeffs.resize(nmax + 1); // allow direct coeffs[n] indexing up to nmax
-    a.coeffs[0] = 1.;
-    return a;
-}
-
 
 int generate_weighted_a1(series_coeff &a, const CH_parameters &params){
 	Complex m1C, m2C, prefm2, prefm1, am2, am1, am0;
