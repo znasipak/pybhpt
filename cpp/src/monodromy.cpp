@@ -2,14 +2,6 @@
 
 #include "monodromy.hpp"
 
-void test_monodromy(){
-	int s = 0, l = 62, m = 0;
-	double q = 0., eps = 2*0.066, la = 62.*63.;
-	Complex nu = nu_solver_monodromy(s, l, m, q, eps, la);
-
-	std::cout << "nu = " << nu << "\n";
-}
-
 Complex nu_solver_monodromy(int s, int l, int m, double q, double eps, double la){
 	double f, error, errorCheck, nuError;
 	Complex nu, stokes, stokesTest;
@@ -130,11 +122,15 @@ Complex monodromy_eigenvalue(series_coeff &a1, series_coeff &a2, const CH_parame
 	return stokes;
 }
 
-series_coeff series_coeff_init(int nmax){
-	series_coeff a = {.nmax = nmax, .ndata = 1};
-	a.coeffs[0] = 1.;
-	return a;
+series_coeff series_coeff_init(int nmax) {
+    series_coeff a;
+    a.nmax = nmax;
+    a.ndata = 1;
+    a.coeffs.resize(nmax + 1); // allow direct coeffs[n] indexing up to nmax
+    a.coeffs[0] = 1.;
+    return a;
 }
+
 
 int generate_weighted_a1(series_coeff &a, const CH_parameters &params){
 	Complex m1C, m2C, prefm2, prefm1, am2, am1, am0;

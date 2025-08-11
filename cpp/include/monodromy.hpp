@@ -11,7 +11,7 @@
 typedef struct series_coeff_struct{
 	int nmax;
 	int ndata;
-	Complex coeffs[SERIES_COEFF_NMAX];
+	ComplexVector coeffs;
 } series_coeff;
 
 typedef struct confluent_heun_parameters_struct{
