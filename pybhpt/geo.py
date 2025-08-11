@@ -235,7 +235,7 @@ class KerrGeodesic:
         return np.array([self.blackholespin, self.semilatusrectum, self.eccentricity, self.inclination])
     
     @property
-    def orbitaparameters(self):
+    def orbitalparameters(self):
         """
         The parameters of the orbit (a, p, e, x).
         """
