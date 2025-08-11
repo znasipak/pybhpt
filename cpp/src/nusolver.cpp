@@ -544,13 +544,13 @@ int nu_solver_guess(MstParameters &params){
 		x_hi = r + deltaX;
 	}
 
-	if (!std::isfinite(x_lo) || !std::isfinite(x_hi)) {
+	if (!std::isfinite(x_lo_test) || !std::isfinite(x_hi_test)) {
 		gsl_root_fsolver_free(s);
 		// handle failure gracefully
 		std::cerr << "NUSOLVER ERROR: Root solver bounds invalid, exiting." << std::endl;
 		std::exit(EXIT_FAILURE);
 	}
-	if (x_lo*x_hi > 0) { 
+	if (x_lo_test*x_hi_test > 0) { 
 		std::cerr << "NUSOLVER ERROR: Root solver bounds invalid, exiting." << std::endl;
 		std::exit(EXIT_FAILURE);
 	}
@@ -591,13 +591,16 @@ int nu_solver_noguess_rootfinder(gsl_function F, const double &x_lo, const doubl
 	double r;
 	double xlo = x_lo, xhi = x_hi;
 
-	if (!std::isfinite(x_lo) || !std::isfinite(x_hi)) {
+	double x_lo_test = (*F.function)(x_lo, &params);
+	double x_hi_test = (*F.function)(x_hi, &params);
+
+	if (!std::isfinite(x_lo_test) || !std::isfinite(x_hi_test)) {
 		gsl_root_fsolver_free(s);
 		// handle failure gracefully
 		std::cerr << "NUSOLVER ERROR: Root solver bounds invalid, exiting." << std::endl;
 		std::exit(EXIT_FAILURE);
 	}
-	if (x_lo*x_hi > 0) { 
+	if (x_lo_test*x_hi_test > 0) {
 		std::cerr << "NUSOLVER ERROR: Root solver bounds invalid, exiting." << std::endl;
 		std::exit(EXIT_FAILURE);
 	}
