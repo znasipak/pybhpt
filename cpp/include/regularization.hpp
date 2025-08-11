@@ -3,20 +3,8 @@
 #ifndef REG_HPP
 #define REG_HPP
 
-#include "boost/filesystem.hpp"
 #include "teukolsky.hpp"
 #include "kerr.hpp"
-
-int save_regAB_data(GeodesicSource geo, const int &sampleSize, const std::string &dir);
-int save_regA_data(Vector At, Vector Ar, GeodesicSource geo, const std::string &dir);
-int save_regA_data(Vector At, Vector Ar, Vector Ath, Vector Aph, GeodesicSource geo, const std::string &dir);
-int save_regB_data(Vector Bt, Vector Br, Vector Bth, Vector Bph, GeodesicSource geo, const std::string &dir);
-
-int save_reg_data(Vector regT, Vector regR, Vector regTh, Vector regPh, GeodesicSource geo, const std::string &filename, const std::string &dir);
-int save_reg_data_circular(Vector regT, Vector regR, Vector regTh, Vector regPh, GeodesicSource geo, const std::string &filename, const std::string &dir);
-int save_reg_data_equatorial(Vector regT, Vector regR, Vector regTh, Vector regPh, GeodesicSource geo, const std::string &filename, const std::string &dir);
-int save_reg_data_spherical(Vector regT, Vector regR, Vector regTh, Vector regPh, GeodesicSource geo, const std::string &filename, const std::string &dir);
-int save_reg_data_generic(Vector regT, Vector regR, Vector regTh, Vector regPh, GeodesicSource geo, const std::string &filename, const std::string &dir);
 
 Vector regularization_parameter_from_source(GeodesicSource &geo, const int &sampleSize, double (*reg_func)(const double &, const double &, const int &, const int &, GeodesicSource &));
 Vector regularization_parameter_from_source_circular(GeodesicSource &geo, const int &sampleSize, double (*reg_func)(const double &, const double &, const int &, const int &, GeodesicSource &));

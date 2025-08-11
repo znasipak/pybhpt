@@ -7,6 +7,7 @@
 #ifndef NUSOLVER_HPP
 #define NUSOLVER_HPP
 
+#include <cstdlib> // for std::exit
 #include <gsl/gsl_roots.h>
 #include <gsl/gsl_deriv.h>
 #include <gsl/gsl_errno.h>

@@ -412,21 +412,29 @@ double GeodesicSource::getMinoTimeOfTime(double t){
 	// double deltaT = (std::abs(getTimeAccumulation(1,1)) + std::abs(getTimeAccumulation(1,2)))/double(getTimeAccumulation(1).size()) + (std::abs(getTimeAccumulation(2,1)) + std::abs(getTimeAccumulation(2,2)))/double(getTimeAccumulation(2).size());
 	// double lambda_lo = (t - 2.*deltaT)/upsilonT;
 	// double lambda_hi = (t + 2.*deltaT)/upsilonT;
-	double lambda_lo = (t - std::abs(t))/upsilonT;
-	double lambda_hi = (t + std::abs(t))/upsilonT;
+	Vector fourierR = getTimeCoefficients(1);
+	Vector fourierTh = getTimeCoefficients(2);
 
-	// std::cout << "x_lo = " << lambda_lo << ", x_hi = " << lambda_hi << "\n";
+	double fourierR_sum = 0.;
+	for(size_t i = 0; i < fourierR.size(); i++){
+		fourierR_sum += std::abs(fourierR[i]);
+	}
+	double fourierTh_sum = 0.;
+	for(size_t i = 0; i < fourierTh.size(); i++){
+		fourierTh_sum += std::abs(fourierTh[i]);
+	}
 
-	int status;
+	double lambda_lo = (t - fourierR_sum - fourierTh_sum)/upsilonT;
+	double lambda_hi = (t + fourierR_sum + fourierTh_sum)/upsilonT;
+
+	int status, out;
 	int iter = 0, max_iter = 100;
 	const gsl_root_fsolver_type *T;
 	gsl_root_fsolver *s;
 
 	gsl_function F;
-	Vector fourierR = getTimeCoefficients(1);
-	Vector fourierTh = getTimeCoefficients(2);
 	struct tp_params params = {
-		.t0 = t,
+		.t0 = t, // t0 is the target time
 		.upsilonT = upsilonT,
 		.upsilonR = upsilonR,
 		.upsilonTh = upsilonTh,
@@ -436,23 +444,30 @@ double GeodesicSource::getMinoTimeOfTime(double t){
 	F.function = &tp_root;
 	F.params = &params;
 
+	double f_lo = tp_root(lambda_lo, &params);
+	double f_hi = tp_root(lambda_hi, &params);
+
+	if(f_lo*f_hi > 0.){
+		std::cerr << "GEO: The function does not change sign in the interval [" << lambda_lo << ", " << lambda_hi << "]. \n";
+		return 0.;
+	}
+
 	T = gsl_root_fsolver_brent;
-	s = gsl_root_fsolver_alloc (T);
-    gsl_root_fsolver_set (s, &F, lambda_lo, lambda_hi);
+	s = gsl_root_fsolver_alloc(T);
+    out = gsl_root_fsolver_set(s, &F, lambda_lo, lambda_hi);
 	double lambda = 0.;
 
 	do{
-      iter++;
-      status = gsl_root_fsolver_iterate (s);
-      lambda = gsl_root_fsolver_root (s);
-      lambda_lo = gsl_root_fsolver_x_lower (s);
-      lambda_hi = gsl_root_fsolver_x_upper (s);
-      status = gsl_root_test_interval (lambda_lo, lambda_hi,
-                                       0, 1.e-14);
-			// std::cout << "x_lo = " << lambda_lo << ", x_hi = " << lambda_hi << "\n";
-  }while (status == GSL_CONTINUE && iter < max_iter);
+		iter++;
+		status = gsl_root_fsolver_iterate (s);
+		lambda = gsl_root_fsolver_root (s);
+		lambda_lo = gsl_root_fsolver_x_lower (s);
+		lambda_hi = gsl_root_fsolver_x_upper (s);
+		status = gsl_root_test_interval (lambda_lo, lambda_hi,
+										0, 1.e-14);
+	}while (status == GSL_CONTINUE && iter < max_iter);
 
-  gsl_root_fsolver_free (s);
+	gsl_root_fsolver_free (s);
 
 	return lambda;
 }
@@ -532,87 +547,87 @@ void GeodesicSource::setCoefficients(Vector tR, Vector tTheta, Vector r, Vector 
 	_geoCoefficients.phiR = phiR;
 	_geoCoefficients.phiTheta = phiTheta;
 }
-void GeodesicSource::save(std::string dir){
-	int Nsample = getOrbitalSampleNumber();
-	double a = getBlackHoleSpin();
-	double p = getSemiLatusRectum();
-	double e = getEccentricity();
-	double x = getInclination();
-	double En = getOrbitalEnergy();
-	double Lz = getOrbitalAngularMomentum();
-	double Qc = getCarterConstant();
-	double r1 = getRadialRoot(1);
-	double r2 = getRadialRoot(2);
-	double r3 = getRadialRoot(3);
-	double r4 = getRadialRoot(4);
-	double z1 = getPolarRoot(1);
-	double z2 = getPolarRoot(2);
-	double UpT = getMinoFrequency(0);
-	double UpR = getMinoFrequency(1);
-	double UpTh = getMinoFrequency(2);
-	double UpPh = getMinoFrequency(3);
+// void GeodesicSource::save(std::string dir){
+// 	int Nsample = getOrbitalSampleNumber();
+// 	double a = getBlackHoleSpin();
+// 	double p = getSemiLatusRectum();
+// 	double e = getEccentricity();
+// 	double x = getInclination();
+// 	double En = getOrbitalEnergy();
+// 	double Lz = getOrbitalAngularMomentum();
+// 	double Qc = getCarterConstant();
+// 	double r1 = getRadialRoot(1);
+// 	double r2 = getRadialRoot(2);
+// 	double r3 = getRadialRoot(3);
+// 	double r4 = getRadialRoot(4);
+// 	double z1 = getPolarRoot(1);
+// 	double z2 = getPolarRoot(2);
+// 	double UpT = getMinoFrequency(0);
+// 	double UpR = getMinoFrequency(1);
+// 	double UpTh = getMinoFrequency(2);
+// 	double UpPh = getMinoFrequency(3);
 
-	Vector deltaTR = getTimeAccumulation(1);
-	Vector deltaTTh = getTimeAccumulation(2);
-	Vector rp = getRadialPosition();
-	Vector thp = getPolarPosition();
-	Vector deltaPhR = getAzimuthalAccumulation(1);
-	Vector deltaPhTh = getAzimuthalAccumulation(2);
+// 	Vector deltaTR = getTimeAccumulation(1);
+// 	Vector deltaTTh = getTimeAccumulation(2);
+// 	Vector rp = getRadialPosition();
+// 	Vector thp = getPolarPosition();
+// 	Vector deltaPhR = getAzimuthalAccumulation(1);
+// 	Vector deltaPhTh = getAzimuthalAccumulation(2);
 
-	GeodesicTrajectory fourierCoefficients = getCoefficients();
+// 	GeodesicTrajectory fourierCoefficients = getCoefficients();
 
-	if(!boost::filesystem::exists(dir)){
-		boost::filesystem::create_directory(dir);
-	}
-	std::string subdir;
-	if(dir.back() == '/'){
-		subdir = dir + "orbit/";
-	}else{
-		subdir = dir + "/orbit/";
-	}
+// 	// if(!boost::filesystem::exists(dir)){
+// 	// 	boost::filesystem::create_directory(dir);
+// 	// }
+// 	std::string subdir;
+// 	if(dir.back() == '/'){
+// 		subdir = dir + "orbit/";
+// 	}else{
+// 		subdir = dir + "/orbit/";
+// 	}
 
-	if(!boost::filesystem::exists(subdir)){
-		boost::filesystem::create_directory(subdir);
-	}
-	char buff[500];
-	sprintf(buff, "geo_a%.5f_p%.5f_e%.5f_x%.5f.txt", a, p, e, x);
+// 	// if(!boost::filesystem::exists(subdir)){
+// 	// 	boost::filesystem::create_directory(subdir);
+// 	// }
+// 	char buff[500];
+// 	sprintf(buff, "geo_a%.5f_p%.5f_e%.5f_x%.5f.txt", a, p, e, x);
 
-	std::string filepath = subdir + buff;
-	std::cout << "Saving file to " << filepath << "\n";
-	std::ofstream file;
-	file.open(filepath);
+// 	std::string filepath = subdir + buff;
+// 	std::cout << "Saving file to " << filepath << "\n";
+// 	std::ofstream file;
+// 	file.open(filepath);
 
-	file << "a\tp\te\tx\tNsample\n";
-	sprintf(buff, "%.15f\t%.15f\t%.15f\t%.15f\t%d\n\n", a, p, e, x, Nsample);
-	file << buff;
+// 	file << "a\tp\te\tx\tNsample\n";
+// 	sprintf(buff, "%.15f\t%.15f\t%.15f\t%.15f\t%d\n\n", a, p, e, x, Nsample);
+// 	file << buff;
 
-	file << "En\tLz\tQc\n";
-	sprintf(buff, "%.15f\t%.15f\t%.15f\n\n", En, Lz, Qc);
-	file << buff;
+// 	file << "En\tLz\tQc\n";
+// 	sprintf(buff, "%.15f\t%.15f\t%.15f\n\n", En, Lz, Qc);
+// 	file << buff;
 
-	file << "r1\tr2\tr3\tr4\tz1\tz2\n";
-	sprintf(buff, "%.15f\t%.15f\t%.15f\t%.15f\t%.15f\t%.15f\n\n", r1, r2, r3, r4, z1, z2);
-	file << buff;
+// 	file << "r1\tr2\tr3\tr4\tz1\tz2\n";
+// 	sprintf(buff, "%.15f\t%.15f\t%.15f\t%.15f\t%.15f\t%.15f\n\n", r1, r2, r3, r4, z1, z2);
+// 	file << buff;
 
-	file << "Upsilon_t\tUpsilon_r\tUpsilon_theta\tUpsilon_phi\n";
-	sprintf(buff, "%.15f\t%.15f\t%.15f\t%.15f\n\n", UpT, UpR, UpTh, UpPh);
-	file << buff;
+// 	file << "Upsilon_t\tUpsilon_r\tUpsilon_theta\tUpsilon_phi\n";
+// 	sprintf(buff, "%.15f\t%.15f\t%.15f\t%.15f\n\n", UpT, UpR, UpTh, UpPh);
+// 	file << buff;
 
-	// file << "t_r\tt_theta\tr_p\ttheta_p\tphi_r\tphi_theta\n";
-	// for(size_t i = 0; i < rp.size(); i++){
-	// 	sprintf(buff, "%.15e\t%.15e\t%.15e\t%.15e\t%.15e\t%.15e\n", deltaTR[i], deltaTTh[i], rp[i], thp[i], deltaPhR[i], deltaPhTh[i]);
-	// 	file << buff;
-	// }
-	// file << "\n";
+// 	// file << "t_r\tt_theta\tr_p\ttheta_p\tphi_r\tphi_theta\n";
+// 	// for(size_t i = 0; i < rp.size(); i++){
+// 	// 	sprintf(buff, "%.15e\t%.15e\t%.15e\t%.15e\t%.15e\t%.15e\n", deltaTR[i], deltaTTh[i], rp[i], thp[i], deltaPhR[i], deltaPhTh[i]);
+// 	// 	file << buff;
+// 	// }
+// 	// file << "\n";
 
-	file << "f_tr\tf_ttheta\tf_r\tf_theta\tf_phir\tf_phitheta\n";
-	for(size_t i = 0; i < rp.size(); i++){
-		sprintf(buff, "%.15e\t%.15e\t%.15e\t%.15e\t%.15e\t%.15e\n", fourierCoefficients.tR[i], fourierCoefficients.tTheta[i], fourierCoefficients.r[i], fourierCoefficients.theta[i], fourierCoefficients.phiR[i], fourierCoefficients.phiTheta[i]);
-		file << buff;
-	}
+// 	file << "f_tr\tf_ttheta\tf_r\tf_theta\tf_phir\tf_phitheta\n";
+// 	for(size_t i = 0; i < rp.size(); i++){
+// 		sprintf(buff, "%.15e\t%.15e\t%.15e\t%.15e\t%.15e\t%.15e\n", fourierCoefficients.tR[i], fourierCoefficients.tTheta[i], fourierCoefficients.r[i], fourierCoefficients.theta[i], fourierCoefficients.phiR[i], fourierCoefficients.phiTheta[i]);
+// 		file << buff;
+// 	}
 
-	file.close();
-}
+// 	file.close();
+// }
 ////////////////////////
 //   Generic orbits   //
 ////////////////////////
@@ -1786,15 +1801,15 @@ GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsampl
 		upPh = x*kerr_geo_azimuthal_frequency_circ(a*x, p);
 	}else{
 		kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
-		std::cout << "Orbital constants have been calculated \n";
+		// std::cout << "Orbital constants have been calculated \n";
 		kerr_geo_radial_roots(r1, r2, r3, r4, a, p, e, En, Lz, Qc);
-		std::cout << "Radial roots have been calculated \n";
+		// std::cout << "Radial roots have been calculated \n";
 		kerr_geo_polar_roots(z1, z2, a, x, En, Lz, Qc);
-		std::cout << "Polar roots have been calculated \n";
+		// std::cout << "Polar roots have been calculated \n";
 		kerr_geo_mino_frequencies(upT, upR, upTh, upPh, a, p, e, x, En, Lz, Qc, r1, r2, r3, r4, z1, z2);
-		std::cout << "Frequencies have been calculated \n";
+		// std::cout << "Frequencies have been calculated \n";
 		kerr_geo_carter_frequencies(cR, cTh, cPh, upT, upR, upTh, upPh, a, En, Lz, Qc, z1, z2);
-		std::cout << "Carter frequencies have been calculated \n";
+		// std::cout << "Carter frequencies have been calculated \n";
 	}
 	if( std::abs(x*x + z2 - 1.) > 1.e-10 ){
 		z2 = sqrt(1. - x*x);
@@ -1803,13 +1818,13 @@ GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsampl
 	Vector fourier_radial, fourier_psi, fourier_tr, fourier_phir;
 	if(e != 0.){
 		fourier_radial = mino_of_psi_fourier(a, p, e, En, r3, r4);
-		std::cout << "Mino of psi has been calculated \n";
+		// std::cout << "Mino of psi has been calculated \n";
 		fourier_psi = kepler_phase_of_angle_fourier(fourier_radial);
-		std::cout << "psi of Mino has been calculated \n";
+		// std::cout << "psi of Mino has been calculated \n";
 		fourier_tr = tp_radial_of_angle_fourier(a, p, e, En, Lz, Qc, upR, fourier_psi);
-		std::cout << "tr of Mino has been calculated \n";
+		// std::cout << "tr of Mino has been calculated \n";
 		fourier_phir = phip_radial_of_angle_fourier(a, p, e, En, Lz, Qc, upR, fourier_psi);
-		std::cout << "phir of Mino has been calculated \n";
+		// std::cout << "phir of Mino has been calculated \n";
 	}
 
 	Vector fourier_polar, fourier_chi, fourier_tz, fourier_phiz;
@@ -2019,8 +2034,4 @@ double kerr_isco(double a, int sgnX){
 double kerr_isco_frequency(double a){
 	int sgnX = int(a/std::abs(a));
 	return kerr_geo_azimuthal_frequency_circ_time(std::abs(a), kerr_isco(std::abs(a), sgnX), sgnX);
-}
-
-void output_geodesic(GeodesicSource geo, std::string dir){
-	geo.save(dir);
 }

@@ -4,8 +4,6 @@
 #define FLUXES_HPP
 
 #include "teukolsky.hpp"
-#include "omp.h"
-#include "boost/filesystem.hpp"
 
 class Fluxes{
 public:
@@ -58,10 +56,5 @@ double horizonConstant(TeukolskyMode teuk);
 double horizonConstant(double a, int L, int m, double omega, double lambda);
 double horizonAmplitude(double a, int L, int m, double omega, double lambda);
 int radial_n_mode_max(int l, double e);
-
-void full_flux_parallel_l(int s, GeodesicSource geo, int modeMax, std::string dir);
-void full_flux_parallel_lm(GeodesicSource geo, int lMax, std::string dir);
-void flux_parallel_lm(GeodesicSource geo, int lMax = 16);
-void flux_parallel_l(int s, GeodesicSource geo, int modeMax = 16);
 
 #endif

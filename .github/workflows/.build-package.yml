@@ -1,0 +1,233 @@
+name: Run tests and build
+
+on:
+  push:
+    branches:
+      - '**'  # Run tests on push to any branch
+  pull_request:
+    branches:
+      - main  # Run tests on PRs to main
+    types:
+      - closed  # Trigger when PR is closed (for merged PRs)
+  release:
+    types:
+      - published
+
+jobs:
+  build_and_run_tests:
+    name: Build and run unit tests
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -el {0}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-14, macos-13]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false  # do NOT checkout submodules here, we'll handle them manually
+          fetch-depth: 1 # shallow clone to speed up the process
+
+      - name: Get Boost submodule commit
+        id: boost_commit
+        run: echo "boost_commit=$(git rev-parse HEAD:extern/boost)" >> $GITHUB_OUTPUT
+
+      - name: Cache Boost headers build
+        id: cache-boost
+        uses: actions/cache@v4
+        with:
+          path: extern/boost
+          key: boost-${{ runner.os }}-${{ steps.boost_commit.outputs.boost_commit }}
+
+      - name: Fully update Boost submodule if cache miss
+        if: steps.cache-boost.outputs.cache-hit != 'true'
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive extern/boost
+          cd extern/boost
+          chmod +x bootstrap.sh
+          ./bootstrap.sh
+          ./b2 headers
+
+      - name: Cache GSL installation
+        id: cache-gsl
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/gsl-install
+          key: gsl-${{ runner.os }}-${{ runner.arch }}-v2.8
+          restore-keys: |
+            gsl-${{ runner.os }}-${{ runner.arch }}-
+
+      - name: Install GSL (Linux & macOS)
+        if: steps.cache-gsl.outputs.cache-hit != 'true'
+        run: |
+          INSTALL_DIR="${{ runner.temp }}/gsl-install" bash build_gsl.sh
+
+      - name: Set GSL environment variables
+        run: |
+          echo "CMAKE_PREFIX_PATH=${{ runner.temp }}/gsl-install" >> $GITHUB_ENV
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            echo "LD_LIBRARY_PATH=${{ runner.temp }}/gsl-install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+          fi
+
+      - name: Install package and run tests
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          python -m pip install '.[testing]'
+          pytest .
+
+      - name: Remove broken Git submodule metadata before cleanup
+        if: steps.cache-boost.outputs.cache-hit == 'true'
+        run: |
+          git submodule deinit --force --all || true
+          rm -rf .git/modules/extern || true
+
+  build_wheels:
+    needs: build_and_run_tests
+    name: Build wheels on ${{ matrix.os }} ${{ matrix.arch }} ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    # Only build wheels for merged PRs to main or releases
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main') ||
+      github.event_name == 'release'
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            arch: x86_64
+            cibw_skip: "*manylinux*"
+            target: musllinux
+            cibw_before_build: bash build_gsl.sh
+          - os: ubuntu-latest
+            arch: x86_64
+            cibw_skip: "*musllinux*"
+            target: manylinux
+            cibw_before_build: bash build_gsl.sh
+          - os: macos-14
+            cibw_before_build: brew install gsl
+            macosx_deployment_target: 14.0
+            arch: arm64
+          - os: macos-13
+            cibw_before_build: brew install gsl
+            macosx_deployment_target: 14.0
+            arch: x86_64
+    env:
+      CIBW_BEFORE_BUILD: |
+        ${{ matrix.cibw_before_build }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false  # do NOT checkout submodules here, we'll handle them manually
+          fetch-depth: 1 # shallow clone to speed up the process
+
+      - name: Get Boost submodule commit
+        id: boost_commit
+        run: echo "boost_commit=$(git rev-parse HEAD:extern/boost)" >> $GITHUB_OUTPUT
+
+      - name: Cache Boost headers build
+        id: cache-boost
+        uses: actions/cache@v4
+        with:
+          path: extern/boost
+          key: boost-${{ runner.os }}-${{ steps.boost_commit.outputs.boost_commit }}
+
+      - name: Fully update Boost submodule if cache miss
+        if: steps.cache-boost.outputs.cache-hit != 'true'
+        run: |
+          git submodule sync --recursive
+          git submodule update --init --recursive extern/boost
+          cd extern/boost
+          chmod +x bootstrap.sh
+          ./bootstrap.sh
+          ./b2 headers
+
+      - name: Build wheels (Linux ${{ matrix.arch }}-${{ matrix.target }} )
+        if: runner.os == 'Linux'
+        uses: pypa/cibuildwheel@v3.1.2
+        env:
+          CIBW_ENVIRONMENT: |
+            CMAKE_PREFIX_PATH=/opt/gsl-install
+            LD_LIBRARY_PATH=/opt/gsl-install/lib:$LD_LIBRARY_PATH
+          CIBW_ARCHS_LINUX: ${{ matrix.arch }}
+          CIBW_SKIP: ${{ matrix.cibw_skip }}
+      
+      - name: Build wheels (macOS)
+        if: runner.os == 'macOS'
+        uses: pypa/cibuildwheel@v3.1.2
+        env:
+          CIBW_ENVIRONMENT: MACOSX_DEPLOYMENT_TARGET=${{ matrix.macosx_deployment_target }}
+
+      - name: Remove broken Git submodule metadata before cleanup
+        if: steps.cache-boost.outputs.cache-hit == 'true'
+        run: |
+          git submodule deinit --force --all || true
+          rm -rf .git/modules/extern || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
+          path: ./wheelhouse/*.whl
+
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    # Only build sdist for merged PRs to main or releases
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main') ||
+      github.event_name == 'release'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build sdist
+        run: pipx run build --sdist
+
+      - uses: actions/upload-artifact@v4
+        with:
+            name: cibw-sdist
+            path: dist/*.tar.gz
+
+  upload_pypi:
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    if: github.event_name == 'release' && github.event.action == 'published'
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          # unpacks all CIBW artifacts into dist/
+          pattern: cibw-*
+          path: dist
+          merge-multiple: true
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          # repository-url: https://test.pypi.org/legacy/
+          verbose: true
+
+  upload_testpypi:
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    environment: testpypi
+    permissions:
+      id-token: write
+    # Only upload to TestPyPI when PR is merged to main
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          # unpacks all CIBW artifacts into dist/
+          pattern: cibw-*
+          path: dist
+          merge-multiple: true
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          verbose: true

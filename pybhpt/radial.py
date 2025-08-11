@@ -1,14 +1,21 @@
 from cybhpt_full import RadialTeukolsky as RadialTeukolskyCython
+from cybhpt_full import available_methods as available_methods_cython
 from cybhpt_full import renormalized_angular_momentum as nu_cython
 from cybhpt_full import renormalized_angular_momentum_monodromy as nu_2_cython
 from cybhpt_full import hypergeo_2F1 as hypergeo_2F1_cython
 import numpy as np
 
-def renormalized_angular_momentum(a, s, l, m, omega):
-    return nu_cython(a, s, l, m, omega)
+def available_methods():
+    """
+    Returns a list of available solution methods.
+    """
+    return available_methods_cython()
 
-def renormalized_angular_momentum_monodromy(a, s, l, m, omega, la):
-    return nu_2_cython(a, s, l, m, omega, la)
+def renormalized_angular_momentum(s, l, m, a, omega):
+    return nu_cython(s, l, m, a, omega)
+
+def renormalized_angular_momentum_monodromy(s, l, m, a, omega, la):
+    return nu_2_cython(s, l, m, a, omega, la)
 
 def hypergeo_2F1(a, b, c, x):
     return hypergeo_2F1_cython(a, b, c, x)
@@ -101,9 +108,22 @@ class RadialTeukolsky:
         1 for first derivatives, and 2 for second derivatives. If `deriv` is not 0, 1, or 2, a ValueError is raised.
     """
     def __init__(self, s, j, m, a, omega, r):
-        self.radialpoints = r
+        if a < 0 or a > 1:
+            raise ValueError(f"Black hole spin parameter {a} must be in the range [0, 1].")
+        if j < np.abs(m):
+            raise ValueError(f"Spheroidal harmonic mode number {j} must be greater than or equal to the absolute value of azimuthal harmonic mode number {m}.")
+        if np.any(r <= 1 + np.sqrt(1 - a**2)):
+            raise ValueError(f"Radial point {r} must be greater than horizon radius r_+ = {1 + np.sqrt(1 - a**2)}.")
+        if isinstance(r, list) or (isinstance(r, np.ndarray) and r.ndim > 0):
+            self.radialpoints = np.asarray(r)
+            self.nsamples = self.radialpoints.shape[0]
+        else:
+            raise AttributeError("Radial points must be a list or a numpy array.")
+        
+        if self.nsamples == 0:
+            raise ValueError("Radial points array is empty.")
         self.base = RadialTeukolskyCython(a, s, j, m, omega, self.radialpoints)
-        self.nsamples = r.shape[0]
+
 
     @property
     def blackholespin(self):

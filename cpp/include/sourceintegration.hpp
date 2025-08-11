@@ -34,6 +34,7 @@ public:
 	~SummationHelper();
 
 	Complex getSum();
+	double getError();
 	double getPrecision();
 	double getMaxTerm();
 
@@ -44,7 +45,7 @@ private:
 	Complex _sum;
 	Complex _previousSum;
 	double _maxTerm;
-	double _precisionLoss;
+	double _error;
 	double _basePrecision;
 };
 

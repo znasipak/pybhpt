@@ -3,6 +3,12 @@ from libcpp.complex cimport complex as cpp_complex
 import numpy as np
 cimport numpy as np
 
+cdef extern from "gsl/gsl_errno.h":
+    void gsl_set_error_handler_off()
+
+# call at import-time
+gsl_set_error_handler_off()
+
 cdef extern from "radialsolver.hpp":
     cdef enum SolutionMethod:
         AUTO, MST, ASYM, HBL, GSN, TEUK
@@ -53,10 +59,10 @@ cdef extern from "radialsolver.hpp":
     cpp_complex[double] teukolsky_starobinsky_complex_constant(int j, int m, double a, double omega, double lambdaCH)
     cpp_complex[double] teukolsky_starobinsky_amplitude(BoundaryCondition bc, int s, int m, double a, double omega, double lambdaCH)
 
-cdef extern from "nusolver.hpp":
+cdef extern from "monodromy.hpp":
     cpp_complex[double] nu_solver_monodromy(int s, int l, int m, double q, double eps, double la)
 
-cdef extern from "monodromy.hpp":
+cdef extern from "nusolver.hpp":
     cpp_complex[double] nu_solver(double q, int s, int l, int m, double epsilon)
 
 cdef extern from "hypergeo_f.hpp":
@@ -65,10 +71,10 @@ cdef extern from "hypergeo_f.hpp":
 def hypergeo_2F1(cpp_complex[double] a, cpp_complex[double] b, cpp_complex[double] c, cpp_complex[double] x):
     return hypergeo_2F1_complex(a, b, c, x)
 
-def renormalized_angular_momentum(double a, int s, int l, int m, double omega):
+def renormalized_angular_momentum(int s, int l, int m, double a, double omega):
     return nu_solver(a, s, l, m, 2.*omega)
 
-def renormalized_angular_momentum_monodromy(double a, int s, int l, int m, double omega, double la):
+def renormalized_angular_momentum_monodromy(int s, int l, int m, double a, double omega, double la):
     return nu_solver_monodromy(s, l, m, a, 2.*omega, la)
 
 cdef dict bc_dict = {
@@ -79,12 +85,17 @@ cdef dict bc_dict = {
 cdef dict method_dict = {
     "AUTO" : SolutionMethod.AUTO, 
     "MST" : SolutionMethod.MST, 
-    "ASYM" : SolutionMethod.ASYM, 
+    "ASYMP" : SolutionMethod.ASYM, 
     "HBL" : SolutionMethod.HBL, 
     "GSN" : SolutionMethod.GSN, 
     "TEUK" : SolutionMethod.TEUK
 }
 
+def available_methods():
+    """
+    Returns a list of available solution methods.
+    """
+    return list(method_dict.keys())
 
 def flip_spin_of_solutions(unicode bc, int s, double a, int m, double omega, double la, double r, cpp_complex[double] R, cpp_complex[double] Rp):
     cdef cpp_complex[double] R0, RP0
@@ -95,13 +106,13 @@ cdef BoundaryCondition str_to_bc(unicode bc_str):
     if bc_str in bc_dict.keys():
         return bc_dict[bc_str]
     else:
-        raise TypeError("{} is not a supported boundary condition.".format(bc_str))
+        raise ValueError("{} is not a supported boundary condition.".format(bc_str))
 
 cdef SolutionMethod str_to_method(unicode method_str):
     if method_str in method_dict.keys():
         return method_dict[method_str]
     else:
-        raise TypeError("{} is not a supported solution method.".format(method_str))
+        raise ValueError("{} is not a supported solution method.".format(method_str))
 
 def teukolsky_starobinsky_transformation_amplitude(unicode bc, int s, int m, double a, double omega, double lambdaCH):
     return teukolsky_starobinsky_amplitude(str_to_bc(bc), s, m, a, omega, lambdaCH)

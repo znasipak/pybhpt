@@ -459,9 +459,8 @@ int nu_solver(MstParameters &params){
 	}else{
 		// otherwise try to make use of monodromy techniques to get an initial guess for nu.
 		params.setRenormalizedAngularMomentum(nu_solver_monodromy(s, l, m, q, eps, la));
-
 		// the monodromy calculation may return 0. if there is catastrophic cancellation that
-		// leads to an inaccurate numerical result. As long as we
+		// leads to an inaccurate numerical result.
 	  	if(std::abs(params.getRenormalizedAngularMomentum()) != 0.){
 			nu_solver_guess(params);
 	  	}else if(eps < 0.5){
@@ -545,6 +544,17 @@ int nu_solver_guess(MstParameters &params){
 		x_hi = r + deltaX;
 	}
 
+	if (!std::isfinite(x_lo_test) || !std::isfinite(x_hi_test)) {
+		gsl_root_fsolver_free(s);
+		// handle failure gracefully
+		std::cerr << "NUSOLVER ERROR: Root solver bounds invalid, exiting." << std::endl;
+		std::exit(EXIT_FAILURE);
+	}
+	if (x_lo_test*x_hi_test > 0) { 
+		std::cerr << "NUSOLVER ERROR: Root solver bounds invalid, exiting." << std::endl;
+		std::exit(EXIT_FAILURE);
+	}
+
 	T = gsl_root_fsolver_brent;
 	s = gsl_root_fsolver_alloc(T);
 	gsl_root_fsolver_set(s, &F, x_lo, x_hi);
@@ -559,7 +569,7 @@ int nu_solver_guess(MstParameters &params){
 	}
 	while (status == GSL_CONTINUE && iter < max_iter);
 
-	gsl_root_fsolver_free (s);
+	gsl_root_fsolver_free(s);
 
 	if(std::abs(cos(2.*M_PI*nu0)) < 1.){
 		params.setRenormalizedAngularMomentum(r);
@@ -580,6 +590,20 @@ int nu_solver_noguess_rootfinder(gsl_function F, const double &x_lo, const doubl
 	int iter = 0, max_iter = 100;
 	double r;
 	double xlo = x_lo, xhi = x_hi;
+
+	double x_lo_test = (*F.function)(x_lo, &params);
+	double x_hi_test = (*F.function)(x_hi, &params);
+
+	if (!std::isfinite(x_lo_test) || !std::isfinite(x_hi_test)) {
+		gsl_root_fsolver_free(s);
+		// handle failure gracefully
+		std::cerr << "NUSOLVER ERROR: Root solver bounds invalid, exiting." << std::endl;
+		std::exit(EXIT_FAILURE);
+	}
+	if (x_lo_test*x_hi_test > 0) {
+		std::cerr << "NUSOLVER ERROR: Root solver bounds invalid, exiting." << std::endl;
+		std::exit(EXIT_FAILURE);
+	}
 
 	T = gsl_root_fsolver_brent;
 	s = gsl_root_fsolver_alloc(T);

@@ -80,8 +80,5 @@ RealMatrix worldline_grid(double t0, double rmin, double rmax, int sampleNumR, d
 ComplexVector metric_perturbation_tetrad_circ(double a, double b, Gauge gauge, int l, int m, Vector t, Vector r, Vector z, Vector phi, GeodesicSource &geo);
 RealMatrix metric_perturbation_circ(Gauge gauge, int l, int m, Vector t, Vector r, Vector z, Vector phi, GeodesicSource &geo);
 Vector metric_perturbation_circ(double a, double b, Gauge gauge, int l, int m, Vector t, Vector r, Vector z, Vector phi, GeodesicSource &geo);
-void save_metric_tetrad_data(std::string filename, Vector t, Vector r, Vector z, Vector phi, ComplexVector hab);
-void save_metric_data(std::string filename, Vector t, Vector r, Vector z, Vector phi, Vector hab);
-void save_full_metric_data(std::string filename, Vector t, Vector r, Vector z, Vector phi, RealMatrix hab);
 
 #endif //METRIC_HPP

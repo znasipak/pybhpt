@@ -2,7 +2,7 @@
 
 A python package for solving problems in black hole perturbation theory
 
-`pybhpt` is a collection of numerical tools for analyzing perturbations of Kerr spacetime, particularly the self-forces experienced by small bodies moving in a Kerr background. Subpackages include: 
+`pybhpt` is a collection of numerical tools for analyzing perturbations of Kerr spacetime, particularly the self-forces and metric-perturbations experienced by small bodies moving in a Kerr background. Subpackages include: 
 
 - `pybhpt.geodesic`: a module that generates bound timelike geodesics in Kerr spacetime
 - `pybhpt.radial`: a module that calculates homogeneous solutions of the radial Teukolsky equation
@@ -13,41 +13,55 @@ A python package for solving problems in black hole perturbation theory
 - `pybhpt.metric`: a module that produces the coefficients needed to reconstruct the metric from the Hertz potentials
 - `pybhpt.redshift`: a module that computes the generalized Detweiler redshift invariant in a variety of gauges
 
-> **Warning**
-> This project is still under heavy active development. Please use at your own risk. If you plan on using this code for research purposes, please reach out to the authors first.
+## Quick Installation
 
-## Installation
-
-PyBHPT relies on several dependencies to install and run, namely a C/C++ compiler (e.g., `g++`), `gsl`, `boost`, `Cython`, `numpy`, `scipy`, and `python >= 3.7`.
-To reduce package conflicts and ensure that the proper dependencies are installed,
-we recommend using Anaconda and its virtual environments.
-
-Create a conda environment `pybhpt-env` (or whatever name you would like)
-with the necessary dependencies to install `pybhpt`:
+Tagged releases of `pybhpt` are available as wheel packages for macOS and 64-bit Linux on [PyPI](https://pypi.org/project/matplotlib/). Install using `pip`:
 ```
-conda create -n pybhpt-env -c conda-forge gsl boost-cpp Cython numpy scipy python=3.7
+python3 -m pip install pybhpt
+```
+
+## Developer Installation
+
+`pybhpt` relies on several dependencies to install and run, namely a C/C++ compiler (e.g., `g++`), `gsl`, `boost`, `Cython`, `numpy`, `scipy`, and `python >= 3.8`. To reduce package conflicts and ensure that the proper dependencies are installed, we recommend using [conda](https://docs.conda.io/en/latest/) (paricularly through [Miniforge](https://github.com/conda-forge/miniforge)) and its virtual environments.
+
+To create a conda environment `pybhpt-env` with just the necessary dependencies use `environment.yml`:
+```
+conda env create -f environment.yml
 conda activate pybhpt-env
 ```
-To include the necessary compiler on MACOSX Intel run:
-```
-conda install clang_osx-64 clangxx_osx-64
-```
-To include the necessary compiler on MACOSX silicon run:
-```
-conda install clang_osx-arm64 clangxx_osx-arm64
-```
-To include the necessary compiler on linux run:
-```
-conda install gcc_linux-64 gxx_linux-64
-```
+For an environment with the extended recommended software dependencies, one can replace `environment.yml` with `environment-extended.yml` or follow the extended `pip` install instructions below. 
+
 Next clone the `pybhpt` repository from GitHub:
 ```
 git clone https://github.com/znasipak/pybhpt.git
 cd pybhpt
 ```
+The `boost` repository is included as a submodule under `extern/boost`. To activate the submodule:
+```
+git submodule update --init --recursive extern/boost
+```
+To include the Boost headers in the compilation path:
+```
+cd extern/boost
+chmod +x bootstrap.sh
+./bootstrap.sh
+./b2 headers
+```
 Finally, we recommend installing the package via `pip`:
 ```
 pip install .
+```
+or to get the basic development dependencies:
+```
+pip install '.[dev, testing]'
+```
+To get all recommended software:
+```
+pip install '.[dev, testing, extended]'
+```
+To ensure the package installed properly, run the unit tests via `pytest`:
+```
+pytest .
 ```
 
 ## Conda Environments with Jupyter
@@ -56,7 +70,7 @@ To run the code in a Jupyter notebook, we recommend `pip` installing the followi
 ```
 pip install ipykernel matplotlib
 ```
-One can then make the environment accessible within Jupyter by running
+These dependencies are already included in `environment-extended.yml` or in the optional `pip install` dependencies. To make the environment accessible within Jupyter:
 ```
 python -m ipykernel install --user --name=pybhpt-env
 ```
@@ -67,7 +81,24 @@ If the package is installed using `pip`, then one can easily uninstall the packa
 ```
 pip uninstall pybhpt
 ```
-To clean the repository, one will also need to remove the directories `build/` and `pybhpt.egg.info/` from the main repository 
+Developers may also need to remove the directories `build/` and `pybhpt.egg.info/` from the main repository.
+
+## Troubleshooting compiling from source
+
+If there are problems compiling `pybhpt` from source, it may be because `cmake` cannot identify the correct compiler. To fix this issue, one can try to explicitly download the necessary compiler into their conda environment.
+
+To include the necessary compiler on macOS Intel:
+```
+conda install clang_osx-64 clangxx_osx-64
+```
+To include the necessary compiler on macOS arm/silicon:
+```
+conda install clang_osx-arm64 clangxx_osx-arm64
+```
+To include the necessary compiler on Linux:
+```
+conda install gcc_linux-64 gxx_linux-64
+```
 
 ## Authors
 

@@ -5,19 +5,6 @@
 #ifndef REDSHIFT_HPP
 #define REDSHIFT_HPP
 
-// class RedshiftData{
-// public:
-//     RedshiftData(Gauge gauge, int lmax, GeodesicSource &geo);
-
-// private:
-//     GeodesicSource& _geo;
-//     int _lmax;
-//     Gauge _gauge;
-//     ComplexTensor _huuCoeffs;
-//     ComplexMatrix _huuIn;
-//     ComplexMatrix _huuUp;
-// };
-
 class RedshiftCoefficients{
 public:
     RedshiftCoefficients(Gauge gauge, GeodesicSource &geo);
@@ -27,10 +14,6 @@ public:
 private:
     ComplexTensor _coeffs;
 };
-
-void export_circular_redshift_data(std::string filename, ComplexVector HuuIn, ComplexVector HuuUp);
-void export_circular_redshift_data_lm(std::string filename, ComplexMatrix HuuIn, ComplexMatrix HuuUp);
-void redshift_circular(std::string filename, Gauge gauge, int lmax, GeodesicSource &geoCirc);
 
 Complex redshift_mode(ComplexTensor &huuCoeff, SphericalHarmonicCoupling &Cjlm, HertzMode &hertz, BoundaryCondition bc, int l, int jr, int jz, int sgnUr, int sgnUz);
 Complex redshift_coefficient_components(ComplexTensor &huu, int Ni, int ai, int bi, int ci, int di, int jr, int jz);

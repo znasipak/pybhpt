@@ -6,14 +6,9 @@ from libcpp.string cimport string
 include "flux_wrap.pyx"
 
 cdef extern from "redshift.hpp":
-    void redshift_circular(string filename, Gauge gauge, int lmax, GeodesicSource &geoCirc)
-
     cdef cppclass RedshiftCoefficientsCPP "RedshiftCoefficients":
         RedshiftCoefficientsCPP(Gauge gauge, GeodesicSource &geo)
         cpp_complex[double] getComponent(int Ni, int ai, int bi, int ci, int di, int jru, int jzu)
-
-cdef extern from "unit_test.hpp":
-    void run_unit_tests()
 
 cdef extern from "metriccoeffs.hpp":
     cpp_complex[double] metric_coefficient_ORG(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z)
@@ -41,12 +36,6 @@ def metric_coefficients_cython_S4dagger(int ai, int bi, int nt, int nr, int nz, 
 
 def metric_coefficients_cython_S0dagger(int ai, int bi, int nt, int nr, int nz, int nphi, double a, double r, double z):
     return metric_coefficient_IRG(ai, bi, nt, nr, nz, nphi, a, r, z)
-
-def circular_redshift(unicode filename, unicode gauge, int lmax, KerrGeodesic geo):
-    return redshift_circular(filename.encode(), str_to_gauge(gauge), lmax, dereference(geo.geocpp))
-
-def run_tests():
-    run_unit_tests()
 
 cdef class RedshiftCoefficients:
     cdef RedshiftCoefficientsCPP *huucpp

@@ -713,7 +713,7 @@ FieldAmplitudeVector resonant_flux_mode_coefficients(int s, int L, int m, int k0
 			int n = nres/nr;
 			// std::cout << "j = "<<j<<" and (k, n) = ("<< k <<", "<< n <<")\n";
 			TeukolskyMode teuk(s, L, m, k, n, geo);
-			teuk.generateSolutions(Slm, Rt, geo);
+			teuk.generateSolutions(Slm, Rt, geo.getTrajectory(), geo.getConstants());
 			// teuk.generateSolutions(geo);
 			resAmplitudes[j].up = teuk.getTeukolskyAmplitude(Up);
 			resAmplitudes[j].in = teuk.getTeukolskyAmplitude(In);
@@ -738,7 +738,7 @@ FieldAmplitudeVector resonant_flux_mode_coefficients(int s, int L, int m, int k0
 			int n = nres/nr;
 			// std::cout << "j = "<< 2*MODEMAX - j <<" and (k, n) = ("<< k <<", "<< n <<")\n";
 			TeukolskyMode teuk(s, L, m, k, n, geo);
-			teuk.generateSolutions(Slm, Rt, geo);
+			teuk.generateSolutions(Slm, Rt, geo.getTrajectory(), geo.getConstants());
 			// teuk.generateSolutions(geo);
 			resAmplitudes[2*MODEMAX - j].up = teuk.getTeukolskyAmplitude(Up);
 			resAmplitudes[2*MODEMAX - j].in = teuk.getTeukolskyAmplitude(In);
@@ -751,101 +751,4 @@ FieldAmplitudeVector resonant_flux_mode_coefficients(int s, int L, int m, int k0
 	}
 
 	return resAmplitudes;
-}
-
-void res_flux_parallel_l(int s, int nth, int nr, GeodesicSource geo, int modeMax, std::string dir){
-	int lMax = modeMax + std::abs(s) - 1;
-	// int modeNumMax = (lMax - 1)*(lMax + 4)/2;
-	int modeNumMax = modeMax;
-	std::vector<ResonantFluxList> fluxes(modeNumMax);
-	int l;
-	int Kmax = fluxes[0].Edot.size();
-	#pragma omp parallel shared(geo, fluxes, modeNumMax) private(l)
-	{
-		#pragma omp for schedule(dynamic)
-			for(l = std::abs(s); l <= lMax; l++) {
-				int th_id = omp_get_thread_num();
-				// std::cout << "Start flux calculation for ("<<l<<", "<<m<<")-mode on kernel " << th_id << "\n";
-				fluxes[l - std::abs(s)] = res_flux_l(s, l, nth, nr, geo);
-				std::cout << "Flux calculation completed on kernel " << th_id << "\n";
-				std::cout << "Edot_inf ("<<l<<")-mode = " << fluxes[l - std::abs(s)].Edot[0].infinity << "\n";
-				std::cout << "Edot_h ("<<l<<")-mode = " << fluxes[l - std::abs(s)].Edot[0].horizon << "\n";
-			}
-	}
-
-	if(!boost::filesystem::exists(dir)){
-		boost::filesystem::create_directory(dir);
-	}
-
-	std::string filePrefix;
-	if(s == 0){
-		filePrefix = "scalar_fluxes";
-	}else{
-		filePrefix = "fluxes";
-	}
-	if(dir.back() == '/'){
-		filePrefix = "/" + filePrefix;
-	}
-
-	char buff[500];
-	sprintf(buff, "_a%.4f_p%.4f_e%.4f_x%.4f_res%d%d.txt", geo.getBlackHoleSpin(), geo.getSemiLatusRectum(), geo.getEccentricity(), geo.getInclination(), nth, nr);
-
-	std::string filepath = dir + filePrefix + buff;
-	std::cout << "Saving file to " << filepath << "\n";
-	std::ofstream file;
-	file.open(filepath);
-
-	file << "l\tK\tEdotH\tEdotI\tLdotH\tLdotI\tQdotH\tQdotI\n";
-
-	Vector EdotTotInf(Kmax, 0.);
-	Vector EdotTotH(Kmax, 0.);
-	Vector LdotTotInf(Kmax, 0.);
-	Vector LdotTotH(Kmax, 0.);
-	Vector QdotTotInf(Kmax, 0.);
-	Vector QdotTotH(Kmax, 0.);
-	for(int l = std::abs(s); l <= lMax; l++) {
-		for(int K = 0; K < Kmax; K++){
-			double EdotTotInfL = 0.;
-			double EdotTotHL = 0.;
-			double LdotTotInfL = 0.;
-			double LdotTotHL = 0.;
-			double QdotTotInfL = 0.;
-			double QdotTotHL = 0.;
-			// std::cout << "Edot_inf ("<<l<<", 0)-mode = " << Edot[lm].infinity << "\n";
-			// std::cout << "Edot_h ("<<l<<", 0)-mode = " << Edot[lm].horizon << "\n";
-			EdotTotInfL += fluxes[l - std::abs(s)].Edot[K].infinity;
-			EdotTotHL += fluxes[l - std::abs(s)].Edot[K].horizon;
-			LdotTotInfL += fluxes[l - std::abs(s)].Ldot[K].infinity;
-			LdotTotHL += fluxes[l - std::abs(s)].Ldot[K].horizon;
-			QdotTotInfL += fluxes[l - std::abs(s)].Qdot[K].infinity;
-			QdotTotHL += fluxes[l - std::abs(s)].Qdot[K].horizon;
-
-			EdotTotInf[K] += EdotTotInfL;
-			EdotTotH[K] += EdotTotHL;
-			LdotTotInf[K] += LdotTotInfL;
-			LdotTotH[K] += LdotTotHL;
-			QdotTotInf[K] += QdotTotInfL;
-			QdotTotH[K] += QdotTotHL;
-			sprintf(buff, "%d\t%d\t%.15e\t%.15e\t%.15e\t%.15e\t%.15e\t%.15e\n", l, K, EdotTotHL, EdotTotInfL, LdotTotHL, LdotTotInfL, QdotTotHL, QdotTotInfL);
-			file << buff;
-		}
-	}
-	for(int K = 0; K < Kmax; K++){
-		sprintf(buff, "tot\t%d\t%.15e\t%.15e\t%.15e\t%.15e\t%.15e\t%.15e\n", K, EdotTotH[K], EdotTotInf[K], LdotTotH[K], LdotTotInf[K], QdotTotH[K], QdotTotInf[K]);
-		file << buff;
-	}
-	std::cout << "Edot_inf = " << EdotTotInf[0] << "\n";
-	std::cout << "Edot_h = " << EdotTotH[0] << "\n";
-	std::cout << "Edot = " << EdotTotInf[0] + EdotTotH[0] << "\n";
-	std::cout << "Ldot_inf = " << LdotTotInf[0] << "\n";
-	std::cout << "Ldot_h = " << LdotTotH[0] << "\n";
-	std::cout << "Ldot = " << LdotTotInf[0] + LdotTotH[0] << "\n";
-	std::cout << "Qdot_inf = " << QdotTotInf[0] << "\n";
-	std::cout << "Qdot_h = " << QdotTotH[0] << "\n";
-	std::cout << "Qdot = " << QdotTotInf[0] + QdotTotH[0] << "\n";
-
-	std::cout << "Edot_2 = " << EdotTotInf[2] + EdotTotH[2] << "\n";
-	std::cout << "Ldot_2 = " << LdotTotInf[2] + LdotTotH[2] << "\n";
-	std::cout << "Qdot_2 = " << QdotTotInf[2] + QdotTotH[2] << "\n";
-	file.close();
 }
