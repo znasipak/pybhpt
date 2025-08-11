@@ -76,8 +76,6 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           python -m pip install '.[testing]'
-          ls -l
-          cd ..
           pytest .
 
       - name: Remove broken Git submodule metadata before cleanup
