@@ -108,7 +108,6 @@ class RadialTeukolsky:
         1 for first derivatives, and 2 for second derivatives. If `deriv` is not 0, 1, or 2, a ValueError is raised.
     """
     def __init__(self, s, j, m, a, omega, r):
-        if a < -1 or a > 1:
         if a < 0 or a > 1:
             raise ValueError(f"Black hole spin parameter {a} must be in the range [0, 1].")
         if j < np.abs(m):
