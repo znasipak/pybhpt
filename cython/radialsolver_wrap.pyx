@@ -3,6 +3,12 @@ from libcpp.complex cimport complex as cpp_complex
 import numpy as np
 cimport numpy as np
 
+cdef extern from "gsl/gsl_errno.h":
+    void gsl_set_error_handler_off()
+
+# call at import-time
+gsl_set_error_handler_off()
+
 cdef extern from "radialsolver.hpp":
     cdef enum SolutionMethod:
         AUTO, MST, ASYM, HBL, GSN, TEUK

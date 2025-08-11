@@ -511,6 +511,7 @@ int nu_solver_guess(MstParameters &params){
 	double deltaX = sqrt(nuTest);
 	deltaX = deltaX < 0.01 ? deltaX : 0.01;
 
+
 	const gsl_root_fsolver_type *T;
 	gsl_root_fsolver *s;
 	gsl_function F;
@@ -544,6 +545,13 @@ int nu_solver_guess(MstParameters &params){
 		x_lo = r - deltaX;
 		x_hi = r + deltaX;
 	}
+
+	if (!std::isfinite(x_lo) || !std::isfinite(x_hi)) {
+		gsl_root_fsolver_free(s);
+		// handle failure gracefully
+		return -1;
+	}
+	if (x_lo >= x_hi) { gsl_root_fsolver_free(s); return -1; }
 
 	T = gsl_root_fsolver_brent;
 	s = gsl_root_fsolver_alloc(T);
@@ -580,6 +588,13 @@ int nu_solver_noguess_rootfinder(gsl_function F, const double &x_lo, const doubl
 	int iter = 0, max_iter = 100;
 	double r;
 	double xlo = x_lo, xhi = x_hi;
+
+	if (!std::isfinite(xlo) || !std::isfinite(xhi)) {
+		gsl_root_fsolver_free(s);
+		// handle failure gracefully
+		return -1;
+	}
+	if (xlo >= xhi) { gsl_root_fsolver_free(s); return -1; }
 
 	T = gsl_root_fsolver_brent;
 	s = gsl_root_fsolver_alloc(T);
