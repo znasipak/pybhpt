@@ -109,7 +109,8 @@ class RadialTeukolsky:
     """
     def __init__(self, s, j, m, a, omega, r):
         if a < -1 or a > 1:
-            raise ValueError(f"Black hole spin parameter {a} must be in the range [-1, 1].")
+        if a < 0 or a > 1:
+            raise ValueError(f"Black hole spin parameter {a} must be in the range [0, 1].")
         if j < np.abs(m):
             raise ValueError(f"Spheroidal harmonic mode number {j} must be greater than or equal to the absolute value of azimuthal harmonic mode number {m}.")
         if np.any(r <= 1 + np.sqrt(1 - a**2)):
