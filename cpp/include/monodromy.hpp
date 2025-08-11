@@ -7,12 +7,13 @@
 
 // declare structure
 struct series_coeff_struct {
+    int size;
     int nmax;
-    int ndata;
+	int n0;
     ComplexVector coeffs;
 
     // Constructor
-    series_coeff_struct(int max_n) : nmax(max_n), ndata(1), coeffs(max_n + 1, Complex(0.0)) {
+    series_coeff_struct(int max_n) : size(max_n + 1), n0(0), nmax(0), coeffs(size, Complex(0.0)) {
         coeffs[0] = Complex(1.0);
     }
 };

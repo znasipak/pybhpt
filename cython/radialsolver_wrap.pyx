@@ -59,10 +59,10 @@ cdef extern from "radialsolver.hpp":
     cpp_complex[double] teukolsky_starobinsky_complex_constant(int j, int m, double a, double omega, double lambdaCH)
     cpp_complex[double] teukolsky_starobinsky_amplitude(BoundaryCondition bc, int s, int m, double a, double omega, double lambdaCH)
 
-cdef extern from "nusolver.hpp":
+cdef extern from "monodromy.hpp":
     cpp_complex[double] nu_solver_monodromy(int s, int l, int m, double q, double eps, double la)
 
-cdef extern from "monodromy.hpp":
+cdef extern from "nusolver.hpp":
     cpp_complex[double] nu_solver(double q, int s, int l, int m, double epsilon)
 
 cdef extern from "hypergeo_f.hpp":
@@ -71,10 +71,10 @@ cdef extern from "hypergeo_f.hpp":
 def hypergeo_2F1(cpp_complex[double] a, cpp_complex[double] b, cpp_complex[double] c, cpp_complex[double] x):
     return hypergeo_2F1_complex(a, b, c, x)
 
-def renormalized_angular_momentum(double a, int s, int l, int m, double omega):
+def renormalized_angular_momentum(int s, int l, int m, double a, double omega):
     return nu_solver(a, s, l, m, 2.*omega)
 
-def renormalized_angular_momentum_monodromy(double a, int s, int l, int m, double omega, double la):
+def renormalized_angular_momentum_monodromy(int s, int l, int m, double a, double omega, double la):
     return nu_solver_monodromy(s, l, m, a, 2.*omega, la)
 
 cdef dict bc_dict = {

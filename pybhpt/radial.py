@@ -12,10 +12,10 @@ def available_methods():
     return available_methods_cython()
 
 def renormalized_angular_momentum(s, l, m, a, omega):
-    return nu_cython(a, s, l, m, omega)
+    return nu_cython(s, l, m, a, omega)
 
 def renormalized_angular_momentum_monodromy(s, l, m, a, omega, la):
-    return nu_2_cython(a, s, l, m, omega, la)
+    return nu_2_cython(s, l, m, a, omega, la)
 
 def hypergeo_2F1(a, b, c, x):
     return hypergeo_2F1_cython(a, b, c, x)

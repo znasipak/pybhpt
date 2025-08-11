@@ -459,9 +459,8 @@ int nu_solver(MstParameters &params){
 	}else{
 		// otherwise try to make use of monodromy techniques to get an initial guess for nu.
 		params.setRenormalizedAngularMomentum(nu_solver_monodromy(s, l, m, q, eps, la));
-
 		// the monodromy calculation may return 0. if there is catastrophic cancellation that
-		// leads to an inaccurate numerical result. As long as we
+		// leads to an inaccurate numerical result.
 	  	if(std::abs(params.getRenormalizedAngularMomentum()) != 0.){
 			nu_solver_guess(params);
 	  	}else if(eps < 0.5){

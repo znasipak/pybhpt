@@ -11,9 +11,8 @@ test_data_renormalized_angular_momentum = [
 
 @pytest.mark.parametrize("params, expected", test_data_renormalized_angular_momentum)
 def test_renormalized_angular_momentum(params, expected):
-    a, s, l, m, omega = params
-    nu = renormalized_angular_momentum(a, s, l, m, omega)
-    assert np.isclose(np.cos(2.*np.pi*nu), np.cos(2.*np.pi*expected), rtol=1e-9), f"Expected {expected}, got {nu} for parameters {params}"
+    nu = renormalized_angular_momentum(*params)
+    assert np.isclose(np.cos(2.*np.pi*nu), np.cos(2.*np.pi*expected), rtol=1e-9, atol = 0), f"Expected {expected}, got {nu} for parameters {params}"
 
 def test_radial_teukolsky_init():
     with pytest.raises(ValueError):
