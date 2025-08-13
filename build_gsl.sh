@@ -12,12 +12,15 @@ else
     CORES=$(sysctl -n hw.ncpu)
 fi
 
-# Download source
+# Download source (use mirror redirector + retries)
 mkdir -p /tmp/gsl-src
 cd /tmp/gsl-src
-curl -LO https://ftp.gnu.org/gnu/gsl/gsl-${GSL_VERSION}.tar.gz
-tar -xzf gsl-${GSL_VERSION}.tar.gz
-cd gsl-${GSL_VERSION}
+curl --fail --location --retry 5 --retry-delay 5 \
+    "https://ftpmirror.gnu.org/gsl/gsl-${GSL_VERSION}.tar.gz" \
+    -o "gsl-${GSL_VERSION}.tar.gz"
+
+tar -xzf "gsl-${GSL_VERSION}.tar.gz"
+cd "gsl-${GSL_VERSION}"
 
 # Build & install
 echo "Configuring GSL ${GSL_VERSION}..."
