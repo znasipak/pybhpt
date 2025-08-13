@@ -7,7 +7,4 @@ build:
 
 python:
   install:
-    - method: pip
-      package: pybhpt
-    - method: pip
-      requirements: docs/requirements.txt
+    - requirements: docs/requirements.txt
