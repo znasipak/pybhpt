@@ -1,6 +1,6 @@
 # pybhpt
 
-A python package for solving problems in black hole perturbation theory
+A python package for solving problems in black hole perturbation theory. 
 
 `pybhpt` is a collection of numerical tools for analyzing perturbations of Kerr spacetime, particularly the self-forces and metric-perturbations experienced by small bodies moving in a Kerr background. Subpackages include: 
 
@@ -12,6 +12,8 @@ A python package for solving problems in black hole perturbation theory
 - `pybhpt.hertz`: a module that solves for the Hertz potentials for the CCK and AAB metric reconstruction procedures
 - `pybhpt.metric`: a module that produces the coefficients needed to reconstruct the metric from the Hertz potentials
 - `pybhpt.redshift`: a module that computes the generalized Detweiler redshift invariant in a variety of gauges
+
+See the [Documentation](https://pybhpt.readthedocs.io/en/latest/) pages for more information about the package, including User Guides and API.
 
 ## Quick Installation
 
