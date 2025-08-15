@@ -1,5 +1,7 @@
 # Redshift module
 
+## API
+
 ```{eval-rst}
 .. automodule:: pybhpt.redshift
    :no-index:
