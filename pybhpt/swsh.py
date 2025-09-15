@@ -10,11 +10,43 @@ Wigner 3j-symbol and Clebsch-Gordon coefficients
 """
 
 def fac(n):
+    """
+    Computes the factorial of a non-negative integer n.
+
+    Parameters
+    ----------
+    n : int
+        A non-negative integer.
+
+    Returns
+    -------
+    float
+        The factorial of n.
+    """
     if n < 0:
         return 0
     return float(np.math.factorial(n))
 
 def Yslm(s, l, m, th):
+    """
+    Evaluate the spin-weighted spherical harmonic $Y_{s}^{lm}$ at a given angle theta.
+
+    Parameters
+    ----------
+    s : int
+        The spin weight of the harmonic.
+    l : int
+        The angular number of the spherical harmonic.
+    m : int
+        The azimuthal number of the spherical harmonic.
+    th : array_like
+        The polar angle(s) at which to evaluate the spherical harmonic.
+
+    Returns
+    -------
+    array_like
+        The values of the spherical harmonic at the specified angles.
+    """
     if np.abs(s) > l:
         return 0.*th
     if s == 0:
@@ -37,9 +69,57 @@ def YslmBase(s, l, m, z):
     return pref*yslm
 
 def clebsch(l1, l2, l3, m1, m2, m3):
+    """
+    Compute the Clebsch-Gordon coefficient <l1,m1,l2,m2|l3,m3>.
+
+    Parameters
+    ----------
+    l1 : int
+        The angular number of the first state.
+    l2 : int
+        The angular number of the second state.
+    l3 : int
+        The angular number of the combined state.
+    m1 : int
+        The azimuthal number of the first state.
+    m2 : int
+        The azimuthal number of the second state.
+    m3 : int
+        The azimuthal number of the combined state.
+
+    Returns
+    -------
+    float
+        The Clebsch-Gordon coefficient <l1,m1,l2,m2|l3,m3>.
+    """
     return (-1)**(l1 - l2 + m3)*np.sqrt(2*l3 + 1)*w3j(l1, l2, l3, m1, m2, -m3);
 
 def w3j(l1, l2, l3, m1, m2, m3):
+    """
+    Compute the Wigner 3j-symbol
+        | l1  l2  l3 |
+        | m1  m2  m3 |
+
+    Parameters
+    ----------
+    l1 : int
+        The angular number of the first state. 
+    l2 : int
+        The angular number of the second state.
+    l3 : int
+        The angular number of the combined state.
+    m1 : int
+        The azimuthal number of the first state.
+    m2 : int
+        The azimuthal number of the second state.
+    m3 : int
+        The azimuthal number of the combined state.
+
+    Returns
+    -------
+    float
+        The Wigner 3j-symbol $ \begin{pmatrix} l1 & l2 & l3 \\ m1 & m2 & m3 \end{pmatrix} $
+    """
     if m1 + m2 + m3 != 0:
         return 0
     elif abs(l1 - l2) > l3:
