@@ -194,52 +194,243 @@ class TeukolskyMode:
     Flips the spin-weight and frequency of the Teukolsky solutions from :math:`s \rightarrow -s` and :math:`\omega \rightarrow -\omega`
     """
     def flipspinweightandfrequency(self):
+        """
+        Flips the spin-weight and frequency of the Teukolsky solutions from :math:`s \rightarrow -s` and :math:`\omega \rightarrow -\omega`
+        """
         self.base.flip_spinweight_frequency()
 
-    """
-    Spherical-spheroidal mixing coefficient between a spherical harmonic :math:`l` mode with a spheroidal :math:`j` mode
-
-    :param l: spherical harmonic mode
-    :type l: int
-    """
     def couplingcoefficient(self, l):
+        """
+        Spherical-spheroidal mixing coefficient between a spherical harmonic $l$ mode with a spheroidal $j$ mode.
+        
+        Parameters
+        ----------
+        l : int
+            Spherical harmonic mode.
+
+        Returns
+        -------
+        float
+            The coupling coefficient between the spherical harmonic mode `l` and the spheroidal harmonic mode `j`.
+        """
         return self.base.couplingcoefficient(l)
 
     def radialpoint(self, pos):
+        """
+        The radial point for the given position `pos`.
+
+        Parameters
+        ----------
+        pos : int
+            The radial position.
+        
+        Returns
+        -------
+        float
+            The radial point at the given position `pos`.
+        """
         return self.base.radialpoint(pos)
     
     def radialsolution(self, bc, pos):
+        """
+        The extended homogeneous radial solution for the given boundary condition `bc` and position `pos`.
+
+        Parameters
+        ----------
+        bc : str
+            The boundary condition, either "In" for ingoing or "Up" for upgoing.
+        pos : int
+            The radial position.
+
+        Returns
+        -------
+        complex
+            The radial solution at the given boundary condition `bc` and position `pos`.
+        """
         return self.base.radialsolution(bc, pos)
     
     def radialderivative(self, bc, pos):
+        """
+        The derivative of the extended homogeneous radial solution for the given boundary condition `bc` and position `pos`.
+
+        Parameters
+        ----------
+        bc : str
+            The boundary condition, either "In" for ingoing or "Up" for upgoing.
+        pos : int
+            The radial position.
+
+        Returns
+        -------
+        complex
+            The radial derivative at the given boundary condition `bc` and position `pos`.
+        """
         return self.base.radialderivative(bc, pos)
     
     def radialderivative2(self, bc, pos):
+        """
+        The second derivative of the extended homogeneous radial solution for the given boundary condition `bc` and position `pos`.
+
+        Parameters
+        ----------
+        bc : str
+            The boundary condition, either "In" for ingoing or "Up" for upgoing.
+        pos : int
+            The radial position.
+
+        Returns
+        -------
+        complex
+            The radial second derivative at the given boundary condition `bc` and position `pos`.
+        """
         return self.base.radialderivative2(bc, pos)
     
     def homogeneousradialsolution(self, bc, pos):
+        """
+        The homogeneous radial solution for the given boundary condition `bc` and position `pos`.
+
+        Parameters
+        ----------
+        bc : str
+            The boundary condition, either "In" for ingoing or "Up" for upgoing.
+        pos : int
+            The radial position.
+
+        Returns
+        -------
+        complex
+            The radial solution at the given boundary condition `bc` and position `pos`.
+        """
         return self.base.homogeneousradialsolution(bc, pos)
     
     def homogeneousradialderivative(self, bc, pos):
+        """
+        The radial derivative of the homogeneous radial solution for the given boundary condition `bc` and position `pos`.
+
+        Parameters
+        ----------
+        bc : str
+            The boundary condition, either "In" for ingoing or "Up" for upgoing.
+        pos : int
+            The radial position.
+
+        Returns
+        -------
+        complex
+            The radial derivative at the given boundary condition `bc` and position `pos`.
+        """
         return self.base.homogeneousradialderivative(bc, pos)
     
     def homogeneousradialderivative2(self, bc, pos):
+        """
+        The second radial derivative of the homogeneous radial solution for the given boundary condition `bc` and position `pos`.
+
+        Parameters
+        ----------
+        bc : str
+            The boundary condition, either "In" for ingoing or "Up" for upgoing.
+        pos : int
+            The radial position.
+
+        Returns
+        -------
+        complex
+            The radial second derivative at the given boundary condition `bc` and position `pos`.
+        """
         return self.base.homogeneousradialderivative2(bc, pos)
     
     def polarpoint(self, pos):
+        """
+        The polar point for the given position `pos`.
+
+        Parameters
+        ----------
+        pos : int
+            The polar position.
+
+        Returns
+        -------
+        float
+            The polar point at the given position `pos`.
+        """
         return self.base.polarpoint(pos)
     
     def polarsolution(self, pos):
+        """
+        The polar solution for the given position `pos`.
+
+        Parameters
+        ----------
+        pos : int
+            The polar position.
+
+        Returns
+        -------
+        float
+            The polar solution at the given position `pos`.
+        """
         return self.base.polarsolution(pos)
     
     def polarderivative(self, pos):
+        """
+        The derivative of the polar solution for the given position `pos`.
+
+        Parameters
+        ----------
+        pos : int
+            The polar position.
+
+        Returns
+        -------
+        float
+            The polar derivative at the given position `pos`.
+        """
         return self.base.polarderivative(pos)
     
     def polarderivative2(self, pos):
+        """
+        The second derivative of the polar solution for the given position `pos`.
+
+        Parameters
+        ----------
+        pos : int
+            The polar position.
+        
+        Returns
+        -------
+        float
+            The polar second derivative at the given position `pos`.
+        """
         return self.base.polarderivative2(pos)
     
     def amplitude(self, bc):
+        """
+        The Teukolsky amplitude for the given boundary condition `bc`.
+
+        Parameters
+        ----------
+        bc : str
+            The boundary condition, either "In" for ingoing or "Up" for upgoing.
+
+        Returns
+        -------
+        complex
+            The Teukolsky amplitude at the given boundary condition `bc`.
+        """
         return self.base.teukolsky_amplitude(bc)
     
     def precision(self, bc):
+        """
+        The precision of the Teukolsky amplitude for the given boundary condition `bc`.
+
+        Parameters
+        ----------
+        bc : str
+            The boundary condition, either "In" for ingoing or "Up" for upgoing.
+
+        Returns
+        -------
+        float
+            The precision of the Teukolsky amplitude at the given boundary condition `bc`.
+        """
         return self.base.teukolsky_amplitude_precision(bc)

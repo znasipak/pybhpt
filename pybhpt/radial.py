@@ -11,14 +11,55 @@ def available_methods():
     """
     return available_methods_cython()
 
-def renormalized_angular_momentum(s, l, m, a, omega):
-    return nu_cython(s, l, m, a, omega)
+def renormalized_angular_momentum(s, j, m, a, omega):
+    """
+    Computes the renormalized angular momentum for the given parameters.
 
-def renormalized_angular_momentum_monodromy(s, l, m, a, omega, la):
-    return nu_2_cython(s, l, m, a, omega, la)
+    Parameters
+    ----------
+    s : int
+        The spin weight of the field.
+    j : int
+        The spheroidal harmonic mode number.
+    m : int
+        The azimuthal harmonic mode number.
+    a : float
+        The black hole spin parameter.
+    omega : float
+        The frequency of the mode.  
 
-def hypergeo_2F1(a, b, c, x):
-    return hypergeo_2F1_cython(a, b, c, x)
+    Returns
+    -------
+    complex
+        The renormalized angular momentum.
+    """
+    return nu_cython(s, j, m, a, omega)
+
+def renormalized_angular_momentum_monodromy(s, j, m, a, omega, la):
+    """
+    Computes the renormalized angular momentum using the monodromy method for the given parameters.
+
+    Parameters
+    ----------
+    s : int
+        The spin weight of the field.
+    j : int
+        The spheroidal harmonic mode number.
+    m : int
+        The azimuthal harmonic mode number.
+    a : float
+        The black hole spin parameter.
+    omega : complex
+        The frequency of the mode.
+    la : complex
+        The spheroidal eigenvalue.
+
+    Returns
+    -------
+    complex
+        The renormalized angular momentum.
+    """
+    return nu_2_cython(s, j, m, a, omega, la)
 
 class RadialTeukolsky:
     """A class for solving the homogeneous radial Teukolsky equation.
@@ -379,3 +420,25 @@ class RadialTeukolsky:
             return self.radialderivatives2(bc)
         else:
             raise ValueError("RadialTeukolsky only solves up to the second derivative")
+        
+def hypergeo_2F1(a, b, c, x):
+    """
+    Gauss hypergeometric function 2F1(a, b; c; x). Note that this function is not very stable across the complex domain.
+    
+    Parameters
+    ----------
+    a : complex
+        The first parameter of the hypergeometric function.
+    b : complex
+        The second parameter of the hypergeometric function.
+    c : complex
+        The third parameter of the hypergeometric function.
+    x : complex
+        The argument of the hypergeometric function.
+
+    Returns
+    -------
+    complex
+        The value of the hypergeometric function 2F1(a, b; c; x).
+    """
+    return hypergeo_2F1_cython(a, b, c, x)
