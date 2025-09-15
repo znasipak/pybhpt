@@ -33,6 +33,7 @@ installation
 notebooks/geodesics.ipynb
 notebooks/radial.ipynb
 notebooks/teuk.ipynb
+notebooks/fluxes.ipynb
 notebooks/waveform.ipynb
 notebooks/tutorial.ipynb
 ```
