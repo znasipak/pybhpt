@@ -325,7 +325,7 @@ def swsh_eigenvalue(s, l, m, g, nmax=None):
     Returns
     -------
     float
-        The eigenvalue of the spin-weighted spheroidal harmonic$.
+        The eigenvalue of the spin-weighted spheroidal harmonic.
     """
     if g == 0.:
         return Yslm_eigenvalue(s, l)
