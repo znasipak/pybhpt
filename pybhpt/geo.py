@@ -77,7 +77,7 @@ def kerrgeo_Vr(a, En, Lz, Q, r):
 
 def kerrgeo_Vtheta(a, En, Lz, Q, theta):
     """
-    The (squared) polar potential Vtheta for the geodesic evolution of $r_p$.
+    The (squared) polar potential Vtheta for the geodesic evolution of $\theta_p$.
 
     Parameters
     ----------
