@@ -4,21 +4,147 @@ from cybhpt_full import kerr_mino_frequencies_wrapper, kerr_orbital_constants_wr
 import numpy as np
 
 def kerrgeo_Vt_radial(a, En, Lz, Q, r):
+    """
+    The radial part of the potential Vt for the geodesic evolution of $t_p$.
+
+    Parameters
+    ----------
+    a : float
+        The black hole spin parameter.
+    En : float
+        The orbital energy of the particle.
+    Lz : float
+        The z-component of the orbital angular momentum of the particle.
+    Q : float
+        The Carter constant of the particle.
+    r : float
+        The radial coordinate.
+    
+    Returns
+    -------
+    float
+        The value of the radial potential Vt at the given parameters.
+    """
     return kerr_geo_V01(a, En, Lz, Q, r)
 
 def kerrgeo_Vt_polar(a, En, Lz, Q, theta):
+    """
+    The polar part of the potential Vt for the geodesic evolution of $t_p$.
+
+    Parameters
+    ----------
+    a : float
+        The black hole spin parameter.
+    En : float
+        The orbital energy of the particle.
+    Lz : float
+        The z-component of the orbital angular momentum of the particle.
+    Q : float
+        The Carter constant of the particle.
+    theta : float
+        The polar angle coordinate.
+
+    Returns
+    -------
+    float
+        The value of the polar potential Vt at the given parameters.
+    """
     return kerr_geo_V02(a, En, Lz, Q, theta)
 
 def kerrgeo_Vr(a, En, Lz, Q, r):
+    """
+    The (squared) radial potential Vr for the geodesic evolution of $r_p$.
+
+    Parameters
+    ----------
+    a : float
+        The black hole spin parameter.
+    En : float
+        The orbital energy of the particle.
+    Lz : float
+        The z-component of the orbital angular momentum of the particle.
+    Q : float
+        The Carter constant of the particle.
+    r : float
+        The radial coordinate.
+
+    Returns
+    -------
+    float
+        The value of the radial potential Vr at the given parameters.
+    """
     return kerr_geo_V11(a, En, Lz, Q, r)
 
 def kerrgeo_Vtheta(a, En, Lz, Q, theta):
+    """
+    The (squared) polar potential Vtheta for the geodesic evolution of $r_p$.
+
+    Parameters
+    ----------
+    a : float
+        The black hole spin parameter.
+    En : float
+        The orbital energy of the particle.
+    Lz : float
+        The z-component of the orbital angular momentum of the particle.
+    Q : float
+        The Carter constant of the particle.
+    theta : float
+        The polar angle coordinate.
+
+    Returns
+    -------
+    float
+        The value of the polar potential Vtheta at the given parameters.
+    """
     return kerr_geo_V22(a, En, Lz, Q, theta)
 
 def kerrgeo_Vphi_radial(a, En, Lz, Q, r):
+    """
+    The (squared) radial potential Vphi for the geodesic evolution of $r_p$.
+
+    Parameters
+    ----------
+    a : float
+        The black hole spin parameter.
+    En : float
+        The orbital energy of the particle.
+    Lz : float
+        The z-component of the orbital angular momentum of the particle.
+    Q : float
+        The Carter constant of the particle.
+    r : float
+        The radial coordinate.
+
+    Returns
+    -------
+    float
+        The value of the radial potential Vphi at the given parameters.
+    """
     return kerr_geo_V31(a, En, Lz, Q, r)
 
 def kerrgeo_Vphi_polar(a, En, Lz, Q, theta):
+    """
+    The (squared) polar potential Vphi for the geodesic evolution of $r_p$.
+
+    Parameters
+    ----------
+    a : float
+        The black hole spin parameter.
+    En : float
+        The orbital energy of the particle.
+    Lz : float
+        The z-component of the orbital angular momentum of the particle.
+    Q : float
+        The Carter constant of the particle.
+    theta : float
+        The polar angle coordinate.
+
+    Returns
+    -------
+    float
+        The value of the polar potential Vphi at the given parameters.
+    """
     return kerr_geo_V32(a, En, Lz, Q, theta)
 
 def kerr_mino_frequencies(a, p, e, x):

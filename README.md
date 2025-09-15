@@ -4,7 +4,7 @@ A python package for solving problems in black hole perturbation theory.
 
 `pybhpt` is a collection of numerical tools for analyzing perturbations of Kerr spacetime, particularly the self-forces and metric-perturbations experienced by small bodies moving in a Kerr background. Subpackages include: 
 
-- `pybhpt.geodesic`: a module that generates bound timelike geodesics in Kerr spacetime
+- `pybhpt.geodesic`: a module that generates bound periodic timelike geodesics in Kerr spacetime
 - `pybhpt.radial`: a module that calculates homogeneous solutions of the radial Teukolsky equation
 - `pybhpt.swsh`: a module that constructs the spin-weighted spheroidal harmonics
 - `pybhpt.teuk`: a module that evaluates the inhomogeneous solutions (Teukolsky amplitudes) of the radial Teukolsky equation due to a point-particle on a bound timelike Kerr geodesic
@@ -13,11 +13,11 @@ A python package for solving problems in black hole perturbation theory.
 - `pybhpt.metric`: a module that produces the coefficients needed to reconstruct the metric from the Hertz potentials
 - `pybhpt.redshift`: a module that computes the generalized Detweiler redshift invariant in a variety of gauges
 
-See the [Documentation](https://pybhpt.readthedocs.io/en/latest/) pages for more information about the package, including User Guides and API.
+See the [Documentation](https://pybhpt.readthedocs.io/en/latest/) pages for more information about the package, including User Guides and API. References and author information can be found at the bottom of the README.
 
 ## Quick Installation
 
-Tagged releases of `pybhpt` are available as wheel packages for macOS and 64-bit Linux on [PyPI](https://pypi.org/project/matplotlib/). Install using `pip`:
+Tagged releases of `pybhpt` are available as wheel packages for macOS and 64-bit Linux on [PyPI](https://pypi.org/project/pybhpt). Install using `pip`:
 ```
 python3 -m pip install pybhpt
 ```
@@ -101,6 +101,14 @@ To include the necessary compiler on Linux:
 ```
 conda install gcc_linux-64 gxx_linux-64
 ```
+
+## References
+
+Theoretical background for the code and explanations of the numerical methods used within are summarized in the references below: 
+
+- Z. Nasipak, *Metric reconstruction and the Hamiltonian for eccentric, precessing binaries in the small-mass-ratio limit* (2025) [arXiv:2507.07746](https://arxiv.org/abs/2507.07746)
+- Z. Nasipak, *An adiabatic gravitational waveform model for compact objects undergoing quasi-circular inspirals into rotating massive black holes*, Phys. Rev. D 109, 044020 (2024) [arXiv:2310.19706](https://arxiv.org/abs/2310.19706)
+- Z. Nasipak, *Adiabatic evolution due to the conservative scalar self-force during orbital resonances*, Phys. Rev. D 106, 064042 (2022) [arXiv:2207.02224](https://arxiv.org/abs/2207.02224)
 
 ## Authors
 

@@ -216,14 +216,6 @@ def swsh_eigs(s, l, m, g, nmax=None, return_eigenvectors=True):
 def Yslm_eigenvalue(s, l, *args):
     return l*(l + 1.) - s*(s + 1.)
 
-def swsh_eigenvalue(s, l, m, g, nmax=None):
-    if g == 0.:
-        return Yslm_eigenvalue(s, l)
-    
-    las = swsh_eigs(s, l, m, g, nmax=nmax, return_eigenvectors=False)
-    
-    return np.real(las[::-1][l - max(abs(s), abs(m))])
-
 def swsh_coeffs(s, l, m, g, th):
     if g == 0.:
         return Yslm(s, l, m, th)
@@ -232,7 +224,35 @@ def swsh_coeffs(s, l, m, g, th):
     coeffs = np.real(eig[l - max(abs(s), abs(m))])
     
     return np.real(eig[l - max(abs(s), abs(m))])
-        
+
+def swsh_eigenvalue(s, l, m, g, nmax=None):
+    """
+    Compute the eigenvalue of the spin-weighted spheroidal harmonic.
+    
+    Parameters
+    ----------
+    s : int
+        The spin weight of the harmonic.
+    l : int
+        The angular number of the harmonic.
+    m : int
+        The azimuthal number of the harmonic.
+    g : float
+        The spheroidicity parameter.
+    nmax : int, optional
+        The maximum number of basis functions to use in the computation. If None, a default value is chosen.
+
+    Returns
+    -------
+    float
+        The eigenvalue of the spin-weighted spheroidal harmonic$.
+    """
+    if g == 0.:
+        return Yslm_eigenvalue(s, l)
+    
+    las = swsh_eigs(s, l, m, g, nmax=nmax, return_eigenvectors=False)
+    
+    return np.real(las[::-1][l - max(abs(s), abs(m))])    
 class SWSHBase:
     def __init__(self, *args):
         arg_num = np.array(args).shape[0]
@@ -294,7 +314,22 @@ class SWSHSeriesBase(SWSHBase):
         eigs_return = np.sign(eigs_temp[self.l - self.lmin])*eigs_temp
         return (np.real(las[pos]), eigs_return)
     
-class SWSH(SWSHSeriesBase):
+class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
+    """
+    A class for generating a spin-weighted spheroidal harmonic.
+
+    Parameters
+    ----------
+    s : int
+        The spin weight of the harmonic.
+    l : int
+        The angular number of the harmonic.
+    m : int
+        The azimuthal number of the harmonic.
+    g : float
+        The spheroidicity parameter.    
+    
+    """
     def __init__(self, s, l, m, g):
         SWSHSeriesBase.__init__(self, s, l, m, g)
         if self.spheroidicity == 0.:
@@ -307,9 +342,37 @@ class SWSH(SWSHSeriesBase):
             self.eigenvalue, self.coeffs = self.generate_eigs()
             
     def Yslm(self, l, th):
+        """
+        Evaluate the spin-weighted spherical harmonic $Y_{s}^{lm}$ at a given angle theta.
+
+        Parameters
+        ----------
+        l : int
+            The angular number of the spherical harmonic.
+        th : array_like
+            The polar angle(s) at which to evaluate the spherical harmonic.
+
+        Returns
+        -------
+        array_like
+            The values of the spherical harmonic at the specified angles.
+        """
         return Yslm(self.s, l, self.m, th)
     
     def Sslm(self, *args):
+        """
+        Evaluate the spin-weighted spheroidal harmonic $S_{s}^{lm}$ at a given angle theta.
+
+        Parameters
+        ----------
+        th : array_like
+            The polar angle(s) at which to evaluate the spheroidal harmonic.
+        
+        Returns
+        -------
+        array_like
+            The values of the spheroidal harmonic at the specified angles.
+        """
         th = args[-1]
         term_num = self.coeffs.shape[0]
         pts_num = th.shape[0]
@@ -332,6 +395,25 @@ def muCoupling(s, l):
     return np.sqrt((l - s + 1.)*(l + s))
 
 def Asjlm(s, j, l, m):
+    """
+    Coupling coefficient between scalar and spin-weighted spherical harmonics
+    
+    Parameters
+    ----------
+    s : int
+        The spin weight of the harmonic.
+    j : int
+        The angular number of the scalar harmonic.
+    l : int
+        The angular number of the spin-weighted harmonic.
+    m : int
+        The azimuthal number of the harmonics. 
+
+    Returns
+    -------
+    float
+        The coupling coefficient $A_{s}^{jlm}$
+    """
     if s >= 0:
         return (-1.)**(m + s)*np.sqrt(4**s*fac(s)**2*(2*l + 1)*(2*j + 1)/fac(2*s))*w3j(s, l, j, 0, m, -m)*w3j(s, l, j, s, -s, 0)
     else:

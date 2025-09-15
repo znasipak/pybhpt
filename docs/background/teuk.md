@@ -28,4 +28,15 @@ $$
 	- \left(\gamma^2\sin^2\theta+\frac{(m+s\cos\theta)^2}{\sin^2\theta}
 	+2\gamma s\cos\theta-s-2m\gamma-\lambda_{sjm\gamma} \right)\right]S_{sjm\gamma} = 0,
 $$
-with eigenvalues $\lambda_{sjm\gamma}$ and spheroidicity $\gamma$. Constructing solutions to these equations are considered in the following sections.
+with eigenvalues $\lambda_{sjm\gamma}$ and spheroidicity $\gamma$.
+
+The time-averaged rate of change of the orbital energy $\langle \dot{E}\rangle$, angular momentum $\langle \dot{L}_z\rangle$, and Carter constant $\langle \dot{Q}\rangle$ can then be expressed in terms of the Teukolsky amplitudes $Z^\mathrm{Up/In}_{sjmkn}$,
+$$ 
+\begin{align}
+\langle \dot{\mathcal{J}} \rangle & = \langle \dot{\mathcal{J}} \rangle^\mathrm{inf} + \langle \dot{\mathcal{J}} \rangle^\mathrm{hor},
+\\
+&= \sum_{jmkn} \langle \dot{\mathcal{J}} \rangle^\mathrm{inf/hor}_{jmkn},
+\\ 
+&= \sum_{jmkn} \alpha_{sjmkn}^{(\mathcal{J})\mathrm{inf/hor}}\left| Z^\mathrm{Up/In}_{sjmkn} \right|^2,
+\end{align}$$
+where $\mathcal{J} = (E, L_z, Q)$, $\alpha_{sjmkn}^{(\mathcal{J})\mathrm{inf}/\mathrm{hor}}$ are known coefficients, and $s=0, \pm 2$ produce either scalar or gravitational fluxes, respectively. 
