@@ -4,6 +4,7 @@ from scipy.special import sph_harm
 from scipy.special import binom
 from scipy.special import factorial
 import numpy as np
+from cybhpt_full import YslmCy, clebschCy, w3jCy
 
 """
 Wigner 3j-symbol and Clebsch-Gordon coefficients
@@ -27,7 +28,7 @@ def fac(n):
         return 0
     return float(np.math.factorial(n))
 
-def Yslm(s, l, m, th):
+def Yslm(s, l, m, th, ph = None):
     """
     Evaluate the spin-weighted spherical harmonic $Y_{s}^{lm}$ at a given angle theta.
 
@@ -52,21 +53,21 @@ def Yslm(s, l, m, th):
     if s == 0:
         return np.real(sph_harm(m, l, 0., th))
     elif s + m < 0:
-        return (-1.)**(s+m)*YslmBase(-s, l, -m, np.cos(th))
-#     elif th > np.pi/2.:
-#         return (-1.)**(l + m)*YslmBase(-s, l, m, -np.cos(th))
+        return (-1.)**(s+m)*YslmBase(-s, l, -m, th)
     else:
-        return YslmBase(s, l, m, np.cos(th))
+        return YslmBase(s, l, m, th)
 
-def YslmBase(s, l, m, z):
-    rmax = l - s
-    pref = (0.5)**(l)*(-1.)**m*np.sqrt(factorial(l+m)/factorial(l+s)*factorial(l-m)/factorial(l-s)*(2*l+1)/(4.*np.pi))*np.sqrt(1. - z)**(s + m)*np.sqrt(1. + z)**(s - m)
-    
-    yslm = 0.*pref
-    for r in range(0, rmax + 1):
-        yslm += binom(l - s, r)*binom(l + s, r + s - m)*(z - 1.)**(rmax - r)*(z + 1.)**(r)
-    
-    return pref*yslm
+def YslmBase(s, l, m, th):
+    if not isinstance(th, (int, float)):
+        b = np.broadcast(th)
+        out = np.empty(b.shape)
+        out.flat = [YslmCy(s, l, m, thi) for (thi,) in b]
+    else:
+        out = YslmCy(s, l, m, th)
+    return out
+
+def Yslm_eigenvalue(s, l, *args):
+    return l*(l + 1.) - s*(s + 1.)
 
 def clebsch(l1, l2, l3, m1, m2, m3):
     """
@@ -92,7 +93,7 @@ def clebsch(l1, l2, l3, m1, m2, m3):
     float
         The Clebsch-Gordon coefficient <l1,m1,l2,m2|l3,m3>.
     """
-    return (-1)**(l1 - l2 + m3)*np.sqrt(2*l3 + 1)*w3j(l1, l2, l3, m1, m2, -m3);
+    return clebschCy(l1, l2, l3, m1, m2, m3)
 
 def w3j(l1, l2, l3, m1, m2, m3):
     """
@@ -120,78 +121,8 @@ def w3j(l1, l2, l3, m1, m2, m3):
     float
         The Wigner 3j-symbol $ \begin{pmatrix} l1 & l2 & l3 \\ m1 & m2 & m3 \end{pmatrix} $
     """
-    if m1 + m2 + m3 != 0:
-        return 0
-    elif abs(l1 - l2) > l3:
-        return 0
-    elif l1 + l2 < l3:
-        return 0
+    return w3jCy(l1, l2, l3, m1, m2, m3)
     
-    if abs(m1) > l1:
-        return 0
-    elif abs(m2) > l2:
-        return 0
-    elif abs(m3) > l3:
-        return 0
-    
-    sumTerm = w3j_tsum(l1, l2, l3, m1, m2, m3)
-    if sumTerm == 0:
-        return 0
-    sumSign = np.sign(sumTerm)
-    tempLog = 0.5*(np.log(fac(l1 + m1)) + np.log(fac(l2 + m2)) + np.log(fac(l3 + m3)))
-    tempLog += 0.5*(np.log(fac(l1 - m1)) + np.log(fac(l2 - m2)) + np.log(fac(l3 - m3)))
-    tempLog += np.log(triangle_coeff(l1, l2, l3))
-    tempLog += np.log(abs(sumTerm))
-    
-    temp = sumSign*np.exp(tempLog)
-    temp *= (-1)**(l1-l2-m3)
-    
-    return temp
-    
-def w3j_tsum(l1, l2, l3, m1, m2, m3):
-    t_min_num = w3j_t_min(l1, l2, l3, m1, m2, m3)
-    t_max_num = w3j_t_max(l1, l2, l3, m1, m2, m3)
-    x = 0
-    if t_max_num < t_min_num:
-        t_max_num = t_min_num
-
-    for t in range(t_min_num - 1, t_max_num + 2):
-        term = (fac(t)*fac(l3 - l2 + m1 + t)*fac(l3 - l1 - m2 + t)
-            *fac(l1 + l2 - l3 - t)*fac(l1 - t - m1)*fac(l2 - t + m2))
-        if term > 0:
-            x += (-1)**t/term
-    
-    return x
-
-def w3j_t_min(l1, l2, l3, m1, m2, m3):
-    temp = 0
-    
-    comp = l3 - l2 + m1
-    if temp + comp < 0:
-        temp = -comp
-    comp = l3 - l1 - m2
-    if temp + comp < 0:
-        temp = -comp
-        
-    return temp
-
-def w3j_t_max(l1, l2, l3, m1, m2, m3):
-    temp = 1
-    comp = l1 + l2 - l3
-    if comp - temp > 0:
-        temp = comp
-    comp = l1 - m1
-    if comp - temp > 0:
-        temp = comp
-    comp = l2 + m2
-    if comp - temp > 0:
-        temp = comp
-        
-    return temp;
-
-def triangle_coeff(l1, l2, l3):
-    return np.sqrt(fac(l1 + l2 - l3)*fac(l3 + l1 - l2)*fac(l2 + l3 - l1)/fac(l1 + l2 + l3 + 1))
-
 """
 SWSH Eigenvalue Functions
 """
@@ -292,9 +223,6 @@ def swsh_eigs(s, l, m, g, nmax=None, return_eigenvectors=True):
     out = scipy.sparse.linalg.eigs(mat, k=Nmax-2, which='SM', return_eigenvectors=return_eigenvectors)
     
     return out
-
-def Yslm_eigenvalue(s, l, *args):
-    return l*(l + 1.) - s*(s + 1.)
 
 def swsh_coeffs(s, l, m, g, th):
     if g == 0.:
