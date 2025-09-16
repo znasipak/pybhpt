@@ -280,7 +280,7 @@ def swsh_eigs(s, l, m, g, nmax=None, return_eigenvectors=True):
     kval = l - lmin
     
     if nmax is None:
-        buffer = round(20 + 2*g)
+        buffer = round(20 + 2*np.abs(g))
         Nmax = kval + buffer + 2
     else:
         if nmax < kval:
@@ -301,9 +301,11 @@ def swsh_coeffs(s, l, m, g, th):
         return Yslm(s, l, m, th)
     
     _, eig = swsh_eigs(s, l, m, g, nmax=None, return_eigenvectors=True)
-    coeffs = np.real(eig[l - max(abs(s), abs(m))])
-    
-    return np.real(eig[l - max(abs(s), abs(m))])
+    if g.imag == 0.:
+        coeffs = np.real(eig[l - max(abs(s), abs(m))])
+    else:
+        coeffs = eig[l - max(abs(s), abs(m))]
+    return coeffs
 
 def swsh_eigenvalue(s, l, m, g, nmax=None):
     """
@@ -317,14 +319,14 @@ def swsh_eigenvalue(s, l, m, g, nmax=None):
         The angular number of the harmonic.
     m : int
         The azimuthal number of the harmonic.
-    g : float
+    g : float or complex
         The spheroidicity parameter.
     nmax : int, optional
         The maximum number of basis functions to use in the computation. If None, a default value is chosen.
 
     Returns
     -------
-    float
+    float or complex
         The eigenvalue of the spin-weighted spheroidal harmonic.
     """
     if g == 0.:
@@ -332,7 +334,11 @@ def swsh_eigenvalue(s, l, m, g, nmax=None):
     
     las = swsh_eigs(s, l, m, g, nmax=nmax, return_eigenvectors=False)
     
-    return np.real(las[::-1][l - max(abs(s), abs(m))])    
+    if g.imag == 0.:
+        eigen = np.real(las)[np.argsort(np.real(las))[l - max(abs(s), abs(m))]]
+    else:
+        eigen = las[np.argsort(np.real(las))[l - max(abs(s), abs(m))]]
+    return eigen
 class SWSHBase:
     def __init__(self, *args):
         arg_num = np.array(args).shape[0]
@@ -347,7 +353,9 @@ class SWSHBase:
 
         if arg_num > 3:
             self.spheroidicity = args[3]
-            
+        if self.spheroidicity.imag == 0:
+            self.spheroidicity = np.real(self.spheroidicity)
+
 class SWSHSeriesBase(SWSHBase):
     def __init__(self, s, l, m, g):
         SWSHBase.__init__(self, s, l, m, g)
@@ -359,7 +367,7 @@ class SWSHSeriesBase(SWSHBase):
         kval = self.l - self.lmin
     
         if nmax is None:
-            buffer = round(20 + 2*self.spheroidicity)
+            buffer = round(20 + np.abs(2*self.spheroidicity))
             Nmax = kval + buffer + 2
         else:
             if nmax < kval:
@@ -383,17 +391,29 @@ class SWSHSeriesBase(SWSHBase):
         return scipy.sparse.linalg.eigs(mat, **kwargs)
     
     def generate_eigenvalue(self):
-        las = np.real(self.eigs(return_eigenvectors=False))
-        pos = np.argsort(las)[self.l - self.lmin]
+        if self.spheroidicity.imag == 0.:
+            las = np.real(self.eigs(return_eigenvectors=False))
+        else:
+            las = self.eigs(return_eigenvectors=False)
+        pos = np.argsort(np.real(las))[self.l - self.lmin]
         return las[pos]
-    
+
     def generate_eigs(self):
         las, eigs = self.eigs()
-        pos = np.argsort(np.real(las))[self.l - self.lmin]
-        eigs_temp = np.real(eigs[:, pos])
-        eigs_return = np.sign(eigs_temp[self.l - self.lmin])*eigs_temp
-        return (np.real(las[pos]), eigs_return)
-    
+        pos_vec = np.argsort(np.real(las))
+        pos = pos_vec[self.l - self.lmin]
+        if self.spheroidicity.imag == 0.:
+            eigs_temp = np.real(eigs[:, pos])
+            eigs_return = np.sign(eigs_temp[self.l - self.lmin])*eigs_temp
+            eig = np.real(las[pos])
+        else:
+            eigs_temp = eigs[:, pos]
+            ref = eigs_temp[self.l - self.lmin]
+            eigs_temp = eigs_temp/ref
+            eigs_norm = np.linalg.norm(eigs_temp)
+            eigs_return = eigs_temp/eigs_norm
+            eig = las[pos]
+        return (eig, eigs_return)
 class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
     """
     A class for generating a spin-weighted spheroidal harmonic.
@@ -406,7 +426,7 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
         The angular number of the harmonic.
     m : int
         The azimuthal number of the harmonic.
-    g : float
+    g : float or complex
         The spheroidicity parameter.    
     
     """
@@ -423,7 +443,7 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
             
     def Yslm(self, l, th):
         """
-        Evaluate the spin-weighted spherical harmonic $Y_{s}^{lm}$ at a given angle theta.
+        Evaluate the spin-weighted spherical harmonic $Y_{s}^{lm}(theta)$ at a given angle theta.
 
         Parameters
         ----------
@@ -441,7 +461,7 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
     
     def Sslm(self, *args):
         """
-        Evaluate the spin-weighted spheroidal harmonic $S_{s}^{lm}$ at a given angle theta.
+        Evaluate the spin-weighted spheroidal harmonic $S_{s}^{lm}(theta)$ at a given angle theta.
 
         Parameters
         ----------
@@ -455,16 +475,22 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
         """
         th = args[-1]
         term_num = self.coeffs.shape[0]
-        pts_num = th.shape[0]
-        Yslm_array = np.empty((term_num, pts_num))
+        if isinstance(th, (int, float)):
+            Yslm_array = np.empty(term_num)
+        else:
+            pts_num = th.shape[0]
+            Yslm_array = np.empty((term_num, pts_num))
         for i in range(term_num):
             Yslm_array[i] = self.Yslm(self.lmin + i, th)
             
         return np.dot(self.coeffs, Yslm_array)
             
-    def __call__(self, th):
-        return self.eval(self.l, th)
-    
+    def __call__(self, th, ph = None):
+        out = self.eval(self.l, th)
+        if ph is not None:
+            out *= np.exp(1.j*self.m*ph)
+        return out
+
 def muCoupling(s, l):
     """
     Eigenvalue for the spin-weighted spherical harmonic lowering operator
