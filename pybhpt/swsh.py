@@ -58,6 +58,7 @@ def Yslm(s, l, m, th, ph = None):
         return YslmBase(s, l, m, th)
 
 def YslmBase(s, l, m, th):
+    assert isinstance(s, int) and isinstance(l, int) and isinstance(m, int), "s, l, and m must be integers"
     if not isinstance(th, (int, float)):
         b = np.broadcast(th)
         out = np.empty(b.shape)
@@ -93,6 +94,8 @@ def clebsch(l1, l2, l3, m1, m2, m3):
     float
         The Clebsch-Gordon coefficient <l1,m1,l2,m2|l3,m3>.
     """
+    assert isinstance(l1, int) and isinstance(l2, int) and isinstance(l3, int), "l1, l2, and l3 must be integers"
+    assert isinstance(m1, int) and isinstance(m2, int) and isinstance(m3, int), "m1, m2, and m3 must be integers"
     return clebschCy(l1, l2, l3, m1, m2, m3)
 
 def w3j(l1, l2, l3, m1, m2, m3):
@@ -121,6 +124,8 @@ def w3j(l1, l2, l3, m1, m2, m3):
     float
         The Wigner 3j-symbol $ \begin{pmatrix} l1 & l2 & l3 \\ m1 & m2 & m3 \end{pmatrix} $
     """
+    assert isinstance(l1, int) and isinstance(l2, int) and isinstance(l3, int), "l1, l2, and l3 must be integers"
+    assert isinstance(m1, int) and isinstance(m2, int) and isinstance(m3, int), "m1, m2, and m3 must be integers"
     return w3jCy(l1, l2, l3, m1, m2, m3)
     
 """
@@ -355,7 +360,12 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
     m : int
         The azimuthal number of the harmonic.
     g : float or complex
-        The spheroidicity parameter.    
+        The spheroidicity parameter.
+
+    Attributes
+    ----------
+    couplingcoefficients : array_like
+        The coupling coefficients between the spin-weighted spheroidal harmonic and the spin-weighted spherical  
     
     """
     def __init__(self, s, l, m, g):
@@ -368,7 +378,11 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
         else:
             self.eval = self.Sslm
             self.eigenvalue, self.coeffs = self.generate_eigs()
-            
+
+    @property
+    def couplingcoefficients(self):
+        return self.coeffs
+
     def Yslm(self, l, th):
         """
         Evaluate the spin-weighted spherical harmonic $Y_{s}^{lm}(theta)$ at a given angle theta.
@@ -416,7 +430,7 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
     def __call__(self, th, ph = None):
         out = self.eval(self.l, th)
         if ph is not None:
-            out *= np.exp(1.j*self.m*ph)
+            out = out*np.exp(1.j*self.m*ph)
         return out
 
 def muCoupling(s, l):
