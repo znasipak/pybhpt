@@ -267,10 +267,14 @@ def swsh_eigenvalue(s, l, m, g, nmax=None):
     
     las = swsh_eigs(s, l, m, g, nmax=nmax, return_eigenvectors=False)
     
+    idx = l - max(abs(s), abs(m))
+    sorted_indices = np.argsort(np.real(las))
+    if idx < 0 or idx >= len(sorted_indices):
+        raise IndexError(f"Index {idx} out of bounds for eigenvalue array of length {len(sorted_indices)}")
     if g.imag == 0.:
-        eigen = np.real(las)[np.argsort(np.real(las))[l - max(abs(s), abs(m))]]
+        eigen = np.real(las)[sorted_indices[idx]]
     else:
-        eigen = las[np.argsort(np.real(las))[l - max(abs(s), abs(m))]]
+        eigen = las[sorted_indices[idx]]
     return eigen
 class SWSHBase:
     def __init__(self, *args):
