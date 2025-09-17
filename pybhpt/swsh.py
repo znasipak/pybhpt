@@ -4,6 +4,7 @@ from scipy.special import sph_harm
 from scipy.special import binom
 from scipy.special import factorial
 import numpy as np
+from cybhpt_full import YslmCy, clebschCy, w3jCy
 
 """
 Wigner 3j-symbol and Clebsch-Gordon coefficients
@@ -27,7 +28,7 @@ def fac(n):
         return 0
     return float(np.math.factorial(n))
 
-def Yslm(s, l, m, th):
+def Yslm(s, l, m, th, ph = None):
     """
     Evaluate the spin-weighted spherical harmonic $Y_{s}^{lm}$ at a given angle theta.
 
@@ -52,21 +53,22 @@ def Yslm(s, l, m, th):
     if s == 0:
         return np.real(sph_harm(m, l, 0., th))
     elif s + m < 0:
-        return (-1.)**(s+m)*YslmBase(-s, l, -m, np.cos(th))
-#     elif th > np.pi/2.:
-#         return (-1.)**(l + m)*YslmBase(-s, l, m, -np.cos(th))
+        return (-1.)**(s+m)*YslmBase(-s, l, -m, th)
     else:
-        return YslmBase(s, l, m, np.cos(th))
+        return YslmBase(s, l, m, th)
 
-def YslmBase(s, l, m, z):
-    rmax = l - s
-    pref = (0.5)**(l)*(-1.)**m*np.sqrt(factorial(l+m)/factorial(l+s)*factorial(l-m)/factorial(l-s)*(2*l+1)/(4.*np.pi))*np.sqrt(1. - z)**(s + m)*np.sqrt(1. + z)**(s - m)
-    
-    yslm = 0.*pref
-    for r in range(0, rmax + 1):
-        yslm += binom(l - s, r)*binom(l + s, r + s - m)*(z - 1.)**(rmax - r)*(z + 1.)**(r)
-    
-    return pref*yslm
+def YslmBase(s, l, m, th):
+    assert isinstance(s, int) and isinstance(l, int) and isinstance(m, int), "s, l, and m must be integers"
+    if not isinstance(th, (int, float)):
+        b = np.broadcast(th)
+        out = np.empty(b.shape)
+        out.flat = [YslmCy(s, l, m, thi) for (thi,) in b]
+    else:
+        out = YslmCy(s, l, m, th)
+    return out
+
+def Yslm_eigenvalue(s, l, *args):
+    return l*(l + 1.) - s*(s + 1.)
 
 def clebsch(l1, l2, l3, m1, m2, m3):
     """
@@ -92,7 +94,9 @@ def clebsch(l1, l2, l3, m1, m2, m3):
     float
         The Clebsch-Gordon coefficient <l1,m1,l2,m2|l3,m3>.
     """
-    return (-1)**(l1 - l2 + m3)*np.sqrt(2*l3 + 1)*w3j(l1, l2, l3, m1, m2, -m3);
+    assert isinstance(l1, int) and isinstance(l2, int) and isinstance(l3, int), "l1, l2, and l3 must be integers"
+    assert isinstance(m1, int) and isinstance(m2, int) and isinstance(m3, int), "m1, m2, and m3 must be integers"
+    return clebschCy(l1, l2, l3, m1, m2, m3)
 
 def w3j(l1, l2, l3, m1, m2, m3):
     """
@@ -120,78 +124,10 @@ def w3j(l1, l2, l3, m1, m2, m3):
     float
         The Wigner 3j-symbol $ \begin{pmatrix} l1 & l2 & l3 \\ m1 & m2 & m3 \end{pmatrix} $
     """
-    if m1 + m2 + m3 != 0:
-        return 0
-    elif abs(l1 - l2) > l3:
-        return 0
-    elif l1 + l2 < l3:
-        return 0
+    assert isinstance(l1, int) and isinstance(l2, int) and isinstance(l3, int), "l1, l2, and l3 must be integers"
+    assert isinstance(m1, int) and isinstance(m2, int) and isinstance(m3, int), "m1, m2, and m3 must be integers"
+    return w3jCy(l1, l2, l3, m1, m2, m3)
     
-    if abs(m1) > l1:
-        return 0
-    elif abs(m2) > l2:
-        return 0
-    elif abs(m3) > l3:
-        return 0
-    
-    sumTerm = w3j_tsum(l1, l2, l3, m1, m2, m3)
-    if sumTerm == 0:
-        return 0
-    sumSign = np.sign(sumTerm)
-    tempLog = 0.5*(np.log(fac(l1 + m1)) + np.log(fac(l2 + m2)) + np.log(fac(l3 + m3)))
-    tempLog += 0.5*(np.log(fac(l1 - m1)) + np.log(fac(l2 - m2)) + np.log(fac(l3 - m3)))
-    tempLog += np.log(triangle_coeff(l1, l2, l3))
-    tempLog += np.log(abs(sumTerm))
-    
-    temp = sumSign*np.exp(tempLog)
-    temp *= (-1)**(l1-l2-m3)
-    
-    return temp
-    
-def w3j_tsum(l1, l2, l3, m1, m2, m3):
-    t_min_num = w3j_t_min(l1, l2, l3, m1, m2, m3)
-    t_max_num = w3j_t_max(l1, l2, l3, m1, m2, m3)
-    x = 0
-    if t_max_num < t_min_num:
-        t_max_num = t_min_num
-
-    for t in range(t_min_num - 1, t_max_num + 2):
-        term = (fac(t)*fac(l3 - l2 + m1 + t)*fac(l3 - l1 - m2 + t)
-            *fac(l1 + l2 - l3 - t)*fac(l1 - t - m1)*fac(l2 - t + m2))
-        if term > 0:
-            x += (-1)**t/term
-    
-    return x
-
-def w3j_t_min(l1, l2, l3, m1, m2, m3):
-    temp = 0
-    
-    comp = l3 - l2 + m1
-    if temp + comp < 0:
-        temp = -comp
-    comp = l3 - l1 - m2
-    if temp + comp < 0:
-        temp = -comp
-        
-    return temp
-
-def w3j_t_max(l1, l2, l3, m1, m2, m3):
-    temp = 1
-    comp = l1 + l2 - l3
-    if comp - temp > 0:
-        temp = comp
-    comp = l1 - m1
-    if comp - temp > 0:
-        temp = comp
-    comp = l2 + m2
-    if comp - temp > 0:
-        temp = comp
-        
-    return temp;
-
-def triangle_coeff(l1, l2, l3):
-    return np.sqrt(fac(l1 + l2 - l3)*fac(l3 + l1 - l2)*fac(l2 + l3 - l1)/fac(l1 + l2 + l3 + 1))
-
 """
 SWSH Eigenvalue Functions
 """
@@ -280,7 +216,7 @@ def swsh_eigs(s, l, m, g, nmax=None, return_eigenvectors=True):
     kval = l - lmin
     
     if nmax is None:
-        buffer = round(20 + 2*g)
+        buffer = round(20 + 2*np.abs(g))
         Nmax = kval + buffer + 2
     else:
         if nmax < kval:
@@ -293,17 +229,16 @@ def swsh_eigs(s, l, m, g, nmax=None, return_eigenvectors=True):
     
     return out
 
-def Yslm_eigenvalue(s, l, *args):
-    return l*(l + 1.) - s*(s + 1.)
-
 def swsh_coeffs(s, l, m, g, th):
     if g == 0.:
         return Yslm(s, l, m, th)
     
     _, eig = swsh_eigs(s, l, m, g, nmax=None, return_eigenvectors=True)
-    coeffs = np.real(eig[l - max(abs(s), abs(m))])
-    
-    return np.real(eig[l - max(abs(s), abs(m))])
+    if g.imag == 0.:
+        coeffs = np.real(eig[l - max(abs(s), abs(m))])
+    else:
+        coeffs = eig[l - max(abs(s), abs(m))]
+    return coeffs
 
 def swsh_eigenvalue(s, l, m, g, nmax=None):
     """
@@ -317,14 +252,14 @@ def swsh_eigenvalue(s, l, m, g, nmax=None):
         The angular number of the harmonic.
     m : int
         The azimuthal number of the harmonic.
-    g : float
+    g : float or complex
         The spheroidicity parameter.
     nmax : int, optional
         The maximum number of basis functions to use in the computation. If None, a default value is chosen.
 
     Returns
     -------
-    float
+    float or complex
         The eigenvalue of the spin-weighted spheroidal harmonic.
     """
     if g == 0.:
@@ -332,7 +267,15 @@ def swsh_eigenvalue(s, l, m, g, nmax=None):
     
     las = swsh_eigs(s, l, m, g, nmax=nmax, return_eigenvectors=False)
     
-    return np.real(las[::-1][l - max(abs(s), abs(m))])    
+    idx = l - max(abs(s), abs(m))
+    sorted_indices = np.argsort(np.real(las))
+    if idx < 0 or idx >= len(sorted_indices):
+        raise IndexError(f"Index {idx} out of bounds for eigenvalue array of length {len(sorted_indices)}")
+    if g.imag == 0.:
+        eigen = np.real(las)[sorted_indices[idx]]
+    else:
+        eigen = las[sorted_indices[idx]]
+    return eigen
 class SWSHBase:
     def __init__(self, *args):
         arg_num = np.array(args).shape[0]
@@ -347,7 +290,9 @@ class SWSHBase:
 
         if arg_num > 3:
             self.spheroidicity = args[3]
-            
+        if self.spheroidicity.imag == 0:
+            self.spheroidicity = np.real(self.spheroidicity)
+
 class SWSHSeriesBase(SWSHBase):
     def __init__(self, s, l, m, g):
         SWSHBase.__init__(self, s, l, m, g)
@@ -359,7 +304,7 @@ class SWSHSeriesBase(SWSHBase):
         kval = self.l - self.lmin
     
         if nmax is None:
-            buffer = round(20 + 2*self.spheroidicity)
+            buffer = round(20 + np.abs(2*self.spheroidicity))
             Nmax = kval + buffer + 2
         else:
             if nmax < kval:
@@ -383,17 +328,29 @@ class SWSHSeriesBase(SWSHBase):
         return scipy.sparse.linalg.eigs(mat, **kwargs)
     
     def generate_eigenvalue(self):
-        las = np.real(self.eigs(return_eigenvectors=False))
-        pos = np.argsort(las)[self.l - self.lmin]
+        if self.spheroidicity.imag == 0.:
+            las = np.real(self.eigs(return_eigenvectors=False))
+        else:
+            las = self.eigs(return_eigenvectors=False)
+        pos = np.argsort(np.real(las))[self.l - self.lmin]
         return las[pos]
-    
+
     def generate_eigs(self):
         las, eigs = self.eigs()
-        pos = np.argsort(np.real(las))[self.l - self.lmin]
-        eigs_temp = np.real(eigs[:, pos])
-        eigs_return = np.sign(eigs_temp[self.l - self.lmin])*eigs_temp
-        return (np.real(las[pos]), eigs_return)
-    
+        pos_vec = np.argsort(np.real(las))
+        pos = pos_vec[self.l - self.lmin]
+        if self.spheroidicity.imag == 0.:
+            eigs_temp = np.real(eigs[:, pos])
+            eigs_return = np.sign(eigs_temp[self.l - self.lmin])*eigs_temp
+            eig = np.real(las[pos])
+        else:
+            eigs_temp = eigs[:, pos]
+            ref = eigs_temp[self.l - self.lmin]
+            eigs_temp = eigs_temp/ref
+            eigs_norm = np.linalg.norm(eigs_temp)
+            eigs_return = eigs_temp/eigs_norm
+            eig = las[pos]
+        return (eig, eigs_return)
 class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
     """
     A class for generating a spin-weighted spheroidal harmonic.
@@ -406,8 +363,13 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
         The angular number of the harmonic.
     m : int
         The azimuthal number of the harmonic.
-    g : float
-        The spheroidicity parameter.    
+    g : float or complex
+        The spheroidicity parameter.
+
+    Attributes
+    ----------
+    couplingcoefficients : array_like
+        The coupling coefficients between the spin-weighted spheroidal harmonic and the spin-weighted spherical  
     
     """
     def __init__(self, s, l, m, g):
@@ -420,10 +382,14 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
         else:
             self.eval = self.Sslm
             self.eigenvalue, self.coeffs = self.generate_eigs()
-            
+
+    @property
+    def couplingcoefficients(self):
+        return self.coeffs
+
     def Yslm(self, l, th):
         """
-        Evaluate the spin-weighted spherical harmonic $Y_{s}^{lm}$ at a given angle theta.
+        Evaluate the spin-weighted spherical harmonic $Y_{s}^{lm}(theta)$ at a given angle theta.
 
         Parameters
         ----------
@@ -441,7 +407,7 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
     
     def Sslm(self, *args):
         """
-        Evaluate the spin-weighted spheroidal harmonic $S_{s}^{lm}$ at a given angle theta.
+        Evaluate the spin-weighted spheroidal harmonic $S_{s}^{lm}(theta)$ at a given angle theta.
 
         Parameters
         ----------
@@ -455,16 +421,22 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
         """
         th = args[-1]
         term_num = self.coeffs.shape[0]
-        pts_num = th.shape[0]
-        Yslm_array = np.empty((term_num, pts_num))
+        if isinstance(th, (int, float)):
+            Yslm_array = np.empty(term_num)
+        else:
+            pts_num = th.shape[0]
+            Yslm_array = np.empty((term_num, pts_num))
         for i in range(term_num):
             Yslm_array[i] = self.Yslm(self.lmin + i, th)
             
         return np.dot(self.coeffs, Yslm_array)
             
-    def __call__(self, th):
-        return self.eval(self.l, th)
-    
+    def __call__(self, th, ph = None):
+        out = self.eval(self.l, th)
+        if ph is not None:
+            out = out*np.exp(1.j*self.m*ph)
+        return out
+
 def muCoupling(s, l):
     """
     Eigenvalue for the spin-weighted spherical harmonic lowering operator

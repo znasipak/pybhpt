@@ -9,7 +9,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "pybhpt"
-version = "0.9.4"
+version = "0.9.5"
 description = "Black Hole Perturbation Theory and Self-Force Algorithms in Python"
 authors = [
   { name = "Zach Nasipak", email = "znasipak@gmail.com" }

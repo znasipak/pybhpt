@@ -86,7 +86,6 @@ int spectral_matrix(const int &s, const int &lmin, const int &m, const double &g
 int spectral_matrix_sparse_init(const int &s, const int &lmin, const int &m, const double &g, gsl_spmatrix* mat);
 int spectral_matrix_sparse(const int &s, const int &lmin, const int &m, const double &g, gsl_spmatrix* mat, const size_t &nmax);
 
-
 // Solve eigensystem of spectral matrix
 int spectral_solver(const int &s, const int &l, const int &m, const double &g, double& la, Vector& bvec);
 

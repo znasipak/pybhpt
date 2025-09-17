@@ -7,6 +7,7 @@ cimport numpy as np
 # from geo_wrap cimport GeodesicSource
 include "geo_wrap.pyx"
 include "radialsolver_wrap.pyx"
+include "swsh_wrap.pyx"
 
 cdef extern from "teukolsky.hpp":
     cdef cppclass SpinWeightedHarmonic:
