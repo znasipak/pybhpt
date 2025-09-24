@@ -48,6 +48,9 @@ def Yslm(s, l, m, th, ph = None):
     array_like
         The values of the spherical harmonic at the specified angles.
     """
+    if ph is not None:
+        return Yslm(s, l, m, th)*np.exp(1.j*m*ph)
+    assert isinstance(s, int) and isinstance(l, int) and isinstance(m, int), "s, l, and m must be integers"
     if np.abs(s) > l:
         return 0.*th
     if s == 0:
