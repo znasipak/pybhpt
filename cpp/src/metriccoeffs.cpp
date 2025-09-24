@@ -3217,7 +3217,7 @@ ComplexMatrix tetrad_velocity_radial(Complex (*subfunc)(double, double, double, 
   for(size_t jr = 1; jr < r.size() - 1; jr++){
     rp = r[jr];
     zp = z[0];
-	double deltaUr = sqrt(kerr_geo_Vr(a, En, Lz, Qc, rp));
+	double deltaUr = std::sqrt(std::abs(kerr_geo_Vr(a, En, Lz, Qc, rp)));
 	// take into account when the radial velocity is positive
 	ua[jr][0] = subfunc(a, En, Lz, Qc, rp, zp, deltaUr);
 	ua[u1rSize - jr][0] = subfunc(a, En, Lz, Qc, rp, zp, -deltaUr);
@@ -3234,7 +3234,7 @@ ComplexMatrix tetrad_velocity_radial(Complex (*subfunc)(double, double, double, 
     for(size_t jz = 1; jz < z.size() - 1; jz++){
       rp = r[jr];
       zp = z[jz];
-      double deltaUr = sqrt(kerr_geo_Vr(a, En, Lz, Qc, rp));
+      double deltaUr = std::sqrt(std::abs(kerr_geo_Vr(a, En, Lz, Qc, rp)));
       // take into account when the radial velocity is positive
       ua[jr][jz] = subfunc(a, En, Lz, Qc, rp, zp, deltaUr);
       ua[jr][u1zSize - jz] = subfunc(a, En, Lz, Qc, rp, zp, deltaUr);
