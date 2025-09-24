@@ -6,8 +6,8 @@ cimport numpy as np
 cdef extern from "gsl/gsl_errno.h":
   void gsl_set_error_handler_off()
 
-# call at import-time
-gsl_set_error_handler_off()
+# If you need to disable GSL error handling, do so in a targeted way within specific functions.
+# gsl_set_error_handler_off()  # Removed global call to avoid masking numerical errors.
 
 cdef extern from "swsh.hpp":
     cdef cppclass SpinWeightedHarmonic:
