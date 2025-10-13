@@ -380,7 +380,7 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
         if self.spheroidicity == 0.:
             self.eval = self.Yslm
             self.eigenvalue = Yslm_eigenvalue(self.s, self.l)
-            self.coeffs = np.zeros(self.l - self.lmin)
+            self.coeffs = np.zeros(self.l - self.lmin + 1)
             self.coeffs[-1] = 1.
         else:
             self.eval = self.Sslm
