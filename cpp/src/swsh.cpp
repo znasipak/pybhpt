@@ -718,8 +718,10 @@ Complex Yslm(const int &s, const int &l, const int &m, const double &th, const d
 
 double Yslm(const int &s, const int &l, const int &m, const double &th){
 	if( s == 0 ) return Ylm(l, m, th);
-	if( th == 0.) return pow(-1, s)*Yslm(0, l, 0, 0.);
-
+	if( th == 0.){
+		if (m != -s) return 0.;
+		else return pow(-1, s)*Yslm(0, l, 0, 0.);
+	}
 	int lmin = std::max(std::abs(m), l - std::abs(s));
 	int lmax = l + std::abs(s);
 	double yslm = 0;
