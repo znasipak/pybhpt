@@ -329,6 +329,12 @@ double GeodesicSource::getAzimuthalAccumulation(int j, int pos){
 	}
 }
 
+double GeodesicSource::getPsiRadialOfMinoTime(double lambda){
+	return kepler_phase_of_angle(lambda*_geoConstants.upsilonR, _geoCoefficients.r);
+}
+double GeodesicSource::getPsiPolarOfMinoTime(double lambda){
+	return kepler_phase_of_angle(lambda*_geoConstants.upsilonTheta, _geoCoefficients.theta);
+}
 double GeodesicSource::getTimePositionOfMinoTime(double lambda){
 	return lambda*_geoConstants.upsilonT + phip_of_angle(lambda*_geoConstants.upsilonR, _geoCoefficients.tR) + phip_of_angle(lambda*_geoConstants.upsilonTheta, _geoCoefficients.tTheta);
 }
@@ -347,6 +353,22 @@ Vector GeodesicSource::getPositionOfMinoTime(double lambda){
 	xp[1] = getRadialPositionOfMinoTime(lambda);
 	xp[2] = getPolarPositionOfMinoTime(lambda);
 	xp[3] = getAzimuthalPositionOfMinoTime(lambda);
+	return xp;
+}
+
+Vector GeodesicSource::getPsiRadialOfMinoTime(Vector lambda){
+	Vector xp(lambda.size());
+	for(size_t i = 0; i < xp.size(); i++){
+		xp[i] = getPsiRadialOfMinoTime(lambda[i]);
+	}
+	return xp;
+}
+
+Vector GeodesicSource::getPsiPolarOfMinoTime(Vector lambda){
+	Vector xp(lambda.size());
+	for(size_t i = 0; i < xp.size(); i++){
+		xp[i] = getPsiPolarOfMinoTime(lambda[i]);
+	}
 	return xp;
 }
 

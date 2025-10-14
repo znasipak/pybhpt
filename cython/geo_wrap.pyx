@@ -54,10 +54,16 @@ cdef extern from "geo.hpp":
         double getPolarPosition(int pos)
         double getAzimuthalAccumulation(int j, int pos)
 
+        double getPsiRadialOfMinoTime(double la)
+        double getPsiPolarOfMinoTime(double la)
+
         double getTimePositionOfMinoTime(double la)
         double getRadialPositionOfMinoTime(double la)
         double getPolarPositionOfMinoTime(double la)
         double getAzimuthalPositionOfMinoTime(double la)
+
+        vector[double] getPsiRadialOfMinoTime(vector[double] la)
+        vector[double] getPsiPolarOfMinoTime(vector[double] la)
 
         vector[double] getTimePositionOfMinoTime(vector[double] la)
         vector[double] getRadialPositionOfMinoTime(vector[double] la)
@@ -187,6 +193,24 @@ cdef class KerrGeodesic:
     def mode_carter_frequency(self, np.ndarray[ndim=1, dtype=np.int64_t] kvec):
         return np.dot(kvec,(self.carterfrequencies))
 
+    cdef void getPsiRadialOfMinoTimeArray(self, np.float64_t *psi, np.float64_t *la, int n):
+        for i in range(n):
+            psi[i] = self.geocpp.getPsiRadialOfMinoTime(la[i])
+    cdef void getPsiPolarOfMinoTimeArray(self, np.float64_t *psi, np.float64_t *la, int n):
+        for i in range(n):
+            psi[i] = self.geocpp.getPsiPolarOfMinoTime(la[i])
+
+    cdef void getPsiRadialOfTimeArray(self, np.float64_t *psi, np.float64_t *t, int n):
+        cdef double tmp
+        for i in range(n):
+            tmp = self.geocpp.getMinoTimeOfTime(t[i])
+            psi[i] = self.geocpp.getPsiRadialOfMinoTime(tmp)
+    cdef void getPsiPolarOfTimeArray(self, np.float64_t *psi, np.float64_t *t, int n):
+        cdef double tmp
+        for i in range(n):
+            tmp = self.geocpp.getMinoTimeOfTime(t[i])
+            psi[i] = self.geocpp.getPsiPolarOfMinoTime(tmp)
+
     cdef void getTimePositionOfMinoTimeArray(self, np.float64_t *t, np.float64_t *la, int n):
         for i in range(n):
             t[i] = self.geocpp.getTimePositionOfMinoTime(la[i])
@@ -199,8 +223,86 @@ cdef class KerrGeodesic:
     cdef void getAzimuthalPositionOfMinoTimeArray(self, np.float64_t *t, np.float64_t *la, int n):
         for i in range(n):
             t[i] = self.geocpp.getAzimuthalPositionOfMinoTime(la[i])
+
+    cdef void getRadialPositionOfTimeArray(self, np.float64_t *r, np.float64_t *t, int n):
+        cdef double tmp
+        for i in range(n):
+            tmp = self.geocpp.getMinoTimeOfTime(t[i])
+            r[i] = self.geocpp.getRadialPositionOfMinoTime(tmp)
+    cdef void getPolarPositionOfTimeArray(self, np.float64_t *th, np.float64_t *t, int n):
+        cdef double tmp
+        for i in range(n):
+            tmp = self.geocpp.getMinoTimeOfTime(t[i])
+            th[i] = self.geocpp.getPolarPositionOfMinoTime(tmp)
+    cdef void getAzimuthalPositionOfTimeArray(self, np.float64_t *ph, np.float64_t *t, int n):
+        cdef double tmp
+        for i in range(n):
+            tmp = self.geocpp.getMinoTimeOfTime(t[i])
+            ph[i] = self.geocpp.getAzimuthalPositionOfMinoTime(tmp)
+
+    def psi_radial(self, double la):
+        return self.geocpp.getPsiRadialOfMinoTime(la)
+
+    def psi_polar(self, double la):
+        return self.geocpp.getPsiPolarOfMinoTime(la)
+
+    def psi_radial_time(self, double t):
+        cdef double tmp = self.geocpp.getMinoTimeOfTime(t)
+        return self.geocpp.getPsiRadialOfMinoTime(tmp)
+
+    def psi_polar_time(self, double t):
+        cdef double tmp = self.geocpp.getMinoTimeOfTime(t)
+        return self.geocpp.getPsiPolarOfMinoTime(tmp)
+
+    def psi_radial_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] la):
+        cdef int n = la.shape[0]
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] psi = np.empty(n, dtype = np.float64)
+        self.getPsiRadialOfMinoTimeArray(&psi[0], &la[0], n)
+        return psi
+
+    def psi_polar_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] la):
+        cdef int n = la.shape[0]
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] psi = np.empty(n, dtype = np.float64)
+        self.getPsiPolarOfMinoTimeArray(&psi[0], &la[0], n)
+        return psi
+
+    def psi_radial_time_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] t):
+        cdef int n = t.shape[0]
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] psi = np.empty(n, dtype = np.float64)
+        self.getPsiRadialOfTimeArray(&psi[0], &t[0], n)
+        return psi
+
+    def psi_polar_time_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] t):
+        cdef int n = t.shape[0]
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] psi = np.empty(n, dtype = np.float64)
+        self.getPsiPolarOfTimeArray(&psi[0], &t[0], n)
+        return psi
+
+    def time_position(self, double la):
+        return self.geocpp.getTimePositionOfMinoTime(la)
+
+    def radial_position(self, double la):
+        return self.geocpp.getRadialPositionOfMinoTime(la)
     
-    def time_position(self, np.ndarray[ndim=1, dtype=np.float64_t] la):
+    def polar_position(self, double la):
+        return self.geocpp.getPolarPositionOfMinoTime(la)
+    
+    def azimuthal_position(self, double la):
+        return self.geocpp.getAzimuthalPositionOfMinoTime(la)
+
+    def radial_position_time(self, double t):
+        cdef double tmp = self.geocpp.getMinoTimeOfTime(t)
+        return self.geocpp.getRadialPositionOfMinoTime(tmp)
+
+    def polar_position_time(self, double t):
+        cdef double tmp = self.geocpp.getMinoTimeOfTime(t)
+        return self.geocpp.getPolarPositionOfMinoTime(tmp)
+
+    def azimuthal_position_time(self, double t):
+        cdef double tmp = self.geocpp.getMinoTimeOfTime(t)
+        return self.geocpp.getAzimuthalPositionOfMinoTime(tmp)
+
+    def time_position_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] la):
         cdef int n = la.shape[0]
         cdef np.ndarray[ndim=1, dtype=np.float64_t] t = np.empty(n, dtype = np.float64)
         self.getTimePositionOfMinoTimeArray(&t[0], &la[0], n)
@@ -209,23 +311,70 @@ cdef class KerrGeodesic:
         #     t[i] = self.geocpp.getTimePositionOfMinoTime(la[i])
         return t
     
-    def radial_position(self, np.ndarray[ndim=1, dtype=np.float64_t] la):
+    def radial_position_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] la):
         cdef int n = la.shape[0]
         cdef np.ndarray[ndim=1, dtype=np.float64_t] x = np.empty(n, dtype = np.float64)
         self.getRadialPositionOfMinoTimeArray(&x[0], &la[0], n)
         return x
 
-    def polar_position(self, np.ndarray[ndim=1, dtype=np.float64_t] la):
+    def polar_position_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] la):
         cdef int n = la.shape[0]
         cdef np.ndarray[ndim=1, dtype=np.float64_t] x = np.empty(n, dtype = np.float64)
         self.getPolarPositionOfMinoTimeArray(&x[0], &la[0], n)
         return x
 
-    def azimuthal_position(self, np.ndarray[ndim=1, dtype=np.float64_t] la):
+    def azimuthal_position_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] la):
         cdef int n = la.shape[0]
         cdef np.ndarray[ndim=1, dtype=np.float64_t] x = np.empty(n, dtype = np.float64)
         self.getAzimuthalPositionOfMinoTimeArray(&x[0], &la[0], n)
         return x
+
+    def radial_position_time_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] t):
+        cdef int n = t.shape[0]
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] x = np.empty(n, dtype = np.float64)
+        self.getRadialPositionOfTimeArray(&x[0], &t[0], n)
+        return x
+
+    def polar_position_time_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] t):
+        cdef int n = t.shape[0]
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] x = np.empty(n, dtype = np.float64)
+        self.getPolarPositionOfTimeArray(&x[0], &t[0], n)
+        return x
+
+    def azimuthal_position_time_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] t):
+        cdef int n = t.shape[0]
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] x = np.empty(n, dtype = np.float64)
+        self.getAzimuthalPositionOfTimeArray(&x[0], &t[0], n)
+        return x
+
+    def position(self, double la):
+        return np.array([self.geocpp.getTimePositionOfMinoTime(la), self.geocpp.getRadialPositionOfMinoTime(la), self.geocpp.getPolarPositionOfMinoTime(la), self.geocpp.getAzimuthalPositionOfMinoTime(la)])
+
+    def position_time(self, double t):
+        cdef double tmp = self.geocpp.getMinoTimeOfTime(t)
+        return np.array([self.geocpp.getRadialPositionOfMinoTime(tmp), self.geocpp.getPolarPositionOfMinoTime(tmp), self.geocpp.getAzimuthalPositionOfMinoTime(tmp)])
+
+    def position_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] la):
+        cdef np.ndarray[ndim=2, dtype=np.float64_t] xp = np.empty((la.shape[0], 4), dtype=np.float64)
+        for i in range(la.shape[0]):
+            xp[i] = self.position(la[i])
+        return xp.T
+
+    def position_time_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] t):
+        cdef np.ndarray[ndim=2, dtype=np.float64_t] xp = np.empty((t.shape[0], 3), dtype=np.float64)
+        for i in range(t.shape[0]):
+            xp[i] = self.position_time(t[i])
+        return xp.T
+
+    def mino_time(self, double t):
+        return self.geocpp.getMinoTimeOfTime(t)
+
+    def mino_time_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] t):
+        cdef int n = t.shape[0]
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] la = np.empty(n, dtype = np.float64)
+        for i in range(n):
+            la[i] = self.mino_time(t[i])
+        return la
     
     def get_time_accumulation(self, int j):
         cdef vector[double] deltaX_cpp = self.geocpp.getTimeAccumulation(j)
@@ -258,18 +407,6 @@ cdef class KerrGeodesic:
         for i in range(n):
             deltaX[i] = deltaX_cpp[i]
         return deltaX
-
-    def position(self, double la):
-        return np.array([self.geocpp.getTimePositionOfMinoTime(la), self.geocpp.getRadialPositionOfMinoTime(la), self.geocpp.getPolarPositionOfMinoTime(la), self.geocpp.getAzimuthalPositionOfMinoTime(la)])
-    
-    def position_vec(self, np.ndarray[ndim=1, dtype=np.float64_t] la):
-        cdef np.ndarray[ndim=2, dtype=np.float64_t] xp = np.empty((la.shape[0], 4), dtype=np.float64)
-        for i in range(la.shape[0]):
-            xp[i] = self.position(la[i])
-        return xp.T
-
-    def mino_time(self, double t):
-        return self.geocpp.getMinoTimeOfTime(t)
 
     def get_time_coefficients(self, int j):
         cdef vector[double] deltaX_cpp = self.geocpp.getTimeCoefficients(j)

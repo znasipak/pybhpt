@@ -499,25 +499,256 @@ class KerrGeodesic:
         """
         return np.dot(np.array([n, k, m]), (self.frequencies))
     
-    def minotime(self, t):
+    def psi_radial(self, la):
+        """
+        Function that returns the radial true anomaly for a given Mino time value.
+
+        Parameters
+        ----------
+        la : float or numpy.ndarray
+            The Mino time value(s). If a numpy array is provided, the function will return a numpy array of the same shape.
+        
+        Returns 
+        -------
+        numpy.ndarray
+            The radial true anomaly for the given Mino time value(s).
+        """
+        if isinstance(la, np.ndarray) or isinstance(la, list):
+            return self.base.psi_radial_vec(np.array(la))
+        else:
+            return self.base.psi_radial(la)
+        
+    def psi_polar(self, la):
+        """
+        Function that returns the polar Darwin phase for a given Mino time value.
+
+        Parameters
+        ----------
+        la : float or numpy.ndarray
+            The Mino time value(s). If a numpy array is provided, the function will return a numpy array of the same shape.
+        
+        Returns 
+        -------
+        numpy.ndarray
+            The polar Darwin phase for the given Mino time value(s).
+        """
+        if isinstance(la, np.ndarray) or isinstance(la, list):
+            return self.base.psi_polar_vec(np.array(la))
+        else:
+            return self.base.psi_polar(la)
+        
+    def psi_radial_of_t(self, t):
+        """
+        Function that returns the radial true anomaly for a given time value.
+
+        Parameters
+        ----------
+        t : float or numpy.ndarray
+            The time value(s). If a numpy array is provided, the function will return a numpy array of the same shape.
+        
+        Returns 
+        -------
+        numpy.ndarray
+            The radial true anomaly for the given time value(s).
+        """
+        if isinstance(t, np.ndarray) or isinstance(t, list):
+            return self.base.psi_radial_time_vec(np.array(t))
+        else:
+            return self.base.psi_radial_time(t)
+
+    def psi_polar_of_t(self, t):
+        """
+        Function that returns the polar Darwin phase for a given time value.
+
+        Parameters
+        ----------
+        t : float or numpy.ndarray
+            The time value(s). If a numpy array is provided, the function will return a numpy array of the same shape.
+        
+        Returns 
+        -------
+        numpy.ndarray
+            The polar Darwin phase for the given time value(s).
+        """
+        if isinstance(t, np.ndarray) or isinstance(t, list):
+            return self.base.psi_polar_time_vec(np.array(t))
+        else:
+            return self.base.psi_polar_time(t)
+
+    def time_position(self, la):
+        """
+        Function that returns the time position for a given Mino time value.
+
+        Parameters
+        ----------
+        la : float or numpy.ndarray
+            The Mino time value(s). If a numpy array is provided, the function will return a numpy array of the same shape.
+        
+        Returns 
+        -------
+        numpy.ndarray
+            The time position for the given Mino time value(s).
+        """
+        if isinstance(la, np.ndarray) or isinstance(la, list):
+            return self.base.time_position_vec(np.array(la))
+        else:
+            return self.base.time_position(la)
+
+    def radial_position(self, la):
+        """
+        Function that returns the radial position for a given Mino time value.
+
+        Parameters
+        ----------
+        la : float or numpy.ndarray
+            The Mino time value(s). If a numpy array is provided, the function will return a numpy array of the same shape.
+        
+        Returns 
+        -------
+        numpy.ndarray
+            The radial position for the given Mino time value(s).
+        """
+        if isinstance(la, np.ndarray) or isinstance(la, list):
+            return self.base.radial_position_vec(np.array(la))
+        else:
+            return self.base.radial_position(la)
+        
+    def polar_position(self, la):
+        """
+        Function that returns the polar position for a given Mino time value.
+
+        Parameters
+        ----------
+        la : float or numpy.ndarray
+            The Mino time value(s). If a numpy array is provided, the function will return a numpy array of the same shape.
+        
+        Returns 
+        -------
+        numpy.ndarray
+            The polar position for the given Mino time value(s).
+        """
+        if isinstance(la, np.ndarray) or isinstance(la, list):
+            return self.base.polar_position_vec(np.array(la))
+        else:
+            return self.base.polar_position(la)
+    
+    def azimuthal_position(self, la):
+        """
+        Function that returns the azimuthal position for a given Mino time value.
+
+        Parameters
+        ----------
+        la : float or numpy.ndarray
+            The Mino time value(s). If a numpy array is provided, the function will return a numpy array of the same shape.
+        
+        Returns 
+        -------
+        numpy.ndarray
+            The azimuthal position for the given Mino time value(s).
+        """
+        if isinstance(la, np.ndarray) or isinstance(la, list):
+            return self.base.azimuthal_position_vec(np.array(la))
+        else:
+            return self.base.azimuthal_position(la)
+    
+    def radial_position_of_t(self, t):
+        """
+        Function that returns the radial position for a given Mino time value.
+
+        Parameters
+        ----------
+        t : float or numpy.ndarray
+            The Mino time value(s). If a numpy array is provided, the function will return a numpy array of the same shape.
+        
+        Returns 
+        -------
+        numpy.ndarray
+            The radial position for the given Mino time value(s).
+        """
+        if isinstance(t, np.ndarray) or isinstance(t, list):
+            return self.base.radial_position_time_vec(np.array(t))
+        else:
+            return self.base.radial_position_time(t)
+        
+    def polar_position_of_t(self, t):
+        """
+        Function that returns the polar position for a given time value.
+
+        Parameters
+        ----------
+        t : float or numpy.ndarray
+            The time value(s). If a numpy array is provided, the function will return a numpy array of the same shape.
+        
+        Returns 
+        -------
+        numpy.ndarray
+            The polar position for the given time value(s).
+        """
+        if isinstance(t, np.ndarray) or isinstance(t, list):
+            return self.base.polar_position_time_vec(np.array(t))
+        else:
+            return self.base.polar_position_time(t)
+    
+    def azimuthal_position_of_t(self, t):
+        """
+        Function that returns the azimuthal position for a given time value.
+
+        Parameters
+        ----------
+        t : float or numpy.ndarray
+            The time value(s). If a numpy array is provided, the function will return a numpy array of the same shape.
+        
+        Returns 
+        -------
+        numpy.ndarray
+            The azimuthal position for the given time value(s).
+        """
+        if isinstance(t, np.ndarray) or isinstance(t, list):
+            return self.base.azimuthal_position_time_vec(np.array(t))
+        else:
+            return self.base.azimuthal_position_time(t)
+    
+    def mino_of_t(self, t):
         """
         Function that returns the Mino time for a given Boyer-Lindquist time.
 
         Parameters
         ----------
-        t : float
-            The Boyer-Lindquist time.
+        t : float or numpy.ndarray
+            The Boyer-Lindquist time value(s). If a numpy array is provided, the function will return a numpy array of the same shape.
         
-        Returns
+        Returns 
         -------
-        float
-            The Mino time for the given Boyer-Lindquist time.
+        numpy.ndarray
+            The Mino time for the given Boyer-Lindquist time value(s).
         """
-        return self.base.mino_time(t)
+        if isinstance(t, np.ndarray) or isinstance(t, list):
+            return self.base.mino_time_vec(np.array(t))
+        else:
+            return self.base.mino_time(t)
     
-    def __call__(self, la):
+    def position_of_t(self, t):
         """
-        Function that returns the position vector for a given Mino time value.
+        Function that returns the position vector (r, theta, phi) for a given Boyer-Lindquist time value.
+        
+        Parameters
+        ----------
+        t : float or numpy.ndarray
+            The Boyer-Lindquist time value(s). If a numpy array is provided, the function will return a numpy array of the same shape.
+        
+        Returns 
+        -------
+        numpy.ndarray
+            The position vector (r, theta, phi) for the given Boyer-Lindquist time value(s).
+        """
+        if isinstance(t, np.ndarray) or isinstance(t, list):
+            return self.base.position_time_vec(np.array(t))
+        else:
+            return self.base.position_time(t)
+        
+    def position(self, la):
+        """
+        Function that returns the position vector (t, r, theta, phi) for a given Mino time value.
         Parameters
         ----------
         la : float or numpy.ndarray
@@ -525,9 +756,12 @@ class KerrGeodesic:
         Returns 
         -------
         numpy.ndarray
-            The position vector for the given Mino time value(s).
+            The position vector (t, r, theta, phi) for the given Mino time value(s).
         """
         if isinstance(la, np.ndarray) or isinstance(la, list):
             return self.base.position_vec(np.array(la))
         else:
             return self.base.position(la)
+    
+    def __call__(self, la):
+        return self.position(la)

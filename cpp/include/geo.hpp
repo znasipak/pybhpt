@@ -97,10 +97,16 @@ public:
 	double getPolarPosition(int pos);
 	double getAzimuthalAccumulation(int j, int pos);
 
+	double getPsiRadialOfMinoTime(double lambda);
+	double getPsiPolarOfMinoTime(double lambda);
+
 	double getTimePositionOfMinoTime(double lambda);
 	double getRadialPositionOfMinoTime(double lambda);
 	double getPolarPositionOfMinoTime(double lambda);
 	double getAzimuthalPositionOfMinoTime(double lambda);
+
+	Vector getPsiRadialOfMinoTime(Vector lambda);
+	Vector getPsiPolarOfMinoTime(Vector lambda);
 
 	Vector getTimePositionOfMinoTime(Vector lambda);
 	Vector getRadialPositionOfMinoTime(Vector lambda);
