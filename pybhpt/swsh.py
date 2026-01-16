@@ -1,6 +1,6 @@
 import scipy.sparse
 import scipy.sparse.linalg
-from scipy.special import sph_harm
+from scipy.special import sph_harm_y
 from scipy.special import binom
 from scipy.special import factorial
 import numpy as np
@@ -54,7 +54,7 @@ def Yslm(s, l, m, th, ph = None):
     if np.abs(s) > l:
         return 0.*th
     if s == 0:
-        return np.real(sph_harm(m, l, 0., th))
+        return np.real(sph_harm_y(l, m, 0., th))
     elif s + m < 0:
         return (-1.)**(s+m)*YslmBase(-s, l, -m, th)
     else:
