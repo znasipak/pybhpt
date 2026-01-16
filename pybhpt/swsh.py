@@ -389,6 +389,9 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
     @property
     def couplingcoefficients(self):
         return self.coeffs
+    
+    def couplingcoefficient(self, l):
+        return self.coeffs[l - self.lmin]
 
     def Yslm(self, l, th):
         """
