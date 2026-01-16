@@ -1025,6 +1025,138 @@ void kerr_geo_polar_roots(double &z1, double &z2, double a, double x, double En,
 	}
 }
 
+double jacobian_D(double a, double r, double En, double Lz, double Qc){
+	return 2.0 * (Qc + (a * En - Lz) * (a * En - Lz)) - 2.0 * r * (Lz * Lz + Qc + a * a * (1.0 - En * En)) + 6.0 * r * r - 4.0 * r * r * r * (1.0 - En * En);
+}
+
+double jacobian_D_spherical(double a, double r, double En, double Lz, double Qc){
+	return - (Lz * Lz + Qc + a * a * (1.0 - En * En)) + 6.0 * r - 6.0 * r * r * (1.0 - En * En);
+}
+
+void ELQdot_to_pexdot_generic(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot){
+	double rp = p/(1. - e);
+	double ra = p/(1. + e);
+
+	double En, Lz, Qc;
+	kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
+
+	double Da = jacobian_D(a, ra, En, Lz, Qc);
+	double Dp = jacobian_D(a, rp, En, Lz, Qc);
+	double Dx = 2.0 * (Lz * Lz + x * x * x * x * a * a * (1.0 - En * En));
+
+	double numerdEx = - 2.0 * x * x * x * (1.0 - x * x) * a * a * En;
+	double numerdLzx = 2.0 * x * (1.0 - x * x) * Lz;
+	double numerdQx = - x * x * x;
+
+	double numerdEa = 4.0 * a * (Lz - a * En) * ra - 2 * En * ra * ra * (ra * ra + a * a);
+	double numerdEp = 4.0 * a * (Lz - a * En) * rp - 2 * En * rp * rp * (rp * rp + a * a);
+	
+	double numerdLza = 4.0 * (a * En - Lz) * ra + 2.0 * Lz * ra * ra;
+	double numerdLzp = 4.0 * (a * En - Lz) * rp + 2.0 * Lz * rp * rp;
+	
+	double numerdQa = ra * ra - 2.0 * ra + a * a;
+	double numerdQp = rp * rp - 2.0 * rp + a * a;
+
+	double dpdra = 0.5 * (1.0 - e * e) * (1.0 - e * e);
+	double dpdpr = 0.5 * (1.0 + e * e) * (1.0 + e * e);
+
+	double dedra = 0.5 * (1.0 - e * e) / p * (1.0 - e);
+	double dedrp = - 0.5 * (1.0 - e * e) / p * (1.0 + e);
+
+	double drpdt = (
+		- numerdEp * Edot
+		+ numerdLzp * Lzdot
+		+ numerdQp * Qdot
+	) / Dp;
+	double dradt = (
+		- numerdEa * Edot
+		+ numerdLza * Lzdot
+		+ numerdQa * Qdot
+	) / Da;
+
+	pdot = dpdra * dradt + dpdpr * drpdt;
+	edot = dedra * dradt + dedrp * drpdt;
+	xdot = (numerdEx * Edot + numerdLzx * Lzdot + numerdQx * Qdot)/Dx;
+}
+
+void ELQdot_to_pexdot_equatorial(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot){
+	double rp = p/(1. - e);
+	double ra = p/(1. + e);
+
+	double En, Lz, Qc;
+	kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
+
+	double Da = jacobian_D(a, ra, En, Lz, Qc);
+	double Dp = jacobian_D(a, rp, En, Lz, Qc);
+
+	double numerdEa = 4.0 * a * (Lz - a * En) * ra - 2 * En * ra * ra * (ra * ra + a * a);
+	double numerdEp = 4.0 * a * (Lz - a * En) * rp - 2 * En * rp * rp * (rp * rp + a * a);
+	
+	double numerdLza = 4.0 * (a * En - Lz) * ra + 2.0 * Lz * ra * ra;
+	double numerdLzp = 4.0 * (a * En - Lz) * rp + 2.0 * Lz * rp * rp;
+
+	double dpdra = 0.5 * (1.0 - e * e) * (1.0 - e * e);
+	double dpdpr = 0.5 * (1.0 + e * e) * (1.0 + e * e);
+
+	double dedra = 0.5 * (1.0 - e * e) / p * (1.0 - e);
+	double dedrp = - 0.5 * (1.0 - e * e) / p * (1.0 + e);
+
+	double drpdt = (
+		- numerdEp * Edot
+		+ numerdLzp * Lzdot
+	) / Dp;
+	double dradt = (
+		- numerdEa * Edot
+		+ numerdLza * Lzdot
+	) / Da;
+
+	pdot = dpdra * dradt + dpdpr * drpdt;
+	edot = dedra * dradt + dedrp * drpdt;
+	xdot = 0.0;
+}
+
+void ELQdot_to_pexdot_spherical(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot){
+	double En, Lz, Qc;
+	kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
+
+	double Dc = jacobian_D_spherical(a, p, En, Lz, Qc);
+	double Dx = 2.0 * (Lz * Lz + x * x * x * x * a * a * (1.0 - En * En));
+
+	double numerdEx = - 2.0 * x * x * x * (1.0 - x * x) * a * a * En;
+	double numerdLzx = 2.0 * x * (1.0 - x * x) * Lz;
+	double numerdQx = - x * x * x;
+
+	double numerdE = 2.0 * a * (Lz - a * En) - 2.0 * En * p * (2.0 * p * p + a * a);
+	
+	double numerdLz = - 2.0 * (Lz - a * En) + 2.0 * Lz * p;
+
+	double numerdQ = p - 1.0;
+
+	pdot = (
+		- numerdE * Edot
+		+ numerdLz * Lzdot
+		+ numerdQ * Qdot
+	) / Dc;
+	edot = 0.0;
+	xdot = (numerdEx * Edot + numerdLzx * Lzdot + numerdQx * Qdot)/Dx;
+}
+
+void ELQdot_to_pexdot(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot){
+	if(std::abs(e) < 1.e-14){
+		ELQdot_to_pexdot_spherical(pdot, edot, xdot, a, p, e, x, Edot, Lzdot, Qdot);
+	}else if(std::abs(1.0 - std::abs(x)) < 1.e-14){
+		ELQdot_to_pexdot_equatorial(pdot, edot, xdot, a, p, e, x, Edot, Lzdot, Qdot);
+	}else{
+		ELQdot_to_pexdot_generic(pdot, edot, xdot, a, p, e, x, Edot, Lzdot, Qdot);
+	}
+}
+
+void ELQdot_to_pexdot(int n, double* pdot, double* edot, double* xdot, const double* a, const double* p, const double* e, const double* x, const double* Edot, const double* Lzdot, const double* Qdot){
+	for(size_t i = 0; i < n; i++){
+		ELQdot_to_pexdot(pdot[i], edot[i], xdot[i], a[i], p[i], e[i], x[i], Edot[i], Lzdot[i], Qdot[i]);
+	}
+}
+
 Vector rp_psi(Vector &psi, double p, double e){
 	Vector rp(psi.size());
 	rp_psi(rp, psi, p, e);

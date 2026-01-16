@@ -92,6 +92,9 @@ cdef extern from "geo.hpp":
     void kerr_geo_polar_roots(double &z1, double &z2, double &a, double &x, double &En, double &Lz, double &Qc)
     void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &upPh, double &a, double &p, double &e, double &x)
 
+    void ELQdot_to_pexdot(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot) 
+    void ELQdot_to_pexdot(int n, double* pdot, double* edot, double* xdot, const double* a, const double* p, const double* e, const double* x, const double* Edot, const double* Lzdot, const double* Qdot)
+
     double kerr_geo_VtR(const double & a, const double & En, const double & Lz, const double & Q, const double & r)
     double kerr_geo_VtTheta(const double & a, const double & En, const double & Lz, const double & Q, const double & theta)
     double kerr_geo_Vr(const double & a, const double & En, const double & Lz, const double & Q, const double & r)
@@ -526,4 +529,38 @@ def _kerr_polar_roots_wrapper(double a, double x, double En, double Lz, double Q
     z2 = 0.
     kerr_geo_polar_roots(z1, z2, a, x, En, Lz, Qc)
     return np.array([z1, z2])
-        
+
+def _kerr_isco_wrapper(double a, int sgnX):
+    return kerr_isco(a, sgnX)
+
+def _kerr_isco_frequency_wrapper(double a):
+    return kerr_isco_frequency(a)
+
+def _ELQdot_to_pexdot_wrapper(double a, double p, double e, double x, double Edot, double Lzdot, double Qdot):
+    cdef double pdot, edot, xdot
+    pdot = 0.
+    edot = 0.
+    xdot = 0.
+    ELQdot_to_pexdot(pdot, edot, xdot, a, p, e, x, Edot, Lzdot, Qdot)
+    return np.array([pdot, edot, xdot])
+
+def _ELQdot_to_pexdot_array_wrapper(double[:] a, double[:] p, double[:] e, double[:] x, double[:] Edot, double[:] Lzdot, double[:] Qdot):
+    """
+    Zero-copy interface using NumPy memoryviews.
+    """
+    cdef int n = a.shape[0] 
+
+    # Pre-allocate output NumPy arrays
+    pdot_out = np.empty(n, dtype=np.float64)
+    edot_out = np.empty(n, dtype=np.float64)
+    xdot_out = np.empty(n, dtype=np.float64) 
+
+    # Cast to memoryviews to get raw pointers
+    cdef double[:] pdot_mv = pdot_out
+    cdef double[:] edot_mv = edot_out
+    cdef double[:] xdot_mv = xdot_out
+
+    # Execute C++ loop
+    ELQdot_to_pexdot(n, &pdot_mv[0], &edot_mv[0], &xdot_mv[0], &a[0], &p[0], &e[0], &x[0], &Edot[0], &Lzdot[0], &Qdot[0])
+
+    return np.array([pdot_out, edot_out, xdot_out])

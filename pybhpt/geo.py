@@ -336,7 +336,7 @@ class KerrGeodesic:
         if not is_power_of_two(nsamples):
             raise ValueError(f"Number of samples {nsamples} must be a power of 2.")
 
-        self.base = KerrGeodesicCython(a, p, e, x, nsamples)
+        self.base = _KerrGeodesicCython(a, p, e, x, nsamples)
         """The base class that contains the Cython implementation of the Kerr geodesic."""
         self.timeradial = self.base.get_time_accumulation(1)
         self.timepolar = self.base.get_time_accumulation(2)

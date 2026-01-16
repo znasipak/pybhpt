@@ -167,6 +167,9 @@ Vector kerr_varpi2(Vector &r, double a);
 void kerr_varpi2(Vector &varpi2, Vector &r, double a);
 double kerr_varpi2(double r, double a);
 
+void ELQdot_to_pexdot(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot);
+void ELQdot_to_pexdot(int n, double* pdot, double* edot, double* xdot, const double* a, const double* p, const double* e, const double* x, const double* Edot, const double* Lzdot, const double* Qdot);
+
 Vector rp_psi(Vector &psi, double p, double e);
 void rp_psi(Vector &rp, Vector &psi, double p, double e);
 Vector zp_chi(Vector &chi, double x);

@@ -81,9 +81,9 @@ cdef class FluxList:
         self.fluxlistcpp.Qdot.horizon += Qdot
 
     def set_infinity_fluxes(self, double Edot, double Ldot, double Qdot):
-        self.fluxlistcpp.Edot.infinity += Edot
-        self.fluxlistcpp.Ldot.infinity += Ldot
-        self.fluxlistcpp.Qdot.infinity += Qdot
+        self.fluxlistcpp.Edot.infinity = Edot
+        self.fluxlistcpp.Ldot.infinity = Ldot
+        self.fluxlistcpp.Qdot.infinity = Qdot
 
     def add_fluxes(self, double EdotH, double LdotH, double QdotH, double EdotI, double LdotI, double QdotI):
         self.fluxlistcpp.Edot.horizon += EdotH
@@ -121,9 +121,3 @@ def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):
     fluxes = FluxList()
     fluxes.set_fluxes(fluxescpp)
     return fluxes
-
-# def full_flux_parallel_l_py(int s, KerrGeodesic geo, int modeMax, unicode wdir):
-#     full_flux_parallel_l(s, dereference(geo.geocpp), modeMax, wdir.encode())
-
-# def full_flux_parallel_lm_py(KerrGeodesic geo, int lmax, unicode wdir):
-#     full_flux_parallel_lm(dereference(geo.geocpp), lmax, wdir.encode())
