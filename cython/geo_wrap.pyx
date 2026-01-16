@@ -83,7 +83,11 @@ cdef extern from "geo.hpp":
         GeodesicTrajectory getCoefficients()
 
     GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int n)
+    void kerr_geo_kepler_parameters(double &p, double &e, double &x, double &a, double &En, double &Lz, double &Qc)
+    void kerr_geo_kepler_parameters(int n, double* p, double* e, double* x, const double* a, const double* En, const double* Lz, const double* Qc)
     void kerr_geo_orbital_constants(double &En, double &Lz, double &Qc, double &a, double &p, double &e, double &x)
+    void kerr_geo_orbital_constants(int n, double* En, double* Lz, double* Qc, const double* a, const double* p, const double* e, const double* x)
+
     void kerr_geo_radial_roots(double &r1, double &r2, double &r3, double &r4, double &a, double &p, double &e, double &En, double &Lz, double &Qc)
     void kerr_geo_polar_roots(double &z1, double &z2, double &a, double &x, double &En, double &Lz, double &Qc)
     void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &upPh, double &a, double &p, double &e, double &x)
@@ -100,22 +104,22 @@ cdef extern from "geo.hpp":
     double kerr_isco(double a, int sgnX)
     double kerr_isco_frequency(double a)
 
-def kerr_geo_V01(double a, double En, double Lz, double Q, double r):
+def _kerr_geo_V01(double a, double En, double Lz, double Q, double r):
     return kerr_geo_VtR(a, En, Lz, Q, r)
 
-def kerr_geo_V02(double a, double En, double Lz, double Q, double theta):
+def _kerr_geo_V02(double a, double En, double Lz, double Q, double theta):
     return kerr_geo_VtTheta(a, En, Lz, Q, theta)
 
-def kerr_geo_V11(double a, double En, double Lz, double Q, double r):
+def _kerr_geo_V11(double a, double En, double Lz, double Q, double r):
     return kerr_geo_Vr(a, En, Lz, Q, r)
 
-def kerr_geo_V22(double a, double En, double Lz, double Q, double theta):
+def _kerr_geo_V22(double a, double En, double Lz, double Q, double theta):
     return kerr_geo_Vtheta(a, En, Lz, Q, theta)
 
-def kerr_geo_V31(double a, double En, double Lz, double Q, double r):
+def _kerr_geo_V31(double a, double En, double Lz, double Q, double r):
     return kerr_geo_VphiR(a, En, Lz, Q, r)
 
-def kerr_geo_V32(double a, double En, double Lz, double Q, double theta):
+def _kerr_geo_V32(double a, double En, double Lz, double Q, double theta):
     return kerr_geo_VphiTheta(a, En, Lz, Q, theta)
 
 cdef class KerrGeodesic:
@@ -440,8 +444,36 @@ cdef class KerrGeodesic:
             deltaX[i] = deltaX_cpp[i]
         return deltaX
 
+def _kerr_kepler_parameters_wrapper(double a, double En, double Lz, double Qc):
+    cdef double p, e, x
+    p = 0.
+    e = 0.
+    x = 0.
+    kerr_geo_kepler_parameters(p, e, x, a, En, Lz, Qc)
+    return np.array([p, e, x])
 
-def kerr_orbital_constants_wrapper(double a, double p, double e, double x):
+def _kerr_kepler_parameters_array_wrapper(double[:] a, double[:] E, double[:] Lz, double[:] Q):
+    """
+    Zero-copy interface using NumPy memoryviews.
+    """
+    cdef int n = E.shape[0]
+    
+    # Pre-allocate output NumPy arrays
+    p_out = np.empty(n, dtype=np.float64)
+    e_out = np.empty(n, dtype=np.float64)
+    xI_out = np.empty(n, dtype=np.float64)
+    
+    # Cast to memoryviews to get raw pointers
+    cdef double[:] p_mv = p_out
+    cdef double[:] e_mv = e_out
+    cdef double[:] xI_mv = xI_out
+    
+    # Execute C++ loop
+    kerr_geo_kepler_parameters(n, &p_mv[0], &e_mv[0], &xI_mv[0], &a[0], &E[0], &Lz[0], &Q[0])
+    
+    return np.array([p_out, e_out, xI_out])
+
+def _kerr_orbital_constants_wrapper(double a, double p, double e, double x):
     cdef double En, Lz, Qc
     En = 0.
     Lz = 0.
@@ -449,7 +481,28 @@ def kerr_orbital_constants_wrapper(double a, double p, double e, double x):
     kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x)
     return np.array([En, Lz, Qc])
 
-def kerr_mino_frequencies_wrapper(double a, double p, double e, double x):
+def _kerr_orbital_constants_array_wrapper(double[:] a, double[:] p, double[:] e, double[:] x):
+    """
+    Zero-copy interface using NumPy memoryviews.
+    """
+    cdef int n = a.shape[0]
+
+    # Pre-allocate output NumPy arrays
+    En_out = np.empty(n, dtype=np.float64)
+    Lz_out = np.empty(n, dtype=np.float64)
+    Qc_out = np.empty(n, dtype=np.float64)
+    
+    # Cast to memoryviews to get raw pointers
+    cdef double[:] En_mv = En_out
+    cdef double[:] Lz_mv = Lz_out
+    cdef double[:] Qc_mv = Qc_out
+    
+    # Execute C++ loop
+    kerr_geo_orbital_constants(n, &En_mv[0], &Lz_mv[0], &Qc_mv[0], &a[0], &p[0], &e[0], &x[0])
+    
+    return np.array([En_out, Lz_out, Qc_out])
+
+def _kerr_mino_frequencies_wrapper(double a, double p, double e, double x):
     cdef double upT, upR, upTh, upPhi
     upT = 0.
     upR = 0.
@@ -457,4 +510,20 @@ def kerr_mino_frequencies_wrapper(double a, double p, double e, double x):
     upPhi = 0.
     kerr_geo_mino_frequencies(upT, upR, upTh, upPhi, a, p, e, x)
     return np.array([upT, upR, upTh, upPhi])
+
+def _kerr_radial_roots_wrapper(double a, double p, double e, double En, double Lz, double Qc):
+    cdef double r1, r2, r3, r4
+    r1 = 0.
+    r2 = 0.
+    r3 = 0.
+    r4 = 0.
+    kerr_geo_radial_roots(r1, r2, r3, r4, a, p, e, En, Lz, Qc)
+    return np.array([r1, r2, r3, r4])
+
+def _kerr_polar_roots_wrapper(double a, double x, double En, double Lz, double Qc):
+    cdef double z1, z2
+    z1 = 0.
+    z2 = 0.
+    kerr_geo_polar_roots(z1, z2, a, x, En, Lz, Qc)
+    return np.array([z1, z2])
         

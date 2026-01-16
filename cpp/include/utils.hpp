@@ -43,4 +43,6 @@ typedef std::vector<RealMatrix> RealTensor;
 Vector downsample_base_2(Vector v, int sampleRate);
 Vector unwrap_phase(const Vector& phase);
 
+void cubic_solver(double &r1, double &r2, double &r3, double A3, double A2, double A1, double A0);
+
 #endif

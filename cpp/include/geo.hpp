@@ -150,7 +150,12 @@ double kerr_geo_carter(double a, double p, double e, double x);
 double kerr_geo_momentum(double En, double a, double p, double e, double x);
 double kerr_geo_carter(double En, double Lz, double a, double p, double e, double x);
 
+void kerr_geo_kepler_parameters(double &p, double &e, double &x, double a, double En, double Lz, double Qc);
+void kerr_geo_kepler_parameters(int n, double* p, double* e, double* x, const double* a, const double* En, const double* Lz, const double* Qc);
+
 void kerr_geo_orbital_constants(double &En, double &Lz, double &Qc, double a, double p, double e, double x);
+void kerr_geo_orbital_constants(int n, double* En, double* Lz, double* Qc, const double* a, const double* p, const double* e, const double* x);
+
 void kerr_geo_radial_roots(double &r1, double &r2, double &r3, double &r4, double a, double p, double e, double En, double Lz, double Qc);
 void kerr_geo_polar_roots(double &z1, double &z2, double a, double x, double En, double Lz, double Qc);
 
@@ -231,7 +236,6 @@ void kerr_trajectory(Vector& tR, Vector& tTh, Vector& rp, Vector& thetap, Vector
 GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsample);
 // void mino_of_psi_test();
 
-
 ///////////////////////
 // Special functions //
 ///////////////////////
@@ -274,5 +278,7 @@ double kerr_geo_Vz_dz(double a, double En, double Lz, double Q, double z);
 double kerr_geo_Vz_dz2(double a, double En, double Lz, double Q, double z);
 double kerr_isco(double a, int sgnX);
 double kerr_isco_frequency(double a);
+
+
 
 #endif
