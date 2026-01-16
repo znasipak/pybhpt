@@ -113,3 +113,9 @@ Theoretical background for the code and explanations of the numerical methods us
 ## Authors
 
 Zachary Nasipak
+
+## Contributors
+
+Zachary Nasipak
+
+Christian Chapman-Bird
