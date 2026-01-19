@@ -4,7 +4,7 @@ from scipy.special import sph_harm_y
 from scipy.special import binom
 from scipy.special import factorial
 import numpy as np
-from cybhpt_full import YslmCy, clebschCy, w3jCy
+from cybhpt_full import _YslmCy, _YslmCy_derivative, _clebschCy, _w3jCy
 
 """
 Wigner 3j-symbol and Clebsch-Gordon coefficients
@@ -59,15 +59,57 @@ def Yslm(s, l, m, th, ph = None):
         return (-1.)**(s+m)*YslmBase(-s, l, -m, th)
     else:
         return YslmBase(s, l, m, th)
+    
+def Yslm_derivative(s, l, m, th, ph = None):
+    """
+    Evaluate the derivative of the spin-weighted spherical harmonic $Y_{s}^{lm}$ at a given angle theta.
+
+    Parameters
+    ----------
+    s : int
+        The spin weight of the harmonic.
+    l : int
+        The angular number of the spherical harmonic.
+    m : int
+        The azimuthal number of the spherical harmonic.
+    th : array_like
+        The polar angle(s) at which to evaluate the spherical harmonic.
+
+    Returns
+    -------
+    array_like
+        The derivatives of the spherical harmonic at the specified angles.
+    """
+    assert isinstance(s, int) and isinstance(l, int) and isinstance(m, int), "s, l, and m must be integers"
+    if ph is not None:
+        return Yslm_derivative(s, l, m, th)*np.exp(1.j*m*ph)
+    if np.abs(s) > l:
+        return 0.*th
+    if s == 0:
+        return np.real(sph_harm_y(l, m, 0., th, diff_n = 1)[1])
+    elif s + m < 0:
+        return (-1.)**(s+m)*YslmDerivBase(-s, l, -m, th)
+    else:
+        return YslmDerivBase(s, l, m, th)
 
 def YslmBase(s, l, m, th):
     assert isinstance(s, int) and isinstance(l, int) and isinstance(m, int), "s, l, and m must be integers"
     if not isinstance(th, (int, float)):
         b = np.broadcast(th)
         out = np.empty(b.shape)
-        out.flat = [YslmCy(s, l, m, thi) for (thi,) in b]
+        out.flat = [_YslmCy(s, l, m, thi) for (thi,) in b]
     else:
-        out = YslmCy(s, l, m, th)
+        out = _YslmCy(s, l, m, th)
+    return out
+
+def YslmDerivBase(s, l, m, th):
+    assert isinstance(s, int) and isinstance(l, int) and isinstance(m, int), "s, l, and m must be integers"
+    if not isinstance(th, (int, float)):
+        b = np.broadcast(th)
+        out = np.empty(b.shape)
+        out.flat = [_YslmCy_derivative(s, l, m, thi) for (thi,) in b]
+    else:
+        out = _YslmCy_derivative(s, l, m, th)
     return out
 
 def Yslm_eigenvalue(s, l, *args):
@@ -99,7 +141,7 @@ def clebsch(l1, l2, l3, m1, m2, m3):
     """
     assert isinstance(l1, int) and isinstance(l2, int) and isinstance(l3, int), "l1, l2, and l3 must be integers"
     assert isinstance(m1, int) and isinstance(m2, int) and isinstance(m3, int), "m1, m2, and m3 must be integers"
-    return clebschCy(l1, l2, l3, m1, m2, m3)
+    return _clebschCy(l1, l2, l3, m1, m2, m3)
 
 def w3j(l1, l2, l3, m1, m2, m3):
     """
@@ -129,7 +171,7 @@ def w3j(l1, l2, l3, m1, m2, m3):
     """
     assert isinstance(l1, int) and isinstance(l2, int) and isinstance(l3, int), "l1, l2, and l3 must be integers"
     assert isinstance(m1, int) and isinstance(m2, int) and isinstance(m3, int), "m1, m2, and m3 must be integers"
-    return w3jCy(l1, l2, l3, m1, m2, m3)
+    return _w3jCy(l1, l2, l3, m1, m2, m3)
     
 """
 SWSH Eigenvalue Functions
@@ -287,9 +329,10 @@ class SWSHBase:
             pass
         
         self.s = args[0]
-        self.l = args[1]
+        self.j = args[1]
         self.m = args[2]
         self.lmin = max(abs(self.s), abs(self.m))
+        self.jmin = max(abs(self.s), abs(self.m))
 
         if arg_num > 3:
             self.spheroidicity = args[3]
@@ -297,14 +340,14 @@ class SWSHBase:
             self.spheroidicity = np.real(self.spheroidicity)
 
 class SWSHSeriesBase(SWSHBase):
-    def __init__(self, s, l, m, g):
-        SWSHBase.__init__(self, s, l, m, g)
+    def __init__(self, s, j, m, g):
+        SWSHBase.__init__(self, s, j, m, g)
         
     def sparse_matrix(self, nmax):
         return spectral_sparse_matrix(self.s, self.m, self.spheroidicity, nmax)
         
     def eigs(self, nmax = None, **kwargs):
-        kval = self.l - self.lmin
+        kval = self.j - self.jmin
     
         if nmax is None:
             buffer = round(20 + np.abs(2*self.spheroidicity))
@@ -321,9 +364,6 @@ class SWSHSeriesBase(SWSHBase):
         if "which" not in kwargs.keys():
             kwargs["which"] = 'SM'
             
-#         if "sigma" not in kwargs.keys():
-#             kwargs["sigma"] = (self.l + Nmax)*(self.l + Nmax + 1) - self.s*(self.s + 1)
-            
         if "return_eigenvectors" not in kwargs.keys():
             kwargs["return_eigenvectors"] = True
             
@@ -335,20 +375,20 @@ class SWSHSeriesBase(SWSHBase):
             las = np.real(self.eigs(return_eigenvectors=False))
         else:
             las = self.eigs(return_eigenvectors=False)
-        pos = np.argsort(np.real(las))[self.l - self.lmin]
+        pos = np.argsort(np.real(las))[self.j - self.jmin]
         return las[pos]
 
     def generate_eigs(self):
         las, eigs = self.eigs()
         pos_vec = np.argsort(np.real(las))
-        pos = pos_vec[self.l - self.lmin]
+        pos = pos_vec[self.j - self.jmin]
         if self.spheroidicity.imag == 0.:
             eigs_temp = np.real(eigs[:, pos])
-            eigs_return = np.sign(eigs_temp[self.l - self.lmin])*eigs_temp
+            eigs_return = np.sign(eigs_temp[self.j - self.jmin])*eigs_temp
             eig = np.real(las[pos])
         else:
             eigs_temp = eigs[:, pos]
-            ref = eigs_temp[self.l - self.lmin]
+            ref = eigs_temp[self.j - self.jmin]
             eigs_temp = eigs_temp/ref
             eigs_norm = np.linalg.norm(eigs_temp)
             eigs_return = eigs_temp/eigs_norm
@@ -362,7 +402,7 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
     ----------
     s : int
         The spin weight of the harmonic.
-    l : int
+    j : int
         The angular number of the harmonic.
     m : int
         The azimuthal number of the harmonic.
@@ -375,16 +415,22 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
         The coupling coefficients between the spin-weighted spheroidal harmonic and the spin-weighted spherical  
     
     """
-    def __init__(self, s, l, m, g):
-        SWSHSeriesBase.__init__(self, s, l, m, g)
+    def __init__(self, s, j, m, g):
+        SWSHSeriesBase.__init__(self, s, j, m, g)
         if self.spheroidicity == 0.:
             self.eval = self.Yslm
-            self.eigenvalue = Yslm_eigenvalue(self.s, self.l)
-            self.coeffs = np.zeros(self.l - self.lmin + 1)
+            self.deriv = self.Yslm_derivative
+            self.eigenvalue = Yslm_eigenvalue(self.s, self.j)
+            self.coeffs = np.zeros(self.j - self.lmin + 1)
             self.coeffs[-1] = 1.
+            self.mincouplingmode = self.j
+            self.maxcouplingmode = self.j
         else:
             self.eval = self.Sslm
+            self.deriv = self.Sslm_derivative
             self.eigenvalue, self.coeffs = self.generate_eigs()
+            self.mincouplingmode = self.lmin
+            self.maxcouplingmode = self.lmin + self.coeffs.shape[0] - 1
 
     @property
     def couplingcoefficients(self):
@@ -411,6 +457,24 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
         """
         return Yslm(self.s, l, self.m, th)
     
+    def Yslm_derivative(self, l, th):
+        """
+        Evaluate the derivative of the spin-weighted spherical harmonic $Y_{s}^{lm}(theta)$ at a given angle theta.
+
+        Parameters
+        ----------
+        l : int
+            The angular number of the spherical harmonic.
+        th : array_like
+            The polar angle(s) at which to evaluate the derivative of the spherical harmonic.
+
+        Returns
+        -------
+        array_like
+            The values of the derivative of the spherical harmonic at the specified angles.
+        """
+        return Yslm_derivative(self.s, l, self.m, th)
+    
     def Sslm(self, *args):
         """
         Evaluate the spin-weighted spheroidal harmonic $S_{s}^{lm}(theta)$ at a given angle theta.
@@ -436,9 +500,41 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
             Yslm_array[i] = self.Yslm(self.lmin + i, th)
             
         return np.dot(self.coeffs, Yslm_array)
+    
+    def Sslm_derivative(self, *args):
+        """
+        Evaluate the derivative of the spin-weighted spheroidal harmonic $S_{s}^{lm}(theta)$ at a given angle theta.
+
+        Parameters
+        ----------
+        th : array_like
+            The polar angle(s) at which to evaluate the spheroidal harmonic.
+        
+        Returns
+        -------
+        array_like
+            The derivatives of the spheroidal harmonic at the specified angles.
+        """
+        th = args[-1]
+        term_num = self.coeffs.shape[0]
+        if isinstance(th, (int, float)):
+            dYslm_array = np.empty(term_num)
+        else:
+            pts_num = th.shape[0]
+            dYslm_array = np.empty((term_num, pts_num))
+        for i in range(term_num):
+            dYslm_array[i] = self.Yslm_derivative(self.lmin + i, th)
             
-    def __call__(self, th, ph = None):
-        out = self.eval(self.l, th)
+        return np.dot(self.coeffs, dYslm_array)
+            
+    def __call__(self, th, ph = None, deriv = None):
+        if deriv is None or deriv == 0:
+            out = self.eval(self.l, th)
+        elif deriv == 1:
+            out = self.deriv(self.l, th)
+        else:
+            raise ValueError(f"Derivative order = {deriv} not supported")
+        
         if ph is not None:
             out = out*np.exp(1.j*self.m*ph)
         return out

@@ -1034,8 +1034,8 @@ double jacobian_D_spherical(double a, double r, double En, double Lz, double Qc)
 }
 
 void ELQdot_to_pexdot_generic(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot){
-	double rp = p/(1. - e);
-	double ra = p/(1. + e);
+	double ra = p/(1. - e);
+	double rp = p/(1. + e);
 
 	double En, Lz, Qc;
 	kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
@@ -1064,12 +1064,12 @@ void ELQdot_to_pexdot_generic(double &pdot, double &edot, double &xdot, double a
 	double dedrp = - 0.5 * (1.0 - e * e) / p * (1.0 + e);
 
 	double drpdt = (
-		- numerdEp * Edot
+		numerdEp * Edot
 		+ numerdLzp * Lzdot
 		+ numerdQp * Qdot
 	) / Dp;
 	double dradt = (
-		- numerdEa * Edot
+		numerdEa * Edot
 		+ numerdLza * Lzdot
 		+ numerdQa * Qdot
 	) / Da;
@@ -1080,8 +1080,8 @@ void ELQdot_to_pexdot_generic(double &pdot, double &edot, double &xdot, double a
 }
 
 void ELQdot_to_pexdot_equatorial(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot){
-	double rp = p/(1. - e);
-	double ra = p/(1. + e);
+	double ra = p/(1. - e);
+	double rp = p/(1. + e);
 
 	double En, Lz, Qc;
 	kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
@@ -1102,11 +1102,11 @@ void ELQdot_to_pexdot_equatorial(double &pdot, double &edot, double &xdot, doubl
 	double dedrp = - 0.5 * (1.0 - e * e) / p * (1.0 + e);
 
 	double drpdt = (
-		- numerdEp * Edot
+		numerdEp * Edot
 		+ numerdLzp * Lzdot
 	) / Dp;
 	double dradt = (
-		- numerdEa * Edot
+		numerdEa * Edot
 		+ numerdLza * Lzdot
 	) / Da;
 
@@ -1133,7 +1133,7 @@ void ELQdot_to_pexdot_spherical(double &pdot, double &edot, double &xdot, double
 	double numerdQ = p - 1.0;
 
 	pdot = (
-		- numerdE * Edot
+		numerdE * Edot
 		+ numerdLz * Lzdot
 		+ numerdQ * Qdot
 	) / Dc;
@@ -1154,6 +1154,202 @@ void ELQdot_to_pexdot(double &pdot, double &edot, double &xdot, double a, double
 void ELQdot_to_pexdot(int n, double* pdot, double* edot, double* xdot, const double* a, const double* p, const double* e, const double* x, const double* Edot, const double* Lzdot, const double* Qdot){
 	for(size_t i = 0; i < n; i++){
 		ELQdot_to_pexdot(pdot[i], edot[i], xdot[i], a[i], p[i], e[i], x[i], Edot[i], Lzdot[i], Qdot[i]);
+	}
+}
+
+void jacobian_ELQ_to_pex_generic(double &dpdE, double &dedE, double &dxdE,
+						  double &dpdLz, double &dedLz, double &dxdLz,
+						  double &dpdQ, double &dedQ, double &dxdQ,
+						  double a, double p, double e, double x){
+	double ra = p/(1. - e);
+	double rp = p/(1. + e);
+
+	double En, Lz, Qc;
+	kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
+
+	double Da = jacobian_D(a, ra, En, Lz, Qc);
+	double Dp = jacobian_D(a, rp, En, Lz, Qc);
+	double Dx = 2.0 * (Lz * Lz + x * x * x * x * a * a * (1.0 - En * En));
+
+	double numerdEx = - 2.0 * x * x * x * (1.0 - x * x) * a * a * En;
+	double numerdLzx = 2.0 * x * (1.0 - x * x) * Lz;
+	double numerdQx = - x * x * x;
+
+	double numerdEa = 4.0 * a * (Lz - a * En) * ra - 2 * En * ra * ra * (ra * ra + a * a);
+	double numerdEp = 4.0 * a * (Lz - a * En) * rp - 2 * En * rp * rp * (rp * rp + a * a);
+	
+	double numerdLza = 4.0 * (a * En - Lz) * ra + 2.0 * Lz * ra * ra;
+	double numerdLzp = 4.0 * (a * En - Lz) * rp + 2.0 * Lz * rp * rp;
+	
+	double numerdQa = ra * ra - 2.0 * ra + a * a;
+	double numerdQp = rp * rp - 2.0 * rp + a * a;
+
+	double dpdra = 0.5 * (1.0 - e) * (1.0 - e);
+	double dpdrp = 0.5 * (1.0 + e) * (1.0 + e);
+
+	double dedra = 0.5 * (1.0 - e * e) / p * (1.0 - e);
+	double dedrp = - 0.5 * (1.0 - e * e) / p * (1.0 + e);
+
+	dpdE = dpdra * numerdEa / Da + dpdrp * numerdEp / Dp;
+	dedE = dedra * numerdEa / Da + dedrp * numerdEp / Dp;
+	dxdE = (numerdEx) / Dx;
+	dpdLz = dpdra * numerdLza / Da + dpdrp * numerdLzp / Dp;
+	dedLz = dedra * numerdLza / Da + dedrp * numerdLzp / Dp;
+	dxdLz = (numerdLzx) / Dx;
+	dpdQ = dpdra * numerdQa / Da + dpdrp * numerdQp / Dp;
+	dedQ = dedra * numerdQa / Da + dedrp * numerdQp / Dp;
+	dxdQ = (numerdQx) / Dx;
+}
+
+void jacobian_pex_to_ELQ_generic(double &dEdp, double &dEde, double &dEdx,
+						  double &dLdp, double &dLde, double &dLdx,
+						  double &dQdp, double &dQde, double &dQdx,
+						  double a, double p, double e, double x){
+	double dpdE, dedE, dxdE;
+	double dpdLz, dedLz, dxdLz;
+	double dpdQ, dedQ, dxdQ;
+	jacobian_ELQ_to_pex_generic(dpdE, dedE, dxdE,
+						  dpdLz, dedLz, dxdLz,
+						  dpdQ, dedQ, dxdQ,
+						  a, p, e, x);
+	double detJ = dpdE*(dedLz*dxdQ - dxdLz*dedQ) - dedE*(dpdLz*dxdQ - dxdLz*dpdQ) + dxdE*(dpdLz*dedQ - dedLz*dpdQ);
+	dEdp = (dedLz*dxdQ - dxdLz*dedQ)/detJ;
+	dEde = (dxdLz*dpdQ - dpdLz*dxdQ)/detJ;
+	dEdx = (dpdLz*dedQ - dedLz*dpdQ)/detJ;
+	dLdp = (dxdE*dedQ - dedE*dxdQ)/detJ;
+	dLde = (dpdE*dxdQ - dxdE*dpdQ)/detJ;
+	dLdx = (dedE*dpdQ - dpdE*dedQ)/detJ;
+	dQdp = (dedE*dxdLz - dxdE*dedLz)/detJ;
+	dQde = (dxdE*dpdLz - dpdE*dxdLz)/detJ;
+	dQdx = (dpdE*dedLz - dedE*dpdLz)/detJ;
+}
+
+void jacobian_ELQ_to_pex_spherical(double &dpdE, double &dedE, double &dxdE,
+						  double &dpdLz, double &dedLz, double &dxdLz,
+						  double &dpdQ, double &dedQ, double &dxdQ,
+						  double a, double p, double e, double x, 
+						  double En, double Lz, double Qc){
+	double Dc = jacobian_D_spherical(a, p, En, Lz, Qc);
+	double Dx = 2.0 * (Lz * Lz + x * x * x * x * a * a * (1.0 - En * En));
+
+	double numerdEx = - 2.0 * x * x * x * (1.0 - x * x) * a * a * En;
+	double numerdLzx = 2.0 * x * (1.0 - x * x) * Lz;
+	double numerdQx = - x * x * x;
+
+	double numerdE = 2.0 * a * (Lz - a * En) - 2.0 * En * p * (2.0 * p * p + a * a);
+	
+	double numerdLz = - 2.0 * (Lz - a * En) + 2.0 * Lz * p;
+
+	double numerdQ = p - 1.0;
+
+	dpdE = numerdE / Dc;
+	dedE = 0.0;
+	dxdE = (numerdEx) / Dx;
+	dpdLz = numerdLz / Dc;
+	dedLz = 0.0;
+	dxdLz = (numerdLzx) / Dx;
+	dpdQ = numerdQ / Dc;
+	dedQ = 0.0;
+	dxdQ = (numerdQx) / Dx;
+}
+
+void jacobian_ELQ_to_pex_spherical(double &dpdE, double &dedE, double &dxdE,
+						  double &dpdLz, double &dedLz, double &dxdLz,
+						  double &dpdQ, double &dedQ, double &dxdQ,
+						  double a, double p, double e, double x){
+	double En, Lz, Qc;
+	kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
+	jacobian_ELQ_to_pex_spherical(dpdE, dedE, dxdE,
+						  dpdLz, dedLz, dxdLz,
+						  dpdQ, dedQ, dxdQ,
+						  a, p, e, x, En, Lz, Qc);
+}
+
+void jacobian_pex_to_ELQ_spherical(double &dEdp, double &dEde, double &dEdx,
+						  double &dLdp, double &dLde, double &dLdx,
+						  double &dQdp, double &dQde, double &dQdx,
+						  double a, double p, double e, double x){
+	double dpdE, dedE, dxdE;
+	double dpdLz, dedLz, dxdLz;
+	double dpdQ, dedQ, dxdQ;
+
+	double En, Lz, Qc;
+	kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
+
+	jacobian_ELQ_to_pex_spherical(dpdE, dedE, dxdE,
+						  dpdLz, dedLz, dxdLz,
+						  dpdQ, dedQ, dxdQ,
+						  a, p, e, x, En, Lz, Qc);
+
+	double detJ = dpdE*dxdLz - dxdE*dpdLz;
+	dEdp = dxdLz/detJ;
+	dEde = 0.0;
+	dEdx = -dpdLz/detJ;
+	dLdp = -dxdE/detJ;
+	dLde = 0.0;
+	dLdx = dpdE/detJ;
+	dQdp = (1.0 - x * x) * ( - 2 * a * a * En * dEdp + 2 * Lz * dLdp / (x * x) );
+	dQde = 0.0;
+	dQdx = - 2.0 * x * (a * a * (1.0 - En * En) + Lz * Lz / (x * x)) + (1.0 - x * x) * ( - 2 * a * a * En * dEdx + 2 * Lz * dLdx / (x * x) - 2 * Lz * Lz / (x * x * x) );
+}
+
+void jacobian_pex_to_ELQ(double &dEdp, double &dEde, double &dEdx,
+						  double &dLdp, double &dLde, double &dLdx,
+						  double &dQdp, double &dQde, double &dQdx,
+						  double a, double p, double e, double x){
+	if(std::abs(e) < 1.e-14){
+		jacobian_pex_to_ELQ_spherical(dEdp, dEde, dEdx,
+						  dLdp, dLde, dLdx,
+						  dQdp, dQde, dQdx,
+						  a, p, e, x);
+	}else{
+		jacobian_pex_to_ELQ_generic(dEdp, dEde, dEdx,
+						  dLdp, dLde, dLdx,
+						  dQdp, dQde, dQdx,
+						  a, p, e, x);
+	}
+}
+
+void jacobian_ELQ_to_pex(double &dpdE, double &dedE, double &dxdE,
+						  double &dpdLz, double &dedLz, double &dxdLz,
+						  double &dpdQ, double &dedQ, double &dxdQ,
+						  double a, double p, double e, double x){
+	if(std::abs(e) < 1.e-14){
+		jacobian_ELQ_to_pex_spherical(dpdE, dedE, dxdE,
+						  dpdLz, dedLz, dxdLz,
+						  dpdQ, dedQ, dxdQ,
+						  a, p, e, x);
+	}else{
+		jacobian_ELQ_to_pex_generic(dpdE, dedE, dxdE,
+						  dpdLz, dedLz, dxdLz,
+						  dpdQ, dedQ, dxdQ,
+						  a, p, e, x);
+	}
+}
+
+void jacobian_ELQ_to_pex(int n,
+						  double* dpdE, double* dedE, double* dxdE,
+						  double* dpdLz, double* dedLz, double* dxdLz,
+						  double* dpdQ, double* dedQ, double* dxdQ,
+						  const double* a, const double* p, const double* e, const double* x){
+	for(size_t i = 0; i < n; i++){
+		jacobian_ELQ_to_pex(dpdE[i], dedE[i], dxdE[i],
+						  dpdLz[i], dedLz[i], dxdLz[i],
+						  dpdQ[i], dedQ[i], dxdQ[i],
+						  a[i], p[i], e[i], x[i]);
+	}
+}
+
+void jacobian_pex_to_ELQ(int n,
+						  double* dEdp, double* dEde, double* dEdx,
+						  double* dLdp, double* dLde, double* dLdx,
+						  double* dQdp, double* dQde, double* dQdx,
+						  const double* a, const double* p, const double* e, const double* x){
+	for(size_t i = 0; i < n; i++){
+		jacobian_pex_to_ELQ(dEdp[i], dEde[i], dEdx[i],
+						  dLdp[i], dLde[i], dLdx[i],
+						  dQdp[i], dQde[i], dQdx[i],
+						  a[i], p[i], e[i], x[i]);
 	}
 }
 

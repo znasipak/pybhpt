@@ -1,6 +1,7 @@
 from cybhpt_full import KerrGeodesic as _KerrGeodesicCython
 from cybhpt_full import _kerr_geo_V01, _kerr_geo_V02, _kerr_geo_V11, _kerr_geo_V22, _kerr_geo_V31, _kerr_geo_V32
 from cybhpt_full import _kerr_mino_frequencies_wrapper, _kerr_orbital_constants_wrapper, _kerr_orbital_constants_array_wrapper, _kerr_kepler_parameters_wrapper, _kerr_kepler_parameters_array_wrapper
+from cybhpt_full import _jacobian_ELQ_to_pex_wrapper, _jacobian_ELQ_to_pex_array_wrapper, _jacobian_pex_to_ELQ_wrapper, _jacobian_pex_to_ELQ_array_wrapper
 import numpy as np
 import numpy.typing as npt
 from typing import Union
@@ -265,6 +266,80 @@ def kerr_kepler_parameters(a: ScalarOrArray,
         return _kerr_kepler_parameters_array_wrapper(a, En, Lz, Qc)
     else:
         return _kerr_kepler_parameters_wrapper(a, En, Lz, Qc)
+    
+def jacobian_ELQ_to_pex(a: ScalarOrArray,
+                        p: ScalarOrArray,
+                        e: ScalarOrArray,
+                        x: ScalarOrArray) -> NumericArray:
+    """
+    Returns the Jacobian matrix of the transformation from (E, Lz, Q) to (p, e, x).
+    |   dp/dE  dp/dLz  dp/dQ    |
+    |   de/dE  de/dLz  de/dQ    |
+    |   dx/dE  dx/dLz  dx/dQ    |
+
+    Parameters
+    ----------
+    a : float or numpy.ndarray
+        The black hole spin parameter.
+    p : float or numpy.ndarray
+        The semilatus rectum of the orbit.
+    e : float or numpy.ndarray
+        The eccentricity of the orbit.
+    x : float or numpy.ndarray
+        The inclination of the orbit.
+
+    Returns
+    -------
+    numpy.ndarray
+        The Jacobian matrix of the transformation from (E, Lz, Q) to (p, e, x).
+    """
+    if isinstance(p, np.ndarray):
+        assert isinstance(e, np.ndarray) and isinstance(x, np.ndarray), "If p is a numpy array, e and x must also be numpy arrays."
+        assert p.shape == e.shape == x.shape, "If p, e, and x are numpy arrays, they must have the same shape."
+        if isinstance(a, np.ndarray):
+            assert a.shape == p.shape, "If a is a numpy array, it must have the same shape as p, e, and x."
+        else:
+            a = np.full(p.shape, a)
+        return _jacobian_ELQ_to_pex_array_wrapper(a, p, e, x)
+    else:
+        return _jacobian_ELQ_to_pex_wrapper(a, p, e, x)
+    
+def jacobian_pex_to_ELQ(a: ScalarOrArray,
+                        p: ScalarOrArray,
+                        e: ScalarOrArray,
+                        x: ScalarOrArray) -> NumericArray:
+    """
+    Returns the Jacobian matrix of the transformation from (p, e, x) to (E, Lz, Q):
+    |   dE/dp  dE/de  dE/dx    |
+    |   dLz/dp dLz/de dLz/dx   |
+    |   dQ/dp  dQ/de  dQ/dx    |
+
+    Parameters
+    ----------
+    a : float or numpy.ndarray
+        The black hole spin parameter.
+    p : float or numpy.ndarray
+        The semilatus rectum of the orbit.
+    e : float or numpy.ndarray
+        The eccentricity of the orbit.
+    x : float or numpy.ndarray
+        The inclination of the orbit.
+
+    Returns
+    -------
+    numpy.ndarray
+        The Jacobian matrix of the transformation from (p, e, x) to (E, Lz, Q).
+    """
+    if isinstance(p, np.ndarray):
+        assert isinstance(e, np.ndarray) and isinstance(x, np.ndarray), "If p is a numpy array, e and x must also be numpy arrays."
+        assert p.shape == e.shape == x.shape, "If p, e, and x are numpy arrays, they must have the same shape."
+        if isinstance(a, np.ndarray):
+            assert a.shape == p.shape, "If a is a numpy array, it must have the same shape as p, e, and x."
+        else:
+            a = np.full(p.shape, a)
+        return _jacobian_pex_to_ELQ_array_wrapper(a, p, e, x)
+    else:
+        return _jacobian_pex_to_ELQ_wrapper(a, p, e, x)
 
 def is_power_of_two(n: int) -> bool:
     return n > 0 and (n & (n - 1)) == 0
