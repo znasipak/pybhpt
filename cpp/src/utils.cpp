@@ -37,6 +37,14 @@ Vector unwrap_phase(const Vector& phase){
 	return phase_unwrap;
 }
 
+/// @brief  Solve cubic equation A3*x^3 + A2*x^2 + A1*x + A0 = 0 for its three real roots.
+/// @param rp First root (smallest)
+/// @param ra Second root (middle)
+/// @param r3 Third root (largest)
+/// @param A3 Coefficient of x^3
+/// @param A2 Coefficient of x^2
+/// @param A1 Coefficient of x
+/// @param A0 Constant term
 void cubic_solver(double &rp, double &ra, double &r3, double A3, double A2, double A1, double A0) {
     double a_c = 1.0; 
     double b = A2 / A3;

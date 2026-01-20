@@ -222,10 +222,14 @@ def kerr_orbital_constants(a: ScalarOrArray,
     numpy.ndarray
         The orbital constants (En, Lz, Qc) of the orbit.
     """
-    if isinstance(p, np.ndarray):
-        assert isinstance(e, np.ndarray) and isinstance(x, np.ndarray), "If p is a numpy array, e and x must also be numpy arrays."
+    if isinstance(p, (np.ndarray, list)):
+        assert isinstance(e, (np.ndarray, list)) and isinstance(x, (np.ndarray, list)), "If p is a numpy array, e and x must also be numpy arrays."
+        p = np.asarray(p, dtype=np.float64)
+        e = np.asarray(e, dtype=np.float64)
+        x = np.asarray(x, dtype=np.float64)
         assert p.shape == e.shape == x.shape, "If p, e, and x are numpy arrays, they must have the same shape."
-        if isinstance(a, np.ndarray):
+        if isinstance(a, (np.ndarray, list)):
+            a = np.asarray(a, dtype=np.float64)
             assert a.shape == p.shape, "If a is a numpy array, it must have the same shape as p, e, and x."
         else:
             a = np.full(p.shape, a)
@@ -256,10 +260,14 @@ def kerr_kepler_parameters(a: ScalarOrArray,
     numpy.ndarray
         The Keplerian parameters (p, e, x) of the orbit.
     """
-    if isinstance(En, np.ndarray):
-        assert isinstance(Lz, np.ndarray) and isinstance(Qc, np.ndarray), "If En is a numpy array, Lz and Qc must also be numpy arrays."
+    if isinstance(En, (np.ndarray, list)):
+        assert isinstance(Lz, (np.ndarray, list)) and isinstance(Qc, (np.ndarray, list)), "If En is a numpy array, Lz and Qc must also be numpy arrays."
+        En = np.asarray(En, dtype=np.float64)
+        Lz = np.asarray(Lz, dtype=np.float64)
+        Qc = np.asarray(Qc, dtype=np.float64)
         assert En.shape == Lz.shape == Qc.shape, "If En, Lz, and Qc are numpy arrays, they must have the same shape."
-        if isinstance(a, np.ndarray):
+        if isinstance(a, (np.ndarray, list)):
+            a = np.asarray(a, dtype=np.float64)
             assert a.shape == En.shape, "If a is a numpy array, it must have the same shape as En, Lz, and Qc."
         else:
             a = np.full(En.shape, a)
@@ -293,10 +301,14 @@ def jacobian_ELQ_to_pex(a: ScalarOrArray,
     numpy.ndarray
         The Jacobian matrix of the transformation from (E, Lz, Q) to (p, e, x).
     """
-    if isinstance(p, np.ndarray):
-        assert isinstance(e, np.ndarray) and isinstance(x, np.ndarray), "If p is a numpy array, e and x must also be numpy arrays."
+    if isinstance(p, (np.ndarray, list)):
+        assert isinstance(e, (np.ndarray, list)) and isinstance(x, (np.ndarray, list)), "If p is a numpy array, e and x must also be numpy arrays."
+        p = np.asarray(p, dtype=np.float64)
+        e = np.asarray(e, dtype=np.float64)
+        x = np.asarray(x, dtype=np.float64)
         assert p.shape == e.shape == x.shape, "If p, e, and x are numpy arrays, they must have the same shape."
-        if isinstance(a, np.ndarray):
+        if isinstance(a, (np.ndarray, list)):
+            a = np.asarray(a, dtype=np.float64)
             assert a.shape == p.shape, "If a is a numpy array, it must have the same shape as p, e, and x."
         else:
             a = np.full(p.shape, a)
@@ -330,10 +342,14 @@ def jacobian_pex_to_ELQ(a: ScalarOrArray,
     numpy.ndarray
         The Jacobian matrix of the transformation from (p, e, x) to (E, Lz, Q).
     """
-    if isinstance(p, np.ndarray):
-        assert isinstance(e, np.ndarray) and isinstance(x, np.ndarray), "If p is a numpy array, e and x must also be numpy arrays."
+    if isinstance(p, (np.ndarray, list)):
+        assert isinstance(e, (np.ndarray, list)) and isinstance(x, (np.ndarray, list)), "If p is a numpy array, e and x must also be numpy arrays."
+        p = np.asarray(p, dtype=np.float64)
+        e = np.asarray(e, dtype=np.float64)
+        x = np.asarray(x, dtype=np.float64)
         assert p.shape == e.shape == x.shape, "If p, e, and x are numpy arrays, they must have the same shape."
-        if isinstance(a, np.ndarray):
+        if isinstance(a, (np.ndarray, list)):
+            a = np.asarray(a, dtype=np.float64)
             assert a.shape == p.shape, "If a is a numpy array, it must have the same shape as p, e, and x."
         else:
             a = np.full(p.shape, a)

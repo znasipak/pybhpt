@@ -823,18 +823,33 @@ double kerr_geo_energy_circ_2(double a, double p, double x){
 	return sqrt((kap*rho + 2.*eps*sig - 2.*x*sqrt(sig*(sig*eps*eps + rho*eps*kap - eta*kap*kap)/(x*x)))/(rho*rho + 4.*eta*sig));
 }
 
+double kerr_geo_energy_polar(double a, double p, double e){
+	return std::sqrt(-((p*(pow(a,4)*pow(-1 + pow(e,2),2) + (-4*pow(e,2) + pow(-2 + p,2))*pow(p,2) + 2*pow(a,2)*p*(-2 + p + pow(e,2)*(2 + p))))/(pow(a,4)*pow(-1 + pow(e,2),2)*(-1 + pow(e,2) - p) + (3 + pow(e,2) - p)*pow(p,4) - 2*pow(a,2)*pow(p,2)*(-1 - pow(e,4) + p + pow(e,2)*(2 + p)))));
+}
+
+double kerr_geo_momentum_polar(double a, double p, double e){
+	return 0.;
+}
+
+double kerr_geo_carter_polar(double a, double p, double e){
+	return -((pow(p,2)*(pow(a,4)*pow(-1 + pow(e,2),2) + pow(p,4) + 2*pow(a,2)*p*(-2 + p + pow(e,2)*(2 + p))))/(pow(a,4)*pow(-1 + pow(e,2),2)*(-1 + pow(e,2) - p) + (3 + pow(e,2) - p)*pow(p,4) - 2*pow(a,2)*pow(p,2)*(-1 - pow(e,4) + p + pow(e,2)*(2 + p))));
+}
+
 double kerr_geo_energy(double a, double p, double e, double x){
 	if(a < 0.){
 		return kerr_geo_energy(-a, p, e, -x);
 	}
+	if(std::abs(e) < 1.e-14){
+		return kerr_geo_energy_circ(a, p, x);
+	}
+	if(std::abs(x) < 1.e-14){
+		return kerr_geo_energy_polar(a, p, e);
+	}
+
 	double rmax = p/(1. - e);
 	double rmin = p/(1. + e);
 	double deltaMax = rmax*rmax - 2.*rmax + a*a;
 	double deltaMin = rmin*rmin - 2.*rmin + a*a;
-
-	if(std::abs(e) < 1.e-14){
-		return kerr_geo_energy_circ(a, p, x);
-	}
 
 	double fmax = pow(rmax, 4) + a*a*(rmax*(rmax + 2.) + (1. - x*x)*deltaMax);
 	double fmin = pow(rmin, 4) + a*a*(rmin*(rmin + 2.) + (1. - x*x)*deltaMin);
@@ -863,6 +878,9 @@ double kerr_geo_momentum(double En, double a, double p, double e, double x){
 	if(a < 0.){
 		return -kerr_geo_momentum(En, -a, p, e, -x);
 	}
+	if(std::abs(x) < 1.e-14){
+		return kerr_geo_momentum_polar(a, p, e);
+	}
 	double rmax = p/(1. - e);
 	double deltaMax = rmax*rmax - 2.*rmax + a*a;
 
@@ -880,8 +898,11 @@ double kerr_geo_carter(double a, double p, double e, double x){
 	double En = kerr_geo_energy(a, p, e, x);
 	return kerr_geo_carter(En, kerr_geo_momentum(En, a, p, e, x), a, p, e, x);
 }
-double kerr_geo_carter(double En, double Lz, double a, double, double, double x){
+double kerr_geo_carter(double En, double Lz, double a, double p, double e, double x){
 	double zmin = sqrt(1. - x*x);
+	if(std::abs(x) < 1.e-14){
+		return kerr_geo_carter_polar(a, p, e);
+	}
 
 	return zmin*zmin*(a*a*(1. - En*En) + Lz*Lz/(x*x));
 }
@@ -947,6 +968,12 @@ void kerr_geo_orbital_constants(double &En, double &Lz, double &Qc, double a, do
 	if(a < 0.){
 		kerr_geo_orbital_constants(En, Lz, Qc, -a, p, e, -x);
 		Lz = -Lz;
+		return ;
+	}
+	if(std::abs(x) < 1.e-14){
+		En = kerr_geo_energy_polar(a, p, e);
+		Lz = kerr_geo_momentum_polar(a, p, e);
+		Qc = kerr_geo_carter_polar(a, p, e);
 		return ;
 	}
 	
@@ -1033,129 +1060,37 @@ double jacobian_D_spherical(double a, double r, double En, double Lz, double Qc)
 	return - (Lz * Lz + Qc + a * a * (1.0 - En * En)) + 6.0 * r - 6.0 * r * r * (1.0 - En * En);
 }
 
-// void ELQdot_to_pexdot_generic(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot){
-// 	double ra = p/(1. - e);
-// 	double rp = p/(1. + e);
+double jacobian_Dx(double a, double x, double En, double Lz, double Qc){
+	if(std::abs(x) > 0.5){
+		return 2.0 * (Lz * Lz + x * x * x * x * a * a * (1.0 - En * En));
+	}else{
+		return 2.0 * (Qc - a * a * (1.0 - En * En) * (1.0 - x * x) * (1.0 - x * x));
+	}
+}
 
-// 	double En, Lz, Qc;
-// 	kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
+double jacobian_numerdQx(double a, double x, double En, double Lz, double Qc){
+	if(std::abs(x) > 0.5){
+		return - x * x * x;
+	}else{
+		return -x * (1.0 - x * x);
+	}
+}
 
-// 	double Da = jacobian_D(a, ra, En, Lz, Qc);
-// 	double Dp = jacobian_D(a, rp, En, Lz, Qc);
-// 	double Dx = 2.0 * (Lz * Lz + x * x * x * x * a * a * (1.0 - En * En));
+double jacobian_numerdEx(double a, double x, double En, double Lz, double Qc){
+	if(std::abs(x) > 0.5){
+		return - 2.0 * x * x * x * (1.0 - x * x) * a * a * En;
+	}else{
+		return - 2.0 * x * (1.0 - x * x) * (1.0 - x * x) * a * a * En;
+	}
+}
 
-// 	double numerdEx = - 2.0 * x * x * x * (1.0 - x * x) * a * a * En;
-// 	double numerdLzx = 2.0 * x * (1.0 - x * x) * Lz;
-// 	double numerdQx = - x * x * x;
-
-// 	double numerdEa = 4.0 * a * (Lz - a * En) * ra - 2 * En * ra * ra * (ra * ra + a * a);
-// 	double numerdEp = 4.0 * a * (Lz - a * En) * rp - 2 * En * rp * rp * (rp * rp + a * a);
-	
-// 	double numerdLza = 4.0 * (a * En - Lz) * ra + 2.0 * Lz * ra * ra;
-// 	double numerdLzp = 4.0 * (a * En - Lz) * rp + 2.0 * Lz * rp * rp;
-	
-// 	double numerdQa = ra * ra - 2.0 * ra + a * a;
-// 	double numerdQp = rp * rp - 2.0 * rp + a * a;
-
-// 	double dpdra = 0.5 * (1.0 - e * e) * (1.0 - e * e);
-// 	double dpdpr = 0.5 * (1.0 + e * e) * (1.0 + e * e);
-
-// 	double dedra = 0.5 * (1.0 - e * e) / p * (1.0 - e);
-// 	double dedrp = - 0.5 * (1.0 - e * e) / p * (1.0 + e);
-
-// 	double drpdt = (
-// 		numerdEp * Edot
-// 		+ numerdLzp * Lzdot
-// 		+ numerdQp * Qdot
-// 	) / Dp;
-// 	double dradt = (
-// 		numerdEa * Edot
-// 		+ numerdLza * Lzdot
-// 		+ numerdQa * Qdot
-// 	) / Da;
-
-// 	pdot = dpdra * dradt + dpdpr * drpdt;
-// 	edot = dedra * dradt + dedrp * drpdt;
-// 	xdot = (numerdEx * Edot + numerdLzx * Lzdot + numerdQx * Qdot)/Dx;
-// }
-
-// void ELQdot_to_pexdot_equatorial(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot){
-// 	double ra = p/(1. - e);
-// 	double rp = p/(1. + e);
-
-// 	double En, Lz, Qc;
-// 	kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
-
-// 	double Da = jacobian_D(a, ra, En, Lz, Qc);
-// 	double Dp = jacobian_D(a, rp, En, Lz, Qc);
-
-// 	double numerdEa = 4.0 * a * (Lz - a * En) * ra - 2 * En * ra * ra * (ra * ra + a * a);
-// 	double numerdEp = 4.0 * a * (Lz - a * En) * rp - 2 * En * rp * rp * (rp * rp + a * a);
-	
-// 	double numerdLza = 4.0 * (a * En - Lz) * ra + 2.0 * Lz * ra * ra;
-// 	double numerdLzp = 4.0 * (a * En - Lz) * rp + 2.0 * Lz * rp * rp;
-
-// 	double dpdra = 0.5 * (1.0 - e * e) * (1.0 - e * e);
-// 	double dpdpr = 0.5 * (1.0 + e * e) * (1.0 + e * e);
-
-// 	double dedra = 0.5 * (1.0 - e * e) / p * (1.0 - e);
-// 	double dedrp = - 0.5 * (1.0 - e * e) / p * (1.0 + e);
-
-// 	double drpdt = (
-// 		numerdEp * Edot
-// 		+ numerdLzp * Lzdot
-// 	) / Dp;
-// 	double dradt = (
-// 		numerdEa * Edot
-// 		+ numerdLza * Lzdot
-// 	) / Da;
-
-// 	pdot = dpdra * dradt + dpdpr * drpdt;
-// 	edot = dedra * dradt + dedrp * drpdt;
-// 	xdot = 0.0;
-// }
-
-// void ELQdot_to_pexdot_spherical(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot){
-// 	double En, Lz, Qc;
-// 	kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
-
-// 	double Dc = jacobian_D_spherical(a, p, En, Lz, Qc);
-// 	double Dx = 2.0 * (Lz * Lz + x * x * x * x * a * a * (1.0 - En * En));
-
-// 	double numerdEx = - 2.0 * x * x * x * (1.0 - x * x) * a * a * En;
-// 	double numerdLzx = 2.0 * x * (1.0 - x * x) * Lz;
-// 	double numerdQx = - x * x * x;
-
-// 	double numerdE = 2.0 * a * (Lz - a * En) - 2.0 * En * p * (2.0 * p * p + a * a);
-	
-// 	double numerdLz = - 2.0 * (Lz - a * En) + 2.0 * Lz * p;
-
-// 	double numerdQ = p - 1.0;
-
-// 	pdot = (
-// 		numerdE * Edot
-// 		+ numerdLz * Lzdot
-// 		+ numerdQ * Qdot
-// 	) / Dc;
-// 	edot = 0.0;
-// 	xdot = (numerdEx * Edot + numerdLzx * Lzdot + numerdQx * Qdot)/Dx;
-// }
-
-// void ELQdot_to_pexdot(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot){
-// 	if(std::abs(e) < 1.e-14){
-// 		ELQdot_to_pexdot_spherical(pdot, edot, xdot, a, p, e, x, Edot, Lzdot, Qdot);
-// 	}else if(std::abs(1.0 - std::abs(x)) < 1.e-14){
-// 		ELQdot_to_pexdot_equatorial(pdot, edot, xdot, a, p, e, x, Edot, Lzdot, Qdot);
-// 	}else{
-// 		ELQdot_to_pexdot_generic(pdot, edot, xdot, a, p, e, x, Edot, Lzdot, Qdot);
-// 	}
-// }
-
-// void ELQdot_to_pexdot(int n, double* pdot, double* edot, double* xdot, const double* a, const double* p, const double* e, const double* x, const double* Edot, const double* Lzdot, const double* Qdot){
-// 	for(int i = 0; i < n; i++){
-// 		ELQdot_to_pexdot(pdot[i], edot[i], xdot[i], a[i], p[i], e[i], x[i], Edot[i], Lzdot[i], Qdot[i]);
-// 	}
-// }
+double jacobian_numerdLzx(double a, double x, double En, double Lz, double Qc){
+	if(std::abs(x) > 0.5){
+		return 2.0 * x * (1.0 - x * x) * Lz;
+	}else{
+		return (1.0 - x * x) * 2.0 * std::sqrt(1.0 - x * x) * std::sqrt(Qc - a * a * (1.0 - En * En) * (1.0 - x * x));
+	}
+}
 
 void jacobian_ELQ_to_pex_generic(double &dpdE, double &dedE, double &dxdE,
 						  double &dpdLz, double &dedLz, double &dxdLz,
@@ -1169,11 +1104,11 @@ void jacobian_ELQ_to_pex_generic(double &dpdE, double &dedE, double &dxdE,
 
 	double Da = jacobian_D(a, ra, En, Lz, Qc);
 	double Dp = jacobian_D(a, rp, En, Lz, Qc);
-	double Dx = 2.0 * (Lz * Lz + x * x * x * x * a * a * (1.0 - En * En));
+	double Dx = jacobian_Dx(a, x, En, Lz, Qc);
 
-	double numerdEx = - 2.0 * x * x * x * (1.0 - x * x) * a * a * En;
-	double numerdLzx = 2.0 * x * (1.0 - x * x) * Lz;
-	double numerdQx = - x * x * x;
+	double numerdEx = jacobian_numerdEx(a, x, En, Lz, Qc);
+	double numerdLzx = jacobian_numerdLzx(a, x, En, Lz, Qc);
+	double numerdQx = jacobian_numerdQx(a, x, En, Lz, Qc);
 
 	double numerdEa = 4.0 * a * (Lz - a * En) * ra - 2 * En * ra * ra * (ra * ra + a * a);
 	double numerdEp = 4.0 * a * (Lz - a * En) * rp - 2 * En * rp * rp * (rp * rp + a * a);
@@ -1230,12 +1165,11 @@ void jacobian_ELQ_to_pex_spherical(double &dpdE, double &dedE, double &dxdE,
 						  double a, double p, double e, double x, 
 						  double En, double Lz, double Qc){
 	double Dc = jacobian_D_spherical(a, p, En, Lz, Qc);
-	double Dx = 2.0 * (Lz * Lz + x * x * x * x * a * a * (1.0 - En * En));
+	double Dx = jacobian_Dx(a, x, En, Lz, Qc);
 
-	double numerdEx = - 2.0 * x * x * x * (1.0 - x * x) * a * a * En;
-	double numerdLzx = 2.0 * x * (1.0 - x * x) * Lz;
-	double numerdQx = - x * x * x;
-
+	double numerdEx = jacobian_numerdEx(a, x, En, Lz, Qc);
+	double numerdLzx = jacobian_numerdLzx(a, x, En, Lz, Qc);
+	double numerdQx = jacobian_numerdQx(a, x, En, Lz, Qc);
 	double numerdE = 2.0 * a * (Lz - a * En) - 2.0 * En * p * (2.0 * p * p + a * a);
 	
 	double numerdLz = - 2.0 * (Lz - a * En) + 2.0 * Lz * p;
