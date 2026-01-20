@@ -213,11 +213,11 @@ class TeukolskyMode:
     
     @property
     def amplitudes(self):
-        return self.base.amplitudes
+        return self.base.teukolsky_amplitudes
     
     @property
     def precisions(self):
-        return self.base.precisions
+        return self.base.teukolsky_amplitude_precisions
     
     def solve(self, geo, method = "AUTO", nsamples = 256, teuk = None, swsh = None):
         """Solve the Teukolsky equation for the given mode and geodesic.
