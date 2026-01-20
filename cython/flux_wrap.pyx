@@ -33,6 +33,11 @@ cdef extern from "fluxes.hpp":
     void full_flux_parallel_l(int s, GeodesicSource geo, int modeMax, cpp_string dir)
     void full_flux_parallel_lm(GeodesicSource geo, int lMax, cpp_string dir)
 
+    void ELQdot_to_pexdot(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot)
+    void pexdot_to_ELQ_dot(double &Edot, double &Lzdot, double &Qdot, double a, double p, double e, double x, double pdot, double edot, double xdot)
+    void ELQdot_to_pexdot(int n, double* pdot, double* edot, double* xdot, const double* a, const double* p, const double* e, const double* x, const double* Edot, const double* Lzdot, const double* Qdot)
+    void pexdot_to_ELQ_dot(int n, double* Edot, double* Lzdot, double* Qdot, const double* a, const double* p, const double* e, const double* x, const double* pdot, const double* edot, const double* xdot)
+
 cdef class FluxList:
     cdef FluxListCPP *fluxlistcpp
 
@@ -150,3 +155,32 @@ def _ELQdot_to_pexdot_array_wrapper(double[:] a, double[:] p, double[:] e, doubl
     ELQdot_to_pexdot(n, &pdot_mv[0], &edot_mv[0], &xdot_mv[0], &a[0], &p[0], &e[0], &x[0], &Edot[0], &Lzdot[0], &Qdot[0])
 
     return np.array([pdot_out, edot_out, xdot_out])
+
+def _pexdot_to_ELQ_dot_wrapper(double a, double p, double e, double x, double pdot, double edot, double xdot):
+    cdef double Edot, Lzdot, Qdot
+    Edot = 0.
+    Lzdot = 0.
+    Qdot = 0.
+    pexdot_to_ELQ_dot(Edot, Lzdot, Qdot, a, p, e, x, pdot, edot, xdot)
+    return np.array([Edot, Lzdot, Qdot])
+
+def _pexdot_to_ELQ_dot_array_wrapper(double[:] a, double[:] p, double[:] e, double[:] x, double[:] pdot, double[:] edot, double[:] xdot):
+    """
+    Zero-copy interface using NumPy memoryviews.
+    """
+    cdef int n = a.shape[0] 
+
+    # Pre-allocate output NumPy arrays
+    Edot_out = np.empty(n, dtype=np.float64)
+    Lzdot_out = np.empty(n, dtype=np.float64)
+    Qdot_out = np.empty(n, dtype=np.float64)  
+
+    # Cast to memoryviews to get raw pointers
+    cdef double[:] Edot_mv = Edot_out
+    cdef double[:] Lzdot_mv = Lzdot_out
+    cdef double[:] Qdot_mv = Qdot_out
+
+    # Execute C++ loop
+    pexdot_to_ELQ_dot(n, &Edot_mv[0], &Lzdot_mv[0], &Qdot_mv[0], &a[0], &p[0], &e[0], &x[0], &pdot[0], &edot[0], &xdot[0])
+
+    return np.array([Edot_out, Lzdot_out, Qdot_out])

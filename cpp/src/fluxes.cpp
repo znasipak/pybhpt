@@ -7,6 +7,67 @@
 #define COUNT_MAX 1000
 #define ZERO_FREQ_MAX 1.e-8
 
+void ELQdot_to_pexdot(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot){
+	double dpdE, dedE, dxdE;
+	double dpdLz, dedLz, dxdLz;
+	double dpdQ, dedQ, dxdQ;
+	
+	if(std::abs(e) < 1.e-12){
+		jacobian_ELQ_to_pex_spherical(dpdE, dedE, dxdE,
+						  dpdLz, dedLz, dxdLz,
+						  dpdQ, dedQ, dxdQ,
+						  a, p, e, x);
+	}else{
+		jacobian_ELQ_to_pex(dpdE, dedE, dxdE,
+						  dpdLz, dedLz, dxdLz,
+						  dpdQ, dedQ, dxdQ,
+						  a, p, e, x);
+	}
+
+	pdot = dpdE * Edot + dpdLz * Lzdot + dpdQ * Qdot;
+	edot = dedE * Edot + dedLz * Lzdot + dedQ * Qdot;
+	xdot = dxdE * Edot + dxdLz * Lzdot + dxdQ * Qdot;
+}
+
+void ELQdot_to_pexdot(int n, double* pdot, double* edot, double* xdot, const double* a, const double* p, const double* e, const double* x, const double* Edot, const double* Lzdot, const double* Qdot){
+	for(size_t i = 0; i < n; i++){
+		ELQdot_to_pexdot(pdot[i], edot[i], xdot[i], a[i], p[i], e[i], x[i], Edot[i], Lzdot[i], Qdot[i]);
+	}
+}
+
+void pexdot_to_ELQ_dot(double &Edot, double &Lzdot, double &Qdot, double a, double p, double e, double x, double pdot, double edot, double xdot){
+	double dEdp, dEde, dEdx;
+	double dLdp, dLde, dLdx;
+	double dQdp, dQde, dQdx;
+	
+	if(std::abs(e) < 1.e-12){
+		jacobian_pex_to_ELQ_spherical(dEdp, dEde, dEdx,
+						  dLdp, dLde, dLdx,
+						  dQdp, dQde, dQdx,
+						  a, p, e, x);
+	}else{
+		jacobian_pex_to_ELQ(dEdp, dEde, dEdx,
+						  dLdp, dLde, dLdx,
+						  dQdp, dQde, dQdx,
+						  a, p, e, x);
+	}
+
+	Edot = dEdp * pdot + dEde * edot + dEdx * xdot;
+	Lzdot = dLdp * pdot + dLde * edot + dLdx * xdot;
+	Qdot = dQdp * pdot + dQde * edot + dQdx * xdot;
+}
+
+void pexdot_to_ELQ_dot(int n,
+						  double* Edot, double* Lzdot, double* Qdot,
+						  const double* a, const double* p, const double* e, const double* x,
+						  const double* pdot, const double* edot, const double* xdot){
+	for(size_t i = 0; i < n; i++){
+		pexdot_to_ELQ_dot(Edot[i], Lzdot[i], Qdot[i],
+						  a[i], p[i], e[i], x[i],
+						  pdot[i], edot[i], xdot[i]);
+	}
+}
+
 double energy_flux_newtonian(GeodesicSource& geo){
 	return energy_flux_newtonian(-2, geo);
 }

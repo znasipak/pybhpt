@@ -132,6 +132,7 @@ double swsh_eigenvalue(const int &s, const int &l, const int &m, const double &g
 Complex Yslm(const int &s, const int &l, const int &m, const double &th, const double &ph);
 double Yslm(const int &s, const int &l, const int &m, const double &th);
 double Yslm_derivative(const int &s, const int &l, const int &m, const double &th);
+double Yslm_derivative2(const int &s, const int &l, const int &m, const double &th);
 
 ////////////////////
 // Test functions //

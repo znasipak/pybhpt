@@ -1,10 +1,10 @@
 import scipy.sparse
 import scipy.sparse.linalg
-from scipy.special import sph_harm_y
-from scipy.special import binom
-from scipy.special import factorial
+# from scipy.special import sph_harm_y
+# from scipy.special import binom
+# from scipy.special import factorial
 import numpy as np
-from cybhpt_full import _YslmCy, _YslmCy_derivative, _clebschCy, _w3jCy
+from cybhpt_full import _YslmCy, _YslmCy_derivative, _YslmCy_derivative2, _clebschCy, _w3jCy
 
 """
 Wigner 3j-symbol and Clebsch-Gordon coefficients
@@ -53,12 +53,8 @@ def Yslm(s, l, m, th, ph = None):
         return Yslm(s, l, m, th)*np.exp(1.j*m*ph)
     if np.abs(s) > l:
         return 0.*th
-    if s == 0:
-        return np.real(sph_harm_y(l, m, 0., th))
-    elif s + m < 0:
-        return (-1.)**(s+m)*YslmBase(-s, l, -m, th)
-    else:
-        return YslmBase(s, l, m, th)
+
+    return _YslmBase(s, l, m, th)
     
 def Yslm_derivative(s, l, m, th, ph = None):
     """
@@ -85,14 +81,36 @@ def Yslm_derivative(s, l, m, th, ph = None):
         return Yslm_derivative(s, l, m, th)*np.exp(1.j*m*ph)
     if np.abs(s) > l:
         return 0.*th
-    if s == 0:
-        return np.real(sph_harm_y(l, m, 0., th, diff_n = 1)[1])
-    elif s + m < 0:
-        return (-1.)**(s+m)*YslmDerivBase(-s, l, -m, th)
-    else:
-        return YslmDerivBase(s, l, m, th)
+    return _YslmDerivBase(s, l, m, th)
 
-def YslmBase(s, l, m, th):
+def Yslm_derivative2(s, l, m, th, ph = None):
+    """
+    Evaluate the second derivative of the spin-weighted spherical harmonic $Y_{s}^{lm}$ at a given angle theta.
+
+    Parameters
+    ----------
+    s : int
+        The spin weight of the harmonic.
+    l : int
+        The angular number of the spherical harmonic.
+    m : int
+        The azimuthal number of the spherical harmonic.
+    th : array_like
+        The polar angle(s) at which to evaluate the spherical harmonic.
+
+    Returns
+    -------
+    array_like
+        The second derivatives of the spherical harmonic at the specified angles.
+    """
+    assert isinstance(s, int) and isinstance(l, int) and isinstance(m, int), "s, l, and m must be integers"
+    if ph is not None:
+        return Yslm_derivative2(s, l, m, th)*np.exp(1.j*m*ph)
+    if np.abs(s) > l:
+        return 0.*th
+    return _YslmDeriv2Base(s, l, m, th)
+
+def _YslmBase(s, l, m, th):
     assert isinstance(s, int) and isinstance(l, int) and isinstance(m, int), "s, l, and m must be integers"
     if not isinstance(th, (int, float)):
         b = np.broadcast(th)
@@ -102,7 +120,7 @@ def YslmBase(s, l, m, th):
         out = _YslmCy(s, l, m, th)
     return out
 
-def YslmDerivBase(s, l, m, th):
+def _YslmDerivBase(s, l, m, th):
     assert isinstance(s, int) and isinstance(l, int) and isinstance(m, int), "s, l, and m must be integers"
     if not isinstance(th, (int, float)):
         b = np.broadcast(th)
@@ -110,6 +128,16 @@ def YslmDerivBase(s, l, m, th):
         out.flat = [_YslmCy_derivative(s, l, m, thi) for (thi,) in b]
     else:
         out = _YslmCy_derivative(s, l, m, th)
+    return out
+
+def _YslmDeriv2Base(s, l, m, th):
+    assert isinstance(s, int) and isinstance(l, int) and isinstance(m, int), "s, l, and m must be integers"
+    if not isinstance(th, (int, float)):
+        b = np.broadcast(th)
+        out = np.empty(b.shape)
+        out.flat = [_YslmCy_derivative2(s, l, m, thi) for (thi,) in b]
+    else:
+        out = _YslmCy_derivative2(s, l, m, th)
     return out
 
 def Yslm_eigenvalue(s, l, *args):
@@ -420,6 +448,7 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
         if self.spheroidicity == 0.:
             self.eval = self.Yslm
             self.deriv = self.Yslm_derivative
+            self.deriv2 = self.Yslm_derivative2
             self.eigenvalue = Yslm_eigenvalue(self.s, self.j)
             self.coeffs = np.zeros(self.j - self.lmin + 1)
             self.coeffs[-1] = 1.
@@ -428,6 +457,7 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
         else:
             self.eval = self.Sslm
             self.deriv = self.Sslm_derivative
+            self.deriv2 = self.Sslm_derivative2
             self.eigenvalue, self.coeffs = self.generate_eigs()
             self.mincouplingmode = self.lmin
             self.maxcouplingmode = self.lmin + self.coeffs.shape[0] - 1
@@ -474,6 +504,24 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
             The values of the derivative of the spherical harmonic at the specified angles.
         """
         return Yslm_derivative(self.s, l, self.m, th)
+    
+    def Yslm_derivative2(self, l, th):
+        """
+        Evaluate the second derivative of the spin-weighted spherical harmonic $Y_{s}^{lm}(theta)$ at a given angle theta.
+
+        Parameters
+        ----------
+        l : int
+            The angular number of the spherical harmonic.
+        th : array_like
+            The polar angle(s) at which to evaluate the derivative of the spherical harmonic.
+
+        Returns
+        -------
+        array_like
+            The values of the second derivative of the spherical harmonic at the specified angles.
+        """
+        return Yslm_derivative2(self.s, l, self.m, th)
     
     def Sslm(self, *args):
         """
@@ -526,12 +574,40 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
             dYslm_array[i] = self.Yslm_derivative(self.lmin + i, th)
             
         return np.dot(self.coeffs, dYslm_array)
+    
+    def Sslm_derivative2(self, *args):
+        """
+        Evaluate the second derivative of the spin-weighted spheroidal harmonic $S_{s}^{lm}(theta)$ at a given angle theta.
+
+        Parameters
+        ----------
+        th : array_like
+            The polar angle(s) at which to evaluate the spheroidal harmonic.
+        
+        Returns
+        -------
+        array_like
+            The second derivatives of the spheroidal harmonic at the specified angles.
+        """
+        th = args[-1]
+        term_num = self.coeffs.shape[0]
+        if isinstance(th, (int, float)):
+            dY2slm_array = np.empty(term_num)
+        else:
+            pts_num = th.shape[0]
+            dY2slm_array = np.empty((term_num, pts_num))
+        for i in range(term_num):
+            dY2slm_array[i] = self.Yslm_derivative2(self.lmin + i, th)
+            
+        return np.dot(self.coeffs, dY2slm_array)
             
     def __call__(self, th, ph = None, deriv = None):
         if deriv is None or deriv == 0:
-            out = self.eval(self.l, th)
+            out = self.eval(self.j, th)
         elif deriv == 1:
-            out = self.deriv(self.l, th)
+            out = self.deriv(self.j, th)
+        elif deriv == 2:
+            out = self.deriv2(self.j, th)
         else:
             raise ValueError(f"Derivative order = {deriv} not supported")
         

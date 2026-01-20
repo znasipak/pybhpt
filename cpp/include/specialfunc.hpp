@@ -126,6 +126,7 @@ double clm(const int &l, const int &m);
 Complex Ylm(const int &l, const int &m, const double &th, const double &ph);
 double Ylm(const int &l, const int &m, const double &th);
 double Ylm_derivative(const int &l, const int &m, const double &th);
+double Ylm_derivative2(const int &l, const int &m, const double &th);
 
 ////////////////////
 // Inverse cosine //

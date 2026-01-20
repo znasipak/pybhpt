@@ -96,9 +96,10 @@ cdef extern from "geo.hpp":
     void jacobian_ELQ_to_pex(int n, double* dpdE, double* dedE, double* dxdE, double* dpdLz, double* dedLz, double* dxdLz, double* dpdQ, double* dedQ, double* dxdQ, const double* a, const double* p, const double* e, const double* x)
     void jacobian_pex_to_ELQ(double &dEdp, double &dEde, double &dEdx, double &dLdp, double &dLde, double &dLdx, double &dQdp, double &dQde, double &dQdx, double a, double p, double e, double x)
     void jacobian_pex_to_ELQ(int n, double* dEdp, double* dEde, double* dEdx, double* dLdp, double* dLde, double* dLdx, double* dQdp, double* dQde, double* dQdx, const double* a, const double* p, const double* e, const double* x)
-    
-    void ELQdot_to_pexdot(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot) 
-    void ELQdot_to_pexdot(int n, double* pdot, double* edot, double* xdot, const double* a, const double* p, const double* e, const double* x, const double* Edot, const double* Lzdot, const double* Qdot)
+    void jacobian_ELQ_to_pex_spherical(double &dpdE, double &dedE, double &dxdE, double &dpdLz, double &dedLz, double &dxdLz, double &dpdQ, double &dedQ, double &dxdQ, double a, double p, double e, double x)
+    void jacobian_ELQ_to_pex_spherical(int n, double* dpdE, double* dedE, double* dxdE, double* dpdLz, double* dedLz, double* dxdLz, double* dpdQ, double* dedQ, double* dxdQ, const double* a, const double* p, const double* e, const double* x)
+    void jacobian_pex_to_ELQ_spherical(double &dEdp, double &dEde, double &dEdx, double &dLdp, double &dLde, double &dLdx, double &dQdp, double &dQde, double &dQdx, double a, double p, double e, double x)
+    void jacobian_pex_to_ELQ_spherical(int n, double* dEdp, double* dEde, double* dEdx, double* dLdp, double* dLde, double* dLdx, double* dQdp, double* dQde, double* dQdx, const double* a, const double* p, const double* e, const double* x)
 
     double kerr_geo_VtR(const double & a, const double & En, const double & Lz, const double & Q, const double & r)
     double kerr_geo_VtTheta(const double & a, const double & En, const double & Lz, const double & Q, const double & theta)

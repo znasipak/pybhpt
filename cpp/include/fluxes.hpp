@@ -21,6 +21,11 @@ public:
 	Fluxes Qdot;
 };
 
+void ELQdot_to_pexdot(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot);
+void pexdot_to_ELQ_dot(double &Edot, double &Lzdot, double &Qdot, double a, double p, double e, double x, double pdot, double edot, double xdot);
+void ELQdot_to_pexdot(int n, double* pdot, double* edot, double* xdot, const double* a, const double* p, const double* e, const double* x, const double* Edot, const double* Lzdot, const double* Qdot);
+void pexdot_to_ELQ_dot(int n, double* Edot, double* Lzdot, double* Qdot, const double* a, const double* p, const double* e, const double* x, const double* pdot, const double* edot, const double* xdot);
+
 double energy_flux_newtonian(GeodesicSource& geo);
 double energy_flux_newtonian(int s, double omegaPhiCirc);
 

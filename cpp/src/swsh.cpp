@@ -718,9 +718,19 @@ Complex Yslm(const int &s, const int &l, const int &m, const double &th, const d
 
 double Yslm(const int &s, const int &l, const int &m, const double &th){
 	if( s == 0 ) return Ylm(l, m, th);
-	if( th == 0. ){
-		if (m != -s) return 0.;
-		else return pow(-1, s)*Yslm(0, l, 0, 0.);
+	if( std::abs(th) < 1.e-14 ){
+		if (m == -s) {
+			double phase = pow(-1., -s);
+			return phase * std::sqrt((2.*l + 1.)/(4.*M_PI));
+		}
+		else return 0.;
+	}
+	if( std::abs(th - M_PI) < 1.e-14 ){
+		if (m == s) {
+			double phase = pow(-1., l);
+			return phase * std::sqrt((2.*l + 1.)/(4.*M_PI));
+		}
+		else return 0.;
 	}
 	int lmin = std::max(std::abs(m), l - std::abs(s));
 	int lmax = l + std::abs(s);
@@ -735,7 +745,28 @@ double Yslm(const int &s, const int &l, const int &m, const double &th){
 
 double Yslm_derivative(const int &s, const int &l, const int &m, const double &th){
 	if( s == 0 ) return Ylm_derivative(l, m, th);
-
+	if( std::abs(th) < 1.e-14 ){
+		if (m == -s + 1) {
+			double phase = 0.5 * pow(-1., -s + 1);
+			return phase * std::sqrt(l + s) * std::sqrt(l - s + 1.) * std::sqrt((2.*l + 1.)/(4.*M_PI));
+		}
+		else if (m == -s - 1){
+			double phase = 0.5 * pow(-1., -s);
+			return phase * std::sqrt(l - s) * std::sqrt(l + s + 1.) * std::sqrt((2.*l + 1.)/(4.*M_PI));
+		}
+		else return 0.;
+	}
+	if( std::abs(th - M_PI) < 1.e-14 ){
+		if (m == s - 1) {
+			double phase = 0.5 * pow(-1., l);
+			return phase * std::sqrt(l + s) * std::sqrt(l - s + 1.) * std::sqrt((2.*l + 1.)/(4.*M_PI));
+		}
+		else if (m == s + 1){
+			double phase = 0.5 * pow(-1., l + 1);
+			return phase * std::sqrt(l - s) * std::sqrt(l + s + 1.) * std::sqrt((2.*l + 1.)/(4.*M_PI));
+		}
+		else return 0.;
+	}
 	int lmin = std::max(std::abs(m), l - std::abs(s) - 1);
 	int lmax = l + std::abs(s) + 1;
 	double DyslmDtheta = 0;
@@ -744,6 +775,52 @@ double Yslm_derivative(const int &s, const int &l, const int &m, const double &t
 		DyslmDtheta += dAsljm(s, l, i, m)*Ylm(i, m, th);
 	}
 	return -DyslmDtheta*pow(sin(th), -1 - std::abs(s));
+}
+
+double Yslm_derivative2(const int &s, const int &l, const int &m, const double &th){
+	if( s == 0 ) return Ylm_derivative2(l, m, th);
+	if( std::abs(th) < 1.e-14 ){
+		if (m == -s + 2) {
+			double phase = 0.25 * pow(-1., -s + 2);
+			double prefactor = std::sqrt(l + s) * std::sqrt(l - s + 1.) * std::sqrt(l + s - 1.) * std::sqrt(l - s + 2.);
+			return phase * prefactor * std::sqrt((2.*l + 1.)/(4.*M_PI));
+		}
+		else if (m == -s){
+			double phase = 0.25 * pow(-1., -s + 1);
+			double prefactor = std::sqrt(l + s) * std::sqrt(l - s + 1.) * std::sqrt(l + s) * std::sqrt(l - s + 1.);
+			prefactor += std::sqrt(l - s) * std::sqrt(l + s + 1.) * std::sqrt(l - s) * std::sqrt(l + s + 1.);
+			return phase * prefactor * std::sqrt((2.*l + 1.)/(4.*M_PI));
+		}
+		else if (m == -s - 2) {
+			double phase = 0.25 * pow(-1., -s - 2);
+			double prefactor = std::sqrt(l - s) * std::sqrt(l + s + 1.) * std::sqrt(l - s - 1.) * std::sqrt(l + s + 2.);
+			return phase * prefactor * std::sqrt((2.*l + 1.)/(4.*M_PI));
+		}
+		else return 0.;
+	}
+	if( std::abs(th - M_PI) < 1.e-14 ){
+		if (m == s - 2) {
+			double phase = 0.25 * pow(-1., l + 2);
+			double prefactor = std::sqrt(l + s) * std::sqrt(l - s + 1.) * std::sqrt(l + s - 1.) * std::sqrt(l - s + 2.);
+			return phase * prefactor * std::sqrt((2.*l + 1.)/(4.*M_PI));
+		}
+		else if (m == s){
+			double phase = 0.25 * pow(-1., l + 1);
+			double prefactor = std::sqrt(l + s) * std::sqrt(l - s + 1.) * std::sqrt(l + s) * std::sqrt(l - s + 1.);
+			prefactor += std::sqrt(l - s) * std::sqrt(l + s + 1.) * std::sqrt(l - s) * std::sqrt(l + s + 1.);
+			return phase * prefactor * std::sqrt((2.*l + 1.)/(4.*M_PI));
+		}
+		else if (m == s + 2) {
+			double phase = 0.25 * pow(-1., l - 2);
+			double prefactor = std::sqrt(l - s) * std::sqrt(l + s + 1.) * std::sqrt(l - s - 1.) * std::sqrt(l + s + 2.);
+			return phase * prefactor * std::sqrt((2.*l + 1.)/(4.*M_PI));
+		}
+		else return 0.;
+	}
+	double yslm = Yslm(s, l, m, th);
+	double DyslmDtheta = Yslm_derivative(s, l, m, th);
+	double eigen = double(l*(l + 1) - s*(s + 1));
+	return (-s - eigen + (s / std::tan(th) + m / std::sin(th))*(s / std::tan(th) + m / std::sin(th)))*yslm - DyslmDtheta / std::tan(th);
 }
 
 // double Yslm_derivative(const int &s, const int &l, const int &m, const double &th){
