@@ -435,7 +435,7 @@ double Ylm_derivative2(const int &l, const int &m, const double &th){
     const size_t plm_size = gsl_sf_legendre_array_n(lmax);
     const size_t nlm = gsl_sf_legendre_nlm(lmax);
     const size_t idx_lm = gsl_sf_legendre_array_index(l, m);
-	double csphase = std::pow(-1.0, m);
+	double csphase = (m % 2 == 0) ? 1.0 : -1.0;
     std::vector<double> Plm(plm_size);
     std::vector<double> dPlm(nlm);
     std::vector<double> d2Plm(nlm);
@@ -451,7 +451,7 @@ double Ylm_derivative(const int &l, const int &m, const double &th){
     const size_t plm_size = gsl_sf_legendre_array_n(lmax);
     const size_t nlm = gsl_sf_legendre_nlm(lmax);
     const size_t idx_lm = gsl_sf_legendre_array_index(l, m);
-	double csphase = std::pow(-1.0, m);
+	double csphase = (m % 2 == 0) ? 1.0 : -1.0;
     std::vector<double> Plm(plm_size);
     std::vector<double> dPlm(nlm);
     double x = std::cos(th);
@@ -465,7 +465,7 @@ double Ylm(const int &l, const int &m, const double &th){
 	const size_t lmax = l;
     const size_t plm_size = gsl_sf_legendre_array_n(lmax);
     const size_t idx_lm = gsl_sf_legendre_array_index(l, m);
-	double csphase = std::pow(-1.0, m);
+	double csphase = (m % 2 == 0) ? 1.0 : -1.0;
     std::vector<double> Plm(plm_size);
     double x = std::cos(th);
 

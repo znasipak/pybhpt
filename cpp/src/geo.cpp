@@ -824,7 +824,7 @@ double kerr_geo_energy_circ_2(double a, double p, double x){
 }
 
 double kerr_geo_energy_polar(double a, double p, double e){
-	return std::sqrt(-((p*(pow(a,4)*pow(-1 + pow(e,2),2) + (-4*pow(e,2) + pow(-2 + p,2))*pow(p,2) + 2*pow(a,2)*p*(-2 + p + pow(e,2)*(2 + p))))/(pow(a,4)*pow(-1 + pow(e,2),2)*(-1 + pow(e,2) - p) + (3 + pow(e,2) - p)*pow(p,4) - 2*pow(a,2)*pow(p,2)*(-1 - pow(e,4) + p + pow(e,2)*(2 + p)))));
+	return std::sqrt(-((p*(std::pow(a,4)*std::pow(-1 + std::pow(e,2),2) + (-4*std::pow(e,2) + std::pow(-2 + p,2))*std::pow(p,2) + 2*std::pow(a,2)*p*(-2 + p + std::pow(e,2)*(2 + p))))/(std::pow(a,4)*std::pow(-1 + std::pow(e,2),2)*(-1 + std::pow(e,2) - p) + (3 + std::pow(e,2) - p)*std::pow(p,4) - 2*std::pow(a,2)*std::pow(p,2)*(-1 - std::pow(e,4) + p + std::pow(e,2)*(2 + p)))));
 }
 
 double kerr_geo_momentum_polar(double a, double p, double e){
@@ -832,7 +832,7 @@ double kerr_geo_momentum_polar(double a, double p, double e){
 }
 
 double kerr_geo_carter_polar(double a, double p, double e){
-	return -((pow(p,2)*(pow(a,4)*pow(-1 + pow(e,2),2) + pow(p,4) + 2*pow(a,2)*p*(-2 + p + pow(e,2)*(2 + p))))/(pow(a,4)*pow(-1 + pow(e,2),2)*(-1 + pow(e,2) - p) + (3 + pow(e,2) - p)*pow(p,4) - 2*pow(a,2)*pow(p,2)*(-1 - pow(e,4) + p + pow(e,2)*(2 + p))));
+	return -((std::pow(p,2)*(std::pow(a,4)*std::pow(-1 + std::pow(e,2),2) + std::pow(p,4) + 2*std::pow(a,2)*p*(-2 + p + std::pow(e,2)*(2 + p))))/(std::pow(a,4)*std::pow(-1 + std::pow(e,2),2)*(-1 + std::pow(e,2) - p) + (3 + std::pow(e,2) - p)*std::pow(p,4) - 2*std::pow(a,2)*std::pow(p,2)*(-1 - std::pow(e,4) + p + std::pow(e,2)*(2 + p))));
 }
 
 double kerr_geo_energy(double a, double p, double e, double x){
