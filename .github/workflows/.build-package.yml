@@ -105,11 +105,11 @@ jobs:
             cibw_skip: "*musllinux*"
             target: manylinux
             cibw_before_build: bash build_gsl.sh
-          - os: macos-14
+          - os: macos-15
             cibw_before_build: brew install gsl
             macosx_deployment_target: 14.0
             arch: arm64
-          - os: macos-13
+          - os: macos-15-intel
             cibw_before_build: brew install gsl
             macosx_deployment_target: 14.0
             arch: x86_64
