@@ -556,9 +556,9 @@ def _jacobian_ELQ_to_pex_wrapper(double a, double p, double e, double x):
     dedQ = 0.
     dxdQ = 0.
     jacobian_ELQ_to_pex(dpdE, dedE, dxdE, dpdLz, dedLz, dxdLz, dpdQ, dedQ, dxdQ, a, p, e, x)
-    return np.array([[dpdE, dedE, dxdE],
-                     [dpdLz, dedLz, dxdLz],
-                     [dpdQ, dedQ, dxdQ]]).T
+    return np.array([[dpdE, dpdLz, dpdQ],
+                     [dedE, dedLz, dedQ],
+                     [dxdE, dxdLz, dxdQ]])
 
 def _jacobian_pex_to_ELQ_wrapper(double a, double p, double e, double x):
     cdef double dEdp, dEde, dEdx
@@ -574,9 +574,9 @@ def _jacobian_pex_to_ELQ_wrapper(double a, double p, double e, double x):
     dQde = 0.
     dQdx = 0.
     jacobian_pex_to_ELQ(dEdp, dEde, dEdx, dLdp, dLde, dLdx, dQdp, dQde, dQdx, a, p, e, x)
-    return np.array([[dEdp, dLdp, dQdp],
-                     [dEde, dLde, dQde],
-                     [dEdx, dLdx, dQdx]]).T
+    return np.array([[dEdp, dEde, dEdx],
+                     [dLdp, dLde, dLdx],
+                     [dQdp, dQde, dQdx]])
 
 def _jacobian_ELQ_to_pex_array_wrapper(double[:] a, double[:] p, double[:] e, double[:] x):
     """
@@ -612,9 +612,9 @@ def _jacobian_ELQ_to_pex_array_wrapper(double[:] a, double[:] p, double[:] e, do
                         &dpdQ_mv[0], &dedQ_mv[0], &dxdQ_mv[0],
                         &a[0], &p[0], &e[0], &x[0])
     
-    return np.array([[dpdE_out, dedE_out, dxdE_out],
-                     [dpdLz_out, dedLz_out, dxdLz_out],
-                     [dpdQ_out, dedQ_out, dxdQ_out]]).T
+    return np.array([[dpdE_out, dpdLz_out, dpdQ_out],
+                     [dedE_out, dedLz_out, dedQ_out],
+                     [dxdE_out, dxdLz_out, dxdQ_out]])
 
 def _jacobian_pex_to_ELQ_array_wrapper(double[:] a, double[:] p, double[:] e, double[:] x):
     """
@@ -650,6 +650,6 @@ def _jacobian_pex_to_ELQ_array_wrapper(double[:] a, double[:] p, double[:] e, do
                         &dQdp_mv[0], &dQde_mv[0], &dQdx_mv[0],
                         &a[0], &p[0], &e[0], &x[0])
     
-    return np.array([[dEdp_out, dLdp_out, dQdp_out],
-                     [dEde_out, dLde_out, dQde_out],
-                     [dEdx_out, dLdx_out, dQdx_out]]).T
+    return np.array([[dEdp_out, dEde_out, dEdx_out],
+                     [dLdp_out, dLde_out, dLdx_out],
+                     [dQdp_out, dQde_out, dQdx_out]])
