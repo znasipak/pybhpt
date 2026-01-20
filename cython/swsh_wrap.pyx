@@ -59,15 +59,12 @@ cdef extern from "swsh.hpp":
     double Yslm_derivative2(int &s, int &l, int &m, double &th)
 
 def _YslmCy(int s, int l, int m, double theta):
-  theta = theta % (2.0 * np.pi)
   return Yslm(s, l, m, theta)
 
 def _YslmCy_derivative(int s, int l, int m, double theta):
-  theta = theta % (2.0 * np.pi)
   return Yslm_derivative(s, l, m, theta)
 
 def _YslmCy_derivative2(int s, int l, int m, double theta):
-  theta = theta % (2.0 * np.pi)
   return Yslm_derivative2(s, l, m, theta)
 
 def _clebschCy(int j1, int j2, int j, int m1, int m2, int m):
