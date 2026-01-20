@@ -30,7 +30,7 @@ void ELQdot_to_pexdot(double &pdot, double &edot, double &xdot, double a, double
 }
 
 void ELQdot_to_pexdot(int n, double* pdot, double* edot, double* xdot, const double* a, const double* p, const double* e, const double* x, const double* Edot, const double* Lzdot, const double* Qdot){
-	for(size_t i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){
 		ELQdot_to_pexdot(pdot[i], edot[i], xdot[i], a[i], p[i], e[i], x[i], Edot[i], Lzdot[i], Qdot[i]);
 	}
 }
@@ -61,7 +61,7 @@ void pexdot_to_ELQ_dot(int n,
 						  double* Edot, double* Lzdot, double* Qdot,
 						  const double* a, const double* p, const double* e, const double* x,
 						  const double* pdot, const double* edot, const double* xdot){
-	for(size_t i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){
 		pexdot_to_ELQ_dot(Edot[i], Lzdot[i], Qdot[i],
 						  a[i], p[i], e[i], x[i],
 						  pdot[i], edot[i], xdot[i]);

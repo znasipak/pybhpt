@@ -1152,7 +1152,7 @@ double jacobian_D_spherical(double a, double r, double En, double Lz, double Qc)
 // }
 
 // void ELQdot_to_pexdot(int n, double* pdot, double* edot, double* xdot, const double* a, const double* p, const double* e, const double* x, const double* Edot, const double* Lzdot, const double* Qdot){
-// 	for(size_t i = 0; i < n; i++){
+// 	for(int i = 0; i < n; i++){
 // 		ELQdot_to_pexdot(pdot[i], edot[i], xdot[i], a[i], p[i], e[i], x[i], Edot[i], Lzdot[i], Qdot[i]);
 // 	}
 // }
@@ -1352,7 +1352,7 @@ void jacobian_ELQ_to_pex(int n,
 						  double* dpdLz, double* dedLz, double* dxdLz,
 						  double* dpdQ, double* dedQ, double* dxdQ,
 						  const double* a, const double* p, const double* e, const double* x){
-	for(size_t i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){
 		jacobian_ELQ_to_pex(dpdE[i], dedE[i], dxdE[i],
 						  dpdLz[i], dedLz[i], dxdLz[i],
 						  dpdQ[i], dedQ[i], dxdQ[i],
@@ -1365,7 +1365,7 @@ void jacobian_pex_to_ELQ(int n,
 						  double* dLdp, double* dLde, double* dLdx,
 						  double* dQdp, double* dQde, double* dQdx,
 						  const double* a, const double* p, const double* e, const double* x){
-	for(size_t i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){
 		jacobian_pex_to_ELQ(dEdp[i], dEde[i], dEdx[i],
 						  dLdp[i], dLde[i], dLdx[i],
 						  dQdp[i], dQde[i], dQdx[i],
@@ -1378,7 +1378,7 @@ void jacobian_ELQ_to_pex_spherical(int n,
 						  double* dpdLz, double* dedLz, double* dxdLz,
 						  double* dpdQ, double* dedQ, double* dxdQ,
 						  const double* a, const double* p, const double* e, const double* x){
-	for(size_t i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){
 		jacobian_ELQ_to_pex_spherical(dpdE[i], dedE[i], dxdE[i],
 						  dpdLz[i], dedLz[i], dxdLz[i],
 						  dpdQ[i], dedQ[i], dxdQ[i],
@@ -1391,7 +1391,7 @@ void jacobian_pex_to_ELQ_spherical(int n,
 						  double* dLdp, double* dLde, double* dLdx,
 						  double* dQdp, double* dQde, double* dQdx,
 						  const double* a, const double* p, const double* e, const double* x){
-	for(size_t i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){
 		jacobian_pex_to_ELQ_spherical(dEdp[i], dEde[i], dEdx[i],
 						  dLdp[i], dLde[i], dLdx[i],
 						  dQdp[i], dQde[i], dQdx[i],
