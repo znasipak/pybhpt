@@ -148,12 +148,11 @@ def transform_ELQ_fluxes_to_pex(a, p, e, x, Edot, Lzdot, Qdot):
 
     Returns
     -------
-    pdot : float or np.ndarray
-        Flux of semi-latus rectum.
-    edot : float or np.ndarray
-        Flux of eccentricity.
-    xdot : float or np.ndarray
-        Flux of inclination.
+    tuple of (float or np.ndarray, float or np.ndarray, float or np.ndarray)
+        A tuple ``(pdot, edot, xdot)`` where:
+        - pdot: Flux of semi-latus rectum.
+        - edot: Flux of eccentricity.
+        - xdot: Flux of inclination.
     """
     if isinstance(p, np.ndarray):
         assert isinstance(e, np.ndarray) and isinstance(x, np.ndarray) and isinstance(Edot, np.ndarray) and isinstance(Lzdot, np.ndarray) and isinstance(Qdot, np.ndarray), "If p is an array, e, x, Edot, Lzdot, and Qdot must also be arrays of the same shape."

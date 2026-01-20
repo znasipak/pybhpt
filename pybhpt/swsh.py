@@ -450,7 +450,7 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
             self.deriv = self.Yslm_derivative
             self.deriv2 = self.Yslm_derivative2
             self.eigenvalue = Yslm_eigenvalue(self.s, self.j)
-            self.coeffs = np.zeros(self.j - self.lmin + 1)
+            self.coeffs = np.zeros(self.j - self.jmin + 1)
             self.coeffs[-1] = 1.
             self.mincouplingmode = self.j
             self.maxcouplingmode = self.j
@@ -514,7 +514,7 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
         l : int
             The angular number of the spherical harmonic.
         th : array_like
-            The polar angle(s) at which to evaluate the derivative of the spherical harmonic.
+            The polar angle(s) at which to evaluate the second derivative of the spherical harmonic.
 
         Returns
         -------
