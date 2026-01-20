@@ -1,4 +1,4 @@
-from cybhpt_full import TeukolskyMode as TeukolskyModeCython
+from cybhpt_full import _TeukolskyMode as _TeukolskyModeCython
 
 class TeukolskyMode:
     """A class for computing Teukolsky modes sourced by a point-particle orbiting in a Kerr background.
@@ -95,7 +95,7 @@ class TeukolskyMode:
         Compute the precision of the Teukolsky amplitude for the given boundary condition.
     """
     def __init__(self, s, j, m, k, n, geo, auto_solve = False):
-        self.base = TeukolskyModeCython(s, j, m, k, n, geo.base)
+        self.base = _TeukolskyModeCython(s, j, m, k, n, geo.base)
         if auto_solve:
             self.solve(geo)
 

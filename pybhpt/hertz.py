@@ -1,6 +1,6 @@
-from cybhpt_full import HertzMode as HertzModeCython
-from cybhpt_full import test_hertz_mode_cython
-from cybhpt_full import teuk_to_hertz_ORG, teuk_to_hertz_IRG, teuk_to_hertz_SRG, teuk_to_hertz_ARG
+from cybhpt_full import _HertzMode as _HertzModeCython
+from cybhpt_full import _test_hertz_mode_cython
+from cybhpt_full import _teuk_to_hertz_ORG, _teuk_to_hertz_IRG, _teuk_to_hertz_SRG, _teuk_to_hertz_ARG
 from pybhpt.radial import RadialTeukolsky
 import numpy as np
 
@@ -17,22 +17,22 @@ def hertz_IRG(Zin, Zup, j, m, k, a, omega, lambdaCH):
     """
     Convert Teukolsky amplitudes to Hertz potential in the IRG gauge.
     """
-    return teuk_to_hertz_IRG(Zin, Zup, j, m, k, a, omega, lambdaCH)
+    return _teuk_to_hertz_IRG(Zin, Zup, j, m, k, a, omega, lambdaCH)
 
 def hertz_ORG(Zin, Zup, j, m, k, a, omega, lambdaCH):
     """Convert Teukolsky amplitudes to Hertz potential in the ORG gauge.
     """
-    return teuk_to_hertz_ORG(Zin, Zup, j, m, k, a, omega, lambdaCH)
+    return _teuk_to_hertz_ORG(Zin, Zup, j, m, k, a, omega, lambdaCH)
 
 def hertz_SRG(Zin, Zup, j, m, k, a, omega, lambdaCH):
     """Convert Teukolsky amplitudes to Hertz potential in the SRG gauge.
     """
-    return teuk_to_hertz_SRG(Zin, Zup, j, m, k, a, omega, lambdaCH)
+    return _teuk_to_hertz_SRG(Zin, Zup, j, m, k, a, omega, lambdaCH)
 
 def hertz_ARG(Zin, Zup, j, m, k, a, omega, lambdaCH):
     """Convert Teukolsky amplitudes to Hertz potential in the ARG gauge.
     """
-    return teuk_to_hertz_ARG(Zin, Zup, j, m, k, a, omega, lambdaCH)
+    return _teuk_to_hertz_ARG(Zin, Zup, j, m, k, a, omega, lambdaCH)
 
 def teuk_to_hertz_amplitude(gauge, Zin, Zup, j, m, k, a, omega, lambdaCH):
     if gauge == "IRG":
@@ -47,7 +47,7 @@ def teuk_to_hertz_amplitude(gauge, Zin, Zup, j, m, k, a, omega, lambdaCH):
         return (0.j, 0.j)
 
 def test_hertz_mode(j, m, k, n, geo):
-    test_hertz_mode_cython(j, m, k, n, geo.base)
+    return _test_hertz_mode_cython(j, m, k, n, geo.base)
 
 def gauge_check(gauge):
     """ Check if the provided gauge is supported. 
@@ -187,7 +187,7 @@ class HertzMode:
         If r contains values inside the source region, a ValueError is raised.
     """
     def __init__(self, teuk, gauge):
-        self.base = HertzModeCython(teuk.base, gauge)
+        self.base = _HertzModeCython(teuk.base, gauge)
         self.gauge = gauge
         self.sampleR = self.base.radialsamplenumber
         self.sampleTh = self.base.polarsamplenumber

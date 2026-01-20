@@ -121,7 +121,7 @@ cdef class FluxList:
         }
 
 
-def flux(int s, KerrGeodesic geo, TeukolskyMode teuk):
+def flux(int s, KerrGeodesic geo, _TeukolskyMode teuk):
     cdef FluxListCPP fluxescpp = flux_mode(s, dereference(geo.geocpp), dereference(teuk.teukcpp), include_minus_m = 0)
     fluxes = FluxList()
     fluxes.set_fluxes(fluxescpp)
