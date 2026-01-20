@@ -242,18 +242,6 @@ cdef class _TeukolskyMode:
     @property
     def a(self):
         return self.blackholespin
-    @property
-    def radialpoints(self):
-        return np.array([self.teukcpp.getRadialPoints(i) for i in range(self.sampleR)])
-    @property
-    def polarpoints(self):
-        return np.array([self.teukcpp.getPolarPoints(i) for i in range(self.sampleTh)])
-    @property
-    def radialsolutions(self):
-        return {
-                "In":np.array([self.teukcpp.getHomogeneousRadialSolution(BoundaryCondition.In, i) for i in range(self.sampleR)]),
-                "Up":np.array([self.teukcpp.getHomogeneousRadialSolution(BoundaryCondition.Up, i) for i in range(self.sampleR)])
-        }
 
     def teukolsky_amplitude(self, unicode bc):
         return self.teukcpp.getTeukolskyAmplitude(str_to_bc(bc))
@@ -296,6 +284,77 @@ cdef class _TeukolskyMode:
     
     def flip_spinweight(self):
         self.teukcpp.flipSpinWeight()
+
+    @property
+    def couplingcoefficients(self):
+        return np.array([self.couplingcoefficient(i) for i in range(self.mincouplingmode, self.maxcouplingmode+1)])
+
+    @property
+    def polarpoints(self):
+        return np.array([self.polarpoint(i) for i in range(self.sampleTh)])
+    
+    @property
+    def polarsolutions(self):
+        return np.array([self.polarsolution(i) for i in range(self.sampleTh)])
+        
+    @property
+    def polarderivatives(self):
+        return np.array([self.polarderivative(i) for i in range(self.sampleTh)])
+
+    @property
+    def polarderivatives2(self):
+        return np.array([self.polarderivative2(i) for i in range(self.sampleTh)])
+    
+    @property
+    def radialpoints(self):
+        return np.array([self.radialpoint(i) for i in range(self.sampleR)])
+    @property
+    def radialsolutions(self):
+        return {
+                "In":np.array([self.teukcpp.getRadialSolution(BoundaryCondition.In, i) for i in range(self.sampleR)]),
+                "Up":np.array([self.teukcpp.getRadialSolution(BoundaryCondition.Up, i) for i in range(self.sampleR)])
+        }
+    @property
+    def radialderivatives(self):
+        return {
+                "In":np.array([self.teukcpp.getRadialDerivative(BoundaryCondition.In, i) for i in range(self.sampleR)]),
+                "Up":np.array([self.teukcpp.getRadialDerivative(BoundaryCondition.Up, i) for i in range(self.sampleR)])
+        }
+    @property
+    def radialderivatives2(self):
+        return {
+                "In":np.array([self.radialderivative2('In', i) for i in range(self.sampleR)]),
+                "Up":np.array([self.radialderivative2('Up', i) for i in range(self.sampleR)])
+        }
+    @property
+    def homogeneousradialsolutions(self):
+        return {
+                "In":np.array([self.teukcpp.getHomogeneousRadialSolution(BoundaryCondition.In, i) for i in range(self.sampleR)]),
+                "Up":np.array([self.teukcpp.getHomogeneousRadialSolution(BoundaryCondition.Up, i) for i in range(self.sampleR)])
+        }
+    @property
+    def homogeneousradialderivatives(self):
+        return {
+                "In":np.array([self.teukcpp.getHomogeneousRadialDerivative(BoundaryCondition.In, i) for i in range(self.sampleR)]),
+                "Up":np.array([self.teukcpp.getHomogeneousRadialDerivative(BoundaryCondition.Up, i) for i in range(self.sampleR)])
+        }
+    @property
+    def homogeneousradialderivatives2(self):
+        return {
+                "In":np.array([self.homogeneousradialderivative2('In', i) for i in range(self.sampleR)]),
+                "Up":np.array([self.homogeneousradialderivative2('Up', i) for i in range(self.sampleR)])
+        }
+    @property
+    def teukolsky_amplitudes(self):
+        return {
+                "In":self.teukolsky_amplitude('In'),
+                "Up":self.teukolsky_amplitude('Up')
+        }
+    def teukolsky_amplitude_precisions(self):
+        return {
+                "In":self.teukolsky_amplitude_precision('In'),
+                "Up":self.teukolsky_amplitude_precision('Up')
+        }
 
 cdef class _HertzMode:
     cdef HertzModeCPP *hertzcpp

@@ -163,6 +163,62 @@ class TeukolskyMode:
     def a(self):
         return self.blackholespin
     
+    @property
+    def couplingcoefficients(self):
+        return self.base.couplingcoefficients
+    
+    @property
+    def polarpoints(self):
+        return self.base.polarpoints
+    
+    @property
+    def polarsolutions(self):
+        return self.base.polarsolutions
+    
+    @property
+    def polarderivatives(self):
+        return self.base.polarderivatives
+    
+    @property
+    def polarderivatives2(self):
+        return self.base.polarderivatives2
+    
+    @property
+    def radialpoints(self):
+        return self.base.radialpoints
+    
+    @property
+    def radialsolutions(self):
+        return self.base.radialsolutions
+    
+    @property
+    def radialderivatives(self):
+        return self.base.radialderivatives
+    
+    @property
+    def radialderivatives2(self):
+        return self.base.radialderivatives2
+    
+    @property
+    def homogeneousradialsolutions(self):
+        return self.base.homogeneousradialsolutions
+    
+    @property
+    def homogeneousradialderivatives(self):
+        return self.base.homogeneousradialderivatives
+    
+    @property
+    def homogeneousradialderivatives2(self):
+        return self.base.homogeneousradialderivatives2
+    
+    @property
+    def amplitudes(self):
+        return self.base.amplitudes
+    
+    @property
+    def precisions(self):
+        return self.base.precisions
+    
     def solve(self, geo, method = "AUTO", nsamples = 256, teuk = None, swsh = None):
         """Solve the Teukolsky equation for the given mode and geodesic.
         Parameters
