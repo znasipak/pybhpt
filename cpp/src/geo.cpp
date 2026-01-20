@@ -938,7 +938,7 @@ void kerr_geo_kepler_parameters(double &p, double &e, double &x, double a, doubl
 }
 
 void kerr_geo_kepler_parameters(int n, double* p, double* e, double* x, const double* a, const double* En, const double* Lz, const double* Qc){
-	for(size_t i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){
 		kerr_geo_kepler_parameters(p[i], e[i], x[i], a[i], En[i], Lz[i], Qc[i]);
 	}
 }
@@ -998,7 +998,7 @@ void kerr_geo_orbital_constants(double &En, double &Lz, double &Qc, double a, do
 }
 
 void kerr_geo_orbital_constants(int n, double* En, double* Lz, double* Qc, const double* a, const double* p, const double* e, const double* x){
-	for(size_t i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){
 		kerr_geo_orbital_constants(En[i], Lz[i], Qc[i], a[i], p[i], e[i], x[i]);
 	}
 }
@@ -1352,7 +1352,7 @@ void jacobian_ELQ_to_pex(int n,
 						  double* dpdLz, double* dedLz, double* dxdLz,
 						  double* dpdQ, double* dedQ, double* dxdQ,
 						  const double* a, const double* p, const double* e, const double* x){
-	for(size_t i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){
 		jacobian_ELQ_to_pex(dpdE[i], dedE[i], dxdE[i],
 						  dpdLz[i], dedLz[i], dxdLz[i],
 						  dpdQ[i], dedQ[i], dxdQ[i],
@@ -1365,7 +1365,7 @@ void jacobian_pex_to_ELQ(int n,
 						  double* dLdp, double* dLde, double* dLdx,
 						  double* dQdp, double* dQde, double* dQdx,
 						  const double* a, const double* p, const double* e, const double* x){
-	for(size_t i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){
 		jacobian_pex_to_ELQ(dEdp[i], dEde[i], dEdx[i],
 						  dLdp[i], dLde[i], dLdx[i],
 						  dQdp[i], dQde[i], dQdx[i],
@@ -1378,7 +1378,7 @@ void jacobian_ELQ_to_pex_spherical(int n,
 						  double* dpdLz, double* dedLz, double* dxdLz,
 						  double* dpdQ, double* dedQ, double* dxdQ,
 						  const double* a, const double* p, const double* e, const double* x){
-	for(size_t i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){
 		jacobian_ELQ_to_pex_spherical(dpdE[i], dedE[i], dxdE[i],
 						  dpdLz[i], dedLz[i], dxdLz[i],
 						  dpdQ[i], dedQ[i], dxdQ[i],
@@ -1391,7 +1391,7 @@ void jacobian_pex_to_ELQ_spherical(int n,
 						  double* dLdp, double* dLde, double* dLdx,
 						  double* dQdp, double* dQde, double* dQdx,
 						  const double* a, const double* p, const double* e, const double* x){
-	for(size_t i = 0; i < n; i++){
+	for(int i = 0; i < n; i++){
 		jacobian_pex_to_ELQ_spherical(dEdp[i], dEde[i], dEdx[i],
 						  dLdp[i], dLde[i], dLdx[i],
 						  dQdp[i], dQde[i], dQdx[i],
