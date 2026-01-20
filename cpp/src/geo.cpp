@@ -823,15 +823,33 @@ double kerr_geo_energy_circ_2(double a, double p, double x){
 	return sqrt((kap*rho + 2.*eps*sig - 2.*x*sqrt(sig*(sig*eps*eps + rho*eps*kap - eta*kap*kap)/(x*x)))/(rho*rho + 4.*eta*sig));
 }
 
+double kerr_geo_energy_polar(double a, double p, double e){
+	return std::sqrt(-((p*(std::pow(a,4)*std::pow(-1 + std::pow(e,2),2) + (-4*std::pow(e,2) + std::pow(-2 + p,2))*std::pow(p,2) + 2*std::pow(a,2)*p*(-2 + p + std::pow(e,2)*(2 + p))))/(std::pow(a,4)*std::pow(-1 + std::pow(e,2),2)*(-1 + std::pow(e,2) - p) + (3 + std::pow(e,2) - p)*std::pow(p,4) - 2*std::pow(a,2)*std::pow(p,2)*(-1 - std::pow(e,4) + p + std::pow(e,2)*(2 + p)))));
+}
+
+double kerr_geo_momentum_polar(double a, double p, double e){
+	return 0.;
+}
+
+double kerr_geo_carter_polar(double a, double p, double e){
+	return -((std::pow(p,2)*(std::pow(a,4)*std::pow(-1 + std::pow(e,2),2) + std::pow(p,4) + 2*std::pow(a,2)*p*(-2 + p + std::pow(e,2)*(2 + p))))/(std::pow(a,4)*std::pow(-1 + std::pow(e,2),2)*(-1 + std::pow(e,2) - p) + (3 + std::pow(e,2) - p)*std::pow(p,4) - 2*std::pow(a,2)*std::pow(p,2)*(-1 - std::pow(e,4) + p + std::pow(e,2)*(2 + p))));
+}
+
 double kerr_geo_energy(double a, double p, double e, double x){
+	if(a < 0.){
+		return kerr_geo_energy(-a, p, e, -x);
+	}
+	if(std::abs(e) < 1.e-14){
+		return kerr_geo_energy_circ(a, p, x);
+	}
+	if(std::abs(x) < 1.e-14){
+		return kerr_geo_energy_polar(a, p, e);
+	}
+
 	double rmax = p/(1. - e);
 	double rmin = p/(1. + e);
 	double deltaMax = rmax*rmax - 2.*rmax + a*a;
 	double deltaMin = rmin*rmin - 2.*rmin + a*a;
-
-	if(std::abs(e) < 1.e-14){
-		return kerr_geo_energy_circ(a, p, x);
-	}
 
 	double fmax = pow(rmax, 4) + a*a*(rmax*(rmax + 2.) + (1. - x*x)*deltaMax);
 	double fmin = pow(rmin, 4) + a*a*(rmin*(rmin + 2.) + (1. - x*x)*deltaMin);
@@ -848,13 +866,21 @@ double kerr_geo_energy(double a, double p, double e, double x){
 	double eta = fmax*gmin - gmax*fmin;
 	double sig = gmax*hmin - hmax*gmin;
 
-	return sqrt((kap*rho + 2.*eps*sig - 2.*x*sqrt(sig*(sig*eps*eps + rho*eps*kap - eta*kap*kap)/(x*x)))/(rho*rho + 4.*eta*sig));
+	double sgnX = (x >= 0.) ? 1.0 : -1.0;
+
+	return sqrt((kap*rho + 2.*eps*sig - 2.*sgnX*sqrt(sig*(sig*eps*eps + rho*eps*kap - eta*kap*kap)))/(rho*rho + 4.*eta*sig));
 }
 
 double kerr_geo_momentum(double a, double p, double e, double x){
 	return kerr_geo_momentum(kerr_geo_energy(a, p, e, x), a, p, e, x);
 }
 double kerr_geo_momentum(double En, double a, double p, double e, double x){
+	if(a < 0.){
+		return -kerr_geo_momentum(En, -a, p, e, -x);
+	}
+	if(std::abs(x) < 1.e-14){
+		return kerr_geo_momentum_polar(a, p, e);
+	}
 	double rmax = p/(1. - e);
 	double deltaMax = rmax*rmax - 2.*rmax + a*a;
 
@@ -863,20 +889,94 @@ double kerr_geo_momentum(double En, double a, double p, double e, double x){
 	double hmax = rmax*(rmax - 2.) + (1. - x*x)/(x*x)*deltaMax;
 	double dmax = (rmax*rmax + a*a*(1. - x*x))*deltaMax;
 
-	return (-En*gmax + x*sqrt((En*En*(gmax*gmax + fmax*hmax) - dmax*hmax)/(x*x)))/hmax;
+	double sgnX = (x >= 0.) ? 1.0 : -1.0;
+
+	return (-En*gmax + sgnX*sqrt((En*En*(gmax*gmax + fmax*hmax) - dmax*hmax)))/hmax;
 }
 
 double kerr_geo_carter(double a, double p, double e, double x){
 	double En = kerr_geo_energy(a, p, e, x);
 	return kerr_geo_carter(En, kerr_geo_momentum(En, a, p, e, x), a, p, e, x);
 }
-double kerr_geo_carter(double En, double Lz, double a, double, double, double x){
+double kerr_geo_carter(double En, double Lz, double a, double p, double e, double x){
 	double zmin = sqrt(1. - x*x);
+	if(std::abs(x) < 1.e-14){
+		return kerr_geo_carter_polar(a, p, e);
+	}
 
 	return zmin*zmin*(a*a*(1. - En*En) + Lz*Lz/(x*x));
 }
 
+void kerr_geo_kepler_parameters(double &p, double &e, double &x, double a, double En, double Lz, double Qc){
+    /// Solve for the Keplerian parameters (p, e, x) given the constants of motion (E, Lz, Q)
+	/// This is based on the code in FEW https://github.com/BlackHolePerturbationToolkit/FastEMRIWaveforms/blob/ce6e56aeba259ab7300e0c236fca45bd01c804cb/src/few/utils/geodesic.py#L13
+	/// which was originally authored by Scott Hughes
+
+	if (Qc < 1.0e-14) {
+        double E2m1 = En * En - 1.0;
+        double A2 = 2.0 / E2m1;
+        double A1 = a * a - (Lz * Lz / E2m1);
+        double A0 = 2.0 * std::pow(a * En - Lz, 2) / E2m1;
+        double rp_v, ra_v, r3_v;
+        cubic_solver(rp_v, ra_v, r3_v, 1.0, A2, A1, A0);
+        p = 2.0 * ra_v * rp_v / (ra_v + rp_v);
+        e = (ra_v - rp_v) / (ra_v + rp_v);
+        x = (Lz > 0.0) ? 1.0 : -1.0;
+    } else {
+        double a2 = a * a;
+        double E2m1 = (En - 1.0) * (En + 1.0);
+        double aEmLz = a * En - Lz;
+        double A0 = -a2 * Qc / E2m1;
+        double A1 = 2.0 * (Qc + aEmLz * aEmLz) / E2m1;
+        double A2 = (a2 * E2m1 - Lz * Lz - Qc) / E2m1;
+        double A3 = 2.0 / E2m1;
+
+        double B0 = A0 + A3 * (-0.25 * A1 + A3 * (0.0625 * A2 - 0.01171875 * A3 * A3));
+        double B1 = A1 + A3 * (-0.5 * A2 + 0.125 * A3 * A3);
+        double B2 = A2 - 0.375 * A3 * A3;
+        double C0 = -0.015625 * B1 * B1;
+        double C1 = 0.0625 * B2 * B2 - 0.25 * B0;
+        double C2 = 0.5 * B2;
+
+        double rtQnr = std::sqrt(C2 * C2 / 9.0 - C1 / 3.0);
+        double Rnr = C2 * (C2 * C2 / 27.0 - C1 / 6.0) + C0 / 2.0;
+        double theta = std::acos(Rnr / (rtQnr * rtQnr * rtQnr));
+        double rtz1 = std::sqrt(-2.0 * rtQnr * std::cos((theta + 2.0 * M_PI) / 3.0) - C2 / 3.0);
+        double z2 = -2.0 * rtQnr * std::cos((theta - 2.0 * M_PI) / 3.0) - C2 / 3.0;
+        double z3 = -2.0 * rtQnr * std::cos(theta / 3.0) - C2 / 3.0;
+        double rtz2z3 = std::sqrt(z2 * z3);
+        double sgnB1 = (B1 > 0) ? 1.0 : -1.0;
+        double rttermmin = std::sqrt(z2 + z3 - 2.0 * sgnB1 * rtz2z3);
+        double ra_v = -0.25 * A3 + rtz1 + rttermmin;
+        double rp_v = -0.25 * A3 + rtz1 - rttermmin;
+
+        p = 2.0 * ra_v * rp_v / (ra_v + rp_v);
+        e = (ra_v - rp_v) / (ra_v + rp_v);
+        double QpLz2ma2omE2 = Qc + Lz * Lz + a2 * E2m1;
+        double denomsqr = QpLz2ma2omE2 + std::sqrt(std::pow(QpLz2ma2omE2, 2) - 4.0 * Lz * Lz * a2 * E2m1);
+        x = std::sqrt(2.0) * Lz / std::sqrt(denomsqr);
+    }
+}
+
+void kerr_geo_kepler_parameters(int n, double* p, double* e, double* x, const double* a, const double* En, const double* Lz, const double* Qc){
+	for(int i = 0; i < n; i++){
+		kerr_geo_kepler_parameters(p[i], e[i], x[i], a[i], En[i], Lz[i], Qc[i]);
+	}
+}
+
 void kerr_geo_orbital_constants(double &En, double &Lz, double &Qc, double a, double p, double e, double x){
+	if(a < 0.){
+		kerr_geo_orbital_constants(En, Lz, Qc, -a, p, e, -x);
+		Lz = -Lz;
+		return ;
+	}
+	if(std::abs(x) < 1.e-14){
+		En = kerr_geo_energy_polar(a, p, e);
+		Lz = kerr_geo_momentum_polar(a, p, e);
+		Qc = kerr_geo_carter_polar(a, p, e);
+		return ;
+	}
+	
 	double rmax = p/(1. - e);
 	double rmin = p/(1. + e);
 	double deltaMax = rmax*rmax - 2.*rmax + a*a;
@@ -924,6 +1024,12 @@ void kerr_geo_orbital_constants(double &En, double &Lz, double &Qc, double a, do
 	}
 }
 
+void kerr_geo_orbital_constants(int n, double* En, double* Lz, double* Qc, const double* a, const double* p, const double* e, const double* x){
+	for(int i = 0; i < n; i++){
+		kerr_geo_orbital_constants(En[i], Lz[i], Qc[i], a[i], p[i], e[i], x[i]);
+	}
+}
+
 void kerr_geo_radial_roots(double &r1, double &r2, double &r3, double &r4, double a, double p, double e, double En, double , double Qc){
 	r1 = p/(1. - e);
 	r2 = p/(1. + e);
@@ -943,6 +1049,287 @@ void kerr_geo_polar_roots(double &z1, double &z2, double a, double x, double En,
 		double alpha = Lz*Lz + Qc + beta;
 		double zsqrt = sqrt(alpha*alpha - 4*Qc*beta);
 		z1 = sqrt((alpha + zsqrt)/(2.*beta));
+	}
+}
+
+double jacobian_D(double a, double r, double En, double Lz, double Qc){
+	return 2.0 * (Qc + (a * En - Lz) * (a * En - Lz)) - 2.0 * r * (Lz * Lz + Qc + a * a * (1.0 - En * En)) + 6.0 * r * r - 4.0 * r * r * r * (1.0 - En * En);
+}
+
+double jacobian_D_spherical(double a, double r, double En, double Lz, double Qc){
+	return - (Lz * Lz + Qc + a * a * (1.0 - En * En)) + 6.0 * r - 6.0 * r * r * (1.0 - En * En);
+}
+
+double jacobian_Dx(double a, double x, double En, double Lz, double Qc){
+	if(std::abs(x) > 0.5){
+		return 2.0 * (Lz * Lz + x * x * x * x * a * a * (1.0 - En * En));
+	}else{
+		return 2.0 * (Qc - a * a * (1.0 - En * En) * (1.0 - x * x) * (1.0 - x * x));
+	}
+}
+
+double jacobian_numerdQx(double a, double x, double En, double Lz, double Qc){
+	if(std::abs(x) > 0.5){
+		return - x * x * x;
+	}else{
+		return -x * (1.0 - x * x);
+	}
+}
+
+double jacobian_numerdEx(double a, double x, double En, double Lz, double Qc){
+	if(std::abs(x) > 0.5){
+		return - 2.0 * x * x * x * (1.0 - x * x) * a * a * En;
+	}else{
+		return - 2.0 * x * (1.0 - x * x) * (1.0 - x * x) * a * a * En;
+	}
+}
+
+double jacobian_numerdLzx(double a, double x, double En, double Lz, double Qc){
+	if(std::abs(x) > 0.5){
+		return 2.0 * x * (1.0 - x * x) * Lz;
+	}else{
+		return (1.0 - x * x) * 2.0 * std::sqrt(1.0 - x * x) * std::sqrt(Qc - a * a * (1.0 - En * En) * (1.0 - x * x));
+	}
+}
+
+void jacobian_ELQ_to_pex_generic(double &dpdE, double &dedE, double &dxdE,
+						  double &dpdLz, double &dedLz, double &dxdLz,
+						  double &dpdQ, double &dedQ, double &dxdQ,
+						  double a, double p, double e, double x){
+	double ra = p/(1. - e);
+	double rp = p/(1. + e);
+
+	double En, Lz, Qc;
+	kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
+
+	double Da = jacobian_D(a, ra, En, Lz, Qc);
+	double Dp = jacobian_D(a, rp, En, Lz, Qc);
+	double Dx = jacobian_Dx(a, x, En, Lz, Qc);
+
+	double numerdEx = jacobian_numerdEx(a, x, En, Lz, Qc);
+	double numerdLzx = jacobian_numerdLzx(a, x, En, Lz, Qc);
+	double numerdQx = jacobian_numerdQx(a, x, En, Lz, Qc);
+
+	double numerdEa = 4.0 * a * (Lz - a * En) * ra - 2 * En * ra * ra * (ra * ra + a * a);
+	double numerdEp = 4.0 * a * (Lz - a * En) * rp - 2 * En * rp * rp * (rp * rp + a * a);
+	
+	double numerdLza = 4.0 * (a * En - Lz) * ra + 2.0 * Lz * ra * ra;
+	double numerdLzp = 4.0 * (a * En - Lz) * rp + 2.0 * Lz * rp * rp;
+	
+	double numerdQa = ra * ra - 2.0 * ra + a * a;
+	double numerdQp = rp * rp - 2.0 * rp + a * a;
+
+	double dpdra = 0.5 * (1.0 - e) * (1.0 - e);
+	double dpdrp = 0.5 * (1.0 + e) * (1.0 + e);
+
+	double dedra = 0.5 * (1.0 - e * e) / p * (1.0 - e);
+	double dedrp = - 0.5 * (1.0 - e * e) / p * (1.0 + e);
+
+	dpdE = dpdra * numerdEa / Da + dpdrp * numerdEp / Dp;
+	dedE = dedra * numerdEa / Da + dedrp * numerdEp / Dp;
+	dxdE = (numerdEx) / Dx;
+	dpdLz = dpdra * numerdLza / Da + dpdrp * numerdLzp / Dp;
+	dedLz = dedra * numerdLza / Da + dedrp * numerdLzp / Dp;
+	dxdLz = (numerdLzx) / Dx;
+	dpdQ = dpdra * numerdQa / Da + dpdrp * numerdQp / Dp;
+	dedQ = dedra * numerdQa / Da + dedrp * numerdQp / Dp;
+	dxdQ = (numerdQx) / Dx;
+}
+
+void jacobian_pex_to_ELQ_generic(double &dEdp, double &dEde, double &dEdx,
+						  double &dLdp, double &dLde, double &dLdx,
+						  double &dQdp, double &dQde, double &dQdx,
+						  double a, double p, double e, double x){
+	double dpdE, dedE, dxdE;
+	double dpdLz, dedLz, dxdLz;
+	double dpdQ, dedQ, dxdQ;
+	jacobian_ELQ_to_pex_generic(dpdE, dedE, dxdE,
+						  dpdLz, dedLz, dxdLz,
+						  dpdQ, dedQ, dxdQ,
+						  a, p, e, x);
+	double detJ = dpdE*(dedLz*dxdQ - dxdLz*dedQ) - dedE*(dpdLz*dxdQ - dxdLz*dpdQ) + dxdE*(dpdLz*dedQ - dedLz*dpdQ);
+	dEdp = (dedLz*dxdQ - dxdLz*dedQ)/detJ;
+	dEde = (dxdLz*dpdQ - dpdLz*dxdQ)/detJ;
+	dEdx = (dpdLz*dedQ - dedLz*dpdQ)/detJ;
+	dLdp = (dxdE*dedQ - dedE*dxdQ)/detJ;
+	dLde = (dpdE*dxdQ - dxdE*dpdQ)/detJ;
+	dLdx = (dedE*dpdQ - dpdE*dedQ)/detJ;
+	dQdp = (dedE*dxdLz - dxdE*dedLz)/detJ;
+	dQde = (dxdE*dpdLz - dpdE*dxdLz)/detJ;
+	dQdx = (dpdE*dedLz - dedE*dpdLz)/detJ;
+}
+
+void jacobian_ELQ_to_pex_spherical(double &dpdE, double &dedE, double &dxdE,
+						  double &dpdLz, double &dedLz, double &dxdLz,
+						  double &dpdQ, double &dedQ, double &dxdQ,
+						  double a, double p, double e, double x, 
+						  double En, double Lz, double Qc){
+	double Dc = jacobian_D_spherical(a, p, En, Lz, Qc);
+	double Dx = jacobian_Dx(a, x, En, Lz, Qc);
+
+	double numerdEx = jacobian_numerdEx(a, x, En, Lz, Qc);
+	double numerdLzx = jacobian_numerdLzx(a, x, En, Lz, Qc);
+	double numerdQx = jacobian_numerdQx(a, x, En, Lz, Qc);
+	double numerdE = 2.0 * a * (Lz - a * En) - 2.0 * En * p * (2.0 * p * p + a * a);
+	
+	double numerdLz = - 2.0 * (Lz - a * En) + 2.0 * Lz * p;
+
+	double numerdQ = p - 1.0;
+
+	dpdE = numerdE / Dc;
+	dedE = 0.0;
+	dxdE = (numerdEx) / Dx;
+	dpdLz = numerdLz / Dc;
+	dedLz = 0.0;
+	dxdLz = (numerdLzx) / Dx;
+	dpdQ = numerdQ / Dc;
+	dedQ = 0.0;
+	dxdQ = (numerdQx) / Dx;
+}
+
+void jacobian_ELQ_to_pex_spherical(double &dpdE, double &dedE, double &dxdE,
+						  double &dpdLz, double &dedLz, double &dxdLz,
+						  double &dpdQ, double &dedQ, double &dxdQ,
+						  double a, double p, double e, double x){
+	double En, Lz, Qc;
+	kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
+	jacobian_ELQ_to_pex_spherical(dpdE, dedE, dxdE,
+						  dpdLz, dedLz, dxdLz,
+						  dpdQ, dedQ, dxdQ,
+						  a, p, e, x, En, Lz, Qc);
+}
+
+void jacobian_pex_to_ELQ_spherical(double &dEdp, double &dEde, double &dEdx,
+						  double &dLdp, double &dLde, double &dLdx,
+						  double &dQdp, double &dQde, double &dQdx,
+						  double a, double p, double e, double x){
+	double dpdE, dedE, dxdE;
+	double dpdLz, dedLz, dxdLz;
+	double dpdQ, dedQ, dxdQ;
+
+	double En, Lz, Qc;
+	kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
+
+	jacobian_ELQ_to_pex_spherical(dpdE, dedE, dxdE,
+						  dpdLz, dedLz, dxdLz,
+						  dpdQ, dedQ, dxdQ,
+						  a, p, e, x, En, Lz, Qc);
+
+	double detJ = dpdE*dxdLz - dxdE*dpdLz;
+	dEdp = dxdLz/detJ;
+	dEde = 0.0;
+	dEdx = -dpdLz/detJ;
+	dLdp = -dxdE/detJ;
+	dLde = 0.0;
+	dLdx = dpdE/detJ;
+	dQdp = (1.0 - x * x) * ( - 2 * a * a * En * dEdp + 2 * Lz * dLdp / (x * x) );
+	dQde = 0.0;
+	dQdx = - 2.0 * x * (a * a * (1.0 - En * En) + Lz * Lz / (x * x)) + (1.0 - x * x) * ( - 2 * a * a * En * dEdx + 2 * Lz * dLdx / (x * x) - 2 * Lz * Lz / (x * x * x) );
+}
+
+// void jacobian_pex_to_ELQ(double &dEdp, double &dEde, double &dEdx,
+// 						  double &dLdp, double &dLde, double &dLdx,
+// 						  double &dQdp, double &dQde, double &dQdx,
+// 						  double a, double p, double e, double x){
+// 	if(std::abs(e) < 1.e-14){
+// 		jacobian_pex_to_ELQ_spherical(dEdp, dEde, dEdx,
+// 						  dLdp, dLde, dLdx,
+// 						  dQdp, dQde, dQdx,
+// 						  a, p, e, x);
+// 	}else{
+// 		jacobian_pex_to_ELQ_generic(dEdp, dEde, dEdx,
+// 						  dLdp, dLde, dLdx,
+// 						  dQdp, dQde, dQdx,
+// 						  a, p, e, x);
+// 	}
+// }
+
+// void jacobian_ELQ_to_pex(double &dpdE, double &dedE, double &dxdE,
+// 						  double &dpdLz, double &dedLz, double &dxdLz,
+// 						  double &dpdQ, double &dedQ, double &dxdQ,
+// 						  double a, double p, double e, double x){
+// 	if(std::abs(e) < 1.e-14){
+// 		jacobian_ELQ_to_pex_spherical(dpdE, dedE, dxdE,
+// 						  dpdLz, dedLz, dxdLz,
+// 						  dpdQ, dedQ, dxdQ,
+// 						  a, p, e, x);
+// 	}else{
+// 		jacobian_ELQ_to_pex_generic(dpdE, dedE, dxdE,
+// 						  dpdLz, dedLz, dxdLz,
+// 						  dpdQ, dedQ, dxdQ,
+// 						  a, p, e, x);
+// 	}
+// }
+
+void jacobian_pex_to_ELQ(double &dEdp, double &dEde, double &dEdx,
+						  double &dLdp, double &dLde, double &dLdx,
+						  double &dQdp, double &dQde, double &dQdx,
+						  double a, double p, double e, double x){
+	jacobian_pex_to_ELQ_generic(dEdp, dEde, dEdx,
+						  dLdp, dLde, dLdx,
+						  dQdp, dQde, dQdx,
+						  a, p, e, x);
+}
+
+void jacobian_ELQ_to_pex(double &dpdE, double &dedE, double &dxdE,
+						  double &dpdLz, double &dedLz, double &dxdLz,
+						  double &dpdQ, double &dedQ, double &dxdQ,
+						  double a, double p, double e, double x){
+	jacobian_ELQ_to_pex_generic(dpdE, dedE, dxdE,
+						  dpdLz, dedLz, dxdLz,
+						  dpdQ, dedQ, dxdQ,
+						  a, p, e, x);
+}
+
+void jacobian_ELQ_to_pex(int n,
+						  double* dpdE, double* dedE, double* dxdE,
+						  double* dpdLz, double* dedLz, double* dxdLz,
+						  double* dpdQ, double* dedQ, double* dxdQ,
+						  const double* a, const double* p, const double* e, const double* x){
+	for(int i = 0; i < n; i++){
+		jacobian_ELQ_to_pex(dpdE[i], dedE[i], dxdE[i],
+						  dpdLz[i], dedLz[i], dxdLz[i],
+						  dpdQ[i], dedQ[i], dxdQ[i],
+						  a[i], p[i], e[i], x[i]);
+	}
+}
+
+void jacobian_pex_to_ELQ(int n,
+						  double* dEdp, double* dEde, double* dEdx,
+						  double* dLdp, double* dLde, double* dLdx,
+						  double* dQdp, double* dQde, double* dQdx,
+						  const double* a, const double* p, const double* e, const double* x){
+	for(int i = 0; i < n; i++){
+		jacobian_pex_to_ELQ(dEdp[i], dEde[i], dEdx[i],
+						  dLdp[i], dLde[i], dLdx[i],
+						  dQdp[i], dQde[i], dQdx[i],
+						  a[i], p[i], e[i], x[i]);
+	}
+}
+
+void jacobian_ELQ_to_pex_spherical(int n,
+						  double* dpdE, double* dedE, double* dxdE,
+						  double* dpdLz, double* dedLz, double* dxdLz,
+						  double* dpdQ, double* dedQ, double* dxdQ,
+						  const double* a, const double* p, const double* e, const double* x){
+	for(int i = 0; i < n; i++){
+		jacobian_ELQ_to_pex_spherical(dpdE[i], dedE[i], dxdE[i],
+						  dpdLz[i], dedLz[i], dxdLz[i],
+						  dpdQ[i], dedQ[i], dxdQ[i],
+						  a[i], p[i], e[i], x[i]);
+	}
+}
+
+void jacobian_pex_to_ELQ_spherical(int n,
+						  double* dEdp, double* dEde, double* dEdx,
+						  double* dLdp, double* dLde, double* dLdx,
+						  double* dQdp, double* dQde, double* dQdx,
+						  const double* a, const double* p, const double* e, const double* x){
+	for(int i = 0; i < n; i++){
+		jacobian_pex_to_ELQ_spherical(dEdp[i], dEde[i], dEdx[i],
+						  dLdp[i], dLde[i], dLdx[i],
+						  dQdp[i], dQde[i], dQdx[i],
+						  a[i], p[i], e[i], x[i]);
 	}
 }
 

@@ -150,7 +150,12 @@ double kerr_geo_carter(double a, double p, double e, double x);
 double kerr_geo_momentum(double En, double a, double p, double e, double x);
 double kerr_geo_carter(double En, double Lz, double a, double p, double e, double x);
 
+void kerr_geo_kepler_parameters(double &p, double &e, double &x, double a, double En, double Lz, double Qc);
+void kerr_geo_kepler_parameters(int n, double* p, double* e, double* x, const double* a, const double* En, const double* Lz, const double* Qc);
+
 void kerr_geo_orbital_constants(double &En, double &Lz, double &Qc, double a, double p, double e, double x);
+void kerr_geo_orbital_constants(int n, double* En, double* Lz, double* Qc, const double* a, const double* p, const double* e, const double* x);
+
 void kerr_geo_radial_roots(double &r1, double &r2, double &r3, double &r4, double a, double p, double e, double En, double Lz, double Qc);
 void kerr_geo_polar_roots(double &z1, double &z2, double a, double x, double En, double Lz, double Qc);
 
@@ -161,6 +166,42 @@ double kerr_delta(double r, double a);
 Vector kerr_varpi2(Vector &r, double a);
 void kerr_varpi2(Vector &varpi2, Vector &r, double a);
 double kerr_varpi2(double r, double a);
+
+// void ELQdot_to_pexdot(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot);
+// void ELQdot_to_pexdot(int n, double* pdot, double* edot, double* xdot, const double* a, const double* p, const double* e, const double* x, const double* Edot, const double* Lzdot, const double* Qdot);
+
+void jacobian_ELQ_to_pex(double &dpdE, double &dedE, double &dxdE,
+						  double &dpdLz, double &dedLz, double &dxdLz,
+						  double &dpdQ, double &dedQ, double &dxdQ,
+						  double a, double p, double e, double x);
+void jacobian_ELQ_to_pex(int n, double* dpdE, double* dedE, double* dxdE,
+						  double* dpdLz, double* dedLz, double* dxdLz,
+						  double* dpdQ, double* dedQ, double* dxdQ,
+						  const double* a, const double* p, const double* e, const double* x);
+void jacobian_pex_to_ELQ(double &dEdp, double &dEde, double &dEdx,
+						  double &dLdp, double &dLde, double &dLdx,
+						  double &dQdp, double &dQde, double &dQdx,
+						  double a, double p, double e, double x);
+void jacobian_pex_to_ELQ(int n, double* dEdp, double* dEde, double* dEdx,
+						  double* dLdp, double* dLde, double* dLdx,
+						  double* dQdp, double* dQde, double* dQdx,
+						  const double* a, const double* p, const double* e, const double* x);  
+void jacobian_ELQ_to_pex_spherical(double &dpdE, double &dedE, double &dxdE,
+						  double &dpdLz, double &dedLz, double &dxdLz,
+						  double &dpdQ, double &dedQ, double &dxdQ,
+						  double a, double p, double e, double x);
+void jacobian_ELQ_to_pex_spherical(int n, double* dpdE, double* dedE, double* dxdE,
+						  double* dpdLz, double* dedLz, double* dxdLz,
+						  double* dpdQ, double* dedQ, double* dxdQ,
+						  const double* a, const double* p, const double* e, const double* x);
+void jacobian_pex_to_ELQ_spherical(double &dEdp, double &dEde, double &dEdx,
+						  double &dLdp, double &dLde, double &dLdx,
+						  double &dQdp, double &dQde, double &dQdx,
+						  double a, double p, double e, double x);
+void jacobian_pex_to_ELQ_spherical(int n, double* dEdp, double* dEde, double* dEdx,
+						  double* dLdp, double* dLde, double* dLdx,
+						  double* dQdp, double* dQde, double* dQdx,
+						  const double* a, const double* p, const double* e, const double* x);  
 
 Vector rp_psi(Vector &psi, double p, double e);
 void rp_psi(Vector &rp, Vector &psi, double p, double e);
@@ -231,7 +272,6 @@ void kerr_trajectory(Vector& tR, Vector& tTh, Vector& rp, Vector& thetap, Vector
 GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsample);
 // void mino_of_psi_test();
 
-
 ///////////////////////
 // Special functions //
 ///////////////////////
@@ -274,5 +314,7 @@ double kerr_geo_Vz_dz(double a, double En, double Lz, double Q, double z);
 double kerr_geo_Vz_dz2(double a, double En, double Lz, double Q, double z);
 double kerr_isco(double a, int sgnX);
 double kerr_isco_frequency(double a);
+
+
 
 #endif

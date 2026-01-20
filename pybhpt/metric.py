@@ -1,7 +1,6 @@
-from cybhpt_full import metric_coefficients_cython_S4dagger, metric_coefficients_cython_S0dagger
+from cybhpt_full import _metric_coefficients_cython_S4dagger, _metric_coefficients_cython_S0dagger
 import numpy as np
 from pybhpt.hertz import available_gauges
-from pybhpt.swsh import Yslm, spin_operator_normalization
 
 def gauge_check(gauge):
     if gauge not in available_gauges:
@@ -31,7 +30,7 @@ def metric_coefficients_S4dagger_ab(ai, bi, nt, nr, nz, nph, a, r, z):
     -------
     float
         The computed metric coefficient."""
-    return metric_coefficients_cython_S4dagger(ai, bi, nt, nr, nz, nph, a, r, z)
+    return _metric_coefficients_cython_S4dagger(ai, bi, nt, nr, nz, nph, a, r, z)
 
 def metric_coefficients_S0dagger_ab(ai, bi, nt, nr, nz, nph, a, r, z):
     """Compute the metric coefficients for the reconstructed perturbation associated with the
@@ -54,7 +53,7 @@ def metric_coefficients_S0dagger_ab(ai, bi, nt, nr, nz, nph, a, r, z):
     -------
     float
         The computed metric coefficient."""
-    return metric_coefficients_cython_S0dagger(ai, bi, nt, nr, nz, nph, a, r, z)
+    return _metric_coefficients_cython_S0dagger(ai, bi, nt, nr, nz, nph, a, r, z)
 
 def metric_coefficients_S0dagger(a, b, c, d, q, rvals, zvals):
     """Compute the metric coefficients for the reconstructed perturbation associated with the

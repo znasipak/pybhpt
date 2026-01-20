@@ -1,15 +1,15 @@
-from cybhpt_full import RadialTeukolsky as RadialTeukolskyCython
-from cybhpt_full import available_methods as available_methods_cython
-from cybhpt_full import renormalized_angular_momentum as nu_cython
-from cybhpt_full import renormalized_angular_momentum_monodromy as nu_2_cython
-from cybhpt_full import hypergeo_2F1 as hypergeo_2F1_cython
+from cybhpt_full import RadialTeukolsky as _RadialTeukolskyCython
+from cybhpt_full import available_methods as _available_methods_cython
+from cybhpt_full import renormalized_angular_momentum as _nu_cython
+from cybhpt_full import renormalized_angular_momentum_monodromy as _nu_2_cython
+from cybhpt_full import hypergeo_2F1 as _hypergeo_2F1_cython
 import numpy as np
 
 def available_methods():
     """
     Returns a list of available solution methods.
     """
-    return available_methods_cython()
+    return _available_methods_cython()
 
 def renormalized_angular_momentum(s, j, m, a, omega):
     """
@@ -33,7 +33,7 @@ def renormalized_angular_momentum(s, j, m, a, omega):
     complex
         The renormalized angular momentum.
     """
-    return nu_cython(s, j, m, a, omega)
+    return _nu_cython(s, j, m, a, omega)
 
 def renormalized_angular_momentum_monodromy(s, j, m, a, omega, la):
     """
@@ -59,7 +59,7 @@ def renormalized_angular_momentum_monodromy(s, j, m, a, omega, la):
     complex
         The renormalized angular momentum.
     """
-    return nu_2_cython(s, j, m, a, omega, la)
+    return _nu_2_cython(s, j, m, a, omega, la)
 
 class RadialTeukolsky:
     """A class for solving the homogeneous radial Teukolsky equation.
@@ -163,7 +163,7 @@ class RadialTeukolsky:
         
         if self.nsamples == 0:
             raise ValueError("Radial points array is empty.")
-        self.base = RadialTeukolskyCython(a, s, j, m, omega, self.radialpoints)
+        self.base = _RadialTeukolskyCython(a, s, j, m, omega, self.radialpoints)
 
 
     @property
@@ -441,4 +441,4 @@ def hypergeo_2F1(a, b, c, x):
     complex
         The value of the hypergeometric function 2F1(a, b; c; x).
     """
-    return hypergeo_2F1_cython(a, b, c, x)
+    return _hypergeo_2F1_cython(a, b, c, x)

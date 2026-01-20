@@ -1,5 +1,12 @@
-from cybhpt_full import FluxList as FluxListCython
-from cybhpt_full import flux as FluxCython
+"""
+Docstring for pybhpt.flux
+
+Module containing classes and functions for computing fluxes of energy, angular momentum, and Carter constant in Kerr spacetime.
+"""
+
+from cybhpt_full import flux as _FluxCython
+from cybhpt_full import _ELQdot_to_pexdot_wrapper, _ELQdot_to_pexdot_array_wrapper
+import numpy as np
 
 class FluxList:
     """A class for storing fluxes of energy, angular momentum, and Carter constant.
@@ -29,11 +36,6 @@ class FluxList:
             self.fluxes = [{"I": 0., "H": 0.}, {"I": 0., "H": 0.}, {"I": 0., "H": 0.}]
         else:
             self.fluxes = fluxes
-
-    # def __add__(self, fluxlist2):
-    #     for i in range(3):
-    #         for bc in ["H", "I"]:
-    #             self.fluxes[i][bc] += fluxlist2.fluxes[i][bc]
     
     @property
     def energy(self):
@@ -83,7 +85,8 @@ class FluxMode:
         A list containing the total fluxes, which are the sum of the horizon and infinity fluxes.
         """
     def __init__(self, geo, teuk):
-        self.base = FluxCython(teuk.spinweight, geo.base, teuk.base)
+        self.base = _FluxCython(teuk.spinweight, geo.base, teuk.base)
+        self.apex = np.array([geo.a, geo.p, geo.e, geo.x])
 
     @property
     def energy(self):
@@ -122,3 +125,40 @@ class FluxMode:
     @property
     def totalfluxes(self):
         return [self.energy["I"] + self.energy["H"], self.angularmomentum["I"] + self.angularmomentum["H"], self.carterconstant["I"] + self.carterconstant["H"]]
+
+def transform_ELQ_fluxes_to_pex(a, p, e, x, Edot, Lzdot, Qdot):
+    """Transform fluxes of energy, angular momentum, and Carter constant to fluxes of semi-latus rectum, eccentricity, and inclination.
+
+    Parameters
+    ----------
+    a : float or np.ndarray
+        Spin parameter of the Kerr black hole.
+    p : float or np.ndarray
+        Semi-latus rectum of the orbit.
+    e : float or np.ndarray
+        Eccentricity of the orbit.
+    x : float or np.ndarray
+        Cosine of the inclination angle of the orbit.
+    Edot : float or np.ndarray
+        Flux of energy.
+    Lzdot : float or np.ndarray
+        Flux of angular momentum.
+    Qdot : float or np.ndarray
+        Flux of Carter constant.
+
+    Returns
+    -------
+    tuple of (float or np.ndarray, float or np.ndarray, float or np.ndarray)
+        A tuple ``(pdot, edot, xdot)`` where:
+        - pdot: Flux of semi-latus rectum.
+        - edot: Flux of eccentricity.
+        - xdot: Flux of inclination.
+    """
+    if isinstance(p, np.ndarray):
+        assert isinstance(e, np.ndarray) and isinstance(x, np.ndarray) and isinstance(Edot, np.ndarray) and isinstance(Lzdot, np.ndarray) and isinstance(Qdot, np.ndarray), "If p is an array, e, x, Edot, Lzdot, and Qdot must also be arrays of the same shape."
+        assert p.shape == e.shape == x.shape == Edot.shape == Lzdot.shape == Qdot.shape, "p, e, x, Edot, Lzdot, and Qdot must have the same shape."
+        if not isinstance(a, np.ndarray):
+            a = np.full_like(p, a)
+        return _ELQdot_to_pexdot_array_wrapper(a, p, e, x, Edot, Lzdot, Qdot)
+    else:  
+        return _ELQdot_to_pexdot_wrapper(a, p, e, x, Edot, Lzdot, Qdot)

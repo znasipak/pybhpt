@@ -158,7 +158,7 @@ cdef Gauge str_to_gauge(unicode gauge_str) except *:
         print("Error")
         TypeError("{} is not a supported gauge.".format(gauge_str))
 
-cdef class TeukolskyMode:
+cdef class _TeukolskyMode:
     cdef TeukolskyModeCPP *teukcpp
     cdef int sampleR
     cdef int sampleTh
@@ -297,14 +297,14 @@ cdef class TeukolskyMode:
     def flip_spinweight(self):
         self.teukcpp.flipSpinWeight()
 
-cdef class HertzMode:
+cdef class _HertzMode:
     cdef HertzModeCPP *hertzcpp
     cdef unicode gauge_str
     cdef Gauge gauge_cpp
     cdef int sampleR
     cdef int sampleTh
 
-    def __init__(self, TeukolskyMode teuk, unicode gauge):
+    def __init__(self, _TeukolskyMode teuk, unicode gauge):
         if np.abs(teuk.spinweight) != 2:
             raise ValueError("Hertz mode only accepts Teukolsky solutions with spin-weight -2,+2.")
         self.gauge_cpp = str_to_gauge(gauge)
@@ -479,7 +479,7 @@ cdef class HertzMode:
                 "Up":np.array([self.radialderivative2('Up', i) for i in range(self.sampleR)])
         }
         
-def test_hertz_mode_cython(int j, int m, int k, int n, KerrGeodesic geo):
+def _test_hertz_mode_cython(int j, int m, int k, int n, KerrGeodesic geo):
     test_hertz_mode(j, m, k, n, dereference(geo.geocpp))
 
 cdef dict basis_dict = {
@@ -487,25 +487,25 @@ cdef dict basis_dict = {
     "coordinate": None
 }
 
-def teuk_to_hertz_ORG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
+def _teuk_to_hertz_ORG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
     cdef cpp_complex[double] PsiIn
     cdef cpp_complex[double] PsiUp
     teukolsky_to_hertz_ORG(PsiIn, PsiUp, ZIn, ZUp, j, m, k, a, omega, lambdaCH)
     return (PsiIn, PsiUp)
 
-def teuk_to_hertz_IRG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
+def _teuk_to_hertz_IRG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
     cdef cpp_complex[double] PsiIn
     cdef cpp_complex[double] PsiUp
     teukolsky_to_hertz_IRG(PsiIn, PsiUp, ZIn, ZUp, j, m, k, a, omega, lambdaCH)
     return (PsiIn, PsiUp)
 
-def teuk_to_hertz_SRG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
+def _teuk_to_hertz_SRG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
     cdef cpp_complex[double] PsiIn
     cdef cpp_complex[double] PsiUp
     teukolsky_to_hertz_SAAB(PsiIn, PsiUp, ZIn, ZUp, j, m, k, a, omega, lambdaCH)
     return (PsiIn, PsiUp)
 
-def teuk_to_hertz_ARG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
+def _teuk_to_hertz_ARG(cpp_complex[double] ZIn, cpp_complex[double] ZUp, int j, int m, int k, double a, double omega, double lambdaCH):
     cdef cpp_complex[double] PsiIn
     cdef cpp_complex[double] PsiUp
     teukolsky_to_hertz_ASAAB(PsiIn, PsiUp, ZIn, ZUp, j, m, a, omega, lambdaCH)
@@ -568,7 +568,7 @@ cdef dict metric_component_gauge_dict = {
     #     (4, 4): None},
 }
 
-def metric_11(double a, double r, double z):
+def _metric_11(double a, double r, double z):
     cdef vector[double] rvec = vector[double](1)
     cdef vector[double] zvec = vector[double](1)
     rvec[0] = r
@@ -579,13 +579,13 @@ def metric_11(double a, double r, double z):
     
     return np.array(coeffs).squeeze()
 
-def metric_coefficient_S4(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):
+def _metric_coefficient_S4(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):
     return metric_coefficient_ORG(alpha, beta, nt, nr, nz, np, a, r, z)
 
-def metric_coefficient_S0(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):
+def _metric_coefficient_S0(int alpha, int beta, int nt, int nr, int nz, int np, double a, double r, double z):
     return metric_coefficient_IRG(alpha, beta, nt, nr, nz, np, a, r, z)
 
-cdef class MetricModeGenerator:
+cdef class _MetricModeGenerator:
     cdef unicode gauge_str
     cdef Gauge gauge_cpp
     cdef unicode basis
@@ -598,13 +598,13 @@ cdef class MetricModeGenerator:
         else:
             raise TypeError('{} is not a valid basis. Must be tetrad or coordinate.'.format(basis))
     
-    def __call__(self, HertzMode hertz, int ai, int bi):
+    def __call__(self, _HertzMode hertz, int ai, int bi):
         if self.basis == "tetrad":
             return self.tetradcomponent(hertz, ai, bi)
         else:
             return self.tetradcomponent(hertz, ai, bi)
     
-    def tetradcomponent(self, HertzMode hertz, int ai, int bi):
+    def tetradcomponent(self, _HertzMode hertz, int ai, int bi):
         if hertz.gauge is not self.gauge_str:
             raise TypeError("Hertz potential in {} gauge. Must be in {} gauge".format(hertz.gauge, self.gauge_str))
         cdef cpp_complex[double] habIn = cpp_complex[double](0., 0.)
@@ -647,7 +647,7 @@ cdef class MetricModeGenerator:
                             dS = cpp_complex[double](0., 0.)
                         for nph in range(3):
                             if nt + nr + nz + nph <= 2:
-                                habbase = metric_coefficient_S0(ai, bi, nt, nr, nz, nph, a, r, z)*dS*(im)**nph*(-1.*iomega)**nt
+                                habbase = _metric_coefficient_S0(ai, bi, nt, nr, nz, nph, a, r, z)*dS*(im)**nph*(-1.*iomega)**nt
                                 habIn += habbase*dPsiIn
                                 habUp += habbase*dPsiUp
             return {"In": habIn, "Up": habUp}

@@ -56,15 +56,19 @@ cdef extern from "swsh.hpp":
     cpp_complex[double] Yslm(int &s, int &l, int &m, double &th, double &ph)
     double Yslm(int &s, int &l, int &m, double &th) except +
     double Yslm_derivative(int &s, int &l, int &m, double &th)
+    double Yslm_derivative2(int &s, int &l, int &m, double &th)
 
-def YslmCy(int s, int l, int m, double theta):
+def _YslmCy(int s, int l, int m, double theta):
   return Yslm(s, l, m, theta)
 
-def YslmCy_derivative(int s, int l, int m, double theta):
+def _YslmCy_derivative(int s, int l, int m, double theta):
   return Yslm_derivative(s, l, m, theta)
 
-def clebschCy(int j1, int j2, int j, int m1, int m2, int m):
+def _YslmCy_derivative2(int s, int l, int m, double theta):
+  return Yslm_derivative2(s, l, m, theta)
+
+def _clebschCy(int j1, int j2, int j, int m1, int m2, int m):
   return clebsch(j1, j2, j, m1, m2, m)
 
-def w3jCy(int j1, int j2, int j, int m1, int m2, int m):
+def _w3jCy(int j1, int j2, int j, int m1, int m2, int m):
   return w3j(j1, j2, j, m1, m2, m)
