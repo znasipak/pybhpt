@@ -882,7 +882,9 @@ Fluxes scalar_energy_flux_mode(double a, double gamma, double omega, double hori
 
 Fluxes scalar_energy_flux_mode(GeodesicSource& geo, TeukolskyMode& teukMode){
 	if(std::abs(teukMode.getFrequency()) > ZERO_FREQ_MAX){
-		teukMode.generateSolutions(geo);
+		if(std::abs(teukMode.getTeukolskyAmplitude(Up)) + std::abs(teukMode.getTeukolskyAmplitude(In)) == 0.){
+			teukMode.generateSolutions(geo);
+		}
 		return scalar_energy_flux_mode(geo.getBlackHoleSpin(), teukMode.getHorizonFrequency(), teukMode.getFrequency(), pow(std::abs(teukMode.getTeukolskyAmplitude(In)), 2), pow(std::abs(teukMode.getTeukolskyAmplitude(Up)), 2));
 	}else{
 		Fluxes eflux = {0., 0.};
@@ -892,7 +894,9 @@ Fluxes scalar_energy_flux_mode(GeodesicSource& geo, TeukolskyMode& teukMode){
 
 Fluxes gravitational_energy_flux_mode(GeodesicSource& geo, TeukolskyMode& teukMode){
 	if(std::abs(teukMode.getFrequency()) > ZERO_FREQ_MAX){
-		teukMode.generateSolutions(geo);
+		if(std::abs(teukMode.getTeukolskyAmplitude(Up)) + std::abs(teukMode.getTeukolskyAmplitude(In)) == 0.){
+			teukMode.generateSolutions(geo);
+		}
 		double prefactor = pow(2.*teukMode.getFrequency(), -2)/M_PI;
 		Fluxes eflux = {prefactor*pow(std::abs(teukMode.getTeukolskyAmplitude(Up)), 2), horizonConstant(teukMode)*prefactor*pow(std::abs(teukMode.getTeukolskyAmplitude(In)), 2)};
 		return eflux;

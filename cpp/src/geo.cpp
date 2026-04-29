@@ -56,7 +56,7 @@ GeodesicSource::GeodesicSource(double a, double p, double e, double x, int Nsamp
 	double cR = 0., cTh = 0., cPh = 0.;
 	if(e == 0. && std::abs(x) == 1.){
 		En = kerr_geo_energy_circ(a*x, p);
-		Lz = kerr_geo_momentum_circ(a*x, p);
+		Lz = x * std::abs(kerr_geo_momentum_circ(a*x, p));
 		upT = kerr_geo_time_frequency_circ(a*x, p);
 		upPh = x*kerr_geo_azimuthal_frequency_circ(a*x, p);
 	}else{
@@ -2186,29 +2186,19 @@ void kerr_trajectory(Vector& tR, Vector& tTh, Vector& rp, Vector& thetap, Vector
 // }
 
 GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsample = pow(2, 9)){
-	// if(e == 0. && std::abs(x) == 1.){
-	// 	GeodesicSource geo = kerr_geo_circ(a, p, sgn(x));
-	// 	GeodesicTrajectory traj = geo.getTrajectory();
-	// 	double tR = geo.tR;
-	// 	double tTheta = geo.tTheta;
-	// 	double r = geo.r;
-	// 	double theta = geo.theta;
-	// 	double phiR = geo.phiR;
-	// 	double phiTheta = geo.phiTheta;
-	//
-	// 	return geo;
-	// }
 	double En = 0., Lz = 0., Qc = 0.;
 	double r1 = 0., r2 = 0., r3 = 0., r4 = 0.;
 	double z1 = 0., z2 = 0.;
 	double upT = 0., upR = 0., upPh = 0., upTh = 0.;
 	double cR = 0., cTh = 0., cPh = 0.;
 	if(e == 0. && std::abs(x) == 1.){
+		std::cout << "Calculating circular equatorial geodesic \n";
 		En = kerr_geo_energy_circ(a*x, p);
-		Lz = kerr_geo_momentum_circ(a*x, p);
+		Lz = x*std::abs(kerr_geo_momentum_circ(a*x, p));
 		upT = kerr_geo_time_frequency_circ(a*x, p);
 		upPh = x*kerr_geo_azimuthal_frequency_circ(a*x, p);
 	}else{
+		std::cout << "Calculating non-circular equatorial geodesic \n";
 		kerr_geo_orbital_constants(En, Lz, Qc, a, p, e, x);
 		// std::cout << "Orbital constants have been calculated \n";
 		kerr_geo_radial_roots(r1, r2, r3, r4, a, p, e, En, Lz, Qc);

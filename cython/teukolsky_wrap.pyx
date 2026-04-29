@@ -350,6 +350,7 @@ cdef class _TeukolskyMode:
                 "In":self.teukolsky_amplitude('In'),
                 "Up":self.teukolsky_amplitude('Up')
         }
+    @property
     def teukolsky_amplitude_precisions(self):
         return {
                 "In":self.teukolsky_amplitude_precision('In'),
