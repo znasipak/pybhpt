@@ -1,0 +1,71 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: pybhpt
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Zachary
+    family-names: Nasipak
+    email: z.nasipak@soton.ac.uk
+    affiliation: University of Southampton
+    orcid: 'https://orcid.org/0000-0002-5109-9704'
+identifiers:
+  - type: url
+    value: 'https://pybhpt.readthedocs.io/'
+    description: Documentation
+  - type: doi
+    value: 10.5281/zenodo.18317623
+    description: Zenodo
+  - type: url
+    value: 'https://github.com/znasipak/pybhpt'
+    description: Github
+repository-code: 'https://github.com/znasipak/pybhpt'
+url: 'https://pybhpt.readthedocs.io/'
+abstract: >-
+  pybhpt is a collection of numerical tools for analyzing
+  perturbations of Kerr spacetime, particularly the
+  self-forces and metric-perturbations experienced by small
+  bodies moving in a Kerr background.
+license: GPL-3.0
+version: v0.9.10
+date-released: '2026-01-20'
+references: 
+  - abbreviation: "Nasipak:2025tby"
+    authors:
+      - family-names: Nasipak
+        given-names: Zachary
+    doi: 10.48550/arXiv.2506.09470
+    year: 2025
+    month: 7
+    title: >-
+      Metric reconstruction and the Hamiltonian for eccentric, precessing binaries in the small-mass-ratio limit
+    identifiers:
+      - type: other
+        value: 'arXiv:gr-qc/2507.07746'
+        description: arXiv preprint of this article
+    type: article
+  - abbreviation: "Nasipak:2022xjh"
+    authors:
+      - family-names: Nasipak
+        given-names: Zachary
+    doi: 10.1103/PhysRevD.106.064042
+    year: 2022
+    month: 9
+    journal: Physical Review D
+    volume: 106
+    issue: 6
+    title: >-
+      Adiabatic evolution due to the conservative scalar self-force during orbital resonances
+    start: 064042
+    publisher:
+      name: American Physical Society
+    url: 'https://link.aps.org/doi/10.1103/PhysRevD.106.064042'
+    identifiers:
+      - type: other
+        value: 'arXiv:gr-qc/2207.02224'
+        description: arXiv preprint of this article
+    type: article
