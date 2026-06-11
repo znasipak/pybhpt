@@ -53,6 +53,26 @@ cdef extern from "radialsolver.hpp":
         cpp_complex[double] getDerivative(BoundaryCondition bc, int pos)
         cpp_complex[double] getSecondDerivative(BoundaryCondition bc, int pos)
 
+    cdef cppclass InterpolatedRadialTeukolskyCPP "InterpolatedRadialTeukolsky":
+        InterpolatedRadialTeukolskyCPP(double a, int s, int l, int m, double omega,
+                                       double rmin, double rmax,
+                                       SolutionMethod method,
+                                       bint solveIn, bint solveUp,
+                                       double rtol) except +
+
+        cpp_complex[double] evaluateSolution  (BoundaryCondition bc, double r)
+        cpp_complex[double] evaluateDerivative(BoundaryCondition bc, double r)
+
+        vector[double] getRadialPoints(BoundaryCondition bc)
+        int getSampleCount(BoundaryCondition bc)
+
+        double getBlackHoleSpin()
+        int getSpinWeight()
+        int getSpheroidalModeNumber()
+        int getAzimuthalModeNumber()
+        double getModeFrequency()
+        double getSpinWeightedSpheroidalEigenvalue()
+
     void flip_spin_of_radial_teukolsky_TS(cpp_complex[double] &RinFlip, cpp_complex[double] &RinPFlip, BoundaryCondition bc, int s, int m, double a, double omega, double la, double r, cpp_complex[double] Rin, cpp_complex[double] RinP)
     double teukolsky_starobinsky_constant(int s, int m, double a, double omega, double lambdaCH)
     double teukolsky_starobinsky_constant_D(int m, double a, double omega, double lambdaCH)
@@ -216,6 +236,109 @@ cdef class RadialTeukolsky:
 
     def second_derivative(self, unicode bc, int pos):
         return self.teukcpp.getSecondDerivative(str_to_bc(bc), pos)
-    
+
     def derivative2(self, unicode bc, int pos):
         return self.teukcpp.getSecondDerivative(str_to_bc(bc), pos)
+
+
+cdef class InterpolatedRadialTeukolsky:
+    cdef InterpolatedRadialTeukolskyCPP *interpcpp
+
+    def __cinit__(self, double a, int s, int l, int m, double omega,
+                  double rmin, double rmax,
+                  unicode method=u"AUTO",
+                  bint solve_in=True, bint solve_up=True,
+                  double rtol=1e-10):
+        self.interpcpp = new InterpolatedRadialTeukolskyCPP(
+            a, s, l, m, omega, rmin, rmax,
+            str_to_method(method), solve_in, solve_up, rtol)
+        if self.interpcpp == NULL:
+            raise MemoryError('Not enough memory.')
+
+    def __dealloc__(self):
+        del self.interpcpp
+
+    @property
+    def blackholespin(self):
+        return self.interpcpp.getBlackHoleSpin()
+
+    @property
+    def spinweight(self):
+        return self.interpcpp.getSpinWeight()
+
+    @property
+    def s(self):
+        return self.spinweight
+
+    @property
+    def spheroidalmode(self):
+        return self.interpcpp.getSpheroidalModeNumber()
+
+    @property
+    def j(self):
+        return self.spheroidalmode
+
+    @property
+    def azimuthalmode(self):
+        return self.interpcpp.getAzimuthalModeNumber()
+
+    @property
+    def m(self):
+        return self.azimuthalmode
+
+    @property
+    def frequency(self):
+        return self.interpcpp.getModeFrequency()
+
+    @property
+    def mode_frequency(self):
+        return self.frequency
+
+    @property
+    def omega(self):
+        return self.frequency
+
+    @property
+    def eigenvalue(self):
+        return self.interpcpp.getSpinWeightedSpheroidalEigenvalue()
+
+    def nsamples(self, unicode bc):
+        """Return the number of interpolation nodes for the given boundary condition."""
+        return self.interpcpp.getSampleCount(str_to_bc(bc))
+
+    def radialpoints(self, unicode bc):
+        """Return the interpolation nodes for the given boundary condition."""
+        cdef vector[double] r = self.interpcpp.getRadialPoints(str_to_bc(bc))
+        return np.array(r)
+
+    def solution(self, unicode bc, double r):
+        """Evaluate R(r) for the given boundary condition."""
+        return self.interpcpp.evaluateSolution(str_to_bc(bc), r)
+
+    def derivative(self, unicode bc, double r):
+        """Evaluate R'(r) for the given boundary condition."""
+        return self.interpcpp.evaluateDerivative(str_to_bc(bc), r)
+
+    def solutions(self, unicode bc, np.ndarray[ndim=1, dtype=np.float64_t] r not None):
+        """Evaluate R(r) at each point in the array r."""
+        cdef int n = r.shape[0]
+        cdef np.ndarray[ndim=1, dtype=np.complex128_t] result = np.zeros(n, dtype=np.complex128)
+        cdef BoundaryCondition bce = str_to_bc(bc)
+        cdef cpp_complex[double] val
+        cdef int i
+        for i in range(n):
+            val = self.interpcpp.evaluateSolution(bce, r[i])
+            result[i] = complex(val.real(), val.imag())
+        return result
+
+    def derivatives(self, unicode bc, np.ndarray[ndim=1, dtype=np.float64_t] r not None):
+        """Evaluate R'(r) at each point in the array r."""
+        cdef int n = r.shape[0]
+        cdef np.ndarray[ndim=1, dtype=np.complex128_t] result = np.zeros(n, dtype=np.complex128)
+        cdef BoundaryCondition bce = str_to_bc(bc)
+        cdef cpp_complex[double] val
+        cdef int i
+        for i in range(n):
+            val = self.interpcpp.evaluateDerivative(bce, r[i])
+            result[i] = complex(val.real(), val.imag())
+        return result

@@ -72,3 +72,6 @@ def _clebschCy(int j1, int j2, int j, int m1, int m2, int m):
 
 def _w3jCy(int j1, int j2, int j, int m1, int m2, int m):
   return w3j(j1, j2, j, m1, m2, m)
+
+def _swsh_eigenvalueCy(int s, int l, int m, double g):
+  return swsh_eigenvalue(s, l, m, g)

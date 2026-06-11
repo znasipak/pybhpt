@@ -1,0 +1,8 @@
+{
+  "source_dir": "/Users/znasipak/Documents/Research/pybhpt",
+  "build_dir": "/Users/znasipak/Documents/Research/pybhpt/build_check",
+  "cmake_path": "/private/var/folders/vf/m7fnlnf949vdz5mw10hnjl080000gn/T/pip-build-env-wlh9nzt6/overlay/lib/python3.12/site-packages/cmake/data/bin/cmake",
+  "skbuild_path": "/private/var/folders/vf/m7fnlnf949vdz5mw10hnjl080000gn/T/pip-build-env-wlh9nzt6/overlay/lib/python3.12/site-packages/scikit_build_core",
+  "skbuild_version": "0.12.2",
+  "python_executable": "/Users/znasipak/miniforge3/envs/pybhpt-dev-env/bin/python3.12"
+}

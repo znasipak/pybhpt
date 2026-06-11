@@ -1,0 +1,74 @@
+{
+	"abstract" : true,
+	"artifacts" : 
+	[
+		{
+			"path" : "/Users/znasipak/miniforge3/envs/pybhpt-dev-env/bin/python3.12"
+		}
+	],
+	"backtrace" : 5,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"include",
+			"find_package"
+		],
+		"files" : 
+		[
+			"/private/var/folders/vf/m7fnlnf949vdz5mw10hnjl080000gn/T/pip-build-env-9pk2qj39/overlay/lib/python3.12/site-packages/cmake/data/share/cmake-4.3/Modules/FindPython/Support.cmake",
+			"/private/var/folders/vf/m7fnlnf949vdz5mw10hnjl080000gn/T/pip-build-env-9pk2qj39/overlay/lib/python3.12/site-packages/cmake/data/share/cmake-4.3/Modules/FindPython.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 5,
+				"parent" : 0
+			},
+			{
+				"file" : 1,
+				"parent" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 721,
+				"parent" : 2
+			},
+			{
+				"file" : 0,
+				"parent" : 3
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 4348,
+				"parent" : 4
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 10
+	},
+	"id" : "Python::Interpreter::@6890427a1f51a3e7e1df",
+	"imported" : true,
+	"local" : true,
+	"name" : "Python::Interpreter",
+	"nameOnDisk" : "python3.12",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sources" : [],
+	"type" : "EXECUTABLE"
+}

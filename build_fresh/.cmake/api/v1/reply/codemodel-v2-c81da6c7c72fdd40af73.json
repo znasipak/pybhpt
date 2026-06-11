@@ -1,0 +1,160 @@
+{
+	"configurations" : 
+	[
+		{
+			"abstractTargets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "BLAS::BLAS::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-BLAS__BLAS-Release-b8368dec5e416897f2ae.json",
+					"name" : "BLAS::BLAS",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "GSL::gsl::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-GSL__gsl-Release-224cd376b27e01ae1452.json",
+					"name" : "GSL::gsl",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "GSL::gslcblas::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-GSL__gslcblas-Release-e6546ef931eff8c83362.json",
+					"name" : "GSL::gslcblas",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "LAPACK::LAPACK::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-LAPACK__LAPACK-Release-b213100a00f7d9c52c39.json",
+					"name" : "LAPACK::LAPACK",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "OpenMP::OpenMP_CXX::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-OpenMP__OpenMP_CXX-Release-e26bd4b87cb89ee50d11.json",
+					"name" : "OpenMP::OpenMP_CXX",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Python::Interpreter::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Python__Interpreter-Release-a118619a8389abb19233.json",
+					"name" : "Python::Interpreter",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Python::InterpreterMultiConfig::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Python__InterpreterMultiConfig-Release-5900572457c42a113600.json",
+					"name" : "Python::InterpreterMultiConfig",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Python::Module::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Python__Module-Release-b824a663cbe1c46b9500.json",
+					"name" : "Python::Module",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Python::NumPy::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Python__NumPy-Release-765f4aaeb96016900f5a.json",
+					"name" : "Python::NumPy",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Threads::Threads::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Threads__Threads-Release-a6077dbc1671d0473974.json",
+					"name" : "Threads::Threads",
+					"projectIndex" : 0
+				}
+			],
+			"directories" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9
+					],
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Release-8dd61fb314566997b552.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "pybhpt",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "cybhpt_full::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-cybhpt_full-Release-c24df8add9ba28f6509f.json",
+					"name" : "cybhpt_full",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/znasipak/Documents/Research/pybhpt/build_fresh",
+		"source" : "/Users/znasipak/Documents/Research/pybhpt"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 10
+	}
+}

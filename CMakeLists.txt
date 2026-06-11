@@ -94,6 +94,17 @@ set_target_properties(cybhpt_full PROPERTIES
   BUILD_WITH_INSTALL_RPATH TRUE
 )
 
+# LAPACK — used in swsh.cpp for fast symmetric eigenvalue computation.
+# gsl_eigen_symm is ~100x slower than LAPACK dsyev for small matrices.
+find_package(LAPACK)
+if(LAPACK_FOUND)
+  target_link_libraries(cybhpt_full PRIVATE ${LAPACK_LIBRARIES})
+  target_compile_definitions(cybhpt_full PRIVATE PYBHPT_HAS_LAPACK)
+  message(STATUS "LAPACK found: ${LAPACK_LIBRARIES}")
+else()
+  message(STATUS "LAPACK not found — spectral solver will use (slow) gsl_eigen_symm")
+endif()
+
 
 # Optional install
 install(TARGETS cybhpt_full DESTINATION "./")

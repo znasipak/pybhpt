@@ -3,6 +3,7 @@
 #ifndef RADIAL_HPP
 #define RADIAL_HPP
 
+#include <functional>
 #include <gsl/gsl_odeiv2.h>
 #include <boost/numeric/odeint.hpp>
 #include "mst.hpp"
@@ -364,6 +365,16 @@ struct jacobi_hbl_implicit{
 int teuk_in_HBL_integrate(ComplexVector &R, ComplexVector &Rp, RadialTeukolsky &teuk, const Vector &r);
 int teuk_up_HBL_integrate(ComplexVector &R, ComplexVector &Rp, RadialTeukolsky &teuk, const Vector &r);
 
+// Dense-output variants: capture every accepted ODE step in [rmin, rmax].
+// r_out is returned in ascending order.  Psi_out / dPsi_out are the HBL
+// variable Ψ and Ψ' (NOT the Teukolsky R) at each captured point.
+int teuk_in_HBL_integrate_dense (Vector &r_out, ComplexVector &Psi_out, ComplexVector &dPsi_out,
+                                  RadialTeukolsky &teuk, double rmin, double rmax,
+                                  double rtol = 1e-10);
+int teuk_up_HBL_integrate_dense (Vector &r_out, ComplexVector &Psi_out, ComplexVector &dPsi_out,
+                                  RadialTeukolsky &teuk, double rmin, double rmax,
+                                  double rtol = 1e-10);
+
 double PhiHBL(double r, double a);
 double hHBL(double r, double a);
 
@@ -421,5 +432,92 @@ Result gsn_up_derivative_asymptotic_infinity(const double &a, const int &s, cons
 Result gsn_up_derivative_asymptotic_infinity(const double &r, hbl_parameters params);
 Result gsn_up_derivative_asymptotic_infinity(const double &a, const int &s, const int &m, const double &omega, const double &lambda, const double &r);
 Result gsn_up_derivative_asymptotic_infinity_chi_series(const double &a, const int &s, const int &m, const double &omega, const double &lambda, const double &r);
+
+
+//*************************************************************//
+//         Interpolated Radial Teukolsky Solution              //
+//*************************************************************//
+
+class InterpolatedRadialTeukolsky {
+public:
+	InterpolatedRadialTeukolsky(double a, int s, int L, int m, double omega,
+	                            double rmin, double rmax,
+	                            SolutionMethod method = AUTO,
+	                            bool solveIn  = true,
+	                            bool solveUp  = true,
+	                            double rtol   = 1e-10);
+
+	// Evaluate R(r) and R'(r) via septic Hermite interpolation + HBL back-transform
+	Complex evaluateSolution  (BoundaryCondition bc, double r) const;
+	Complex evaluateDerivative(BoundaryCondition bc, double r) const;
+
+	Vector getRadialPoints(BoundaryCondition bc) const;
+	int    getSampleCount (BoundaryCondition bc) const;
+
+	double getBlackHoleSpin()                    const;
+	int    getSpinWeight()                       const;
+	int    getSpheroidalModeNumber()             const;
+	int    getAzimuthalModeNumber()              const;
+	double getModeFrequency()                    const;
+	double getSpinWeightedSpheroidalEigenvalue() const;
+
+private:
+	double _a, _omega, _lambda;
+	int    _s, _L, _m;
+	bool   _hasIn, _hasUp;
+
+	// Separate adaptive grids for In and Up (dense ODE gives different step densities)
+	Vector        _r_in, _r_up;
+	// HBL intermediates Psi, Psi', Psi'', Psi''' stored at adaptive nodes
+	// H = -1 for In solutions, H = +1 for Up solutions
+	ComplexVector _inPsi,  _inDPsi,  _inD2Psi,  _inD3Psi;
+	ComplexVector _upPsi,  _upDPsi,  _upD2Psi,  _upD3Psi;
+
+	hbl_parameters hblParams(BoundaryCondition bc) const;
+
+	// Psi'' from the HBL ODE right-hand side
+	Complex hblODERhs(BoundaryCondition bc,
+	                  double r, Complex psi, Complex dpsi) const;
+
+	// Psi''' from chain rule: uses jacobi_hbl_implicit formulas
+	Complex hblODE3rdDeriv(BoundaryCondition bc,
+	                       double r, Complex psi, Complex dpsi, Complex d2psi) const;
+
+	// Quintic Hermite Psi''' residual at left node of interval i (relative)
+	double hermiteResidualPsi(int i,
+	                          BoundaryCondition bc,
+	                          const Vector        &r,
+	                          const ComplexVector &Psi,
+	                          const ComplexVector &dPsi,
+	                          const ComplexVector &d2Psi,
+	                          double atol) const;
+
+	// Post-processing refinement: check every Hermite interval and insert ODE
+	// midpoints wherever the residual exceeds rtol.  The MidpointEval callable
+	// takes (r_from, Psi_from, dPsi_from, r_to) and returns the exact (Psi, dPsi)
+	// at r_to.  Repeats until all intervals pass or max_passes is reached.
+	using MidpointEval = std::function<std::pair<Complex,Complex>(
+	    double, Complex, Complex, double)>;
+	void refineGrid(Vector &r, ComplexVector &Psi, ComplexVector &dPsi,
+	                ComplexVector &d2Psi, BoundaryCondition bc,
+	                MidpointEval eval, double rtol, int max_passes = 5);
+
+	static Vector logspace(double rmin, double rmax, int n);
+	int     findInterval    (double r_eval, const Vector &r) const;
+
+	// Septic Hermite evaluation: p(r), p'(r) using (Psi, Psi', Psi'', Psi''') at nodes
+	Complex hermiteEval     (int idx, double r_eval,
+	                         const Vector        &r,
+	                         const ComplexVector &y,
+	                         const ComplexVector &dy,
+	                         const ComplexVector &d2y,
+	                         const ComplexVector &d3y) const;
+	Complex hermiteDerivEval(int idx, double r_eval,
+	                         const Vector        &r,
+	                         const ComplexVector &y,
+	                         const ComplexVector &dy,
+	                         const ComplexVector &d2y,
+	                         const ComplexVector &d3y) const;
+};
 
 #endif

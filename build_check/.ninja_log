@@ -1,0 +1,26 @@
+# ninja log v7
+6	2969	1781126660341454247	cython/redshift_wrap.cpp	e317f4f38c85b13e
+6	2969	1781126660341454247	/Users/znasipak/Documents/Research/pybhpt/build_check/cython/redshift_wrap.cpp	e317f4f38c85b13e
+2970	3589	1781126660485080934	CMakeFiles/cybhpt_full.dir/cpp/src/utils.cpp.o	d17d8bdc037e1c5e
+2971	3599	1781126660485888350	CMakeFiles/cybhpt_full.dir/cpp/src/cf.cpp.o	490f757c60172c97
+2970	3711	1781126660485507601	CMakeFiles/cybhpt_full.dir/cpp/src/kerr.cpp.o	1d2a528f31951fe8
+2971	3791	1781126660486484975	CMakeFiles/cybhpt_full.dir/cpp/src/monodromy.cpp.o	a92bcdc3bf2637af
+2972	3802	1781126660486912475	CMakeFiles/cybhpt_full.dir/cpp/src/bessel.cpp.o	199745ec58932e26
+2971	3872	1781126660486208225	CMakeFiles/cybhpt_full.dir/cpp/src/swsh.cpp.o	b9af8981666051e5
+2972	3881	1781126660487155808	CMakeFiles/cybhpt_full.dir/cpp/src/hypergeo_u.cpp.o	7d93c479755aae0e
+2972	3933	1781126660487664933	CMakeFiles/cybhpt_full.dir/cpp/src/mst.cpp.o	8189d5ec68282ca7
+2971	3983	1781126660486722308	CMakeFiles/cybhpt_full.dir/cpp/src/hypergeo_f.cpp.o	1325c8d7ec4d3bf9
+2972	4024	1781126660487354891	CMakeFiles/cybhpt_full.dir/cpp/src/nusolver.cpp.o	abd32cc0504d4a08
+2970	4031	1781126660485303976	CMakeFiles/cybhpt_full.dir/cpp/src/specialfunc.cpp.o	a38062903e344a95
+2970	4572	1781126660485703392	CMakeFiles/cybhpt_full.dir/cpp/src/geo.cpp.o	2d9506aeb684cad8
+2973	4842	1781126660487920182	CMakeFiles/cybhpt_full.dir/cpp/src/gsn_asymp.cpp.o	a7917e699e3590ea
+2973	5133	1781126660488833640	CMakeFiles/cybhpt_full.dir/cpp/src/teukolsky.cpp.o	2a290ae62023a002
+2974	5141	1781126660489064973	CMakeFiles/cybhpt_full.dir/cpp/src/hertz.cpp.o	347f3de9990311bd
+3600	5423	1781126661115872893	CMakeFiles/cybhpt_full.dir/cpp/src/fluxes.cpp.o	63a44279ade4f643
+3592	5486	1781126661107554108	CMakeFiles/cybhpt_full.dir/cpp/src/metriccoeffs.cpp.o	a1bde33bd71da73b
+3712	5503	1781126661227302313	CMakeFiles/cybhpt_full.dir/cpp/src/metric.cpp.o	e64b8019b0c9b78d
+2973	5570	1781126660488576099	CMakeFiles/cybhpt_full.dir/cpp/src/sourceintegration.cpp.o	6d6eaf732cc71ccc
+3791	5740	1781126661306185172	CMakeFiles/cybhpt_full.dir/cpp/src/redshift.cpp.o	922d2cbe3d2050b1
+2973	6367	1781126660488361432	CMakeFiles/cybhpt_full.dir/cpp/src/radialsolver.cpp.o	a69b161960dd44c7
+2969	9792	1781126660484685268	CMakeFiles/cybhpt_full.dir/cython/redshift_wrap.cpp.o	3efb8b3bb9dc7cd4
+9793	9872	1781126667308030485	cybhpt_full.cpython-312-darwin.so	e3b3e3d576252416

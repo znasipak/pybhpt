@@ -1,0 +1,91 @@
+{
+	"abstract" : true,
+	"backtrace" : 4,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"_add_lapack_target",
+			"find_package",
+			"set_target_properties"
+		],
+		"files" : 
+		[
+			"/private/var/folders/vf/m7fnlnf949vdz5mw10hnjl080000gn/T/pip-build-env-wlh9nzt6/overlay/lib/python3.12/site-packages/cmake/data/share/cmake-4.3/Modules/FindLAPACK.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 99,
+				"parent" : 0
+			},
+			{
+				"file" : 0,
+				"parent" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 895,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 145,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 164,
+				"parent" : 3
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 10
+	},
+	"id" : "LAPACK::LAPACK::@6890427a1f51a3e7e1df",
+	"imported" : true,
+	"interfaceCompileDependencies" : 
+	[
+		{
+			"backtrace" : 5,
+			"id" : "BLAS::BLAS::@6890427a1f51a3e7e1df"
+		}
+	],
+	"interfaceLinkLibraries" : 
+	[
+		{
+			"backtrace" : 5,
+			"fragment" : "-lm"
+		},
+		{
+			"backtrace" : 5,
+			"fragment" : "-ldl"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "BLAS::BLAS::@6890427a1f51a3e7e1df"
+		}
+	],
+	"local" : true,
+	"name" : "LAPACK::LAPACK",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sources" : [],
+	"type" : "INTERFACE_LIBRARY"
+}
