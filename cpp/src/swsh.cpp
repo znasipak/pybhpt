@@ -342,6 +342,34 @@ int spectral_solver_n(const int &s, const int &l, const int &m, const double &g,
 		return 1; // error, need larger nmax tolerance
 	}
 
+	double weight = spectral_weight(g);
+
+#ifdef PYBHPT_HAS_LAPACK
+	// Use bmat directly as working buffer: zero it, fill with the spectral matrix,
+	// run dsyev in-place, then transpose so eigenvectors end up as columns (GSL convention).
+	// LAPACK dsyev writes eigenvectors as columns in Fortran column-major order; in the
+	// C row-major layout of bmat->data this appears as eigenvectors stored as rows.
+	// A subsequent in-place transpose restores the GSL convention used by the rest of the code.
+	gsl_matrix_set_zero(bmat);
+	int error = spectral_matrix(s, lmin, m, g, bmat);
+	if( error ) return 1;
+
+	int n = nmax;
+	// Workspace query for optimal lwork
+	int lwork_query = -1;
+	double work_opt = 0.;
+	int info = 0;
+	char jobz = 'V', uplo = 'U';
+	dsyev_(&jobz, &uplo, &n, bmat->data, &n, la->data, &work_opt, &lwork_query, &info);
+	int lwork = std::max((int)work_opt, 3*n + 64);
+	std::vector<double> work(lwork);
+	dsyev_(&jobz, &uplo, &n, bmat->data, &n, la->data, work.data(), &lwork, &info);
+	if( info != 0 ) return 1;
+	// dsyev returns eigenvalues in ascending order; no explicit sort needed.
+	// Transpose in-place to convert LAPACK's row-stored eigenvectors to GSL column convention.
+	gsl_matrix_transpose(bmat);
+	gsl_vector_scale(la, 1./weight);
+#else
 	gsl_matrix* specMat = gsl_matrix_calloc(nmax, nmax);
 	int error = spectral_matrix(s, lmin, m, g, specMat);
 	if( error ) return 1;
@@ -355,8 +383,8 @@ int spectral_solver_n(const int &s, const int &l, const int &m, const double &g,
 	gsl_eigen_symmv_free(w);
 	gsl_matrix_free(specMat);
 
-	double weight = spectral_weight(g);
 	gsl_vector_scale(la, 1/weight);
+#endif
 
 	return 0;
 }
@@ -368,6 +396,29 @@ int spectral_solver_n(const int &s, const int &l, const int &m, const double &g,
 		return 1; // error, need larger nmax tolerance
 	}
 
+	double weight = spectral_weight(g);
+
+#ifdef PYBHPT_HAS_LAPACK
+	// Zero bmat first: gsl_spmatrix_sp2d only sets non-zero entries, leaving the
+	// remaining positions untouched. The matrix must be zeroed to avoid garbage
+	// in off-band positions that would corrupt the eigenvalue solve.
+	gsl_matrix_set_zero(bmat);
+	int error = gsl_spmatrix_sp2d(bmat, mat);
+	if( error ) return 1;
+
+	int n = nmax;
+	int lwork_query = -1;
+	double work_opt = 0.;
+	int info = 0;
+	char jobz = 'V', uplo = 'U';
+	dsyev_(&jobz, &uplo, &n, bmat->data, &n, la->data, &work_opt, &lwork_query, &info);
+	int lwork = std::max((int)work_opt, 3*n + 64);
+	std::vector<double> work(lwork);
+	dsyev_(&jobz, &uplo, &n, bmat->data, &n, la->data, work.data(), &lwork, &info);
+	if( info != 0 ) return 1;
+	gsl_matrix_transpose(bmat);
+	gsl_vector_scale(la, 1./weight);
+#else
 	gsl_matrix* specMat = gsl_matrix_calloc(nmax, nmax);
 	int error = gsl_spmatrix_sp2d(specMat, mat);
 	if( error ) return 1;
@@ -381,8 +432,8 @@ int spectral_solver_n(const int &s, const int &l, const int &m, const double &g,
 	gsl_eigen_symmv_free(w);
 	gsl_matrix_free(specMat);
 
-	double weight = spectral_weight(g);
 	gsl_vector_scale(la, 1/weight);
+#endif
 
 	return 0;
 }

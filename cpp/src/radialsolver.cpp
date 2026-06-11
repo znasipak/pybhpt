@@ -41,15 +41,14 @@ int RadialTeukolsky::ASYMsolveBoundary(BoundaryCondition bc){
 	int success = 1;
 	int boundaryFlagMax = 40;
 	if( bc == In ){
-		teuk_in_ASYM_series(_horizonBoundarySolution, *this, _horizonBoundary);
-	 	teuk_in_derivative_ASYM_series(_horizonBoundaryDerivative, *this, _horizonBoundary);
+		// Compute R and R' in one recurrence pass instead of two separate calls
+		teuk_in_ASYM_series_both(_horizonBoundarySolution, _horizonBoundaryDerivative, *this, _horizonBoundary);
 
 		int boundaryFlag = 0;
 		double rplus = (1. + sqrt(1. - _a*_a));
 		while( (std::abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundarySolution.getValue())) || isinf(std::abs(_horizonBoundarySolution.getValue())) || std::abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundaryDerivative.getValue())) || isinf(std::abs(_horizonBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
 			_horizonBoundary = rplus + 0.5*(_horizonBoundary - rplus);
-			teuk_in_ASYM_series(_horizonBoundarySolution, *this, _horizonBoundary);
-			teuk_in_derivative_ASYM_series(_horizonBoundaryDerivative, *this, _horizonBoundary);
+			teuk_in_ASYM_series_both(_horizonBoundarySolution, _horizonBoundaryDerivative, *this, _horizonBoundary);
 			boundaryFlag++;
 		}
 
@@ -57,14 +56,13 @@ int RadialTeukolsky::ASYMsolveBoundary(BoundaryCondition bc){
 			success = 0; // consider method failed
 		}
 	}else{
-		teuk_up_ASYM_series(_infinityBoundarySolution, *this, _infinityBoundary);
-		teuk_up_derivative_ASYM_series(_infinityBoundaryDerivative, *this, _infinityBoundary);
+		// Compute R and R' in one recurrence pass instead of two separate calls
+		teuk_up_ASYM_series_both(_infinityBoundarySolution, _infinityBoundaryDerivative, *this, _infinityBoundary);
 
 		int boundaryFlag = 0;
 		while( (std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
 			_infinityBoundary *= 2;
-			teuk_up_ASYM_series(_infinityBoundarySolution, *this, _infinityBoundary);
-			teuk_up_derivative_ASYM_series(_infinityBoundaryDerivative, *this, _infinityBoundary);
+			teuk_up_ASYM_series_both(_infinityBoundarySolution, _infinityBoundaryDerivative, *this, _infinityBoundary);
 			boundaryFlag++;
 		}
 
@@ -1533,6 +1531,21 @@ int teuk_up_derivative_ASYM_series(ComplexVector &Rp, RadialTeukolsky &teuk, con
 	}
 
 	return 0;
+}
+
+// Combined wrappers: compute R and dR/dr in one recurrence pass.
+void teuk_in_ASYM_series_both(Result &R, Result &Rp, RadialTeukolsky &teuk, const double &r){
+	teuk_in_asymptotic_horizon_and_derivative(R, Rp,
+		teuk.getBlackHoleSpin(), teuk.getSpinWeight(),
+		teuk.getAzimuthalModeNumber(), teuk.getModeFrequency(),
+		teuk.getSpinWeightedSpheroidalEigenvalue(), r);
+}
+
+void teuk_up_ASYM_series_both(Result &R, Result &Rp, RadialTeukolsky &teuk, const double &r){
+	teuk_up_asymptotic_infinity_and_derivative(R, Rp,
+		teuk.getBlackHoleSpin(), teuk.getSpinWeight(),
+		teuk.getAzimuthalModeNumber(), teuk.getModeFrequency(),
+		teuk.getSpinWeightedSpheroidalEigenvalue(), r);
 }
 
 //*************************************************************//
@@ -3378,6 +3391,13 @@ Result teuk_up_asymptotic_infinity(const double &a, const int &s, const int &, c
 	Complex qCH = -(bCH + aCH)*(1. + cs) - 2.*aCH*bCH + lambda - 2.*epsilonPlus*epsilonMinus + 2.*omega*Complex(m)*a
 		- 2.*omega*(2*omega + I*cs)*(1. - kappa) + 2.*I*omega*cs*kappa + 2.*I*omega*kappa*(1. + 2.*aCH);
 
+	// Hoist loop-invariant sub-expressions
+	const Complex eps3         = epsilonCH*epsilonCH*epsilonCH;
+	const Complex alph2        = alphaCH*alphaCH;
+	const Complex alph_eps     = alphaCH*epsilonCH;
+	const Complex eps2         = epsilonCH*epsilonCH;
+	const Complex gm_dt_eps_m1 = gammaCH + deltaCH - epsilonCH;
+
 	// Asymptotic amplitude chosen to match normalization of MST solutions
 	Complex Ctrans = pow(2., -2.*I*omega);
 	Complex prefactor = pow((r - rp)/(r - rm), bCH)*pow(r - rm, -2.*cs - 1. + 2.*I*omega)*exp(I*omega*r);
@@ -3391,13 +3411,15 @@ Result teuk_up_asymptotic_infinity(const double &a, const int &s, const int &, c
 
 	Complex cm2 = 0.;
 	Complex cm1 = 1.;
-	Complex c0 = -(alphaCH + epsilonCH*(Complex(k) - 2.))*(alphaCH + epsilonCH*(Complex(k) - gammaCH - 1.))*cm2;
-	c0 += (alphaCH*alphaCH + alphaCH*epsilonCH*(2.*Complex(k) - gammaCH - deltaCH + epsilonCH - 1.) + epsilonCH*epsilonCH*(
-		Complex(k)*(Complex(k) - gammaCH - deltaCH + epsilonCH - 1.) + gammaCH + deltaCH - epsilonCH - qCH))*cm1;
-	c0 /= Complex(k)*pow(epsilonCH, 3);
-	Complex arg = (2.*kappa)/(r - rm);
+	Complex ck  = Complex(k);
+	Complex c0 = -(alphaCH + epsilonCH*(ck - 2.))*(alphaCH + epsilonCH*(ck - gammaCH - 1.))*cm2;
+	c0 += (alph2 + alph_eps*(2.*ck - gammaCH - deltaCH + epsilonCH - 1.)
+		+ eps2*(ck*(ck - gammaCH - deltaCH + epsilonCH - 1.) + gm_dt_eps_m1 - qCH))*cm1;
+	c0 /= ck*eps3;
+	Complex arg   = (2.*kappa)/(r - rm);
+	Complex arg_k = arg;   // running arg^k; starts at arg^1
 
-	term = c0*pow(arg, k);
+	term = c0*arg_k;
 	sum += term;
 	maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 	k++;
@@ -3405,17 +3427,18 @@ Result teuk_up_asymptotic_infinity(const double &a, const int &s, const int &, c
 	while( (std::abs(term/sum) > DBL_EPSILON && std::abs(previousTerm/sum) > DBL_EPSILON && k < 100) || k <= 6 ){
 		cm2 = cm1;
 		cm1 = c0;
-		c0 = -(alphaCH + epsilonCH*(Complex(k) - 2.))*(alphaCH + epsilonCH*(Complex(k) - gammaCH - 1.))*cm2;
-		c0 += (alphaCH*alphaCH + alphaCH*epsilonCH*(2.*Complex(k) - gammaCH - deltaCH + epsilonCH - 1.) + epsilonCH*epsilonCH*(
-			Complex(k)*(Complex(k) - gammaCH - deltaCH + epsilonCH - 1.) + gammaCH + deltaCH - epsilonCH - qCH))*cm1;
-		c0 /= Complex(k)*pow(epsilonCH, 3);
+		ck  = Complex(k);
+		c0 = -(alphaCH + epsilonCH*(ck - 2.))*(alphaCH + epsilonCH*(ck - gammaCH - 1.))*cm2;
+		c0 += (alph2 + alph_eps*(2.*ck - gammaCH - deltaCH + epsilonCH - 1.)
+			+ eps2*(ck*(ck - gammaCH - deltaCH + epsilonCH - 1.) + gm_dt_eps_m1 - qCH))*cm1;
+		c0 /= ck*eps3;
 
 		previousTerm = term;
-		term = c0*pow(arg, k);
+		arg_k *= arg;   // arg^k
+		term = c0*arg_k;
 		sum += term;
 		maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 		k++;
-		// std::cout << "term = "<< term << ", sum = " << sum << "\n";
 	}
 
 	double error = std::abs(maxTerm/sum)*DBL_EPSILON;
@@ -3449,37 +3472,49 @@ Result teuk_up_derivative_asymptotic_infinity(const double &a, const int &s, con
 	Complex qCH = -(bCH + aCH)*(1. + cs) - 2.*aCH*bCH + lambda - 2.*epsilonPlus*epsilonMinus + 2.*omega*Complex(m)*a
 		- 2.*omega*(2*omega + I*cs)*(1. - kappa) + 2.*I*omega*cs*kappa + 2.*I*omega*kappa*(1. + 2.*aCH);
 
+	// Hoist loop-invariant sub-expressions
+	const Complex eps3         = epsilonCH*epsilonCH*epsilonCH;
+	const Complex alph2        = alphaCH*alphaCH;
+	const Complex alph_eps     = alphaCH*epsilonCH;
+	const Complex eps2         = epsilonCH*epsilonCH;
+	const Complex gm_dt_eps_m1 = gammaCH + deltaCH - epsilonCH;
+	const Complex inv_rm       = Complex(-1.)/(r - rm);
+
 	// recurrence relation for the asymptotic series coefficients for the confluent Heun solution near infinity
 	int k = 0;
-	Complex gr = bCH/(r - rp) - (bCH + 2.*cs + 1. - 2.*I*omega)/(r - rm) + I*omega;
-	Complex arg = (2.*kappa)/(r - rm);
-	Complex term = gr;
-	Complex sum = term;
+	Complex gr    = bCH/(r - rp) - (bCH + 2.*cs + 1. - 2.*I*omega)/(r - rm) + I*omega;
+	Complex arg   = (2.*kappa)/(r - rm);
+	Complex term  = gr;
+	Complex sum   = term;
 	Complex maxTerm = term;
 	k++;
 
 	Complex cm2 = 0.;
 	Complex cm1 = 1.;
-	Complex c0 = -(alphaCH + epsilonCH*(Complex(k) - 2.))*(alphaCH + epsilonCH*(Complex(k) - gammaCH - 1.))*cm2;
-	c0 += (alphaCH*alphaCH + alphaCH*epsilonCH*(2.*Complex(k) - gammaCH - deltaCH + epsilonCH - 1.) + epsilonCH*epsilonCH*(
-		Complex(k)*(Complex(k) - gammaCH - deltaCH + epsilonCH - 1.) + gammaCH + deltaCH - epsilonCH - qCH))*cm1;
-	c0 /= Complex(k)*pow(epsilonCH, 3);
+	Complex ck  = Complex(k);
+	Complex c0  = -(alphaCH + epsilonCH*(ck - 2.))*(alphaCH + epsilonCH*(ck - gammaCH - 1.))*cm2;
+	c0 += (alph2 + alph_eps*(2.*ck - gammaCH - deltaCH + epsilonCH - 1.)
+		+ eps2*(ck*(ck - gammaCH - deltaCH + epsilonCH - 1.) + gm_dt_eps_m1 - qCH))*cm1;
+	c0 /= ck*eps3;
 
-	term = c0*(gr - Complex(k)/(r - rm))*pow(arg, k);
+	Complex arg_k = arg;   // running arg^k; starts at arg^1
+	term = c0*(gr + inv_rm)*arg_k;   // (gr - 1/(r-rm)) * arg^1
 	sum += term;
 	maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 	k++;
 	Complex previousTerm = term;
-	while( (std::abs(term/sum) > DBL_EPSILON && std::abs(previousTerm/sum) > DBL_EPSILON && k < 100 ) || k <= 5 ){
+	while( (std::abs(term/sum) > DBL_EPSILON && std::abs(previousTerm/sum) > DBL_EPSILON && k < 100) || k <= 5 ){
 		cm2 = cm1;
 		cm1 = c0;
-		c0 = -(alphaCH + epsilonCH*(Complex(k) - 2.))*(alphaCH + epsilonCH*(Complex(k) - gammaCH - 1.))*cm2;
-		c0 += (alphaCH*alphaCH + alphaCH*epsilonCH*(2.*Complex(k) - gammaCH - deltaCH + epsilonCH - 1.) + epsilonCH*epsilonCH*(
-			Complex(k)*(Complex(k) - gammaCH - deltaCH + epsilonCH - 1.) + gammaCH + deltaCH - epsilonCH - qCH))*cm1;
-		c0 /= Complex(k)*pow(epsilonCH, 3);
+		ck  = Complex(k);
+		c0  = -(alphaCH + epsilonCH*(ck - 2.))*(alphaCH + epsilonCH*(ck - gammaCH - 1.))*cm2;
+		c0 += (alph2 + alph_eps*(2.*ck - gammaCH - deltaCH + epsilonCH - 1.)
+			+ eps2*(ck*(ck - gammaCH - deltaCH + epsilonCH - 1.) + gm_dt_eps_m1 - qCH))*cm1;
+		c0 /= ck*eps3;
 
 		previousTerm = term;
-		term = c0*(gr - Complex(k)/(r - rm))*pow(arg, k);
+		arg_k *= arg;   // arg^k
+		term = c0*(gr + ck*inv_rm)*arg_k;   // (gr - k/(r-rm)) * arg^k
 		sum += term;
 		maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 		k++;
@@ -3493,6 +3528,108 @@ Result teuk_up_derivative_asymptotic_infinity(const double &a, const int &s, con
 	Complex prefactor = pow((r - rp)/(r - rm), bCH)*pow(r - rm, -2.*cs - 1. + 2.*I*omega)*exp(I*omega*r);
 
 	return Result(Ctrans*prefactor*sum, Ctrans*prefactor*sum*error);
+}
+
+// Combined Up function: compute R and dR/dr in a single recurrence pass.
+// Replaces calling teuk_up_asymptotic_infinity + teuk_up_derivative_asymptotic_infinity
+// separately, halving the number of recurrence iterations and the number of swsh_eigenvalue
+// calls.  Constant sub-expressions in the recurrence are precomputed before the loop,
+// and arg^k is computed incrementally (avoids pow(arg,k) = exp(k*log(arg)) each step).
+void teuk_up_asymptotic_infinity_and_derivative(Result &R, Result &Rp,
+	const double &a, const int &s, const int &m,
+	const double &omega, const double &lambda, const double &r)
+{
+	double kappa = sqrt(1. - a*a);
+	double rm = 1. - kappa, rp = 1. + kappa;
+	double tau = (2.*omega - m*a)/kappa;
+	double epsilonPlus = omega + 0.5*tau, epsilonMinus = omega - 0.5*tau;
+	Complex cs = Complex(s);
+
+	Complex aCH = I*epsilonMinus;
+	Complex bCH = I*epsilonPlus;
+
+	Complex gammaCH  = 1. + cs + 2.*aCH;
+	Complex deltaCH  = 1. + cs + 2.*bCH;
+	Complex epsilonCH = 4.*I*omega*kappa;
+	Complex alphaCH  = epsilonCH*(1. + 2.*cs - 2.*I*omega + aCH + bCH);
+	Complex qCH = -(bCH + aCH)*(1. + cs) - 2.*aCH*bCH + lambda
+		- 2.*epsilonPlus*epsilonMinus + 2.*omega*Complex(m)*a
+		- 2.*omega*(2*omega + I*cs)*(1. - kappa)
+		+ 2.*I*omega*cs*kappa + 2.*I*omega*kappa*(1. + 2.*aCH);
+
+	// Hoist loop-invariant sub-expressions out of the recurrence
+	const Complex eps3        = epsilonCH*epsilonCH*epsilonCH;
+	const Complex alph2       = alphaCH*alphaCH;
+	const Complex alph_eps    = alphaCH*epsilonCH;
+	const Complex eps2        = epsilonCH*epsilonCH;
+	const Complex gm_dt_eps_m1 = gammaCH + deltaCH - epsilonCH;  // γ+δ-ε (constant part of k term)
+
+	// gr = d(log prefactor)/dr; same for both R and dR
+	Complex gr     = bCH/(r - rp) - (bCH + 2.*cs + 1. - 2.*I*omega)/(r - rm) + I*omega;
+	Complex arg    = (2.*kappa)/(r - rm);
+	// inv_rm = -1/(r-rm): the k-dependent factor in dR's term is c_k*(gr - k/(r-rm))*arg^k
+	const Complex inv_rm = Complex(-1.)/(r - rm);
+
+	// k=0 initial terms  (c_0 = 1, arg^0 = 1)
+	Complex sum_R  = 1.;
+	Complex sum_dR = gr;
+	Complex maxTerm_R  = sum_R;
+	Complex maxTerm_dR = sum_dR;
+
+	// k=1: compute c_1 from cm2=0, cm1=1
+	int k = 1;
+	Complex ck  = Complex(k);
+	Complex cm2 = 0., cm1 = 1.;
+	Complex c0  = -(alphaCH + epsilonCH*(ck - 2.))*(alphaCH + epsilonCH*(ck - gammaCH - 1.))*cm2;
+	c0 += (alph2 + alph_eps*(2.*ck - gammaCH - deltaCH + epsilonCH - 1.)
+		+ eps2*(ck*(ck - gammaCH - deltaCH + epsilonCH - 1.) + gm_dt_eps_m1 - qCH))*cm1;
+	c0 /= ck*eps3;
+
+	Complex arg_k = arg;   // arg^1
+	Complex term_R  = c0 * arg_k;
+	Complex term_dR = c0 * (gr + inv_rm) * arg_k;   // (gr - 1/(r-rm)) * arg^1
+	sum_R  += term_R;
+	sum_dR += term_dR;
+	maxTerm_R  = (std::abs(term_R)  < std::abs(maxTerm_R))  ? maxTerm_R  : term_R;
+	maxTerm_dR = (std::abs(term_dR) < std::abs(maxTerm_dR)) ? maxTerm_dR : term_dR;
+
+	k = 2;
+	Complex prevTerm_R = term_R, prevTerm_dR = term_dR;
+	while( k <= 6 ||
+	       (k < 100 &&
+	        ((std::abs(term_R/sum_R)   > DBL_EPSILON && std::abs(prevTerm_R/sum_R)   > DBL_EPSILON) ||
+	         (std::abs(term_dR/sum_dR) > DBL_EPSILON && std::abs(prevTerm_dR/sum_dR) > DBL_EPSILON))) )
+	{
+		cm2 = cm1; cm1 = c0;
+		ck  = Complex(k);
+		c0  = -(alphaCH + epsilonCH*(ck - 2.))*(alphaCH + epsilonCH*(ck - gammaCH - 1.))*cm2;
+		c0 += (alph2 + alph_eps*(2.*ck - gammaCH - deltaCH + epsilonCH - 1.)
+			+ eps2*(ck*(ck - gammaCH - deltaCH + epsilonCH - 1.) + gm_dt_eps_m1 - qCH))*cm1;
+		c0 /= ck*eps3;
+
+		prevTerm_R  = term_R;
+		prevTerm_dR = term_dR;
+		arg_k *= arg;   // arg^k
+
+		term_R  = c0 * arg_k;
+		term_dR = c0 * (gr + ck*inv_rm) * arg_k;   // (gr - k/(r-rm)) * arg^k
+		sum_R  += term_R;
+		sum_dR += term_dR;
+		maxTerm_R  = (std::abs(term_R)  < std::abs(maxTerm_R))  ? maxTerm_R  : term_R;
+		maxTerm_dR = (std::abs(term_dR) < std::abs(maxTerm_dR)) ? maxTerm_dR : term_dR;
+		k++;
+	}
+
+	double error_R  = std::abs(maxTerm_R/sum_R)*DBL_EPSILON;
+	error_R  = (std::abs(term_R/sum_R)  < error_R)  ? error_R  : std::abs(term_R/sum_R);
+	double error_dR = std::abs(maxTerm_dR/sum_dR)*DBL_EPSILON;
+	error_dR = (std::abs(term_dR/sum_dR) < error_dR) ? error_dR : std::abs(term_dR/sum_dR);
+
+	Complex Ctrans   = pow(2., -2.*I*omega);
+	Complex prefactor = pow((r - rp)/(r - rm), bCH)*pow(r - rm, -2.*cs - 1. + 2.*I*omega)*exp(I*omega*r);
+
+	R  = Result(Ctrans*prefactor*sum_R,  Ctrans*prefactor*sum_R *error_R);
+	Rp = Result(Ctrans*prefactor*sum_dR, Ctrans*prefactor*sum_dR*error_dR);
 }
 
 Result teuk_in_asymptotic_horizon(const double &a, const int &s, const int &L, const int &m, const double &omega, const double &r){
@@ -3522,6 +3659,10 @@ Result teuk_in_asymptotic_horizon(const double &a, const int &s, const int &, co
 	Complex qCH = -(bCH + aCH)*(1. + cs) - 2.*aCH*bCH + lambda - 2.*epsilonPlus*epsilonMinus + 2.*omega*Complex(m)*a
 		- 2.*omega*(2*omega + I*cs)*(1. - kappa) + sgn*2.*I*omega*cs*kappa + sgn*2.*I*omega*kappa*(1. + 2.*aCH);
 
+	// Hoist loop-invariant denominators used in the recurrence
+	const Complex gm_eps_m1 = gammaCH - deltaCH + epsilonCH - 1.;
+	const Complex dt_gm_eps = deltaCH*(gammaCH + epsilonCH - 1.);
+
 	// recurrence relation for the asymptotic series coefficients for the confluent Heun solution near infinity
 	int k = 0;
 	Complex term = 1.;
@@ -3531,13 +3672,14 @@ Result teuk_in_asymptotic_horizon(const double &a, const int &s, const int &, co
 
 	Complex cm2 = 0.;
 	Complex cm1 = 1.;
-	Complex c0 = -(alphaCH + epsilonCH*(Complex(k) - deltaCH - 1.))*cm2;
-	c0 += -(Complex(k)*Complex(k) + Complex(k)*(gammaCH - deltaCH + epsilonCH - 1.) - deltaCH*(gammaCH + epsilonCH - 1.)
-		+ alphaCH - qCH)*cm1;
-	c0 /= Complex(k)*(Complex(k) - deltaCH + 1.);
-	Complex arg = (r - rp)/(2.*kappa);
+	Complex ck  = Complex(k);
+	Complex c0  = -(alphaCH + epsilonCH*(ck - deltaCH - 1.))*cm2;
+	c0 += -(ck*ck + ck*gm_eps_m1 - dt_gm_eps + alphaCH - qCH)*cm1;
+	c0 /= ck*(ck - deltaCH + 1.);
+	Complex arg   = (r - rp)/(2.*kappa);
+	Complex arg_k = arg;   // running arg^k; starts at arg^1
 
-	term = c0*pow(arg, k);
+	term = c0*arg_k;
 	sum += term;
 	maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 	k++;
@@ -3545,16 +3687,16 @@ Result teuk_in_asymptotic_horizon(const double &a, const int &s, const int &, co
 	while( (std::abs(term/sum) > DBL_EPSILON && std::abs(previousTerm/sum) > DBL_EPSILON && k < 300) || k <= 4 ){
 		cm2 = cm1;
 		cm1 = c0;
-		c0 = -(alphaCH + epsilonCH*(Complex(k) - deltaCH - 1.))*cm2;
-		c0 += -(Complex(k)*Complex(k) + Complex(k)*(gammaCH - deltaCH + epsilonCH - 1.) - deltaCH*(gammaCH + epsilonCH - 1.)
-			+ alphaCH - qCH)*cm1;
-		c0 /= Complex(k)*(Complex(k) - deltaCH + 1.);
+		ck  = Complex(k);
+		c0  = -(alphaCH + epsilonCH*(ck - deltaCH - 1.))*cm2;
+		c0 += -(ck*ck + ck*gm_eps_m1 - dt_gm_eps + alphaCH - qCH)*cm1;
+		c0 /= ck*(ck - deltaCH + 1.);
 
 		previousTerm = term;
-		term = c0*pow(arg, k);
+		arg_k *= arg;   // arg^k
+		term = c0*arg_k;
 		sum += term;
 		maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
-		//std::cout << "sum_" << k << " = " << sum << " \n";
 		k++;
 	}
 
@@ -3595,23 +3737,32 @@ Result teuk_in_derivative_asymptotic_horizon(const double &a, const int &s, cons
 	Complex qCH = -(bCH + aCH)*(1. + cs) - 2.*aCH*bCH + lambda - 2.*epsilonPlus*epsilonMinus + 2.*omega*Complex(m)*a
 		- 2.*omega*(2*omega + I*cs)*(1. - kappa) + sgn*2.*I*omega*cs*kappa + sgn*2.*I*omega*kappa*(1. + 2.*aCH);
 
+	// Hoist loop-invariant denominators
+	const Complex gm_eps_m1   = gammaCH - deltaCH + epsilonCH - 1.;
+	const Complex dt_gm_eps   = deltaCH*(gammaCH + epsilonCH - 1.);
+	const double  inv_2kappa  = 1./(2.*kappa);
+
 	// recurrence relation for the asymptotic series coefficients for the confluent Heun solution near infinity
 	int k = 0;
-	Complex gr = aCH/(r - rm) - (bCH + cs)/(r - rp) + sgn*I*omega;
-	Complex arg = (r - rp)/(2.*kappa);
-	Complex term = gr;
-	Complex sum = term;
+	Complex gr    = aCH/(r - rm) - (bCH + cs)/(r - rp) + sgn*I*omega;
+	Complex arg   = (r - rp)/(2.*kappa);
+	Complex term  = gr;
+	Complex sum   = term;
 	Complex maxTerm = term;
 	k++;
 
 	Complex cm2 = 0.;
 	Complex cm1 = 1.;
-	Complex c0 = -(alphaCH + epsilonCH*(Complex(k) - deltaCH - 1.))*cm2;
-	c0 += -(Complex(k)*Complex(k) + Complex(k)*(gammaCH - deltaCH + epsilonCH - 1.) - deltaCH*(gammaCH + epsilonCH - 1.)
-		+ alphaCH - qCH)*cm1;
-	c0 /= Complex(k)*(Complex(k) - deltaCH + 1.);
+	Complex ck  = Complex(k);
+	Complex c0  = -(alphaCH + epsilonCH*(ck - deltaCH - 1.))*cm2;
+	c0 += -(ck*ck + ck*gm_eps_m1 - dt_gm_eps + alphaCH - qCH)*cm1;
+	c0 /= ck*(ck - deltaCH + 1.);
 
-	term = c0*(gr*pow(arg, k) + Complex(k)/(2.*kappa)*pow(arg, k-1));
+	// arg_k = arg^k, arg_km1 = arg^(k-1); both needed for the derivative term
+	Complex arg_k   = arg;           // arg^1
+	Complex arg_km1 = Complex(1.);   // arg^0
+
+	term = c0*(gr*arg_k + ck*inv_2kappa*arg_km1);
 	sum += term;
 	maxTerm = term;
 	k++;
@@ -3620,13 +3771,15 @@ Result teuk_in_derivative_asymptotic_horizon(const double &a, const int &s, cons
 	while( (std::abs(term/sum) > DBL_EPSILON && std::abs(previousTerm/sum) > DBL_EPSILON && k < 300) || k <= 4 ){
 		cm2 = cm1;
 		cm1 = c0;
-		c0 = -(alphaCH + epsilonCH*(Complex(k) - deltaCH - 1.))*cm2;
-		c0 += -(Complex(k)*Complex(k) + Complex(k)*(gammaCH - deltaCH + epsilonCH - 1.) - deltaCH*(gammaCH + epsilonCH - 1.)
-			+ alphaCH - qCH)*cm1;
-		c0 /= Complex(k)*(Complex(k) - deltaCH + 1.);
+		ck  = Complex(k);
+		c0  = -(alphaCH + epsilonCH*(ck - deltaCH - 1.))*cm2;
+		c0 += -(ck*ck + ck*gm_eps_m1 - dt_gm_eps + alphaCH - qCH)*cm1;
+		c0 /= ck*(ck - deltaCH + 1.);
 
 		previousTerm = term;
-		term = c0*(gr*pow(arg, k) + Complex(k)/(2.*kappa)*pow(arg, k-1));
+		arg_km1  = arg_k;
+		arg_k   *= arg;   // arg^k
+		term = c0*(gr*arg_k + ck*inv_2kappa*arg_km1);
 		sum += term;
 		maxTerm = (std::abs(term) < std::abs(maxTerm))? maxTerm : term;
 		k++;
@@ -3640,6 +3793,106 @@ Result teuk_in_derivative_asymptotic_horizon(const double &a, const int &s, cons
 	Complex prefactor = pow((r - rm)/(2.*kappa), aCH)*pow(r - rp, -cs - bCH)*exp(sgn*I*omega*(r - rp));
 
 	return Result(Btrans*prefactor*sum, Btrans*prefactor*sum*error);
+}
+
+// Combined In function: compute R and dR/dr in a single recurrence pass.
+// Replaces calling teuk_in_asymptotic_horizon + teuk_in_derivative_asymptotic_horizon
+// separately, halving the number of recurrence iterations per boundary evaluation.
+// arg^k and arg^(k-1) are maintained as running products (no pow() inside the loop).
+void teuk_in_asymptotic_horizon_and_derivative(Result &R, Result &Rp,
+	const double &a, const int &s, const int &m,
+	const double &omega, const double &lambda, const double &r)
+{
+	double kappa = sqrt(1. - a*a);
+	double rm = 1. - kappa, rp = 1. + kappa;
+	double tau = (2.*omega - m*a)/kappa;
+	double epsilonPlus = omega + tau/2., epsilonMinus = omega - tau/2.;
+	double kfreq = omega - m*a/(2.*rp);
+	Complex cs = Complex(s);
+
+	double sgn = -1.;
+	Complex aCH = -cs - I*epsilonMinus;
+	Complex bCH = I*epsilonPlus;
+
+	Complex gammaCH  = 1. + cs + 2.*aCH;
+	Complex deltaCH  = 1. + cs + 2.*bCH;
+	Complex epsilonCH = sgn*4.*I*omega*kappa;
+	Complex alphaCH  = epsilonCH*(1. + sgn*(cs - 2.*I*omega) + cs + aCH + bCH);
+	Complex qCH = -(bCH + aCH)*(1. + cs) - 2.*aCH*bCH + lambda
+		- 2.*epsilonPlus*epsilonMinus + 2.*omega*Complex(m)*a
+		- 2.*omega*(2*omega + I*cs)*(1. - kappa)
+		+ sgn*2.*I*omega*cs*kappa + sgn*2.*I*omega*kappa*(1. + 2.*aCH);
+
+	// Hoist loop-invariant sub-expressions
+	const Complex gm_eps_m1  = gammaCH - deltaCH + epsilonCH - 1.;
+	const Complex dt_gm_eps  = deltaCH*(gammaCH + epsilonCH - 1.);
+	const double  inv_2kappa = 1./(2.*kappa);
+
+	// gr = d(log prefactor)/dr
+	Complex gr  = aCH/(r - rm) - (bCH + cs)/(r - rp) + sgn*I*omega;
+	Complex arg = (r - rp)/(2.*kappa);
+
+	// k=0 initial terms  (c_0 = 1, arg^0 = 1)
+	Complex sum_R  = 1.;
+	Complex sum_dR = gr;
+	Complex maxTerm_R  = sum_R;
+	Complex maxTerm_dR = sum_dR;
+
+	// k=1: compute c_1 from cm2=0, cm1=1
+	int k = 1;
+	Complex ck  = Complex(k);
+	Complex cm2 = 0., cm1 = 1.;
+	Complex c0  = -(alphaCH + epsilonCH*(ck - deltaCH - 1.))*cm2;
+	c0 += -(ck*ck + ck*gm_eps_m1 - dt_gm_eps + alphaCH - qCH)*cm1;
+	c0 /= ck*(ck - deltaCH + 1.);
+
+	Complex arg_k   = arg;           // arg^1
+	Complex arg_km1 = Complex(1.);   // arg^0
+
+	Complex term_R  = c0 * arg_k;
+	Complex term_dR = c0 * (gr*arg_k + ck*inv_2kappa*arg_km1);
+	sum_R  += term_R;
+	sum_dR += term_dR;
+	maxTerm_R  = (std::abs(term_R)  < std::abs(maxTerm_R))  ? maxTerm_R  : term_R;
+	maxTerm_dR = (std::abs(term_dR) < std::abs(maxTerm_dR)) ? maxTerm_dR : term_dR;
+
+	k = 2;
+	Complex prevTerm_R = term_R, prevTerm_dR = term_dR;
+	while( k <= 6 ||
+	       (k < 300 &&
+	        ((std::abs(term_R/sum_R)   > DBL_EPSILON && std::abs(prevTerm_R/sum_R)   > DBL_EPSILON) ||
+	         (std::abs(term_dR/sum_dR) > DBL_EPSILON && std::abs(prevTerm_dR/sum_dR) > DBL_EPSILON))) )
+	{
+		cm2 = cm1; cm1 = c0;
+		ck  = Complex(k);
+		c0  = -(alphaCH + epsilonCH*(ck - deltaCH - 1.))*cm2;
+		c0 += -(ck*ck + ck*gm_eps_m1 - dt_gm_eps + alphaCH - qCH)*cm1;
+		c0 /= ck*(ck - deltaCH + 1.);
+
+		prevTerm_R  = term_R;
+		prevTerm_dR = term_dR;
+		arg_km1 = arg_k;
+		arg_k  *= arg;   // arg^k
+
+		term_R  = c0 * arg_k;
+		term_dR = c0 * (gr*arg_k + ck*inv_2kappa*arg_km1);
+		sum_R  += term_R;
+		sum_dR += term_dR;
+		maxTerm_R  = (std::abs(term_R)  < std::abs(maxTerm_R))  ? maxTerm_R  : term_R;
+		maxTerm_dR = (std::abs(term_dR) < std::abs(maxTerm_dR)) ? maxTerm_dR : term_dR;
+		k++;
+	}
+
+	double error_R  = std::abs(maxTerm_R/sum_R)*DBL_EPSILON;
+	error_R  = (std::abs(term_R/sum_R)  < error_R)  ? error_R  : std::abs(term_R/sum_R);
+	double error_dR = std::abs(maxTerm_dR/sum_dR)*DBL_EPSILON;
+	error_dR = (std::abs(term_dR/sum_dR) < error_dR) ? error_dR : std::abs(term_dR/sum_dR);
+
+	Complex Btrans   = pow(2., I*kfreq*rp/kappa - cs)*pow(kappa, I*kfreq*rm/kappa - cs)*exp(-I*kfreq*rp);
+	Complex prefactor = pow((r - rm)/(2.*kappa), aCH)*pow(r - rp, -cs - bCH)*exp(sgn*I*omega*(r - rp));
+
+	R  = Result(Btrans*prefactor*sum_R,  Btrans*prefactor*sum_R *error_R);
+	Rp = Result(Btrans*prefactor*sum_dR, Btrans*prefactor*sum_dR*error_dR);
 }
 
 Result gsn_up_asymptotic_infinity(const double &a, const int &s, const int &L, const int &m, const double &omega, const double &r){

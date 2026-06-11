@@ -197,6 +197,9 @@ int teuk_up_ASYM_series(Result &R, RadialTeukolsky &teuk, const double &r);
 int teuk_up_derivative_ASYM_series(ComplexVector &Rp, RadialTeukolsky &teuk, const Vector &r);
 Result teuk_up_derivative_ASYM_series(RadialTeukolsky &teuk, const double &r);
 int teuk_up_derivative_ASYM_series(Result &R, RadialTeukolsky &teuk, const double &r);
+// Combined: R and dR/dr in one recurrence pass
+void teuk_in_ASYM_series_both(Result &R, Result &Rp, RadialTeukolsky &teuk, const double &r);
+void teuk_up_ASYM_series_both(Result &R, Result &Rp, RadialTeukolsky &teuk, const double &r);
 
 // static solutions
 int teuk_static(ComplexVector &Rin, ComplexVector &RinP, ComplexVector &Rup, ComplexVector &RupP, RadialTeukolsky &teuk, Vector &r);
@@ -410,11 +413,15 @@ Result teuk_up_asymptotic_infinity(const double &a, const int &s, const int &L, 
 Result teuk_up_asymptotic_infinity(const double &a, const int &s, const int &L, const int &m, const double &omega, const double &lambda, const double &r);
 Result teuk_up_derivative_asymptotic_infinity(const double &a, const int &s, const int &L, const int &m, const double &omega, const double &r);
 Result teuk_up_derivative_asymptotic_infinity(const double &a, const int &s, const int &L, const int &m, const double &omega, const double &lambda, const double &r);
+// Combined: compute R and dR/dr in a single recurrence pass (no L parameter — lambda must be pre-computed)
+void teuk_up_asymptotic_infinity_and_derivative(Result &R, Result &Rp, const double &a, const int &s, const int &m, const double &omega, const double &lambda, const double &r);
 
 Result teuk_in_asymptotic_horizon(const double &a, const int &s, const int &L, const int &m, const double &omega, const double &r);
 Result teuk_in_asymptotic_horizon(const double &a, const int &s, const int &L, const int &m, const double &omega, const double &lambda, const double &r);
 Result teuk_in_derivative_asymptotic_horizon(const double &a, const int &s, const int &L, const int &m, const double &omega, const double &r);
 Result teuk_in_derivative_asymptotic_horizon(const double &a, const int &s, const int &L, const int &m, const double &omega, const double &lambda, const double &r);
+// Combined: compute R and dR/dr in a single recurrence pass (no L parameter — lambda must be pre-computed)
+void teuk_in_asymptotic_horizon_and_derivative(Result &R, Result &Rp, const double &a, const int &s, const int &m, const double &omega, const double &lambda, const double &r);
 
 Complex gsn_asymptotic_initial_sum(const double &a, const int &s, const int &m, const double &omega, const double &lambda, const double &r);
 Complex gsn_asymptotic_initial_sum(const double &r, hbl_parameters params);
