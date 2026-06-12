@@ -768,15 +768,20 @@ void teukolskyIntegrandMinus2(Complex &integrandIn, Complex &integrandUp, int co
 
 	Complex u2p, u2m, u4p, u4m;
 	u_24_coeffs(u2m, u2p, u4m, u4p, geoConstants, rp, thp);
+	// the four phase factors e^{i(±rphase ± thphase)} are products and
+	// conjugates of just two complex exponentials
+	Complex er = exp(I*rphase), eth = exp(I*thphase);
+	Complex epp = er*eth, epm = er*conj(eth);
+	Complex emp = conj(epm), emm = conj(epp);
 	Complex Cnn, Cnmbar, Cmbarmbar;
-	Cnn = u2p*u2p*(exp(I*(rphase + thphase)) + exp(I*(rphase - thphase)));
-	Cnn += u2m*u2m*(exp(I*(-rphase + thphase)) + exp(I*(-rphase - thphase)));
-	Cnmbar = u2p*u4p*exp(I*(rphase + thphase));
-	Cnmbar += u2p*u4m*exp(I*(rphase - thphase));
-	Cnmbar += u2m*u4p*exp(I*(-rphase + thphase));
-	Cnmbar += u2m*u4m*exp(I*(-rphase - thphase));
-	Cmbarmbar = u4p*u4p*(exp(I*(rphase + thphase)) + exp(I*(-rphase + thphase)));
-	Cmbarmbar += u4m*u4m*(exp(I*(rphase - thphase)) + exp(I*(-rphase - thphase)));
+	Cnn = u2p*u2p*(epp + epm);
+	Cnn += u2m*u2m*(emp + emm);
+	Cnmbar = u2p*u4p*epp;
+	Cnmbar += u2p*u4m*epm;
+	Cnmbar += u2m*u4p*emp;
+	Cnmbar += u2m*u4m*emm;
+	Cmbarmbar = u4p*u4p*(epp + emp);
+	Cmbarmbar += u4m*u4m*(epm + emm);
 
 	Complex Ann0, Anmbar0, Anmbar1, Ambarmbar0, Ambarmbar1, Ambarmbar2;
 	A_coeffs_w(Ann0, Anmbar0, Ambarmbar0, Anmbar1, Ambarmbar1, Ambarmbar2, m, freq, geoConstants, rp, thp, St, StP, StPP);
@@ -795,10 +800,11 @@ void teukolskyIntegrandMinus2PolarTurningPoint(Complex &integrandIn, Complex &in
 
 	Complex u2p, u2m, u4;
 	u_24_coeffs_PolarTurningPoint(u2m, u2p, u4, geoConstants, rp, thp);
+	Complex er = exp(I*rphase), erc = conj(er);
 	Complex Cnn, Cnmbar, Cmbarmbar;
-	Cnn = u2p*u2p*exp(I*rphase) + u2m*u2m*exp(-I*rphase);
-	Cnmbar = u2p*u4*exp(I*rphase) + u2m*u4*exp(-I*rphase);
-	Cmbarmbar = u4*u4*(exp(I*rphase) + exp(-I*rphase));
+	Cnn = u2p*u2p*er + u2m*u2m*erc;
+	Cnmbar = u2p*u4*er + u2m*u4*erc;
+	Cmbarmbar = u4*u4*(er + erc);
 
 	Complex Ann0, Anmbar0, Anmbar1, Ambarmbar0, Ambarmbar1, Ambarmbar2;
 	A_coeffs_w(Ann0, Anmbar0, Ambarmbar0, Anmbar1, Ambarmbar1, Ambarmbar2, m, freq, geoConstants, rp, thp, St, StP, StPP);
@@ -837,12 +843,13 @@ void teukolskyIntegrandMinus2RadialTurningPoint(Complex &integrandIn, Complex &i
 
 	Complex u2, u4p, u4m;
 	u_24_coeffs_RadialTurningPoint(u2, u4m, u4p, geoConstants, rp, thp);
+	Complex eth = exp(I*thphase), ethc = conj(eth);
 	Complex Cnn, Cnmbar, Cmbarmbar;
-	Cnn = u2*u2*(exp(I*(thphase)) + exp(I*(-thphase)));
-	Cnmbar = u2*u4p*exp(I*(thphase));
-	Cnmbar += u2*u4m*exp(I*(-thphase));
-	Cmbarmbar = u4p*u4p*exp(I*(thphase));
-	Cmbarmbar += u4m*u4m*exp(I*(-thphase));
+	Cnn = u2*u2*(eth + ethc);
+	Cnmbar = u2*u4p*eth;
+	Cnmbar += u2*u4m*ethc;
+	Cmbarmbar = u4p*u4p*eth;
+	Cmbarmbar += u4m*u4m*ethc;
 
 	Complex Ann0, Anmbar0, Anmbar1, Ambarmbar0, Ambarmbar1, Ambarmbar2;
 	A_coeffs_w(Ann0, Anmbar0, Ambarmbar0, Anmbar1, Ambarmbar1, Ambarmbar2, m, freq, geoConstants, rp, thp, St, StP, StPP);
@@ -874,15 +881,20 @@ void teukolskyIntegrandPlus2(Complex &integrandIn, Complex &integrandUp, int con
 
 	Complex u1p, u1m, u3p, u3m;
 	u_13_coeffs(u1m, u1p, u3m, u3p, geoConstants, rp, thp);
+	// the four phase factors e^{i(±rphase ± thphase)} are products and
+	// conjugates of just two complex exponentials
+	Complex er = exp(I*rphase), eth = exp(I*thphase);
+	Complex epp = er*eth, epm = er*conj(eth);
+	Complex emp = conj(epm), emm = conj(epp);
 	Complex Cll, Clm, Cmm;
-	Cll = u1p*u1p*(exp(I*(rphase + thphase)) + exp(I*(rphase - thphase)));
-	Cll += u1m*u1m*(exp(I*(-rphase + thphase)) + exp(I*(-rphase - thphase)));
-	Clm = u1p*u3p*exp(I*(rphase + thphase));
-	Clm += u1p*u3m*exp(I*(rphase - thphase));
-	Clm += u1m*u3p*exp(I*(-rphase + thphase));
-	Clm += u1m*u3m*exp(I*(-rphase - thphase));
-	Cmm = u3p*u3p*(exp(I*(rphase + thphase)) + exp(I*(-rphase + thphase)));
-	Cmm += u3m*u3m*(exp(I*(rphase - thphase)) + exp(I*(-rphase - thphase)));
+	Cll = u1p*u1p*(epp + epm);
+	Cll += u1m*u1m*(emp + emm);
+	Clm = u1p*u3p*epp;
+	Clm += u1p*u3m*epm;
+	Clm += u1m*u3p*emp;
+	Clm += u1m*u3m*emm;
+	Cmm = u3p*u3p*(epp + emp);
+	Cmm += u3m*u3m*(epm + emm);
 
 	Complex All0, Alm0, Alm1, Amm0, Amm1, Amm2;
 	A13_coeffs_w(All0, Alm0, Amm0, Alm1, Amm1, Amm2, m, freq, geoConstants, rp, thp, St, StP, StPP);
@@ -914,12 +926,13 @@ void teukolskyIntegrandPlus2PolarTurningPoint(Complex &integrandIn, Complex &int
 
 	Complex u1p, u1m, u3;
 	u_13_coeffs_PolarTurningPoint(u1m, u1p, u3, geoConstants, rp, thp);
+	Complex er = exp(I*rphase), erc = conj(er);
 	Complex Cll, Clm, Cmm;
-	Cll = u1p*u1p*exp(I*(rphase));
-	Cll += u1m*u1m*exp(I*(-rphase));
-	Clm = u1p*u3*exp(I*(rphase));
-	Clm += u1m*u3*exp(I*(-rphase));
-	Cmm = u3*u3*(exp(I*(rphase)) + exp(I*(-rphase)));
+	Cll = u1p*u1p*er;
+	Cll += u1m*u1m*erc;
+	Clm = u1p*u3*er;
+	Clm += u1m*u3*erc;
+	Cmm = u3*u3*(er + erc);
 
 	Complex All0, Alm0, Alm1, Amm0, Amm1, Amm2;
 	A13_coeffs_w(All0, Alm0, Amm0, Alm1, Amm1, Amm2, m, freq, geoConstants, rp, thp, St, StP, StPP);
@@ -950,12 +963,13 @@ void teukolskyIntegrandPlus2RadialTurningPoint(Complex &integrandIn, Complex &in
 
 	Complex u1, u3p, u3m;
 	u_13_coeffs_RadialTurningPoint(u1, u3m, u3p, geoConstants, rp, thp);
+	Complex eth = exp(I*thphase), ethc = conj(eth);
 	Complex Cll, Clm, Cmm;
-	Cll = u1*u1*(exp(I*(thphase)) + exp(I*(-thphase)));
-	Clm = u1*u3p*exp(I*(thphase));
-	Clm += u1*u3m*exp(I*(-thphase));
-	Cmm = u3p*u3p*exp(I*(thphase));
-	Cmm += u3m*u3m*exp(I*(-thphase));
+	Cll = u1*u1*(eth + ethc);
+	Clm = u1*u3p*eth;
+	Clm += u1*u3m*ethc;
+	Cmm = u3p*u3p*eth;
+	Cmm += u3m*u3m*ethc;
 
 	Complex All0, Alm0, Alm1, Amm0, Amm1, Amm2;
 	A13_coeffs_w(All0, Alm0, Amm0, Alm1, Amm1, Amm2, m, freq, geoConstants, rp, thp, St, StP, StPP);
@@ -1106,9 +1120,15 @@ static void A_coeffs_w(Complex &Ann0, Complex &Anmbar0, Complex &Ambarmbar0, Com
 	double Kp = 2.*omega*rp;
 	double cthp = cos(thp);
 	double sthp = sin(thp);
+	double Kdelta = K/delta;
 
-	Complex rho = -1./(rp - I*a*cthp);
-	Complex rhoBar = -1./(rp + I*a*cthp);
+	// q = -1/rho, so inverse powers of rho (and of rhoBar = conj(rho)) reduce
+	// to products of q rather than calls to the much slower complex pow
+	Complex q = rp - I*a*cthp;
+	Complex q2 = q*q;
+	Complex q3 = q2*q;
+	Complex rho = -conj(q)/std::norm(q);
+	Complex rhoBar = conj(rho);
 
 	Complex L1 = -m/sthp + a*omega*sthp + cthp/sthp;
 	Complex L2 = -m/sthp + a*omega*sthp + 2.*cthp/sthp;
@@ -1117,12 +1137,15 @@ static void A_coeffs_w(Complex &Ann0, Complex &Anmbar0, Complex &Ambarmbar0, Com
 	Complex L1Sp = SlmPP + L1*SlmP;
 	Complex L1L2S = L1Sp + L2p*Slm + L2*SlmP + L1*L2*Slm;
 
-	Ann0 = -pow(rho, -2)*pow(rhoBar, -1)*pow(sqrt(2.)*delta, -2)*( pow(rho, -1)*L1L2S + 3.*I*a*sthp*L1*Slm + 3.*I*a*cthp*Slm + 2.*I*a*sthp*SlmP - I*a*sthp*L2*Slm );
-	Anmbar0 = pow(rho, -3)*pow(sqrt(2.)*delta, -1)*( (rho + rhoBar - I*K/delta)*L2S + (rho - rhoBar)*a*sthp*K/delta*Slm );
-	Anmbar1 = -pow(rho, -3)*pow(sqrt(2.)*delta, -1)*( L2S + I*(rho - rhoBar)*a*sthp*Slm );
-	Ambarmbar0 = pow(rho, -3)*rhoBar*Slm/4.*( I*(Kp/delta - deltaP/delta*K/delta) + K/delta*K/delta + 2.*I*rho*K/delta );
-	Ambarmbar1 = -pow(rho, -3)*rhoBar*Slm/2.*( I*K/delta - rho );
-	Ambarmbar2 = -pow(rho, -3)*rhoBar*Slm/4.;
+	Complex q3sq2delta = q3/(M_SQRT2*delta);
+	Complex q3rhoBarSlm = q3*rhoBar*Slm;
+
+	Ann0 = q2*conj(q)*(0.5/(delta*delta))*( -q*L1L2S + 3.*I*a*sthp*L1*Slm + 3.*I*a*cthp*Slm + 2.*I*a*sthp*SlmP - I*a*sthp*L2*Slm );
+	Anmbar0 = -q3sq2delta*( (rho + rhoBar - I*Kdelta)*L2S + (rho - rhoBar)*a*sthp*Kdelta*Slm );
+	Anmbar1 = q3sq2delta*( L2S + I*(rho - rhoBar)*a*sthp*Slm );
+	Ambarmbar0 = -0.25*q3rhoBarSlm*( I*(Kp/delta - deltaP/delta*Kdelta) + Kdelta*Kdelta + 2.*I*rho*Kdelta );
+	Ambarmbar1 = 0.5*q3rhoBarSlm*( I*Kdelta - rho );
+	Ambarmbar2 = 0.25*q3rhoBarSlm;
 }
 
 void A13_coeffs(Complex &All0, Complex &Alm0, Complex &Amm0, Complex &Alm1, Complex &Amm1, Complex &Amm2, int const &, int const &m, int const &k, int const &n, GeodesicConstants &geoConstants, double const &rp, double const &thp, double const &Slm, double const &SlmP, double const &SlmPP){
@@ -1139,22 +1162,27 @@ static void A13_coeffs_w(Complex &All0, Complex &Alm0, Complex &Amm0, Complex &A
 	double Kp = 2.*omega*rp;
 	double cthp = cos(thp);
 	double sthp = sin(thp);
+	double Kdelta = K/delta;
 
-	Complex rho = -1./(rp - I*a*cthp);
-	Complex rhoBar = -1./(rp + I*a*cthp);
+	// q = -1/rho; inverse powers of rho and rhoBar = conj(rho) become
+	// products of q, and |rho|^-2 = norm(q) is purely real
+	Complex q = rp - I*a*cthp;
+	double qq = std::norm(q);
+	Complex rho = -conj(q)/qq;
+	Complex rhoBar = conj(rho);
 
-	Complex dLd1 = m/sin(thp) - a*omega*sthp + cthp/sthp;
-	Complex dLd2 = m/sin(thp) - a*omega*sthp + 2.*cthp/sthp;
+	Complex dLd1 = m/sthp - a*omega*sthp + cthp/sthp;
+	Complex dLd2 = m/sthp - a*omega*sthp + 2.*cthp/sthp;
 	Complex dLd2p = -m*cthp/sthp/sthp - a*omega*cthp - 2./sthp/sthp;
 	Complex rhoOverRhoP = I*a*rho*sthp;
 	Complex rhoOverRhoPP = I*a*rho*(cthp + 2.*sthp*rhoOverRhoP);
 
-	All0 = -0.5*pow(rho, -1)*rhoBar*(SlmPP + (dLd1 + dLd2 + 2.*rhoOverRhoP)*SlmP + (dLd2p + dLd1*dLd2 - 6.*pow(rhoOverRhoP, 2) + 3.*rhoOverRhoPP + (3.*dLd1 - dLd2)*rhoOverRhoP)*Slm);
-	Alm0 = 2.*pow(sqrt(2.)*rho, -1)*( -1.*(rho + rhoBar + I*K/delta)*(SlmP + dLd2*Slm) + (rho - rhoBar)*a*sthp*K/delta*Slm);
-	Alm1 = 2.*pow(sqrt(2.)*rho, -1)*( SlmP + dLd2*Slm + I*(rho - rhoBar)*a*sthp*Slm );
-	Amm0 = -pow(rho, -1)*pow(rhoBar, -1)*Slm*( I*(Kp/delta - deltaP/delta*K/delta) - K/delta*K/delta + 2.*I*rho*K/delta );
-	Amm1 = 2.*pow(rho, -1)*pow(rhoBar, -1)*Slm*( I*K/delta + rho );
-	Amm2 = -pow(rho, -1)*pow(rhoBar, -1)*Slm;
+	All0 = 0.5*q*rhoBar*(SlmPP + (dLd1 + dLd2 + 2.*rhoOverRhoP)*SlmP + (dLd2p + dLd1*dLd2 - 6.*rhoOverRhoP*rhoOverRhoP + 3.*rhoOverRhoPP + (3.*dLd1 - dLd2)*rhoOverRhoP)*Slm);
+	Alm0 = -M_SQRT2*q*( -1.*(rho + rhoBar + I*Kdelta)*(SlmP + dLd2*Slm) + (rho - rhoBar)*a*sthp*Kdelta*Slm);
+	Alm1 = -M_SQRT2*q*( SlmP + dLd2*Slm + I*(rho - rhoBar)*a*sthp*Slm );
+	Amm0 = -qq*Slm*( I*(Kp/delta - deltaP/delta*Kdelta) - Kdelta*Kdelta + 2.*I*rho*Kdelta );
+	Amm1 = 2.*qq*Slm*( I*Kdelta + rho );
+	Amm2 = -qq*Slm;
 }
 
 void u_13_coeffs(Complex &u1m, Complex &u1p, Complex &u3m, Complex &u3p, GeodesicConstants &geoConstants, double const &rp, double const &thp){
@@ -1163,12 +1191,17 @@ void u_13_coeffs(Complex &u1m, Complex &u1p, Complex &u3m, Complex &u3p, Geodesi
 	double uTheta = sqrt(std::abs(kerr_geo_Vtheta(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, thp)));
 
 	double z = cos(thp);
-	Complex rhobar = -1./(rp + I*a*z);
+	Complex qb = rp + I*a*z;
+	Complex rhobar = -conj(qb)/std::norm(qb);
 
-	u1p = -(geoConstants.En*(rp*rp + a*a) - a*geoConstants.Lz - uR)/(rp*rp - 2.*rp + a*a);
-	u1m = -(geoConstants.En*(rp*rp + a*a) - a*geoConstants.Lz + uR)/(rp*rp - 2.*rp + a*a);
-	u3p = rhobar/sqrt(2.)*(I*sqrt(1. - z*z)*(a*geoConstants.En - geoConstants.Lz/(1 - z*z)) - uTheta);
-	u3m = rhobar/sqrt(2.)*(I*sqrt(1. - z*z)*(a*geoConstants.En - geoConstants.Lz/(1 - z*z)) + uTheta);
+	double Evarpi = geoConstants.En*(rp*rp + a*a) - a*geoConstants.Lz;
+	double delta = rp*rp - 2.*rp + a*a;
+	Complex thbracket = I*sqrt(1. - z*z)*(a*geoConstants.En - geoConstants.Lz/(1 - z*z));
+	Complex rhobarSqrt2 = rhobar/M_SQRT2;
+	u1p = -(Evarpi - uR)/delta;
+	u1m = -(Evarpi + uR)/delta;
+	u3p = rhobarSqrt2*(thbracket - uTheta);
+	u3m = rhobarSqrt2*(thbracket + uTheta);
 }
 
 void u_13_coeffs_RadialTurningPoint(Complex &u1,  Complex &u3m, Complex &u3p, GeodesicConstants &geoConstants, double const &rp, double const &thp){
@@ -1209,12 +1242,17 @@ void u_24_coeffs(Complex &u2m, Complex &u2p, Complex &u4m, Complex &u4p, Geodesi
 	double uR = sqrt(std::abs(kerr_geo_Vr(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, rp)));
 	double uTheta = sqrt(std::abs(kerr_geo_Vtheta(a, geoConstants.En, geoConstants.Lz, geoConstants.Q, thp)));
 	double z = cos(thp);
-	Complex rho = -1./(rp - I*a*z);
+	Complex qr0 = rp - I*a*z;
+	Complex rho = -conj(qr0)/std::norm(qr0);
 
-	u2p = -(geoConstants.En*(rp*rp + a*a) - a*geoConstants.Lz + uR)/(2.*(rp*rp + pow(a*z, 2)));
-	u2m = -(geoConstants.En*(rp*rp + a*a) - a*geoConstants.Lz - uR)/(2.*(rp*rp + pow(a*z, 2)));
-	u4p = -rho/sqrt(2.)*(I*sqrt(1. - z*z)*(a*geoConstants.En - geoConstants.Lz/(1 - z*z)) + uTheta);
-	u4m = -rho/sqrt(2.)*(I*sqrt(1. - z*z)*(a*geoConstants.En - geoConstants.Lz/(1 - z*z)) - uTheta);
+	double Evarpi = geoConstants.En*(rp*rp + a*a) - a*geoConstants.Lz;
+	double twoSigma = 2.*(rp*rp + (a*z)*(a*z));
+	Complex thbracket = I*sqrt(1. - z*z)*(a*geoConstants.En - geoConstants.Lz/(1 - z*z));
+	Complex rhoSqrt2 = -rho/M_SQRT2;
+	u2p = -(Evarpi + uR)/twoSigma;
+	u2m = -(Evarpi - uR)/twoSigma;
+	u4p = rhoSqrt2*(thbracket + uTheta);
+	u4m = rhoSqrt2*(thbracket - uTheta);
 }
 
 void u_24_coeffs_PolarTurningPoint(Complex &u2m, Complex &u2p, Complex &u4, GeodesicConstants &geoConstants, double const &rp, double const &thp){
@@ -1391,7 +1429,7 @@ TeukolskyAmplitudes scalar_amplitude_circeq(int L, int m, GeodesicTrajectory& tr
 }
 
 int scalar_integrand_I1(Complex &integrand, int m, int n, double freq, double tR, double rp, double phiR, double qr, Complex Rt){
-	integrand = pow(rp, 2)*Rt*cos(n*qr + freq*tR - m*phiR);
+	integrand = rp*rp*Rt*cos(n*qr + freq*tR - m*phiR);
 	return 0;
 }
 
@@ -1406,7 +1444,7 @@ int scalar_integrand_I3(Complex &integrand, int m, int n, double freq, double tR
 }
 
 int scalar_integrand_I4(Complex &integrand, int m, int k, double freq, double tTh, double aCosThP, double phiTh, double qth, double St){
-	integrand = pow(aCosThP, 2)*St*cos(k*qth + freq*tTh - m*phiTh);
+	integrand = aCosThP*aCosThP*St*cos(k*qth + freq*tTh - m*phiTh);
 	return 0;
 }
 
@@ -1427,16 +1465,17 @@ int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int
 	Complex sumTerm = 0.;
 	Complex sum = sumTerm;
 	double maxTerm = 0.;
+	double freq = teuk.getModeFrequency();
 
 	int samplePos = 0;
 	double q = samplePos*deltaQ;
-	integrand(sumTerm, m, n, teuk.getModeFrequency(), traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
+	integrand(sumTerm, m, n, freq, traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
 	sum = sumTerm;
 	maxTerm = std::abs(sumTerm) < maxTerm ? maxTerm : std::abs(sumTerm);
 
 	samplePos = halfSample*sampleDiff;
 	q = samplePos*deltaQ;
-	integrand(sumTerm, m, n, teuk.getModeFrequency(), traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
+	integrand(sumTerm, m, n, freq, traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
 	sum += sumTerm;
 	maxTerm = std::abs(sumTerm) < maxTerm ? maxTerm : std::abs(sumTerm);
 
@@ -1444,7 +1483,7 @@ int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int
 		samplePos = i*sampleDiff;
 		q = samplePos*deltaQ;
 
-		integrand(sumTerm, m, n, teuk.getModeFrequency(), traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
+		integrand(sumTerm, m, n, freq, traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
 		sum += 2.*sumTerm;
 		maxTerm = std::abs(sumTerm) < maxTerm ? maxTerm : std::abs(sumTerm);
 	}
@@ -1461,7 +1500,7 @@ int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int
 			samplePos = i*sampleDiff + sampleDiff/2;
 			q = double(samplePos)*deltaQ;
 
-			integrand(sumTerm, m, n, teuk.getModeFrequency(), traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
+			integrand(sumTerm, m, n, freq, traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
 			sum += 2.*sumTerm;
 			maxTerm = std::abs(sumTerm) < maxTerm ? maxTerm : std::abs(sumTerm);
 		}
