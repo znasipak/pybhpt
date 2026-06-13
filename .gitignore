@@ -9,6 +9,8 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+# local CMake build trees (build_opt, build_baseline, build_check, ...)
+build_*/
 develop-eggs/
 dist/
 downloads/
