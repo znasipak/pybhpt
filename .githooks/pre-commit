@@ -1,0 +1,22 @@
+#!/bin/sh
+#
+# Reject commits that include local CMake build trees (build_baseline/,
+# build_opt/, build_check/, ...). These are local development artifacts and
+# must never be committed. .gitignore blocks accidental `git add`, but it
+# cannot stop `git add -f` or a stale rule -- this hook is the backstop.
+#
+# Activate with:  git config core.hooksPath .githooks
+
+blocked=$(git diff --cached --name-only | grep -E '^build_[^/]*/' || true)
+
+if [ -n "$blocked" ]; then
+	echo "ERROR: refusing to commit local build directories:" >&2
+	echo "$blocked" | sed -E 's:(build_[^/]*)/.*:  \1/:' | sort -u >&2
+	echo >&2
+	echo "These are build artifacts (ignored by .gitignore's build_*/ rule)." >&2
+	echo "If one was force-added, unstage it:  git rm --cached -r <dir>" >&2
+	echo "To bypass this check intentionally:  git commit --no-verify" >&2
+	exit 1
+fi
+
+exit 0
