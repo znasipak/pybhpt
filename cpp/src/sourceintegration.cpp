@@ -49,6 +49,46 @@ int integrand_convergence(Complex old_value, Complex new_value, double eps1, dou
 	return ((eps0 < eps1) || (eps0 < eps2));
 }
 
+// Geometric error estimate for the trapezoidal-rule amplitude.
+// dLast is the relative change over the final sample doubling, |1 - Z_{N/2}/Z_N|,
+// and dPrev the change over the previous doubling. For a smooth periodic
+// integrand the trapezoidal error is the aliased Fourier tail; the bare dLast
+// estimates the error of Z_{N/2}, not Z_N. Modelling the remaining increments as
+// geometric with ratio rho = dLast/dPrev sums the tail to the error of Z_N,
+//     E_N ~ dLast * rho/(1-rho),
+// which tightens the estimate when convergence is healthy (rho small) and
+// inflates it when convergence is slow (rho -> 1, the oscillatory/pre-asymptotic
+// regime where the bare last-step estimate is optimistic). This is conservative
+// relative to true spectral convergence, where rho shrinks each step so the tail
+// is even smaller. The ratio is capped at RHO_MAX < 1 so that a stalled or
+// non-contracting sequence (rho >= 1) maps continuously to the worst-case
+// inflation factor RHO_MAX/(1-RHO_MAX) rather than blowing up or collapsing back
+// to dLast. Once dLast reaches the roundoff floor the ratio is just noise, so we
+// report the floor.
+static double conservative_precision(double dLast, double dPrev, double roundoff){
+	const double RHO_MAX = 0.99;                          // caps the geometric factor at 99
+	double floor = 10.*roundoff;
+	if(dLast <= floor) return std::max(dLast, roundoff);  // converged at the noise floor
+	if(!(dPrev > floor)) return dLast;                    // no usable prior step
+	double rho = dLast/dPrev;
+	if(rho > RHO_MAX) rho = RHO_MAX;                      // stalled / non-contracting -> worst case
+	return std::max(dLast*rho/(1.0 - rho), roundoff);     // geometric tail estimate of E_N
+}
+
+// Relative-error estimate for a scalar amplitude Z ~ I1*I2 + I3*I4 built from
+// four separately-converged 1D integrals with relative precisions pI1..pI4.
+// Each product's relative error is ~p_a + p_b; we sum the resulting absolute
+// errors and divide by |I1*I2 + I3*I4|, so cancellation between the two terms
+// (small denominator) correctly inflates the reported precision.
+static double scalar_amplitude_precision(Complex I1, double pI1, Complex I2, double pI2,
+		Complex I3, double pI3, Complex I4, double pI4){
+	double term12 = std::abs(I1*I2), term34 = std::abs(I3*I4);
+	double denom = std::abs(I1*I2 + I3*I4);
+	if(denom == 0.) return 1.;
+	double absErr = term12*(pI1 + pI2) + term34*(pI3 + pI4);
+	return std::max(absErr/denom, DBL_EPSILON);
+}
+
 ///////////////////////////////////////////////////////
 // 					Field amplitudes				 //
 ///////////////////////////////////////////////////////
@@ -619,6 +659,8 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	ZlmUp = sumUp.getSum()/double(halfSampleR*halfSampleTh);
 	ZlmIn = sumIn.getSum()/double(halfSampleR*halfSampleTh);
 	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
+	Complex ZlmUpComparePrev = 0., ZlmInComparePrev = 0.;
+	double pThUp = 0., pThIn = 0.;   // polar-direction error estimate (last radial resolution)
 	// std::cout << ZlmIn << ", " << ZlmUp << " for " << NsampleR << ", " << NsampleTh << "\n";
 
 	double errorTolerance = 5.e-11;
@@ -632,6 +674,7 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 		}
 
 		Complex ZlmUpCompareTh = 0., ZlmInCompareTh = 0.;
+		Complex ZlmUpCompareThPrev = 0., ZlmInCompareThPrev = 0.;
 		Complex ZlmUpTh = ZlmUp, ZlmInTh = ZlmIn;
 		int convergenceTestTh = 0;
 		while(NsampleTh < NsampleMaxTh && convergenceTestTh < 2){
@@ -669,11 +712,25 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 			NsampleTh *= 2;
 			halfSampleTh *= 2;
 			sampleDiffTh /= 2;
+			ZlmUpCompareThPrev = ZlmUpCompareTh;
+			ZlmInCompareThPrev = ZlmInCompareTh;
 			ZlmUpCompareTh = ZlmUpTh;
 			ZlmInCompareTh = ZlmInTh;
 			ZlmUpTh = sumUp.getSum()/double(halfSampleR*halfSampleTh);
 			ZlmInTh = sumIn.getSum()/double(halfSampleR*halfSampleTh);
 			// std::cout << ZlmInTh << ", " << ZlmUpTh << " for " << NsampleR << ", " << NsampleTh << "\n";
+		}
+		// geometric estimate of the polar-direction tail at this radial resolution;
+		// the final radial iteration's value is combined with the radial estimate below
+		if(std::abs(ZlmUpCompareTh) > 0.){
+			double dTh = std::abs(1. - ZlmUpCompareTh/ZlmUpTh);
+			double dThPrev = (std::abs(ZlmUpCompareThPrev) > 0.) ? std::abs(1. - ZlmUpCompareThPrev/ZlmUpCompareTh) : dTh;
+			pThUp = conservative_precision(dTh, dThPrev, sumUp.getPrecision());
+		}
+		if(std::abs(ZlmInCompareTh) > 0.){
+			double dTh = std::abs(1. - ZlmInCompareTh/ZlmInTh);
+			double dThPrev = (std::abs(ZlmInCompareThPrev) > 0.) ? std::abs(1. - ZlmInCompareThPrev/ZlmInCompareTh) : dTh;
+			pThIn = conservative_precision(dTh, dThPrev, sumIn.getPrecision());
 		}
 		// additional qr sample points for fixed qth = 0. and qth = pi
 		for(int i = 0; i < halfSampleR; i++){
@@ -708,6 +765,8 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 		NsampleR *= 2;
 		halfSampleR *= 2;
 		sampleDiffR /= 2;
+		ZlmUpComparePrev = ZlmUpCompare;
+		ZlmInComparePrev = ZlmInCompare;
 		ZlmUpCompare = ZlmUp;
 		ZlmInCompare = ZlmIn;
 		ZlmUp = sumUp.getSum()/double(halfSampleR*halfSampleTh);
@@ -716,9 +775,10 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 		// std::cout << "Teukolsky Up amplitude = " << ZlmUp << " with "<<NsampleR*NsampleTh<<" samples \n";
 		// std::cout << "Precision of Teukolsky Up amplitude = " << std::abs(1. - ZlmUpCompare/ZlmUp) << " with "<<NsampleR*NsampleTh<<" samples \n";
 	}
-	
-	double precisionIn = std::abs(1. - ZlmInCompare/ZlmIn);
-	double precisionUp = std::abs(1. - ZlmUpCompare/ZlmUp);
+
+	// total 2D error = radial-direction tail (geometric) + polar-direction tail (pTh*)
+	double precisionIn = conservative_precision(std::abs(1. - ZlmInCompare/ZlmIn), std::abs(1. - ZlmInComparePrev/ZlmInCompare), sumIn.getPrecision()) + pThIn;
+	double precisionUp = conservative_precision(std::abs(1. - ZlmUpCompare/ZlmUp), std::abs(1. - ZlmUpComparePrev/ZlmUpCompare), sumUp.getPrecision()) + pThUp;
 	if(precisionIn > PRECISION_THRESHOLD){
 		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
 	}
@@ -872,6 +932,7 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	double errorTolerance = 5.e-12;
 	double convergenceTest = 0;
 	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
+	Complex ZlmUpComparePrev = 0., ZlmInComparePrev = 0.;
 	while(convergenceTest < 2 && Nsample < NsampleMax){
 		if(integrand_convergence(ZlmUpCompare, ZlmUp, errorTolerance, 10.*sumUp.getPrecision()) && integrand_convergence(ZlmInCompare, ZlmIn, errorTolerance, 10.*sumIn.getPrecision())){
 			convergenceTest += 1;
@@ -888,6 +949,8 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 		Nsample *= 2;
 		halfSample *= 2;
 		sampleDiff /= 2;
+		ZlmUpComparePrev = ZlmUpCompare;
+		ZlmInComparePrev = ZlmInCompare;
 		ZlmUpCompare = ZlmUp;
 		ZlmInCompare = ZlmIn;
 		ZlmUp = sumUp.getSum()/double(halfSample);
@@ -901,8 +964,8 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	// if(sumIn.getPrecision()){
 
 	// }
-	double precisionIn = std::abs(1. - ZlmInCompare/ZlmIn);
-	double precisionUp = std::abs(1. - ZlmUpCompare/ZlmUp);
+	double precisionIn = conservative_precision(std::abs(1. - ZlmInCompare/ZlmIn), std::abs(1. - ZlmInComparePrev/ZlmInCompare), sumIn.getPrecision());
+	double precisionUp = conservative_precision(std::abs(1. - ZlmUpCompare/ZlmUp), std::abs(1. - ZlmUpComparePrev/ZlmUpCompare), sumUp.getPrecision());
 
 	if(precisionIn > PRECISION_THRESHOLD){
 		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
@@ -1011,6 +1074,7 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 	double errorTolerance = 5.e-12;
 	double convergenceTest = 0;
 	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
+	Complex ZlmUpComparePrev = 0., ZlmInComparePrev = 0.;
 	while(convergenceTest < 2 && Nsample < NsampleMax){
 		if(integrand_convergence(ZlmUpCompare, ZlmUp, errorTolerance, sumUp.getPrecision()) && integrand_convergence(ZlmInCompare, ZlmIn, errorTolerance, sumIn.getPrecision())){
 			convergenceTest += 1;
@@ -1027,14 +1091,16 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 		Nsample *= 2;
 		halfSample *= 2;
 		sampleDiff /= 2;
+		ZlmUpComparePrev = ZlmUpCompare;
+		ZlmInComparePrev = ZlmInCompare;
 		ZlmUpCompare = ZlmUp;
 		ZlmInCompare = ZlmIn;
 		ZlmUp = sumUp.getSum()/double(halfSample);
 		ZlmIn = sumIn.getSum()/double(halfSample);
 	}
 
-	double precisionIn = std::abs(1. - ZlmInCompare/ZlmIn);
-	double precisionUp = std::abs(1. - ZlmUpCompare/ZlmUp);
+	double precisionIn = conservative_precision(std::abs(1. - ZlmInCompare/ZlmIn), std::abs(1. - ZlmInComparePrev/ZlmInCompare), sumIn.getPrecision());
+	double precisionUp = conservative_precision(std::abs(1. - ZlmUpCompare/ZlmUp), std::abs(1. - ZlmUpComparePrev/ZlmUpCompare), sumUp.getPrecision());
 
 	if(precisionIn > PRECISION_THRESHOLD){
 		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
@@ -1777,7 +1843,7 @@ int scalar_integrand_I4(Complex &integrand, int m, int k, double freq, double tT
 	return 0;
 }
 
-int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int, int, double, double, double, double, double, Complex), int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, BoundaryCondition bc, RadialTeukolsky &teuk, double errorThreshold, double errorTolerance){
+int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int, int, double, double, double, double, double, Complex), int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, BoundaryCondition bc, RadialTeukolsky &teuk, double errorThreshold, double errorTolerance, double &precisionOut){
 	int halfSampleInit = 16;
 	int halfSample = halfSampleInit;
 	int argLength = traj.r.size();
@@ -1823,7 +1889,7 @@ int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int
 	double errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
 	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
 
-	Complex ICompare = 0.;
+	Complex ICompare = 0., IComparePrev = 0.;
 	while(halfSample < halfSampleMax && std::abs(1. - ICompare/II) > errorToleranceAdjusted){
 		for(int i = 0; i < halfSample; i++){
 			samplePos = i*sampleDiff + sampleDiff/2;
@@ -1835,12 +1901,18 @@ int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int
 		}
 		halfSample *= 2;
 		sampleDiff /= 2;
+		IComparePrev = ICompare;
 		ICompare = II;
 		II = sum/double(2*halfSample);
 
 		precisionLoss = maxTerm/std::abs(II);
 		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
 		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+	}
+	{
+		double dLastP = std::abs(1. - ICompare/II);
+		double dPrevP = (std::abs(ICompare) > 0.) ? std::abs(1. - IComparePrev/ICompare) : dLastP;
+		precisionOut = std::max(conservative_precision(dLastP, dPrevP, DBL_EPSILON*precisionLoss), errorToleranceAdjusted);
 	}
 	if(errorToleranceAdjusted > errorThreshold){
 		return -1;
@@ -1853,7 +1925,7 @@ int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int
 	return 0;
 }
 
-int polar_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int, int, double, double, double, double, double, double), int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, SpinWeightedHarmonic &swsh, double errorThreshold, double errorTolerance){
+int polar_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int, int, double, double, double, double, double, double), int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, SpinWeightedHarmonic &swsh, double errorThreshold, double errorTolerance, double &precisionOut){
 	int halfSampleInit = 16;
 	int halfSample = halfSampleInit;
 	int argLength = traj.theta.size();
@@ -1900,7 +1972,7 @@ int polar_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int,
 	double errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
 	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
 
-	Complex ICompare = 0.;
+	Complex ICompare = 0., IComparePrev = 0.;
 	while(halfSample < halfSampleMax && std::abs(1. - ICompare/II) > errorToleranceAdjusted){
 		for(int i = 0; i < halfSample; i++){
 			samplePos = i*sampleDiff + sampleDiff/2;
@@ -1912,12 +1984,18 @@ int polar_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int,
 		}
 		halfSample *= 2;
 		sampleDiff /= 2;
+		IComparePrev = ICompare;
 		ICompare = II;
 		II = sum/double(2*halfSample);
 
 		precisionLoss = maxTerm/std::abs(II);
 		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
 		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+	}
+	{
+		double dLastP = std::abs(1. - ICompare/II);
+		double dPrevP = (std::abs(ICompare) > 0.) ? std::abs(1. - IComparePrev/ICompare) : dLastP;
+		precisionOut = std::max(conservative_precision(dLastP, dPrevP, DBL_EPSILON*precisionLoss), errorToleranceAdjusted);
 	}
 	if(errorToleranceAdjusted > errorThreshold){
 		return -1;
@@ -1950,41 +2028,45 @@ TeukolskyAmplitudes scalar_amplitude_generic(int, int m, int k, int n, GeodesicT
 	Complex W = scalar_wronskian(geoConstants.a, teuk.getRadialPoints(0), teuk.getSolution(In, 0), teuk.getDerivative(In, 0), teuk.getSolution(Up, 0), teuk.getDerivative(Up, 0));
 
 	Complex I1Up = 0., I1In = 0., I3Up = 0., I3In = 0., I2 = 0., I4 = 0.;
+	double pI1Up = 0., pI1In = 0., pI3Up = 0., pI3In = 0., pI2 = 0., pI4 = 0.;
 	Complex ZlmUp = 0.;
 	Complex ZlmIn = 0.;
+	double precisionIn = 1., precisionUp = 1.;
 
-	int status = polar_integral_convergence_sum(I2, scalar_integrand_I2, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance);
+	int status = polar_integral_convergence_sum(I2, scalar_integrand_I2, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance, pI2);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, 1., 1.};
 		return Zlm;
 	}
-	status = polar_integral_convergence_sum(I4, scalar_integrand_I4, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance);
+	status = polar_integral_convergence_sum(I4, scalar_integrand_I4, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance, pI4);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, 1., 1.};
 		return Zlm;
 	}
 
-	status = radial_integral_convergence_sum(I1In, scalar_integrand_I1, m, k, n, traj, geoConstants, Up, teuk, errorThresholdR, errorTolerance);
+	status = radial_integral_convergence_sum(I1In, scalar_integrand_I1, m, k, n, traj, geoConstants, Up, teuk, errorThresholdR, errorTolerance, pI1In);
 	if(status != -1){
 		if(std::abs(I4) > 0.){
-			status = radial_integral_convergence_sum(I3In, scalar_integrand_I3, m, k, n, traj, geoConstants, Up, teuk, errorThresholdR, errorTolerance);
+			status = radial_integral_convergence_sum(I3In, scalar_integrand_I3, m, k, n, traj, geoConstants, Up, teuk, errorThresholdR, errorTolerance, pI3In);
 		}
 		if(status != -1){
 			ZlmIn = -4.*M_PI/W/upT*(I1In*I2 + I3In*I4);
+			precisionIn = scalar_amplitude_precision(I1In, pI1In, I2, pI2, I3In, pI3In, I4, pI4);
 		}
 	}
 
-	status = radial_integral_convergence_sum(I1Up, scalar_integrand_I1, m, k, n, traj, geoConstants, In, teuk, errorThresholdR, errorTolerance);
+	status = radial_integral_convergence_sum(I1Up, scalar_integrand_I1, m, k, n, traj, geoConstants, In, teuk, errorThresholdR, errorTolerance, pI1Up);
 	if(status != -1){
 		if(std::abs(I4) > 0.){
-			status = radial_integral_convergence_sum(I3Up, scalar_integrand_I3, m, k, n, traj, geoConstants, In, teuk, errorThresholdR, errorTolerance);
+			status = radial_integral_convergence_sum(I3Up, scalar_integrand_I3, m, k, n, traj, geoConstants, In, teuk, errorThresholdR, errorTolerance, pI3Up);
 		}
 		if(status != -1){
 			ZlmUp = -4.*M_PI/W/upT*(I1Up*I2 + I3Up*I4);
+			precisionUp = scalar_amplitude_precision(I1Up, pI1Up, I2, pI2, I3Up, pI3Up, I4, pI4);
 		}
 	}
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
+	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, precisionIn, precisionUp};
 
 	return Zlm;
 }
@@ -1996,41 +2078,45 @@ TeukolskyAmplitudes scalar_amplitude_equatorial(int, int m, int k, int n, Geodes
 	Complex W = scalar_wronskian(geoConstants.a, teuk.getRadialPoints(0), teuk.getSolution(In, 0), teuk.getDerivative(In, 0), teuk.getSolution(Up, 0), teuk.getDerivative(Up, 0));
 
 	Complex I1Up = 0., I1In = 0., I3Up = 0., I3In = 0., I2 = 0., I4 = 0.;
+	double pI1Up = 0., pI1In = 0., pI3Up = 0., pI3In = 0.;  // single-point polar -> pI2 = pI4 = 0
 	Complex ZlmUp = 0.;
 	Complex ZlmIn = 0.;
+	double precisionIn = 1., precisionUp = 1.;
 
 	int status = scalar_integrand_I2(I2, m, k, teuk.getModeFrequency(), traj.tTheta[0], geoConstants.a*cos(swsh.getArguments(0)), traj.getAzimuthalAccumulation(2, 0), 0, swsh.getSolution(0));
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, 1., 1.};
 		return Zlm;
 	}
 	status = scalar_integrand_I4(I4, m, k, teuk.getModeFrequency(), traj.tTheta[0], geoConstants.a*cos(traj.getPolarPosition(0)), traj.getAzimuthalAccumulation(2, 0), 0, swsh.getSolution(0));
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, 1., 1.};
 		return Zlm;
 	}
 
-	status = radial_integral_convergence_sum(I1In, scalar_integrand_I1, m, k, n, traj, geoConstants, Up, teuk, errorThresholdR, errorTolerance);
+	status = radial_integral_convergence_sum(I1In, scalar_integrand_I1, m, k, n, traj, geoConstants, Up, teuk, errorThresholdR, errorTolerance, pI1In);
 	if(status != -1){
 		if(std::abs(I4) > 0.){
-			status = radial_integral_convergence_sum(I3In, scalar_integrand_I3, m, k, n, traj, geoConstants, Up, teuk, errorThresholdR, errorTolerance);
+			status = radial_integral_convergence_sum(I3In, scalar_integrand_I3, m, k, n, traj, geoConstants, Up, teuk, errorThresholdR, errorTolerance, pI3In);
 		}
 		if(status != -1){
 			ZlmIn = -4.*M_PI/W/upT*(I1In*I2 + I3In*I4);
+			precisionIn = scalar_amplitude_precision(I1In, pI1In, I2, 0., I3In, pI3In, I4, 0.);
 		}
 	}
 
-	status = radial_integral_convergence_sum(I1Up, scalar_integrand_I1, m, k, n, traj, geoConstants, In, teuk, errorThresholdR, errorTolerance);
+	status = radial_integral_convergence_sum(I1Up, scalar_integrand_I1, m, k, n, traj, geoConstants, In, teuk, errorThresholdR, errorTolerance, pI1Up);
 	if(status != -1){
 		if(std::abs(I4) > 0.){
-			status = radial_integral_convergence_sum(I3Up, scalar_integrand_I3, m, k, n, traj, geoConstants, In, teuk, errorThresholdR, errorTolerance);
+			status = radial_integral_convergence_sum(I3Up, scalar_integrand_I3, m, k, n, traj, geoConstants, In, teuk, errorThresholdR, errorTolerance, pI3Up);
 		}
 		if(status != -1){
 			ZlmUp = -4.*M_PI/W/upT*(I1Up*I2 + I3Up*I4);
+			precisionUp = scalar_amplitude_precision(I1Up, pI1Up, I2, 0., I3Up, pI3Up, I4, 0.);
 		}
 	}
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
+	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, precisionIn, precisionUp};
 
 	return Zlm;
 }
@@ -2042,17 +2128,19 @@ TeukolskyAmplitudes scalar_amplitude_spherical(int, int m, int k, int n, Geodesi
 	Complex W = scalar_wronskian(geoConstants.a, teuk.getRadialPoints(0), teuk.getSolution(In, 0), teuk.getDerivative(In, 0), teuk.getSolution(Up, 0), teuk.getDerivative(Up, 0));
 
 	Complex I1Up = 0., I1In = 0., I3Up = 0., I3In = 0., I2 = 0., I4 = 0.;
+	double pI2 = 0., pI4 = 0.;  // single-point radial -> pI1 = pI3 = 0
 	Complex ZlmUp = 0.;
 	Complex ZlmIn = 0.;
+	double precisionIn = 1., precisionUp = 1.;
 
-	int status = polar_integral_convergence_sum(I2, scalar_integrand_I2, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance);
+	int status = polar_integral_convergence_sum(I2, scalar_integrand_I2, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance, pI2);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, 1., 1.};
 		return Zlm;
 	}
-	status = polar_integral_convergence_sum(I4, scalar_integrand_I4, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance);
+	status = polar_integral_convergence_sum(I4, scalar_integrand_I4, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance, pI4);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, 1., 1.};
 		return Zlm;
 	}
 
@@ -2061,6 +2149,7 @@ TeukolskyAmplitudes scalar_amplitude_spherical(int, int m, int k, int n, Geodesi
 		status = scalar_integrand_I3(I3In, m, n, teuk.getModeFrequency(), traj.getTimeAccumulation(1, 0), traj.getRadialPosition(0), traj.getAzimuthalAccumulation(1, 0), 0, teuk.getSolution(Up, 0));
 		if(status != -1){
 			ZlmIn = -4.*M_PI/W/upT*(I1In*I2 + I3In*I4);
+			precisionIn = scalar_amplitude_precision(I1In, 0., I2, pI2, I3In, 0., I4, pI4);
 		}
 	}
 
@@ -2069,10 +2158,11 @@ TeukolskyAmplitudes scalar_amplitude_spherical(int, int m, int k, int n, Geodesi
 		status = scalar_integrand_I3(I3Up, m, n, teuk.getModeFrequency(), traj.getTimeAccumulation(1, 0), traj.getRadialPosition(0), traj.getAzimuthalAccumulation(1, 0), 0, teuk.getSolution(In, 0));
 		if(status != -1){
 			ZlmUp = -4.*M_PI/W/upT*(I1Up*I2 + I3Up*I4);
+			precisionUp = scalar_amplitude_precision(I1Up, 0., I2, pI2, I3Up, 0., I4, pI4);
 		}
 	}
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
+	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, precisionIn, precisionUp};
 
 	return Zlm;
 }
