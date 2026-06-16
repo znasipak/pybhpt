@@ -10,16 +10,37 @@
 static void A_coeffs_w(Complex &Ann0, Complex &Anmbar0, Complex &Ambarmbar0, Complex &Anmbar1, Complex &Ambarmbar1, Complex &Ambarmbar2, int const &m, double const &omega, GeodesicConstants &geoConstants, double const &rp, double const &thp, double const &Slm, double const &SlmP, double const &SlmPP);
 static void A13_coeffs_w(Complex &All0, Complex &Alm0, Complex &Amm0, Complex &Alm1, Complex &Amm1, Complex &Amm2, int const &m, double const &omega, GeodesicConstants &geoConstants, double const &rp, double const &thp, double const &Slm, double const &SlmP, double const &SlmPP);
 
-SummationHelper::SummationHelper(): _sum(0.), _previousSum(0.), _maxTerm(0.), _error(1.), _basePrecision(DBL_EPSILON) {}
+SummationHelper::SummationHelper(): _sum(0.), _comp(0.), _sumAbs(0.), _maxTerm(0.), _error(1.), _basePrecision(DBL_EPSILON) {}
 SummationHelper::~SummationHelper() {}
 
-void SummationHelper::add(Complex val){
-	// std::cout << "val = " << val << "\n";
-	if(std::abs(val) > _maxTerm) _maxTerm = std::abs(val);
-	_previousSum = _sum;
-	_sum += val;
+// Neumaier compensated addition for one real component: accumulate the
+// low-order bits lost in s += x into the compensation c.
+static inline void neumaier_add(double &s, double &c, double x){
+	double t = s + x;
+	if(std::abs(s) >= std::abs(x)) c += (s - t) + x;   // s larger: low bits of x lost
+	else                          c += (x - t) + s;   // x larger: low bits of s lost
+	s = t;
+}
 
-	_error = _basePrecision*_maxTerm; // conservative estimate of absolute error
+void SummationHelper::add(Complex val){
+	double a = std::abs(val);
+	if(a > _maxTerm) _maxTerm = a;
+	_sumAbs += a;                       // L1 norm of the terms (cancellation/condition number)
+
+	// Neumaier compensated summation, component-wise
+	double sr = _sum.real(), cr = _comp.real();
+	double si = _sum.imag(), ci = _comp.imag();
+	neumaier_add(sr, cr, val.real());
+	neumaier_add(si, ci, val.imag());
+	_sum = Complex(sr, si);
+	_comp = Complex(cr, ci);
+
+	// Absolute error: input/solution noise (_basePrecision) propagated through every
+	// term -> _basePrecision * sum|x_i|, i.e. base precision times the condition number
+	// when divided by |sum|. This captures the FULL cancellation across all terms, not
+	// just the single largest one. (The floating-point round-off, ~eps*sum|x_i|, is held
+	// negligible by the compensated summation and is dominated by _basePrecision anyway.)
+	_error = _basePrecision*_sumAbs;
 }
 
 void SummationHelper::setBasePrecision(double val){
@@ -27,7 +48,7 @@ void SummationHelper::setBasePrecision(double val){
 }
 
 Complex SummationHelper::getSum(){
-	return _sum;
+	return _sum + _comp;   // corrected sum: running total plus recovered low-order bits
 }
 
 double SummationHelper::getMaxTerm(){
@@ -35,13 +56,13 @@ double SummationHelper::getMaxTerm(){
 }
 
 double SummationHelper::getError(){
-	// provides some measure of cancellation error
+	// absolute error estimate: base precision times the L1 norm of the terms
 	return _error;
 }
 
 double SummationHelper::getPrecision(){
-	// provides some measure of cancellation error
-	return getError()/std::abs(_sum);
+	// relative error: _basePrecision * (sum|x_i| / |sum|) = base precision * condition number
+	return getError()/std::abs(getSum());
 }
 
 int integrand_convergence(Complex old_value, Complex new_value, double eps1, double eps2){
