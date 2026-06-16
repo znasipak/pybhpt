@@ -51,28 +51,21 @@ int integrand_convergence(Complex old_value, Complex new_value, double eps1, dou
 
 // Geometric error estimate for the trapezoidal-rule amplitude.
 // dLast is the relative change over the final sample doubling, |1 - Z_{N/2}/Z_N|,
-// and dPrev the change over the previous doubling. For a smooth periodic
-// integrand the trapezoidal error is the aliased Fourier tail; the bare dLast
-// estimates the error of Z_{N/2}, not Z_N. Modelling the remaining increments as
-// geometric with ratio rho = dLast/dPrev sums the tail to the error of Z_N,
-//     E_N ~ dLast * rho/(1-rho),
-// which tightens the estimate when convergence is healthy (rho small) and
-// inflates it when convergence is slow (rho -> 1, the oscillatory/pre-asymptotic
-// regime where the bare last-step estimate is optimistic). This is conservative
-// relative to true spectral convergence, where rho shrinks each step so the tail
-// is even smaller. The ratio is capped at RHO_MAX < 1 so that a stalled or
-// non-contracting sequence (rho >= 1) maps continuously to the worst-case
-// inflation factor RHO_MAX/(1-RHO_MAX) rather than blowing up or collapsing back
-// to dLast. Once dLast reaches the roundoff floor the ratio is just noise, so we
-// report the floor.
+// and dPrev the change over the previous doubling (currently unused).
+//
+// We report the bare truncation estimate dLast, floored at the roundoff/
+// cancellation level. A geometric rho/(1-rho) extrapolation (rho = dLast/dPrev)
+// was tried: it tightens well-converged modes, but its main effect is to REDUCE
+// conservatism, and it has a sharp failure mode -- once the difference sequence
+// bottoms out on solution noise, dLast and dPrev stop shrinking, rho -> 1 from
+// noise rather than from a genuine stall, and rho/(1-rho) inflates the reported
+// error by orders of magnitude. The bare last-step estimate has no such pathology:
+// at the floor it reports the residual difference; on a real stall it reports the
+// (large) last difference. dPrev is retained in the signature (and computed at the
+// call sites for the 2D combination) but intentionally unused.
 static double conservative_precision(double dLast, double dPrev, double roundoff){
-	const double RHO_MAX = 0.99;                          // caps the geometric factor at 99
-	double floor = 10.*roundoff;
-	if(dLast <= floor) return std::max(dLast, roundoff);  // converged at the noise floor
-	if(!(dPrev > floor)) return dLast;                    // no usable prior step
-	double rho = dLast/dPrev;
-	if(rho > RHO_MAX) rho = RHO_MAX;                      // stalled / non-contracting -> worst case
-	return std::max(dLast*rho/(1.0 - rho), roundoff);     // geometric tail estimate of E_N
+	(void)dPrev;
+	return std::max(dLast, roundoff);
 }
 
 // Relative-error estimate for a scalar amplitude Z ~ I1*I2 + I3*I4 built from
