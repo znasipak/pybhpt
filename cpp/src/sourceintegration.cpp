@@ -109,14 +109,14 @@ static double scalar_amplitude_precision(Complex I1, double pI1, Complex I2, dou
 // 					Field amplitudes				 //
 ///////////////////////////////////////////////////////
 
-TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh){
+TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol){
 	if( std::abs(s) == 2 ){
 		ComplexDerivativesMatrixStruct Rin = {.solution = teuk.getSolution(In), .derivative = teuk.getDerivative(In), .secondDerivative = teuk.getSecondDerivative(In)};
 		ComplexDerivativesMatrixStruct Rup = {.solution = teuk.getSolution(Up), .derivative = teuk.getDerivative(Up), .secondDerivative = teuk.getSecondDerivative(Up)};
 		DerivativesMatrix Slm = {.solution = swsh.getSolution(), .derivative = swsh.getDerivative(), .secondDerivative = swsh.getSecondDerivative()};
-		return teukolsky_amplitude(s, L, m, k, n, traj, geoConstants, Rin, Rup, Slm);
+		return teukolsky_amplitude(s, L, m, k, n, traj, geoConstants, Rin, Rup, Slm, tol);
 	}else if( s == 0 ){
-		return scalar_amplitude_generic(L, m, k, n, traj, geoConstants, teuk, swsh);
+		return scalar_amplitude_generic(L, m, k, n, traj, geoConstants, teuk, swsh, tol);
 	}else{
 		std::cout << "SOURCEINTEGRATION: ERROR: Source integration not yet implemented for s = " << s << " fields \n";
 		TeukolskyAmplitudes Zlm = {0., 0., DBL_EPSILON, DBL_EPSILON};
@@ -124,7 +124,7 @@ TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicT
 	}
 }
 
-TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh){
+TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double){
 	if( std::abs(s) == 2 ){
 		ComplexDerivativesMatrixStruct Rin = {.solution = teuk.getSolution(In), .derivative = teuk.getDerivative(In), .secondDerivative = teuk.getSecondDerivative(In)};
 		ComplexDerivativesMatrixStruct Rup = {.solution = teuk.getSolution(Up), .derivative = teuk.getDerivative(Up), .secondDerivative = teuk.getSecondDerivative(Up)};
@@ -139,14 +139,14 @@ TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajecto
 	}
 }
 
-TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh){
+TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol){
 	if( std::abs(s) == 2 ){
 		ComplexDerivativesMatrixStruct Rin = {.solution = teuk.getSolution(In), .derivative = teuk.getDerivative(In), .secondDerivative = teuk.getSecondDerivative(In)};
 		ComplexDerivativesMatrixStruct Rup = {.solution = teuk.getSolution(Up), .derivative = teuk.getDerivative(Up), .secondDerivative = teuk.getSecondDerivative(Up)};
 		DerivativesMatrix Slm = {.solution = swsh.getSolution(), .derivative = swsh.getDerivative(), .secondDerivative = swsh.getSecondDerivative()};
-		return teukolsky_amplitude_ecceq(s, L, m, n, traj, geoConstants, Rin, Rup, Slm);
+		return teukolsky_amplitude_ecceq(s, L, m, n, traj, geoConstants, Rin, Rup, Slm, tol);
 	}else if( s == 0 ){
-		return scalar_amplitude_equatorial(L, m, 0, n, traj, geoConstants, teuk, swsh);
+		return scalar_amplitude_equatorial(L, m, 0, n, traj, geoConstants, teuk, swsh, tol);
 	}else{
 		std::cout << "SOURCEINTEGRATION: ERROR: Source integration not yet implemented for s = " << s << " fields \n";
 		TeukolskyAmplitudes Zlm = {0., 0., DBL_EPSILON, DBL_EPSILON};
@@ -154,14 +154,14 @@ TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTr
 	}
 }
 
-TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh){
+TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol){
 	if( std::abs(s) == 2 ){
 		ComplexDerivativesMatrixStruct Rin = {.solution = teuk.getSolution(In), .derivative = teuk.getDerivative(In), .secondDerivative = teuk.getSecondDerivative(In)};
 		ComplexDerivativesMatrixStruct Rup = {.solution = teuk.getSolution(Up), .derivative = teuk.getDerivative(Up), .secondDerivative = teuk.getSecondDerivative(Up)};
 		DerivativesMatrix Slm = {.solution = swsh.getSolution(), .derivative = swsh.getDerivative(), .secondDerivative = swsh.getSecondDerivative()};
-		return teukolsky_amplitude_sphinc(s, L, m, k, traj, geoConstants, Rin, Rup, Slm);
+		return teukolsky_amplitude_sphinc(s, L, m, k, traj, geoConstants, Rin, Rup, Slm, tol);
 	}else if( s == 0 ){
-		return scalar_amplitude_spherical(L, m, k, 0, traj, geoConstants, teuk, swsh);
+		return scalar_amplitude_spherical(L, m, k, 0, traj, geoConstants, teuk, swsh, tol);
 	}else{
 		std::cout << "SOURCEINTEGRATION: ERROR: Source integration not yet implemented for s = " << s << " fields \n";
 		TeukolskyAmplitudes Zlm = {0., 0., DBL_EPSILON, DBL_EPSILON};
@@ -495,7 +495,7 @@ static TabIntegrandSet tab_integrands(int s){
 // Teukolsky s = -2 field amplitudes //
 ///////////////////////////////////////
 
-TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm){
+TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm, double tol){
 	
 	const ComplexVector &R0 = (Rin.solution);
 	const ComplexVector &Rp0 = (Rin.derivative);
@@ -679,7 +679,7 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	double pThUp = 0., pThIn = 0.;   // polar-direction error estimate (last radial resolution)
 	// std::cout << ZlmIn << ", " << ZlmUp << " for " << NsampleR << ", " << NsampleTh << "\n";
 
-	double errorTolerance = 5.e-11;
+	double errorTolerance = (tol > 0. ? tol : 5.e-11);
 	int convergenceTest = 0;
 	while(NsampleR < NsampleMaxR && convergenceTest < 2){
 		// needs to pass the convergence test twice
@@ -828,7 +828,7 @@ void rescale_solution(ComplexVector &R, ComplexVector &Rp, ComplexVector &Rpp, d
 	}
 }
 
-TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm){
+TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm, double tol){
 	const ComplexVector *R0ptr = &Rin.solution;
 	const ComplexVector *Rp0ptr = &Rin.derivative;
 	const ComplexVector *Rpp0ptr = &Rin.secondDerivative;
@@ -945,7 +945,7 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	ZlmUp = sumUp.getSum()/double(halfSample);
 	ZlmIn = sumIn.getSum()/double(halfSample);
 
-	double errorTolerance = 5.e-12;
+	double errorTolerance = (tol > 0. ? tol : 5.e-12);
 	double convergenceTest = 0;
 	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
 	Complex ZlmUpComparePrev = 0., ZlmInComparePrev = 0.;
@@ -998,7 +998,7 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	return Zlm;
 }
 
-TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm){
+TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm, double tol){
 	
 	Complex R0 = (Rin.solution)[0];
 	Complex Rp0 = (Rin.derivative)[0];
@@ -1087,7 +1087,7 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 	ZlmUp = sumUp.getSum()/double(halfSample);
 	ZlmIn = sumIn.getSum()/double(halfSample);
 
-	double errorTolerance = 5.e-12;
+	double errorTolerance = (tol > 0. ? tol : 5.e-12);
 	double convergenceTest = 0;
 	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
 	Complex ZlmUpComparePrev = 0., ZlmInComparePrev = 0.;
@@ -2025,21 +2025,21 @@ int polar_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int,
 	return 0;
 }
 
-TeukolskyAmplitudes scalar_amplitude(int l, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh){
+TeukolskyAmplitudes scalar_amplitude(int l, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol){
 	if(std::abs(geoConstants.x) == 1. && geoConstants.e == 0.){
 		return scalar_amplitude_circular(l, m, k, n, traj, geoConstants, teuk, swsh);
 	}else if(std::abs(geoConstants.x) == 1.){
-		return scalar_amplitude_equatorial(l, m, k, n, traj, geoConstants, teuk, swsh);
+		return scalar_amplitude_equatorial(l, m, k, n, traj, geoConstants, teuk, swsh, tol);
 	}else if(geoConstants.e == 0.){
-		return scalar_amplitude_spherical(l, m, k, n, traj, geoConstants, teuk, swsh);
+		return scalar_amplitude_spherical(l, m, k, n, traj, geoConstants, teuk, swsh, tol);
 	}
-	return scalar_amplitude_generic(l, m, k, n, traj, geoConstants, teuk, swsh);
+	return scalar_amplitude_generic(l, m, k, n, traj, geoConstants, teuk, swsh, tol);
 }
 
-TeukolskyAmplitudes scalar_amplitude_generic(int, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh){
+TeukolskyAmplitudes scalar_amplitude_generic(int, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol){
 	double errorThresholdR = 1.e-2;
 	double errorThresholdTh = 1.e-2;
-	double errorTolerance = 5.e-12;
+	double errorTolerance = (tol > 0. ? tol : 5.e-12);
 	double upT = geoConstants.upsilonT;
 	Complex W = scalar_wronskian(geoConstants.a, teuk.getRadialPoints(0), teuk.getSolution(In, 0), teuk.getDerivative(In, 0), teuk.getSolution(Up, 0), teuk.getDerivative(Up, 0));
 
@@ -2087,9 +2087,9 @@ TeukolskyAmplitudes scalar_amplitude_generic(int, int m, int k, int n, GeodesicT
 	return Zlm;
 }
 
-TeukolskyAmplitudes scalar_amplitude_equatorial(int, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh){
+TeukolskyAmplitudes scalar_amplitude_equatorial(int, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol){
 	double errorThresholdR = 1.e-2;
-	double errorTolerance = 5.e-12;
+	double errorTolerance = (tol > 0. ? tol : 5.e-12);
 	double upT = geoConstants.upsilonT;
 	Complex W = scalar_wronskian(geoConstants.a, teuk.getRadialPoints(0), teuk.getSolution(In, 0), teuk.getDerivative(In, 0), teuk.getSolution(Up, 0), teuk.getDerivative(Up, 0));
 
@@ -2137,9 +2137,9 @@ TeukolskyAmplitudes scalar_amplitude_equatorial(int, int m, int k, int n, Geodes
 	return Zlm;
 }
 
-TeukolskyAmplitudes scalar_amplitude_spherical(int, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh){
+TeukolskyAmplitudes scalar_amplitude_spherical(int, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol){
 	double errorThresholdTh = 1.e-2;
-	double errorTolerance = 5.e-12;
+	double errorTolerance = (tol > 0. ? tol : 5.e-12);
 	double upT = geoConstants.upsilonT;
 	Complex W = scalar_wronskian(geoConstants.a, teuk.getRadialPoints(0), teuk.getSolution(In, 0), teuk.getDerivative(In, 0), teuk.getSolution(Up, 0), teuk.getDerivative(Up, 0));
 

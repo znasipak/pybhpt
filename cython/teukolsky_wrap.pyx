@@ -21,6 +21,8 @@ cdef extern from "teukolsky.hpp":
         int generateSolutions(GeodesicSource& geo, SolutionMethod method, int samplesize)
         int generateSolutions(double omega, GeodesicTrajectory &traj, GeodesicConstants &geoConst, vector[double] r, vector[double] theta, SolutionMethod method, int samplesize)
         int generateSolutions(SpinWeightedHarmonic swsh, RadialTeukolsky teuk, GeodesicTrajectory& traj, GeodesicConstants &geoConst)
+        void setSourceIntegrationTolerance(double tol)
+        double getSourceIntegrationTolerance()
 
         int flipSpinWeightAndFrequency()
         int flipSpinWeight()
@@ -274,7 +276,8 @@ cdef class _TeukolskyMode:
     def polarderivative2(self, int i):
         return self.teukcpp.getPolarSecondDerivative(i)
 
-    def solve(self, KerrGeodesic geo, unicode method = "AUTO", int nsample = 256, teuk=None, swsh=None):
+    def solve(self, KerrGeodesic geo, unicode method = "AUTO", int nsample = 256, teuk=None, swsh=None, double tol = -1.):
+        self.teukcpp.setSourceIntegrationTolerance(tol)
         self.teukcpp.generateSolutions(dereference(geo.geocpp), str_to_method(method), nsample)
         self.sampleR = self.teukcpp.getRadialSampleNumber()
         self.sampleTh = self.teukcpp.getPolarSampleNumber()

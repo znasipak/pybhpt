@@ -50,10 +50,10 @@ private:
 	double _basePrecision;
 };
 
-TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
-TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
-TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
-TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
+TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
+TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
+TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
+TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
 
 // TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
 // TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
@@ -62,9 +62,9 @@ TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicT
 
 TeukolskyAmplitudes teukolsky_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm);
 // TeukolskyAmplitudes teukolsky_amplitude_circeq_plus_2(int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm);
-TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm);
-TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm);
+TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm, double tol = -1.);
+TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm, double tol = -1.);
+TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm, double tol = -1.);
 Complex teukolskyIntegrand(int const &L, int const &m, int const &k, int const &n, GeodesicConstants &geoConstants, double const &tR, double const &tTh, double const &rp, double const &thp, double const &phiR, double const &phiTh, double const &qr, double const &qth, Complex const &Rt, Complex const &RtP, Complex const &RtPP, double const &St, double const &StP, double const &StPP);
 Complex teukolskyIntegrandPlus(int const &L, int const &m, int const &k, int const &n, GeodesicConstants &geoConstants, double const &tR, double const &tTh, double const &rp, double const &thp, double const &phiR, double const &phiTh, double const &qr, double const &qth, Complex const &Rt, Complex const &RtP, Complex const &RtPP, double const &St, double const &StP, double const &StPP);
 void teukolskyIntegrandMinus2(Complex &integrandIn, Complex &integrandUp, int const &L, int const &m, int const &k, int const &n, GeodesicConstants &geoConstants, double const &tR, double const &tTh, double const &rp, double const &thp, double const &phiR, double const &phiTh, double const &qr, double const &qth, Complex const &Rin, Complex const &RinP, Complex const &RinPP,  Complex const &Rup, Complex const &RupP, Complex const &RupPP, double const &St, double const &StP, double const &StPP);
@@ -80,11 +80,11 @@ int scalar_integrand_I1(Complex &integrand, int m, int n, double freq, double tR
 int scalar_integrand_I2(Complex &integrand, int m, int k, double freq, double tTh, double, double phiTh, double qth, double St);
 int scalar_integrand_I3(Complex &integrand, int m, int n, double freq, double tR, double, double phiR, double qr, Complex Rt);
 int scalar_integrand_I4(Complex &integrand, int m, int k, double freq, double tTh, double aCosThP, double phiTh, double qth, double St);
-TeukolskyAmplitudes scalar_amplitude(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
-TeukolskyAmplitudes scalar_amplitude_equatorial(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
-TeukolskyAmplitudes scalar_amplitude_spherical(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
+TeukolskyAmplitudes scalar_amplitude(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
+TeukolskyAmplitudes scalar_amplitude_equatorial(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
+TeukolskyAmplitudes scalar_amplitude_spherical(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
 TeukolskyAmplitudes scalar_amplitude_circular(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
-TeukolskyAmplitudes scalar_amplitude_generic(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
+TeukolskyAmplitudes scalar_amplitude_generic(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
 
 // TeukolskyAmplitudes scalar_amplitude_circeq(int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
 // TeukolskyAmplitudes scalar_amplitude_ecceq(int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);

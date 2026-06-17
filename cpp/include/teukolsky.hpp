@@ -66,6 +66,11 @@ public:
 	double getPolarDerivative(int pos);
 	double getPolarSecondDerivative(int pos);
 
+	// Source-integration error tolerance. A non-positive value (the default)
+	// uses the per-driver built-in tolerance; a positive value overrides it.
+	void setSourceIntegrationTolerance(double tol);
+	double getSourceIntegrationTolerance();
+
 private:
 	int _s;
 	int _L;
@@ -93,6 +98,8 @@ private:
 	Complex _ZlmUp;
 	double _ZlmInPrecision;
 	double _ZlmUpPrecision;
+
+	double _sourceTolerance = -1.;
 };
 
 void flip_spin_of_coupling_coefficients(Vector &bslmo, int L, int m);

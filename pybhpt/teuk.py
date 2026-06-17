@@ -219,7 +219,7 @@ class TeukolskyMode:
     def precisions(self):
         return self.base.teukolsky_amplitude_precisions
     
-    def solve(self, geo, method = "AUTO", nsamples = 256, teuk = None, swsh = None):
+    def solve(self, geo, method = "AUTO", nsamples = 256, teuk = None, swsh = None, tol = None):
         """Solve the Teukolsky equation for the given mode and geodesic.
         Parameters
         ----------
@@ -233,12 +233,17 @@ class TeukolskyMode:
             RadialTeukolsky object to use for constructing the radial Green function. Default is None.
         swsh : SpheroidalHarmonicMode, optional
             SpheroidalHarmonic object to use for coupling with spheroidal harmonics. Default is None.
+        tol : float, optional
+            Relative error tolerance for the adaptive source integration. ``None``
+            (the default) uses the built-in per-orbit-class tolerance; a positive
+            value overrides it (smaller = more samples / tighter convergence).
 
         """
+        cytol = -1. if tol is None else tol
         if teuk is None or swsh is None:
-            self.base.solve(geo.base, method, nsamples)
+            self.base.solve(geo.base, method, nsamples, tol=cytol)
         else:
-            self.base.solve(geo.base, method, nsamples, teuk.base, swsh.base)
+            self.base.solve(geo.base, method, nsamples, teuk.base, swsh.base, tol=cytol)
 
     """
     Flips the spin-weight of the Teukolsky solutions from :math:`s \rightarrow -s`
