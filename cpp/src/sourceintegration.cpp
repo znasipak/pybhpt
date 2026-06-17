@@ -2047,16 +2047,16 @@ TeukolskyAmplitudes scalar_amplitude_generic(int, int m, int k, int n, GeodesicT
 	double pI1Up = 0., pI1In = 0., pI3Up = 0., pI3In = 0., pI2 = 0., pI4 = 0.;
 	Complex ZlmUp = 0.;
 	Complex ZlmIn = 0.;
-	double precisionIn = 1., precisionUp = 1.;
+	double precisionIn = DBL_EPSILON, precisionUp = DBL_EPSILON;  // zero amplitude (e.g. parity-forbidden) is an exact, well-known zero
 
 	int status = polar_integral_convergence_sum(I2, scalar_integrand_I2, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance, pI2);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, 1., 1.};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
 		return Zlm;
 	}
 	status = polar_integral_convergence_sum(I4, scalar_integrand_I4, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance, pI4);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, 1., 1.};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
 		return Zlm;
 	}
 
@@ -2097,16 +2097,16 @@ TeukolskyAmplitudes scalar_amplitude_equatorial(int, int m, int k, int n, Geodes
 	double pI1Up = 0., pI1In = 0., pI3Up = 0., pI3In = 0.;  // single-point polar -> pI2 = pI4 = 0
 	Complex ZlmUp = 0.;
 	Complex ZlmIn = 0.;
-	double precisionIn = 1., precisionUp = 1.;
+	double precisionIn = DBL_EPSILON, precisionUp = DBL_EPSILON;  // zero amplitude (e.g. parity-forbidden) is an exact, well-known zero
 
 	int status = scalar_integrand_I2(I2, m, k, teuk.getModeFrequency(), traj.tTheta[0], geoConstants.a*cos(swsh.getArguments(0)), traj.getAzimuthalAccumulation(2, 0), 0, swsh.getSolution(0));
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, 1., 1.};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
 		return Zlm;
 	}
 	status = scalar_integrand_I4(I4, m, k, teuk.getModeFrequency(), traj.tTheta[0], geoConstants.a*cos(traj.getPolarPosition(0)), traj.getAzimuthalAccumulation(2, 0), 0, swsh.getSolution(0));
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, 1., 1.};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
 		return Zlm;
 	}
 
@@ -2147,16 +2147,16 @@ TeukolskyAmplitudes scalar_amplitude_spherical(int, int m, int k, int n, Geodesi
 	double pI2 = 0., pI4 = 0.;  // single-point radial -> pI1 = pI3 = 0
 	Complex ZlmUp = 0.;
 	Complex ZlmIn = 0.;
-	double precisionIn = 1., precisionUp = 1.;
+	double precisionIn = DBL_EPSILON, precisionUp = DBL_EPSILON;  // zero amplitude (e.g. parity-forbidden) is an exact, well-known zero
 
 	int status = polar_integral_convergence_sum(I2, scalar_integrand_I2, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance, pI2);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, 1., 1.};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
 		return Zlm;
 	}
 	status = polar_integral_convergence_sum(I4, scalar_integrand_I4, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance, pI4);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, 1., 1.};
+		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
 		return Zlm;
 	}
 
