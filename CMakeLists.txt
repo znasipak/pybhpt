@@ -29,6 +29,11 @@ add_custom_command(
           -3 -+ --module-name "cybhpt_full"
           -I "${CMAKE_CURRENT_SOURCE_DIR}/cpp/include"
   DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/cython/redshift_wrap.pyx"
+          "${CMAKE_CURRENT_SOURCE_DIR}/cython/flux_wrap.pyx"
+          "${CMAKE_CURRENT_SOURCE_DIR}/cython/teukolsky_wrap.pyx"
+          "${CMAKE_CURRENT_SOURCE_DIR}/cython/geo_wrap.pyx"
+          "${CMAKE_CURRENT_SOURCE_DIR}/cython/radialsolver_wrap.pyx"
+          "${CMAKE_CURRENT_SOURCE_DIR}/cython/swsh_wrap.pyx"
   COMMENT "Generating redshift_wrap.cpp from Cython"
   VERBATIM
 )
