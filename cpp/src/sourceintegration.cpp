@@ -1,4 +1,16 @@
 // sourceintegration.cpp
+//
+// Source integration for the Teukolsky (|s|=2) and scalar (s=0) field amplitudes
+// Z_{lmkn}. For a given mode the amplitude is a phase-space average over the
+// orbital radial/polar phases (q_r, q_theta), evaluated with a periodic
+// trapezoidal rule whose sample count is doubled adaptively until the relative
+// change falls below a tolerance (or the solution-noise floor). Layout:
+//   1. summation / error-estimate helpers (SummationHelper, convergence tests)
+//   2. field_amplitude* dispatch on spin and orbit geometry
+//   3. |s|=2 lazily-tabulated source machinery and teukolsky_amplitude* drivers
+//   4. |s|=2 integrand and source-coefficient (A/u/C) definitions
+//   5. scalar (s=0) integrands, 1-D convergence sums, and scalar_amplitude* drivers
+//   6. Wronskians
 
 #include "sourceintegration.hpp"
 #include <stdexcept>
@@ -60,12 +72,15 @@ double SummationHelper::getMaxTerm(){
 }
 
 double SummationHelper::getError(){
-	// absolute error estimate: base precision times the L1 norm of the terms
+	// absolute error estimate: base precision times the L2 norm of the terms,
+	// _basePrecision * sqrt(sum|x_i|^2) (uncorrelated per-term noise added in quadrature)
 	return _error;
 }
 
 double SummationHelper::getPrecision(){
-	// relative error: _basePrecision * (sum|x_i| / |sum|) = base precision * condition number
+	// relative error: _basePrecision * sqrt(sum|x_i|^2) / |sum| = base precision times the
+	// RMS (L2) condition number. The L1 form sum|x_i|/|sum| would be the worst-case
+	// (fully-correlated) bound, ~sqrt(N) larger.
 	return getError()/std::abs(getSum());
 }
 
@@ -74,22 +89,16 @@ int integrand_convergence(Complex old_value, Complex new_value, double eps1, dou
 	return ((eps0 < eps1) || (eps0 < eps2));
 }
 
-// Geometric error estimate for the trapezoidal-rule amplitude.
-// dLast is the relative change over the final sample doubling, |1 - Z_{N/2}/Z_N|,
-// and dPrev the change over the previous doubling (currently unused).
-//
-// We report the bare truncation estimate dLast, floored at the roundoff/
-// cancellation level. A geometric rho/(1-rho) extrapolation (rho = dLast/dPrev)
-// was tried: it tightens well-converged modes, but its main effect is to REDUCE
-// conservatism, and it has a sharp failure mode -- once the difference sequence
-// bottoms out on solution noise, dLast and dPrev stop shrinking, rho -> 1 from
-// noise rather than from a genuine stall, and rho/(1-rho) inflates the reported
-// error by orders of magnitude. The bare last-step estimate has no such pathology:
-// at the floor it reports the residual difference; on a real stall it reports the
-// (large) last difference. dPrev is retained in the signature (and computed at the
-// call sites for the 2D combination) but intentionally unused.
+// Error estimate for the periodic-trapezoidal amplitude, which converges spectrally.
+// dLast is the relative change over the final sample doubling, |1 - Z_{N/2}/Z_N|, and
+// dPrev the change over the previous doubling. Treating the (geometric) tail with ratio
+// rho = dLast/dPrev, the remaining error sums to dLast*rho/(1-rho); we use that
+// extrapolation while the sequence is cleanly contracting (rho < 0.75) and otherwise fall
+// back to the bare last step (factor 1). The rho < 0.75 cap is essential: once the
+// difference sequence bottoms out on solution noise, rho -> 1 from noise rather than from
+// real convergence and an uncapped rho/(1-rho) would inflate the estimate by orders of
+// magnitude. The result is floored at a fraction of the roundoff/cancellation level.
 static double conservative_precision(double dLast, double dPrev, double roundoff){
-	// (void)dPrev;
 	double rho = dPrev > 0. ? dLast/dPrev : 0.;
 	double factor = rho < 0.75 ? rho/(1. - rho) : 1.;
 	return std::max(dLast * factor, 0.1 * roundoff);
@@ -113,6 +122,12 @@ static double scalar_amplitude_precision(Complex I1, double pI1, Complex I2, dou
 // 					Field amplitudes				 //
 ///////////////////////////////////////////////////////
 
+// Top-level dispatch: package the radial Teukolsky and spin-weighted spheroidal
+// solutions for spin |s|=2 (or hand off to the scalar driver for s=0) and return
+// the In/Up amplitudes. The field_amplitude_{circeq,ecceq,sphinc} variants below
+// are the same dispatch specialised to a degenerate orbit geometry (the caller in
+// teukolsky.cpp picks the right one). `tol` overrides the built-in tolerance when
+// positive. Throws std::runtime_error for spin weights other than -2, 0, +2.
 TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol){
 	if( std::abs(s) == 2 ){
 		ComplexDerivativesMatrixStruct Rin = {.solution = teuk.getSolution(In), .derivative = teuk.getDerivative(In), .secondDerivative = teuk.getSecondDerivative(In)};
@@ -495,6 +510,14 @@ static TabIntegrandSet tab_integrands(int s){
 // Teukolsky s = -2 field amplitudes //
 ///////////////////////////////////////
 
+// Generic |s|=2 amplitude: a 2-D periodic-trapezoidal average of the source over the
+// radial and polar phases (q_r, q_theta), normalised by the radial Wronskian. The
+// per-mode constants and the radial/polar tables are filled lazily (see fill_src_*),
+// and the sample counts in each direction are doubled independently until the In/Up
+// amplitudes stop changing to within `errorTolerance` or the SummationHelper noise
+// floor (whichever is looser). The reported precision combines the radial-direction
+// truncation estimate with the polar-direction estimate at the final radial
+// resolution. `tol` overrides errorTolerance when positive.
 TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm, double tol){
 	
 	const ComplexVector &R0 = (Rin.solution);
@@ -585,28 +608,24 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	sumIn.setBasePrecision(5.e-14);
 
 	// initial sum over fixed qr = 0. and qr = pi; qth = 0 and qth = pi
-	// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
 	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 	sumUp.add(0.25*sumUpTerm);
 	sumIn.add(0.25*sumInTerm);
 
 	samplePosTh = halfSampleTh*sampleDiffTh;
 	qth = double(samplePosTh)*deltaQTh;
-	// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
 	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 	sumUp.add(signK*0.25*sumUpTerm);
 	sumIn.add(signK*0.25*sumInTerm);
 
 	samplePosR = halfSampleR*sampleDiffR;
 	qr = double(samplePosR)*deltaQR;
-	// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
 	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 	sumUp.add(signKN*0.25*sumUpTerm);
 	sumIn.add(signKN*0.25*sumInTerm);
 
 	samplePosTh = 0;
 	qth = double(samplePosTh)*deltaQTh;
-	// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
 	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 	sumUp.add(signN*0.25*sumUpTerm);
 	sumIn.add(signN*0.25*sumInTerm);
@@ -618,7 +637,6 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 
 		samplePosTh = 0.;
 		qth = double(samplePosTh)*deltaQTh;
-		// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
 		// first sum performs integration with qth = 0
 		integ.polarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 		sumUp.add(0.5*sumUpTerm);
@@ -626,7 +644,6 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 
 		samplePosTh = halfSampleTh*sampleDiffTh;
 		qth = double(samplePosTh)*deltaQTh;
-		// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
 		// second sum performs integration with qth = pi
 		integ.polarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 		sumUp.add(signK*0.5*sumUpTerm);
@@ -640,8 +657,6 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 
 		samplePosR = 0.;
 		qr = double(samplePosR)*deltaQR;
-		// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
-		// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
 		// first sum performs integration between qr = 0 to qr = pi
 		integ.radialTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 		sumUp.add(0.5*sumUpTerm);
@@ -649,7 +664,6 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 
 		samplePosR = halfSampleR*sampleDiffR;
 		qr = double(samplePosR)*deltaQR;
-		// std::cout << "qr = " << 2. - qr/M_PI << ", qth = " << qth/M_PI << "\n";
 		integ.radialTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 		sumUp.add(signN*0.5*sumUpTerm);
 		sumIn.add(signN*0.5*sumInTerm);
@@ -663,8 +677,6 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 		for(int j = 1; j < halfSampleTh; j++){
 			samplePosTh = j*sampleDiffTh;
 			qth = double(samplePosTh)*deltaQTh;
-			// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
-			// std::cout << "sample position = " << samplePos << "/" << NsampleMax << "\n";
 			// first sum performs integration between qr = 0 to qr = pi
 			integ.generic(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 			sumUp.add(sumUpTerm);
@@ -677,7 +689,6 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
 	Complex ZlmUpComparePrev = 0., ZlmInComparePrev = 0.;
 	double pThUp = 0., pThIn = 0.;   // polar-direction error estimate (last radial resolution)
-	// std::cout << ZlmIn << ", " << ZlmUp << " for " << NsampleR << ", " << NsampleTh << "\n";
 
 	double errorTolerance = (tol > 0. ? tol : 5.e-11);
 	int convergenceTest = 0;
@@ -734,7 +745,6 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 			ZlmInCompareTh = ZlmInTh;
 			ZlmUpTh = sumUp.getSum()/double(halfSampleR*halfSampleTh);
 			ZlmInTh = sumIn.getSum()/double(halfSampleR*halfSampleTh);
-			// std::cout << ZlmInTh << ", " << ZlmUpTh << " for " << NsampleR << ", " << NsampleTh << "\n";
 		}
 		// geometric estimate of the polar-direction tail at this radial resolution;
 		// the final radial iteration's value is combined with the radial estimate below
@@ -755,14 +765,12 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 
 			samplePosTh = 0.;
 			qth = double(samplePosTh)*deltaQTh;
-			// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
 			integ.polarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 			sumUp.add(0.5*sumUpTerm);
 			sumIn.add(0.5*sumInTerm);
 
 			samplePosTh = halfSampleTh*sampleDiffTh;
 			qth = double(samplePosTh)*deltaQTh;
-			// std::cout << "qr = " << qr/M_PI << ", qth = " << 2. - qth/M_PI << "\n";
 			integ.polarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 			sumUp.add(signK*0.5*sumUpTerm);
 			sumIn.add(signK*0.5*sumInTerm);
@@ -771,7 +779,6 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 			for(int j = 1; j < halfSampleTh; j++){
 				samplePosTh = j*sampleDiffTh;
 				qth = double(samplePosTh)*deltaQTh;
-				// std::cout << "qr = " << qr/M_PI << ", qth = " << qth/M_PI << "\n";
 				integ.generic(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 				sumUp.add(sumUpTerm);
 				sumIn.add(sumInTerm);
@@ -787,9 +794,6 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 		ZlmInCompare = ZlmIn;
 		ZlmUp = sumUp.getSum()/double(halfSampleR*halfSampleTh);
 		ZlmIn = sumIn.getSum()/double(halfSampleR*halfSampleTh);
-		// std::cout << ZlmIn << ", " << ZlmUp << " for " << NsampleR << ", " << NsampleTh << "\n";
-		// std::cout << "Teukolsky Up amplitude = " << ZlmUp << " with "<<NsampleR*NsampleTh<<" samples \n";
-		// std::cout << "Precision of Teukolsky Up amplitude = " << std::abs(1. - ZlmUpCompare/ZlmUp) << " with "<<NsampleR*NsampleTh<<" samples \n";
 	}
 
 	// total 2D error = radial-direction tail (geometric) + polar-direction tail (pTh*)
@@ -922,7 +926,6 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	int samplePos = 0.;
 	double qr = samplePos*deltaQ;
 	double qth = 0.;
-	// double maxTerm = 0.;
 	Complex sumUpTerm, sumInTerm;
 	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, radAt(samplePos), pol);
 	sumUp.add(0.5*sumUpTerm);
@@ -972,11 +975,6 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 		ZlmUp = sumUp.getSum()/double(halfSample);
 		ZlmIn = sumIn.getSum()/double(halfSample);
 	}
-	// std::cout << Nsample << "\n";
-	// std::cout << sumIn.getPrecision() << "\n";
-	// std::cout << sumUp.getPrecision() << "\n";
-	// std::cout << ZlmIn << "\n";
-	// std::cout << ZlmUp << "\n";
 	// if(sumIn.getPrecision()){
 
 	// }
@@ -1806,39 +1804,11 @@ void C13_coeffs(Complex &Cll, Complex &Clm, Complex &Cmm, GeodesicConstants &geo
 // Scalar s = 0 field amplitudes //
 ///////////////////////////////////
 
-TeukolskyAmplitudes scalar_amplitude_circeq(int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm){
-	
-	int k = 0, n = 0;
-
-	Complex R0 = (Rin.solution)[0];
-	Complex Rp0 = (Rin.derivative)[0];
-
-	Complex R1 = (Rup.solution)[0];
-	Complex Rp1 = (Rup.derivative)[0];
-
-	double St = (Slm.solution)[0];
-
-	double rp = (traj.r)[0];
-	double thp = 0.5*M_PI;
-
-	Complex W = scalar_wronskian(geoConstants.a, rp, R0, Rp0, R1, Rp1);
-
-	Complex I1Up = scalar_integrand_1(L, m, k, n, geoConstants, 0., rp, 0., 0., R0);
-	Complex I1In = scalar_integrand_1(L, m, k, n, geoConstants, 0., rp, 0., 0., R1);
-	Complex I2 = scalar_integrand_2(L, m, k, n, geoConstants, 0., thp, 0., 0., St);
-
-	Complex I3Up = scalar_integrand_3(L, m, k, n, geoConstants, 0., rp, 0., 0., R0);
-	Complex I3In = scalar_integrand_3(L, m, k, n, geoConstants, 0., rp, 0., 0., R1);
-	Complex I4 = scalar_integrand_4(L, m, k, n, geoConstants, 0., thp, 0., 0., St);
-
-	Complex ZlmUp = -4.*M_PI/W/geoConstants.upsilonT*( I1Up*I2 + I3Up*I4 );
-	Complex ZlmIn = -4.*M_PI/W/geoConstants.upsilonT*( I1In*I2 + I3In*I4 );
-
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};
-
-	return Zlm;
-}
-
+// Single weighted samples of the four scalar sub-integrands. I1/I3 are the radial
+// pieces (carry r_p^2 R and the e^{i(n q_r + omega t_R - m phi_R)} phase), I2/I4 the
+// polar pieces (carry the spin-0 harmonic S and the polar phase). Each returns 0, or
+// -1 if the running integral magnitude has collapsed to ~0 relative to its largest
+// term (catastrophic cancellation -> the amplitude is an exact zero by symmetry).
 int scalar_integrand_I1(Complex &integrand, int m, int n, double freq, double tR, double rp, double phiR, double qr, Complex Rt){
 	integrand = rp*rp*Rt*cos(n*qr + freq*tR - m*phiR);
 	return 0;
@@ -1859,6 +1829,12 @@ int scalar_integrand_I4(Complex &integrand, int m, int k, double freq, double tT
 	return 0;
 }
 
+// Adaptive 1-D periodic-trapezoidal integral of a scalar radial sub-integrand over q_r.
+// Doubles the sample count (drawn at strided indices of the precomputed grid) until the
+// relative change is within max(errorTolerance, 10*noise-floor), accumulating with the
+// compensated/L2 SummationHelper. Writes the integral to II and its relative precision to
+// precisionOut. Returns 0 on success, -1 if the integral cancelled to ~0 (an exact zero,
+// e.g. parity-forbidden), or 1 if it could not reach tolerance within the grid.
 int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int, int, double, double, double, double, double, Complex), int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, BoundaryCondition bc, RadialTeukolsky &teuk, double errorThreshold, double errorTolerance, double &precisionOut){
 	int halfSampleInit = 16;
 	int halfSample = halfSampleInit;
@@ -1933,6 +1909,9 @@ int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int
 	return 0;
 }
 
+// Polar (q_theta) counterpart of radial_integral_convergence_sum: same adaptive
+// trapezoidal scheme and return codes, integrating a scalar polar sub-integrand
+// against the spin-weighted spheroidal harmonic.
 int polar_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int, int, double, double, double, double, double, double), int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, SpinWeightedHarmonic &swsh, double errorThreshold, double errorTolerance, double &precisionOut){
 	int halfSampleInit = 16;
 	int halfSample = halfSampleInit;
@@ -2006,6 +1985,10 @@ int polar_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int,
 	return 0;
 }
 
+// Scalar (s=0) amplitude: dispatch to the geometry-specialised driver. Each driver builds
+// Z ~ I1*I2 + I3*I4 from separable radial (I1,I3) and polar (I2,I4) integrals, normalised by
+// the scalar Wronskian; degenerate directions collapse to a single sample. status==1 from any
+// sub-integral propagates into the returned TeukolskyAmplitudes (-> Python warning).
 TeukolskyAmplitudes scalar_amplitude(int l, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol){
 	if(std::abs(geoConstants.x) == 1. && geoConstants.e == 0.){
 		return scalar_amplitude_circular(l, m, k, n, traj, geoConstants, teuk, swsh);
@@ -2207,26 +2190,8 @@ TeukolskyAmplitudes scalar_amplitude_circular(int, int m, int k, int n, Geodesic
 	return Zlm;
 }
 
-Complex scalar_integrand_1(int, int m, int k, int n, GeodesicConstants &geoConstants, double tR, double rp, double phiR, double qr, Complex Rt){
-	double freq = (m*geoConstants.upsilonPhi + k*geoConstants.upsilonTheta + n*geoConstants.upsilonR)/geoConstants.upsilonT;
-	return pow(rp, 2)*Rt*exp(I*(n*qr + freq*tR - m*phiR));
-}
-
-Complex scalar_integrand_2(int, int m, int k, int n, GeodesicConstants &geoConstants, double tTh, double, double phiTh, double qth, double St){
-	double freq = (m*geoConstants.upsilonPhi + k*geoConstants.upsilonTheta + n*geoConstants.upsilonR)/geoConstants.upsilonT;
-	return St*exp(I*(k*qth + freq*tTh - m*phiTh));
-}
-
-Complex scalar_integrand_3(int, int m, int k, int n, GeodesicConstants &geoConstants, double tR, double, double phiR, double qr, Complex Rt){
-	double freq = (m*geoConstants.upsilonPhi + k*geoConstants.upsilonTheta + n*geoConstants.upsilonR)/geoConstants.upsilonT;
-	return Rt*exp(I*(n*qr + freq*tR - m*phiR));
-}
-
-Complex scalar_integrand_4(int, int m, int k, int n, GeodesicConstants &geoConstants, double tTh, double thp, double phiTh, double qth, double St){
-	double freq = (m*geoConstants.upsilonPhi + k*geoConstants.upsilonTheta + n*geoConstants.upsilonR)/geoConstants.upsilonT;
-	return pow(geoConstants.a*cos(thp), 2)*St*exp(I*(k*qth + freq*tTh - m*phiTh));
-}
-
+// Radial Wronskian W = (R_in R_up' - R_up R_in') Delta^{s+1}, used to normalise the
+// Green-function amplitude. The (a, rp) overload is the s=0 case (Delta^1).
 Complex wronskian(double a, double rp, Complex Rin, Complex RinP, Complex Rup, Complex RupP){
 	return (Rin*RupP - Rup*RinP)/(rp*rp - 2.*rp + a*a);
 }

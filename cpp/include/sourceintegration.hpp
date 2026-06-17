@@ -58,18 +58,17 @@ private:
 	double _basePrecision;
 };
 
+// Field-amplitude entry points (dispatch on spin and orbit geometry). `tol` is the
+// relative source-integration tolerance; a non-positive value uses the built-in default.
+// _circeq: circular-equatorial, _ecceq: eccentric-equatorial, _sphinc: spherical-inclined,
+// (no suffix): fully generic. Throws std::runtime_error for unsupported spin weights.
 TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
 TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
 TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
 TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
 
-// TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-// TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-// TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-// TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-
+// |s|=2 spin-weighted source integrals, one per orbit geometry (called by the field_amplitude* above).
 TeukolskyAmplitudes teukolsky_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm);
-// TeukolskyAmplitudes teukolsky_amplitude_circeq_plus_2(int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
 TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm, double tol = -1.);
 TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm, double tol = -1.);
 TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm, double tol = -1.);
@@ -84,26 +83,19 @@ void teukolskyIntegrandPlus2PolarTurningPoint(Complex &integrandIn, Complex &int
 void teukolskyIntegrandMinus2RadialPolarTurningPoint(Complex &integrandIn, Complex &integrandUp, int const &L, int const &m, int const &k, int const &n, GeodesicConstants &geoConstants, double const &tR, double const &tTh, double const &rp, double const &thp, double const &phiR, double const &phiTh, double const &qr, double const &qth, Complex const &Rin, Complex const &RinP, Complex const &RinPP,  Complex const &Rup, Complex const &RupP, Complex const &RupPP, double const &St, double const &StP, double const &StPP);
 void teukolskyIntegrandPlus2RadialPolarTurningPoint(Complex &integrandIn, Complex &integrandUp, int const &L, int const &m, int const &k, int const &n, GeodesicConstants &geoConstants, double const &tR, double const &tTh, double const &rp, double const &thp, double const &phiR, double const &phiTh, double const &qr, double const &qth, Complex const &Rin, Complex const &RinP, Complex const &RinPP,  Complex const &Rup, Complex const &RupP, Complex const &RupPP, double const &St, double const &StP, double const &StPP);
 
+// Scalar (s=0) source integrands: write one weighted sample into `integrand` and return a
+// status (0 ok, -1 the running integral has cancelled to ~0). I1/I3 are radial, I2/I4 polar.
 int scalar_integrand_I1(Complex &integrand, int m, int n, double freq, double tR, double rp, double phiR, double qr, Complex Rt);
 int scalar_integrand_I2(Complex &integrand, int m, int k, double freq, double tTh, double, double phiTh, double qth, double St);
 int scalar_integrand_I3(Complex &integrand, int m, int n, double freq, double tR, double, double phiR, double qr, Complex Rt);
 int scalar_integrand_I4(Complex &integrand, int m, int k, double freq, double tTh, double aCosThP, double phiTh, double qth, double St);
+
+// Scalar (s=0) amplitude entry points; `scalar_amplitude` dispatches on orbit geometry.
 TeukolskyAmplitudes scalar_amplitude(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
 TeukolskyAmplitudes scalar_amplitude_equatorial(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
 TeukolskyAmplitudes scalar_amplitude_spherical(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
 TeukolskyAmplitudes scalar_amplitude_circular(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh);
 TeukolskyAmplitudes scalar_amplitude_generic(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol = -1.);
-
-// TeukolskyAmplitudes scalar_amplitude_circeq(int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-// TeukolskyAmplitudes scalar_amplitude_ecceq(int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-// TeukolskyAmplitudes scalar_amplitude_sphinc(int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-// TeukolskyAmplitudes scalar_amplitude(int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConst, ComplexDerivativesMatrixStruct Rin, ComplexDerivativesMatrixStruct Rup, DerivativesMatrix Slm);
-// Complex scalar_integrand_ecceq(int L, int m, int n, GeodesicConstants &geoConstants, double tR, double rp, double phiR, double qr, Complex Rt, double St);
-// Complex scalar_integrand_sphinc(int L, int m, int k, int n, GeodesicConstants &geoConstants, double tR, double tTh, double rp, double thp, double phiR, double phiTh, double qr, double qth, Complex Rt, double St);
-Complex scalar_integrand_1(int L, int m, int k, int n, GeodesicConstants &geoConstants, double tR, double rp, double phiR, double qr, Complex Rt);
-Complex scalar_integrand_2(int L, int m, int k, int n, GeodesicConstants &geoConstants, double tTh, double thp, double phiTh, double qth, double St);
-Complex scalar_integrand_3(int L, int m, int k, int n, GeodesicConstants &geoConstants, double tR, double rp, double phiR, double qr, Complex Rt);
-Complex scalar_integrand_4(int L, int m, int k, int n, GeodesicConstants &geoConstants, double tTh, double thp, double phiTh, double qth, double St);
 
 Complex wronskian(double a, double rp, Complex Rin, Complex RinP, Complex Rup, Complex RupP);
 Complex wronskian(int s, double a, double rp, Complex Rin, Complex RinP, Complex Rup, Complex RupP);
