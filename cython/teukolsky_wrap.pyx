@@ -18,9 +18,9 @@ cdef extern from "teukolsky.hpp":
         TeukolskyModeCPP(int s, int L, int m, int k, int n, GeodesicSource& geo)
         TeukolskyModeCPP(int s, int L, int m, int k, int n, double a, vector[double] theta, vector[double] r)
 
-        int generateSolutions(GeodesicSource& geo, SolutionMethod method, int samplesize)
-        int generateSolutions(double omega, GeodesicTrajectory &traj, GeodesicConstants &geoConst, vector[double] r, vector[double] theta, SolutionMethod method, int samplesize)
-        int generateSolutions(SpinWeightedHarmonic swsh, RadialTeukolsky teuk, GeodesicTrajectory& traj, GeodesicConstants &geoConst)
+        int generateSolutions(GeodesicSource& geo, SolutionMethod method, int samplesize) except +
+        int generateSolutions(double omega, GeodesicTrajectory &traj, GeodesicConstants &geoConst, vector[double] r, vector[double] theta, SolutionMethod method, int samplesize) except +
+        int generateSolutions(SpinWeightedHarmonic swsh, RadialTeukolsky teuk, GeodesicTrajectory& traj, GeodesicConstants &geoConst) except +
         void setSourceIntegrationTolerance(double tol)
         double getSourceIntegrationTolerance()
 
@@ -278,9 +278,21 @@ cdef class _TeukolskyMode:
 
     def solve(self, KerrGeodesic geo, unicode method = "AUTO", int nsample = 256, teuk=None, swsh=None, double tol = -1.):
         self.teukcpp.setSourceIntegrationTolerance(tol)
-        self.teukcpp.generateSolutions(dereference(geo.geocpp), str_to_method(method), nsample)
+        cdef int status = self.teukcpp.generateSolutions(dereference(geo.geocpp), str_to_method(method), nsample)
         self.sampleR = self.teukcpp.getRadialSampleNumber()
         self.sampleTh = self.teukcpp.getPolarSampleNumber()
+        if status != 0:
+            import warnings
+            warnings.warn(
+                "source integral for mode (s=%d, l=%d, m=%d, k=%d, n=%d) did not reach the "
+                "requested tolerance on the %dx%d grid; the amplitude is returned with "
+                "precision %.2e (In) / %.2e (Up). Increase nsample or loosen tol to suppress."
+                % (self.teukcpp.getSpinWeight(), self.teukcpp.getSpheroidalModeNumber(),
+                   self.teukcpp.getAzimuthalModeNumber(), self.teukcpp.getPolarModeNumber(),
+                   self.teukcpp.getRadialModeNumber(), self.sampleR, self.sampleTh,
+                   self.teukcpp.getTeukolskyAmplitudePrecision(BoundaryCondition.In),
+                   self.teukcpp.getTeukolskyAmplitudePrecision(BoundaryCondition.Up)),
+                RuntimeWarning, stacklevel=2)
 
     def flip_spinweight_frequency(self):
         self.teukcpp.flipSpinWeightAndFrequency()

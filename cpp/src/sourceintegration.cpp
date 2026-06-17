@@ -1,6 +1,8 @@
 // sourceintegration.cpp
 
 #include "sourceintegration.hpp"
+#include <stdexcept>
+#include <string>
 
 #define PRECISION_THRESHOLD 1.e-2
 
@@ -120,9 +122,8 @@ TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicT
 	}else if( s == 0 ){
 		return scalar_amplitude_generic(L, m, k, n, traj, geoConstants, teuk, swsh, tol);
 	}else{
-		std::cout << "SOURCEINTEGRATION: ERROR: Source integration not yet implemented for s = " << s << " fields \n";
-		TeukolskyAmplitudes Zlm = {0., 0., DBL_EPSILON, DBL_EPSILON};
-		return Zlm;
+		throw std::runtime_error("sourceintegration: source integration is not implemented for spin-weight s = "
+			+ std::to_string(s) + " (only s = -2, 0, +2 are supported)");
 	}
 }
 
@@ -135,9 +136,8 @@ TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajecto
 	}else if( s == 0 ){
 		return scalar_amplitude_circular(L, m, 0, 0, traj, geoConstants, teuk, swsh);
 	}else{
-		std::cout << "SOURCEINTEGRATION: ERROR: Source integration not yet implemented for s = " << s << " fields \n";
-		TeukolskyAmplitudes Zlm = {0., 0., DBL_EPSILON, DBL_EPSILON};
-		return Zlm;
+		throw std::runtime_error("sourceintegration: source integration is not implemented for spin-weight s = "
+			+ std::to_string(s) + " (only s = -2, 0, +2 are supported)");
 	}
 }
 
@@ -150,9 +150,8 @@ TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTr
 	}else if( s == 0 ){
 		return scalar_amplitude_equatorial(L, m, 0, n, traj, geoConstants, teuk, swsh, tol);
 	}else{
-		std::cout << "SOURCEINTEGRATION: ERROR: Source integration not yet implemented for s = " << s << " fields \n";
-		TeukolskyAmplitudes Zlm = {0., 0., DBL_EPSILON, DBL_EPSILON};
-		return Zlm;
+		throw std::runtime_error("sourceintegration: source integration is not implemented for spin-weight s = "
+			+ std::to_string(s) + " (only s = -2, 0, +2 are supported)");
 	}
 }
 
@@ -165,9 +164,8 @@ TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicT
 	}else if( s == 0 ){
 		return scalar_amplitude_spherical(L, m, k, 0, traj, geoConstants, teuk, swsh, tol);
 	}else{
-		std::cout << "SOURCEINTEGRATION: ERROR: Source integration not yet implemented for s = " << s << " fields \n";
-		TeukolskyAmplitudes Zlm = {0., 0., DBL_EPSILON, DBL_EPSILON};
-		return Zlm;
+		throw std::runtime_error("sourceintegration: source integration is not implemented for spin-weight s = "
+			+ std::to_string(s) + " (only s = -2, 0, +2 are supported)");
 	}
 }
 
@@ -1923,9 +1921,12 @@ int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int
 	if(sumHelper.getPrecision() > errorThreshold){   // cancelled to ~zero: unreliable / exact zero
 		return -1;
 	}
+	// Signal non-convergence (status 1) if we exhausted the grid without reaching the
+	// effective tolerance. precisionOut already reflects the achieved (sub-tolerance)
+	// precision; the calling driver turns status 1 into a Python warning rather than
+	// aborting, so the (poorly resolved) amplitude is still returned.
 	double effTol = std::max(errorTolerance, 10.*sumHelper.getPrecision());
 	if(std::abs(1. - ICompare/II) > effTol){
-		std::cout << "(SOURCEINT) ERROR: IR ("<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<effTol<<" within N = " << 2*halfSample << " samples. Only converged to precision of  "<<std::abs(1. - ICompare/II)<< ". \n";
 		return 1;
 	}
 
@@ -1995,9 +1996,10 @@ int polar_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int,
 	if(sumHelper.getPrecision() > errorThreshold){   // cancelled to ~zero: unreliable / exact zero
 		return -1;
 	}
+	// Signal non-convergence (status 1) if we exhausted the grid without reaching the
+	// effective tolerance (see radial_integral_convergence_sum for the rationale).
 	double effTol = std::max(errorTolerance, 10.*sumHelper.getPrecision());
 	if(std::abs(1. - ICompare/II) > effTol){
-		std::cout << "(SOURCEINT) ERROR: ITh ("<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<effTol<<" within N = " << 2*halfSample << " samples. Only converged to precision of  "<<std::abs(1. - ICompare/II)<< ". \n";
 		return 1;
 	}
 
@@ -2027,22 +2029,25 @@ TeukolskyAmplitudes scalar_amplitude_generic(int, int m, int k, int n, GeodesicT
 	Complex ZlmUp = 0.;
 	Complex ZlmIn = 0.;
 	double precisionIn = DBL_EPSILON, precisionUp = DBL_EPSILON;  // zero amplitude (e.g. parity-forbidden) is an exact, well-known zero
+	bool converged = true;   // cleared if any sub-integral fails to reach tolerance (status == 1)
 
 	int status = polar_integral_convergence_sum(I2, scalar_integrand_I2, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance, pI2);
+	converged &= (status != 1);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
-		return Zlm;
+		return {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
 	}
 	status = polar_integral_convergence_sum(I4, scalar_integrand_I4, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance, pI4);
+	converged &= (status != 1);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
-		return Zlm;
+		return {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
 	}
 
 	status = radial_integral_convergence_sum(I1In, scalar_integrand_I1, m, k, n, traj, geoConstants, Up, teuk, errorThresholdR, errorTolerance, pI1In);
+	converged &= (status != 1);
 	if(status != -1){
 		if(std::abs(I4) > 0.){
 			status = radial_integral_convergence_sum(I3In, scalar_integrand_I3, m, k, n, traj, geoConstants, Up, teuk, errorThresholdR, errorTolerance, pI3In);
+			converged &= (status != 1);
 		}
 		if(status != -1){
 			ZlmIn = -4.*M_PI/W/upT*(I1In*I2 + I3In*I4);
@@ -2051,9 +2056,11 @@ TeukolskyAmplitudes scalar_amplitude_generic(int, int m, int k, int n, GeodesicT
 	}
 
 	status = radial_integral_convergence_sum(I1Up, scalar_integrand_I1, m, k, n, traj, geoConstants, In, teuk, errorThresholdR, errorTolerance, pI1Up);
+	converged &= (status != 1);
 	if(status != -1){
 		if(std::abs(I4) > 0.){
 			status = radial_integral_convergence_sum(I3Up, scalar_integrand_I3, m, k, n, traj, geoConstants, In, teuk, errorThresholdR, errorTolerance, pI3Up);
+			converged &= (status != 1);
 		}
 		if(status != -1){
 			ZlmUp = -4.*M_PI/W/upT*(I1Up*I2 + I3Up*I4);
@@ -2061,9 +2068,7 @@ TeukolskyAmplitudes scalar_amplitude_generic(int, int m, int k, int n, GeodesicT
 		}
 	}
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, precisionIn, precisionUp};
-
-	return Zlm;
+	return {ZlmIn, ZlmUp, precisionIn, precisionUp, converged ? 0 : 1};
 }
 
 TeukolskyAmplitudes scalar_amplitude_equatorial(int, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol){
@@ -2077,22 +2082,23 @@ TeukolskyAmplitudes scalar_amplitude_equatorial(int, int m, int k, int n, Geodes
 	Complex ZlmUp = 0.;
 	Complex ZlmIn = 0.;
 	double precisionIn = DBL_EPSILON, precisionUp = DBL_EPSILON;  // zero amplitude (e.g. parity-forbidden) is an exact, well-known zero
+	bool converged = true;   // cleared if any sub-integral fails to reach tolerance (status == 1)
 
 	int status = scalar_integrand_I2(I2, m, k, teuk.getModeFrequency(), traj.tTheta[0], geoConstants.a*cos(swsh.getArguments(0)), traj.getAzimuthalAccumulation(2, 0), 0, swsh.getSolution(0));
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
-		return Zlm;
+		return {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
 	}
 	status = scalar_integrand_I4(I4, m, k, teuk.getModeFrequency(), traj.tTheta[0], geoConstants.a*cos(traj.getPolarPosition(0)), traj.getAzimuthalAccumulation(2, 0), 0, swsh.getSolution(0));
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
-		return Zlm;
+		return {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
 	}
 
 	status = radial_integral_convergence_sum(I1In, scalar_integrand_I1, m, k, n, traj, geoConstants, Up, teuk, errorThresholdR, errorTolerance, pI1In);
+	converged &= (status != 1);
 	if(status != -1){
 		if(std::abs(I4) > 0.){
 			status = radial_integral_convergence_sum(I3In, scalar_integrand_I3, m, k, n, traj, geoConstants, Up, teuk, errorThresholdR, errorTolerance, pI3In);
+			converged &= (status != 1);
 		}
 		if(status != -1){
 			ZlmIn = -4.*M_PI/W/upT*(I1In*I2 + I3In*I4);
@@ -2101,9 +2107,11 @@ TeukolskyAmplitudes scalar_amplitude_equatorial(int, int m, int k, int n, Geodes
 	}
 
 	status = radial_integral_convergence_sum(I1Up, scalar_integrand_I1, m, k, n, traj, geoConstants, In, teuk, errorThresholdR, errorTolerance, pI1Up);
+	converged &= (status != 1);
 	if(status != -1){
 		if(std::abs(I4) > 0.){
 			status = radial_integral_convergence_sum(I3Up, scalar_integrand_I3, m, k, n, traj, geoConstants, In, teuk, errorThresholdR, errorTolerance, pI3Up);
+			converged &= (status != 1);
 		}
 		if(status != -1){
 			ZlmUp = -4.*M_PI/W/upT*(I1Up*I2 + I3Up*I4);
@@ -2111,9 +2119,7 @@ TeukolskyAmplitudes scalar_amplitude_equatorial(int, int m, int k, int n, Geodes
 		}
 	}
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, precisionIn, precisionUp};
-
-	return Zlm;
+	return {ZlmIn, ZlmUp, precisionIn, precisionUp, converged ? 0 : 1};
 }
 
 TeukolskyAmplitudes scalar_amplitude_spherical(int, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol){
@@ -2127,16 +2133,17 @@ TeukolskyAmplitudes scalar_amplitude_spherical(int, int m, int k, int n, Geodesi
 	Complex ZlmUp = 0.;
 	Complex ZlmIn = 0.;
 	double precisionIn = DBL_EPSILON, precisionUp = DBL_EPSILON;  // zero amplitude (e.g. parity-forbidden) is an exact, well-known zero
+	bool converged = true;   // cleared if any sub-integral fails to reach tolerance (status == 1)
 
 	int status = polar_integral_convergence_sum(I2, scalar_integrand_I2, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance, pI2);
+	converged &= (status != 1);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
-		return Zlm;
+		return {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
 	}
 	status = polar_integral_convergence_sum(I4, scalar_integrand_I4, m, k, n, traj, geoConstants, swsh, errorThresholdTh, errorTolerance, pI4);
+	converged &= (status != 1);
 	if(status == -1){
-		TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
-		return Zlm;
+		return {ZlmIn, ZlmUp, DBL_EPSILON, DBL_EPSILON};  // sub-integral cancelled to zero -> exact zero amplitude
 	}
 
 	status = scalar_integrand_I1(I1In, m, n, teuk.getModeFrequency(), traj.getTimeAccumulation(1, 0), traj.getRadialPosition(0), traj.getAzimuthalAccumulation(1, 0), 0., teuk.getSolution(Up, 0));
@@ -2157,9 +2164,7 @@ TeukolskyAmplitudes scalar_amplitude_spherical(int, int m, int k, int n, Geodesi
 		}
 	}
 
-	TeukolskyAmplitudes Zlm = {ZlmIn, ZlmUp, precisionIn, precisionUp};
-
-	return Zlm;
+	return {ZlmIn, ZlmUp, precisionIn, precisionUp, converged ? 0 : 1};
 }
 
 TeukolskyAmplitudes scalar_amplitude_circular(int, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh){

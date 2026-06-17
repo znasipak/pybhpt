@@ -9,11 +9,19 @@
 #include "swsh.hpp"
 #include <functional>
 
+// Result of a source integration: the In/Up Teukolsky (or scalar) amplitudes
+// together with an estimate of their relative precision. `status` is 0 on a
+// normal result and 1 if a sub-integral failed to reach its tolerance within
+// the available grid (the amplitude is still returned, with `*Precision`
+// reflecting the shortfall); the Cython layer turns status==1 into a Python
+// warning. The member defaults make a default-constructed result well defined
+// (an untrusted zero) rather than holding indeterminate values.
 typedef struct TeukolskyAmplitudesStruct{
-	Complex in;
-	Complex up;
-	double inPrecision;
-	double upPrecision;
+	Complex in = 0.;
+	Complex up = 0.;
+	double inPrecision = 1.;
+	double upPrecision = 1.;
+	int status = 0;
 } TeukolskyAmplitudes;
 
 typedef struct DerivativesMatrixStruct{

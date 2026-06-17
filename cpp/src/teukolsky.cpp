@@ -147,7 +147,9 @@ int TeukolskyMode::generateSolutions(SpinWeightedHarmonic& swsh, RadialTeukolsky
 	_ZlmUp = Zlm.up;
 	_ZlmInPrecision = Zlm.inPrecision;
 	_ZlmUpPrecision = Zlm.upPrecision;
-	return 0;
+	// Zlm.status == 1 flags a source integral that did not reach tolerance within the
+	// grid; the amplitude is still returned. Propagated so the Python layer can warn.
+	return Zlm.status;
 }
 
 int TeukolskyMode::flipSpinWeightAndFrequency(){
