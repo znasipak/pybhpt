@@ -87,8 +87,10 @@ int integrand_convergence(Complex old_value, Complex new_value, double eps1, dou
 // (large) last difference. dPrev is retained in the signature (and computed at the
 // call sites for the 2D combination) but intentionally unused.
 static double conservative_precision(double dLast, double dPrev, double roundoff){
-	(void)dPrev;
-	return std::max(dLast, roundoff);
+	// (void)dPrev;
+	double rho = dPrev > 0. ? dLast/dPrev : 0.;
+	double factor = rho < 0.75 ? rho/(1. - rho) : 1.;
+	return std::max(dLast * factor, 0.1 * roundoff);
 }
 
 // Relative-error estimate for a scalar amplitude Z ~ I1*I2 + I3*I4 built from
@@ -1874,67 +1876,56 @@ int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int
 	double deltaQ = M_PI/double(halfSampleMax);
 
 	Complex sumTerm = 0.;
-	Complex sum = sumTerm;
-	double maxTerm = 0.;
+	SummationHelper sumHelper;
+	sumHelper.setBasePrecision(5.e-14);   // solution-input noise floor, as in the |s|=2 path
 	double freq = teuk.getModeFrequency();
 
 	int samplePos = 0;
 	double q = samplePos*deltaQ;
 	integrand(sumTerm, m, n, freq, traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
-	sum = sumTerm;
-	maxTerm = std::abs(sumTerm) < maxTerm ? maxTerm : std::abs(sumTerm);
+	sumHelper.add(sumTerm);
 
 	samplePos = halfSample*sampleDiff;
 	q = samplePos*deltaQ;
 	integrand(sumTerm, m, n, freq, traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
-	sum += sumTerm;
-	maxTerm = std::abs(sumTerm) < maxTerm ? maxTerm : std::abs(sumTerm);
+	sumHelper.add(sumTerm);
 
 	for(int i = 1; i < halfSample; i++){
 		samplePos = i*sampleDiff;
 		q = samplePos*deltaQ;
 
 		integrand(sumTerm, m, n, freq, traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
-		sum += 2.*sumTerm;
-		maxTerm = std::abs(sumTerm) < maxTerm ? maxTerm : std::abs(sumTerm);
+		sumHelper.add(2.*sumTerm);
 	}
 
-	II = sum/double(2*halfSample);
-
-	double precisionLoss = maxTerm/std::abs(II);
-	double errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+	II = sumHelper.getSum()/double(2*halfSample);
 
 	Complex ICompare = 0., IComparePrev = 0.;
-	while(halfSample < halfSampleMax && std::abs(1. - ICompare/II) > errorToleranceAdjusted){
+	while(halfSample < halfSampleMax && !integrand_convergence(ICompare, II, errorTolerance, 10.*sumHelper.getPrecision())){
 		for(int i = 0; i < halfSample; i++){
 			samplePos = i*sampleDiff + sampleDiff/2;
 			q = double(samplePos)*deltaQ;
 
 			integrand(sumTerm, m, n, freq, traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
-			sum += 2.*sumTerm;
-			maxTerm = std::abs(sumTerm) < maxTerm ? maxTerm : std::abs(sumTerm);
+			sumHelper.add(2.*sumTerm);
 		}
 		halfSample *= 2;
 		sampleDiff /= 2;
 		IComparePrev = ICompare;
 		ICompare = II;
-		II = sum/double(2*halfSample);
-
-		precisionLoss = maxTerm/std::abs(II);
-		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+		II = sumHelper.getSum()/double(2*halfSample);
 	}
 	{
 		double dLastP = std::abs(1. - ICompare/II);
 		double dPrevP = (std::abs(ICompare) > 0.) ? std::abs(1. - IComparePrev/ICompare) : dLastP;
-		precisionOut = std::max(conservative_precision(dLastP, dPrevP, DBL_EPSILON*precisionLoss), errorToleranceAdjusted);
+		precisionOut = conservative_precision(dLastP, dPrevP, sumHelper.getPrecision());
 	}
-	if(errorToleranceAdjusted > errorThreshold){
+	if(sumHelper.getPrecision() > errorThreshold){   // cancelled to ~zero: unreliable / exact zero
 		return -1;
 	}
-	if(std::abs(1. - ICompare/II) > errorToleranceAdjusted){
-		std::cout << "(SOURCEINT) ERROR: IR ("<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<errorToleranceAdjusted<<" within N = " << 2*halfSample << " samples. Only converged to precision of  "<<std::abs(1. - ICompare/II)<< ". \n";
+	double effTol = std::max(errorTolerance, 10.*sumHelper.getPrecision());
+	if(std::abs(1. - ICompare/II) > effTol){
+		std::cout << "(SOURCEINT) ERROR: IR ("<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<effTol<<" within N = " << 2*halfSample << " samples. Only converged to precision of  "<<std::abs(1. - ICompare/II)<< ". \n";
 		return 1;
 	}
 
@@ -1956,69 +1947,57 @@ int polar_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int,
 	double deltaQ = M_PI/double(halfSampleMax);
 
 	Complex sumTerm = 0.;
-	Complex sum = sumTerm;
-	double maxTerm = 0.;
+	SummationHelper sumHelper;
+	sumHelper.setBasePrecision(5.e-14);   // solution-input noise floor, as in the |s|=2 path
 	double freq = geoConstants.getTimeFrequency(m, k, n);
 	double a = geoConstants.a;
 
 	int samplePos = 0;
 	double q = samplePos*deltaQ;
 	integrand(sumTerm, m, k, freq, traj.tTheta[samplePos], a*cos(swsh.getArguments(samplePos)), traj.phiTheta[samplePos], q, swsh.getSolution(samplePos));
-	sum = sumTerm;
-	maxTerm = std::abs(sumTerm) < maxTerm ? maxTerm : std::abs(sumTerm);
+	sumHelper.add(sumTerm);
 
 	samplePos = halfSample*sampleDiff;
 	q = samplePos*deltaQ;
 	integrand(sumTerm, m, k, freq, traj.tTheta[samplePos], a*cos(swsh.getArguments(samplePos)), traj.phiTheta[samplePos], q, swsh.getSolution(samplePos));
-	sum += sumTerm;
-	maxTerm = std::abs(sumTerm) < maxTerm ? maxTerm : std::abs(sumTerm);
+	sumHelper.add(sumTerm);
 
 	for(int i = 1; i < halfSample; i++){
 		samplePos = i*sampleDiff;
 		q = samplePos*deltaQ;
 
 		integrand(sumTerm, m, k, freq, traj.tTheta[samplePos], a*cos(swsh.getArguments(samplePos)), traj.phiTheta[samplePos], q, swsh.getSolution(samplePos));
-		sum += 2.*sumTerm;
-		maxTerm = std::abs(sumTerm) < maxTerm ? maxTerm : std::abs(sumTerm);
+		sumHelper.add(2.*sumTerm);
 	}
 
-	II = sum/double(2*halfSample);
-
-	double precisionLoss = maxTerm/std::abs(II);
-	double errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-	errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+	II = sumHelper.getSum()/double(2*halfSample);
 
 	Complex ICompare = 0., IComparePrev = 0.;
-	while(halfSample < halfSampleMax && std::abs(1. - ICompare/II) > errorToleranceAdjusted){
+	while(halfSample < halfSampleMax && !integrand_convergence(ICompare, II, errorTolerance, 10.*sumHelper.getPrecision())){
 		for(int i = 0; i < halfSample; i++){
 			samplePos = i*sampleDiff + sampleDiff/2;
 			q = double(samplePos)*deltaQ;
 
 			integrand(sumTerm, m, k, freq, traj.tTheta[samplePos], a*cos(swsh.getArguments(samplePos)), traj.phiTheta[samplePos], q, swsh.getSolution(samplePos));
-			sum += 2.*sumTerm;
-			maxTerm = std::abs(sumTerm) < maxTerm ? maxTerm : std::abs(sumTerm);
+			sumHelper.add(2.*sumTerm);
 		}
 		halfSample *= 2;
 		sampleDiff /= 2;
 		IComparePrev = ICompare;
 		ICompare = II;
-		II = sum/double(2*halfSample);
-
-		precisionLoss = maxTerm/std::abs(II);
-		errorToleranceAdjusted = 10*DBL_EPSILON*precisionLoss;
-		errorToleranceAdjusted = errorToleranceAdjusted < errorTolerance ? errorTolerance : errorToleranceAdjusted;
+		II = sumHelper.getSum()/double(2*halfSample);
 	}
 	{
 		double dLastP = std::abs(1. - ICompare/II);
 		double dPrevP = (std::abs(ICompare) > 0.) ? std::abs(1. - IComparePrev/ICompare) : dLastP;
-		precisionOut = std::max(conservative_precision(dLastP, dPrevP, DBL_EPSILON*precisionLoss), errorToleranceAdjusted);
+		precisionOut = conservative_precision(dLastP, dPrevP, sumHelper.getPrecision());
 	}
-	if(errorToleranceAdjusted > errorThreshold){
+	if(sumHelper.getPrecision() > errorThreshold){   // cancelled to ~zero: unreliable / exact zero
 		return -1;
 	}
-
-	if(std::abs(1. - ICompare/II) > errorToleranceAdjusted){
-		std::cout << "(SOURCEINT) ERROR: ITh ("<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<errorToleranceAdjusted<<" within N = " << 2*halfSample << " samples. Only converged to precision of  "<<std::abs(1. - ICompare/II)<< ". \n";
+	double effTol = std::max(errorTolerance, 10.*sumHelper.getPrecision());
+	if(std::abs(1. - ICompare/II) > effTol){
+		std::cout << "(SOURCEINT) ERROR: ITh ("<<m<<","<<k<<","<<n<<") integral did not converge to expected tolerance of "<<effTol<<" within N = " << 2*halfSample << " samples. Only converged to precision of  "<<std::abs(1. - ICompare/II)<< ". \n";
 		return 1;
 	}
 
