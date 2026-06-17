@@ -44,7 +44,7 @@ public:
 private:
 	Complex _sum;          // running compensated sum (add _comp for the corrected value)
 	Complex _comp;         // Neumaier compensation (lost low-order bits)
-	double _sumAbs;        // running sum of term magnitudes (L1 norm -> condition number)
+	double _sumAbsSq;      // running sum of |term|^2 (L2 norm -> RMS condition number)
 	double _maxTerm;
 	double _error;
 	double _basePrecision;

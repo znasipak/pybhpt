@@ -10,7 +10,7 @@
 static void A_coeffs_w(Complex &Ann0, Complex &Anmbar0, Complex &Ambarmbar0, Complex &Anmbar1, Complex &Ambarmbar1, Complex &Ambarmbar2, int const &m, double const &omega, GeodesicConstants &geoConstants, double const &rp, double const &thp, double const &Slm, double const &SlmP, double const &SlmPP);
 static void A13_coeffs_w(Complex &All0, Complex &Alm0, Complex &Amm0, Complex &Alm1, Complex &Amm1, Complex &Amm2, int const &m, double const &omega, GeodesicConstants &geoConstants, double const &rp, double const &thp, double const &Slm, double const &SlmP, double const &SlmPP);
 
-SummationHelper::SummationHelper(): _sum(0.), _comp(0.), _sumAbs(0.), _maxTerm(0.), _error(1.), _basePrecision(DBL_EPSILON) {}
+SummationHelper::SummationHelper(): _sum(0.), _comp(0.), _sumAbsSq(0.), _maxTerm(0.), _error(1.), _basePrecision(DBL_EPSILON) {}
 SummationHelper::~SummationHelper() {}
 
 // Neumaier compensated addition for one real component: accumulate the
@@ -25,7 +25,7 @@ static inline void neumaier_add(double &s, double &c, double x){
 void SummationHelper::add(Complex val){
 	double a = std::abs(val);
 	if(a > _maxTerm) _maxTerm = a;
-	_sumAbs += a;                       // L1 norm of the terms (cancellation/condition number)
+	_sumAbsSq += a*a;                   // L2 norm^2 of the terms (RMS condition number)
 
 	// Neumaier compensated summation, component-wise
 	double sr = _sum.real(), cr = _comp.real();
@@ -35,12 +35,14 @@ void SummationHelper::add(Complex val){
 	_sum = Complex(sr, si);
 	_comp = Complex(cr, ci);
 
-	// Absolute error: input/solution noise (_basePrecision) propagated through every
-	// term -> _basePrecision * sum|x_i|, i.e. base precision times the condition number
-	// when divided by |sum|. This captures the FULL cancellation across all terms, not
-	// just the single largest one. (The floating-point round-off, ~eps*sum|x_i|, is held
-	// negligible by the compensated summation and is dominated by _basePrecision anyway.)
-	_error = _basePrecision*_sumAbs;
+	// Absolute error: per-term input/solution noise (_basePrecision relative) propagated
+	// through the sum. The per-sample errors are essentially INDEPENDENT (distinct phase
+	// points), so they add in quadrature: error ~ _basePrecision * sqrt(sum|x_i|^2). Divided
+	// by |sum| this is base precision times the RMS condition number -- it credits the
+	// sqrt(N) averaging of uncorrelated noise (so a well-conditioned average beats a single
+	// sample) while still blowing up under genuine cancellation. The L1 sum|x_i| would be the
+	// worst-case (fully-correlated) bound, ~sqrt(N) larger, and over-reports by that factor.
+	_error = _basePrecision*std::sqrt(_sumAbsSq);
 }
 
 void SummationHelper::setBasePrecision(double val){
