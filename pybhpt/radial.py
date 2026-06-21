@@ -237,7 +237,7 @@ class RadialTeukolsky:
         """
         self.base.set_bc(bc, R, Rp, r)
 
-    def solve(self, method = "AUTO", bc = None):
+    def solve(self, method = "AUTO", bc = None, rtol = None):
         """Solves the radial Teukolsky equation.
 
         Parameters
@@ -247,11 +247,16 @@ class RadialTeukolsky:
         bc : str, optional
             Specifies which homogeneous solutions to compute. If None, both "In" (horizon) and "Up" (infinity) solutions are computed.
             If "In", only the horizon solution is computed. If "Up", only the infinity solution is computed.
+        rtol : float, optional
+            Relative tolerance for the numerical ODE integrators (HBL/TEUK/GSN). ``None``
+            (the default) uses the built-in tolerance; a positive value trades accuracy
+            for fewer integration steps. Ignored by the analytic methods (MST/ASYMP).
         """
+        cyrtol = -1. if rtol is None else rtol
         if bc is None:
-            self.base.solve(method, "None")
+            self.base.solve(method, "None", rtol=cyrtol)
         else:
-            self.base.solve(method, bc)
+            self.base.solve(method, bc, rtol=cyrtol)
 
     def flipspinweight(self):
         """Flips the sign of the spin weight of the field."""

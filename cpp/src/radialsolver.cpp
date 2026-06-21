@@ -34,6 +34,8 @@ int RadialTeukolsky::getSpheroidalModeNumber(){ return _L; }
 int RadialTeukolsky::getAzimuthalModeNumber(){ return _m; }
 double RadialTeukolsky::getModeFrequency(){ return _omega; }
 double RadialTeukolsky::getSpinWeightedSpheroidalEigenvalue(){ return _lambda; }
+void RadialTeukolsky::setODETolerance(double rtol){ _odeRtol = rtol; }
+double RadialTeukolsky::getODETolerance(){ return _odeRtol > 0. ? _odeRtol : TEUK_ODE_REL_ERR; }
 
 // Generate retarded boundary conditions for Teukolsky equation. This is neccessary if one is
 // going to generate solutions with any of the integration methods {HBL, GSN, TEUK}
@@ -1775,7 +1777,8 @@ int teuk_jac_null_gsl(double, const double*, double *, double*, void*){
 	return GSL_SUCCESS;
 }
 
-int teuk_integrate_gsl(ComplexVector &psi, ComplexVector &dpsidr, int (*sys)(double, const double*, double*, void*), state_type psi0, const double r0, const Vector &r, void *params){
+int teuk_integrate_gsl(ComplexVector &psi, ComplexVector &dpsidr, int (*sys)(double, const double*, double*, void*), state_type psi0, const double r0, const Vector &r, void *params, double rtol){
+	if(rtol <= 0.) rtol = TEUK_ODE_REL_ERR;   // <=0 sentinel -> built-in default
 	size_t dim = 4;
 	double Psi[dim];
 	for(size_t i = 0; i < dim; i++){
@@ -1798,10 +1801,10 @@ int teuk_integrate_gsl(ComplexVector &psi, ComplexVector &dpsidr, int (*sys)(dou
 
 	gsl_odeiv2_system gsl_sys = {sys, NULL, dim, params};
 
-	double abs_error = sqrt(Psi[0]*Psi[0] + Psi[1]*Psi[1])*TEUK_ODE_REL_ERR*(1.e-5);
+	double abs_error = sqrt(Psi[0]*Psi[0] + Psi[1]*Psi[1])*rtol*(1.e-5);
 	const gsl_odeiv2_step_type *T = gsl_odeiv2_step_rk8pd;
 	gsl_odeiv2_step* s = gsl_odeiv2_step_alloc(T, dim);
-	gsl_odeiv2_control* c = gsl_odeiv2_control_y_new(abs_error, TEUK_ODE_REL_ERR);
+	gsl_odeiv2_control* c = gsl_odeiv2_control_y_new(abs_error, rtol);
 	gsl_odeiv2_evolve* e = gsl_odeiv2_evolve_alloc(dim);
 
 	int stepNum = r.size(), status;
@@ -2045,7 +2048,7 @@ int teuk_in_TEUK_integrate(ComplexVector &R_return, ComplexVector &Rp_return, Ra
 		teuk_blc sys(params);
 		teuk_integrate_boost(R_return, Rp_return, sys, R0, r0, rReverse);
 	}else{
-		teuk_integrate_gsl(R_return, Rp_return, &teuk_blc_gsl, R0, r0, rReverse, &params);
+		teuk_integrate_gsl(R_return, Rp_return, &teuk_blc_gsl, R0, r0, rReverse, &params, teuk.getODETolerance());
 	}
 
 	if(r0 >= r.back()){
@@ -2102,7 +2105,7 @@ int teuk_up_TEUK_integrate(ComplexVector &R_return, ComplexVector &Rp_return, Ra
 		teuk_blc sys(params);
 		teuk_integrate_boost(R_return, Rp_return, sys, R0, r0, rReverse);
 	}else{
-		teuk_integrate_gsl(R_return, Rp_return, &teuk_blc_gsl, R0, r0, rReverse, &params);
+		teuk_integrate_gsl(R_return, Rp_return, &teuk_blc_gsl, R0, r0, rReverse, &params, teuk.getODETolerance());
 	}
 	if(r0 >= r.back()){
 		std::reverse(R_return.begin(),R_return.end());
@@ -2239,7 +2242,7 @@ int teuk_in_GSN_integrate(ComplexVector &R_return, ComplexVector &Rp_return, Rad
 		teuk_GSN sys(params);
 		teuk_integrate_boost(PsiVec, dPsiVec, sys, Psi0, r0, r);
 	}else{
-		teuk_integrate_gsl(PsiVec, dPsiVec, &teuk_GSN_gsl, Psi0, r0, r, &params);
+		teuk_integrate_gsl(PsiVec, dPsiVec, &teuk_GSN_gsl, Psi0, r0, r, &params, teuk.getODETolerance());
 	}
 	// Complex PsiTemp = norm*PsiVec[stepNum-1];
 	// Complex dPsiTemp = norm*dPsiVec[stepNum-1];
@@ -2318,7 +2321,7 @@ int teuk_up_GSN_integrate(ComplexVector &R_return, ComplexVector &Rp_return, Rad
 		teuk_GSN sys(params);
 		teuk_integrate_boost(PsiVec, dPsiVec, sys, Psi0, r0, rReverse);
 	}else{
-		teuk_integrate_gsl(PsiVec, dPsiVec, &teuk_GSN_gsl, Psi0, r0, rReverse, &params);
+		teuk_integrate_gsl(PsiVec, dPsiVec, &teuk_GSN_gsl, Psi0, r0, rReverse, &params, teuk.getODETolerance());
 	}
 	// Complex PsiTemp = norm*PsiVec[stepNum-1];
 	// Complex dPsiTemp = norm*dPsiVec[stepNum-1];
@@ -2677,7 +2680,7 @@ int teuk_in_HBL_integrate(ComplexVector &R_return, ComplexVector &Rp_return, Rad
 		teuk_hbl sys(params);
 		teuk_integrate_boost(PsiVec, dPsiVec, sys, Psi0, r0, rReverse);
 	}else{
-		teuk_integrate_gsl(PsiVec, dPsiVec, &teuk_hbl_gsl, Psi0, r0, rReverse, &params);
+		teuk_integrate_gsl(PsiVec, dPsiVec, &teuk_hbl_gsl, Psi0, r0, rReverse, &params, teuk.getODETolerance());
 	}
 	// Complex PsiTemp = norm*PsiVec[stepNum-1];
 	// Complex dPsiTemp = norm*dPsiVec[stepNum-1];
@@ -2753,7 +2756,7 @@ int teuk_up_HBL_integrate(ComplexVector &R_return, ComplexVector &Rp_return, Rad
 		teuk_hbl sys(params);
 		teuk_integrate_boost(PsiVec, dPsiVec, sys, Psi0, r0, rReverse);
 	}else{
-		teuk_integrate_gsl(PsiVec, dPsiVec, &teuk_hbl_gsl, Psi0, r0, rReverse, &params);
+		teuk_integrate_gsl(PsiVec, dPsiVec, &teuk_hbl_gsl, Psi0, r0, rReverse, &params, teuk.getODETolerance());
 	// 	int success = teuk_integrate_gsl(PsiVec, dPsiVec, &teuk_hbl_gsl, &jacobian, Psi0, r0, rReverse, &params);
 	}
 
@@ -2820,7 +2823,7 @@ int teuk_in_HBL_integrate_dense(
 	if (r0 < rmin - 1.e-12) {
 		Vector rmin_vec = {rmin};
 		ComplexVector Psi_rmin(1), dPsi_rmin(1);
-		teuk_integrate_gsl(Psi_rmin, dPsi_rmin, &teuk_hbl_gsl, psi0, r0, rmin_vec, &params);
+		teuk_integrate_gsl(Psi_rmin, dPsi_rmin, &teuk_hbl_gsl, psi0, r0, rmin_vec, &params, rtol);
 		psi0 = {Psi_rmin[0].real(), Psi_rmin[0].imag(),
 		        dPsi_rmin[0].real(), dPsi_rmin[0].imag()};
 		r0 = rmin;
@@ -2914,7 +2917,7 @@ int teuk_up_HBL_integrate_dense(
 	if (r0 > rmax + 1.e-12) {
 		Vector rmax_vec = {rmax};
 		ComplexVector Psi_rmax(1), dPsi_rmax(1);
-		teuk_integrate_gsl(Psi_rmax, dPsi_rmax, &teuk_hbl_gsl, psi0, r0, rmax_vec, &params);
+		teuk_integrate_gsl(Psi_rmax, dPsi_rmax, &teuk_hbl_gsl, psi0, r0, rmax_vec, &params, rtol);
 		psi0 = {Psi_rmax[0].real(), Psi_rmax[0].imag(),
 		        dPsi_rmax[0].real(), dPsi_rmax[0].imag()};
 		r0 = rmax;

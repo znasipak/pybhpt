@@ -37,6 +37,8 @@ cdef extern from "radialsolver.hpp":
         void setBoundaryConditions(BoundaryCondition bc, cpp_complex[double] R, cpp_complex[double] Rp, double r)
         void generateSolutions(SolutionMethod method)
         void generateSolutions(BoundaryCondition bc, SolutionMethod method)
+        void setODETolerance(double rtol)
+        double getODETolerance()
         int resampleSolutions(vector[double] radialSamples)
         void flipSpinWeight()
 
@@ -207,7 +209,8 @@ cdef class RadialTeukolsky:
     def set_bc(self, unicode bc, cpp_complex[double] R, cpp_complex[double] Rp, double r):
         self.teukcpp.setBoundaryConditions(str_to_bc(bc), R, Rp, r)
 
-    def solve(self, unicode method="AUTO", unicode bc="None"):
+    def solve(self, unicode method="AUTO", unicode bc="None", double rtol = -1.):
+        self.teukcpp.setODETolerance(rtol)
         if bc == "None":
             self.teukcpp.generateSolutions(str_to_method(method))
         else:

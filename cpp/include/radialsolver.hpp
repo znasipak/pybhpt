@@ -31,6 +31,12 @@ public:
 	void generateSolutions(BoundaryCondition bc, SolutionMethod method = AUTO, bool make_stable=true);
 	int resampleSolutions(Vector radialSamples);
 
+	// Relative tolerance handed to the numerical ODE integrators (HBL/TEUK/GSN).
+	// A non-positive value (the default) uses the built-in tolerance; set a positive
+	// value before generateSolutions to trade accuracy for fewer integration steps.
+	void setODETolerance(double rtol);
+	double getODETolerance();
+
 	void flipSpinWeight();
 
 	Vector getRadialPoints();
@@ -93,6 +99,8 @@ protected:
 	ComplexVector _inDerivative;
 	ComplexVector _upSolution;
 	ComplexVector _upDerivative;
+
+	double _odeRtol = -1.;   // <=0 -> use the built-in TEUK_ODE_REL_ERR default
 };
 
 typedef struct hbl_parameters_struct{
@@ -236,7 +244,7 @@ int teuk_integrate_boost(ComplexVector &psi, ComplexVector &dpsidr, ODE_FUNC sys
 template <typename ODE_FUNC>
 int teuk_integrate_boost(ComplexVector &psi, ComplexVector &dpsidr, ODE_FUNC sys, ODE_FUNC jac, state_type psi0, const double r0, const Vector &r);
 
-int teuk_integrate_gsl(ComplexVector &psi, ComplexVector &dpsidr, int (*sys)(double, const double*, double*, void*), state_type psi0, const double r0, const Vector &r, void *params);
+int teuk_integrate_gsl(ComplexVector &psi, ComplexVector &dpsidr, int (*sys)(double, const double*, double*, void*), state_type psi0, const double r0, const Vector &r, void *params, double rtol = -1.);
 int teuk_integrate_gsl(ComplexVector &psi, ComplexVector &dpsidr, int (*sys)(double, const double*, double*, void*), int (*jac)(double, const double*, double*, double*, void*), state_type psi0, const double r0, const Vector &r, void *params);
 int teuk_jac_null_gsl(double r, const double y[], double f[], void* params);
 
