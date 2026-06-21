@@ -1,0 +1,82 @@
+# Filename: image.def
+Bootstrap: docker
+From: ubuntu:22.04
+
+%environment
+    # Set up environment for when using the container
+    . /opt/conda/etc/profile.d/conda.sh
+    conda activate
+    
+    # RUNTIME SAFEGUARDS:
+    # Prevents math libraries from trying to use instructions (like AVX-512) 
+    # that might not exist on older OSPool nodes.
+    export NPY_DISABLE_CPU_FEATURES="AVX512F,AVX2"
+    export MKL_DEBUG_CPU_TYPE=5
+    export OPENBLAS_CORETYPE=Generic
+
+%post
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update -y
+    apt-get install -y build-essential wget git binutils
+
+    # Install pinned Miniforge
+    MINIFORGE_VERSION="24.3.0-0"
+    wget "https://github.com/conda-forge/miniforge/releases/download/${MINIFORGE_VERSION}/Miniforge3-$(uname)-$(uname -m).sh"
+    bash Miniforge3-$(uname)-$(uname -m).sh -b -f -p /opt/conda
+    rm Miniforge3-$(uname)-$(uname -m).sh
+
+    git clone https://github.com/znasipak/pybhpt.git
+    cd pybhpt
+    git checkout feature-continuous-solution
+    git submodule update --init --recursive extern/boost
+
+    . /opt/conda/etc/profile.d/conda.sh
+    conda activate
+    conda config --set channel_priority strict
+    conda config --add default_channels conda-forge
+
+    # Set BLAS preference before any other installs. OpenBLAS also provides LAPACK
+    # (dsyev_), which swsh.cpp uses for the fast spectral eigenvalue solver; install
+    # libopenblas explicitly so the linkable lib + symlink are present in the env.
+    conda install -y "blas=*=openblas" libopenblas
+    conda env update --prefix $(conda info --base) --file environment-extended.yml
+
+    cd extern/boost
+    chmod +x bootstrap.sh
+    ./bootstrap.sh
+    ./b2 headers
+
+    cd ../../
+    conda install -y scikit-build-core cmake>=3.18 ninja numpy cython
+
+    # BLA_VENDOR=OpenBLAS makes find_package(LAPACK) target the conda libopenblas;
+    # CMAKE_PREFIX_PATH points it at the conda env; PYBHPT_REQUIRE_LAPACK=ON makes the
+    # build FAIL (rather than silently using the ~100x slower gsl_eigen_symm) if LAPACK
+    # is somehow not found.
+    export CMAKE_ARGS="-DPYBHPT_MARCH=x86-64-v2 -DBLA_VENDOR=OpenBLAS -DCMAKE_PREFIX_PATH=${CONDA_PREFIX} -DPYBHPT_REQUIRE_LAPACK=ON"
+    pip install --no-build-isolation .
+
+    # Verify build
+    echo "=== Checking for AVX-512 ==="
+    if objdump -d /opt/conda/lib/python*/site-packages/cybhpt_full*.so \
+       | grep -qiE "zmm|avx512|evex"; then
+        echo "ERROR: AVX-512 instructions found!"
+        exit 1
+    fi
+
+    echo "=== Checking LAPACK is linked (fast spectral solver) ==="
+    if ! ldd /opt/conda/lib/python*/site-packages/cybhpt_full*.so \
+       | grep -qiE "openblas|lapack"; then
+        echo "ERROR: LAPACK/OpenBLAS not linked — fell back to slow gsl_eigen_symm!"
+        exit 1
+    fi
+
+    python -c "import pybhpt; print('Import OK')"
+
+    # Cleanup
+    conda clean -afy
+    apt-get purge -y build-essential git wget
+    apt-get autoremove -y
+    apt-get clean
+    cd /
+    rm -rf /pybhpt

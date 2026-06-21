@@ -101,7 +101,16 @@ set_target_properties(cybhpt_full PROPERTIES
 
 # LAPACK — used in swsh.cpp for fast symmetric eigenvalue computation.
 # gsl_eigen_symm is ~100x slower than LAPACK dsyev for small matrices.
-find_package(LAPACK)
+# By default LAPACK is optional (graceful fallback). Set -DPYBHPT_REQUIRE_LAPACK=ON
+# (done in the wheel CI and the Apptainer image) to fail the build instead of
+# silently degrading to the slow path. Hint the implementation with -DBLA_VENDOR=...
+# (e.g. OpenBLAS) and point CMAKE_PREFIX_PATH at the conda env if needed.
+option(PYBHPT_REQUIRE_LAPACK "Fail the build if LAPACK is not found" OFF)
+if(PYBHPT_REQUIRE_LAPACK)
+  find_package(LAPACK REQUIRED)
+else()
+  find_package(LAPACK)
+endif()
 if(LAPACK_FOUND)
   target_link_libraries(cybhpt_full PRIVATE ${LAPACK_LIBRARIES})
   target_compile_definitions(cybhpt_full PRIVATE PYBHPT_HAS_LAPACK)

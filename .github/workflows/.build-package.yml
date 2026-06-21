@@ -71,7 +71,14 @@ jobs:
             echo "LD_LIBRARY_PATH=${{ runner.temp }}/gsl-install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
           fi
 
+      - name: Install LAPACK (Linux; macOS uses the Accelerate framework)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libopenblas-dev
+
       - name: Install package and run tests
+        # Require LAPACK so a silent fallback to the slow gsl_eigen_symm path fails CI.
+        env:
+          CMAKE_ARGS: "-DPYBHPT_REQUIRE_LAPACK=ON"
         run: |
           python -m venv venv
           source venv/bin/activate
@@ -100,11 +107,13 @@ jobs:
             cibw_skip: "*manylinux*"
             target: musllinux
             cibw_before_build: bash build_gsl.sh
+            cibw_before_all: apk add openblas-dev    # musllinux (Alpine); auditwheel bundles it
           - os: ubuntu-latest
             arch: x86_64
             cibw_skip: "*musllinux*"
             target: manylinux
             cibw_before_build: bash build_gsl.sh
+            cibw_before_all: yum -y install openblas-devel    # manylinux; auditwheel bundles it
           - os: macos-14
             cibw_before_build: brew install gsl
             macosx_deployment_target: 14.0
@@ -116,6 +125,9 @@ jobs:
     env:
       CIBW_BEFORE_BUILD: |
         ${{ matrix.cibw_before_build }}
+      # Install LAPACK/OpenBLAS in the build container once, before any wheel is built
+      # (empty for macOS, which gets LAPACK from the Accelerate framework).
+      CIBW_BEFORE_ALL: ${{ matrix.cibw_before_all }}
 
     steps:
       - uses: actions/checkout@v4
@@ -151,14 +163,17 @@ jobs:
           CIBW_ENVIRONMENT: |
             CMAKE_PREFIX_PATH=/opt/gsl-install
             LD_LIBRARY_PATH=/opt/gsl-install/lib:$LD_LIBRARY_PATH
+            CMAKE_ARGS=-DPYBHPT_REQUIRE_LAPACK=ON
           CIBW_ARCHS_LINUX: ${{ matrix.arch }}
           CIBW_SKIP: ${{ matrix.cibw_skip }}
-      
+
       - name: Build wheels (macOS)
         if: runner.os == 'macOS'
         uses: pypa/cibuildwheel@v3.1.2
         env:
-          CIBW_ENVIRONMENT: MACOSX_DEPLOYMENT_TARGET=${{ matrix.macosx_deployment_target }}
+          CIBW_ENVIRONMENT: |
+            MACOSX_DEPLOYMENT_TARGET=${{ matrix.macosx_deployment_target }}
+            CMAKE_ARGS=-DPYBHPT_REQUIRE_LAPACK=ON
 
       - name: Remove broken Git submodule metadata before cleanup
         if: steps.cache-boost.outputs.cache-hit == 'true'
