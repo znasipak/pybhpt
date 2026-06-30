@@ -444,7 +444,7 @@ class KerrGeodesic:
     azimuthalpolarfourier : numpy.ndarray
         The Fourier coefficients of azimuthal position with respect to the polar Mino phase.  
     """
-    def __init__(self, a, p, e, x, nsamples = 2**8, parametrization = "mino"):
+    def __init__(self, a, p, e, x, nsamples = 2**8, parametrization = "darwin"):
         if a < 0 or a > 1:
             raise ValueError(f"Black hole spin parameter {a} must be in the range [0, 1].")
         if not is_power_of_two(nsamples):
