@@ -609,12 +609,10 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	// first add the points at qr = 0 and qr = pi
 	Complex ZlmUp, ZlmIn;
 	int samplePosR = 0, samplePosTh = 0;
-	double qr = 0.;
-	double qth = 0.;
 	Complex sumUpTerm, sumInTerm;
 	SummationHelper sumUp;
 	SummationHelper sumIn;
-	
+
 	// first account for the fact that we expect some numerical error in our
 	// radial and polar solutions on the order of 10^-14
 	sumUp.setBasePrecision(5.e-14);
@@ -626,19 +624,16 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	sumIn.add(0.25*sumInTerm);
 
 	samplePosTh = halfSampleTh*sampleDiffTh;
-	qth = double(samplePosTh)*deltaQTh;
 	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 	sumUp.add(signK*0.25*sumUpTerm);
 	sumIn.add(signK*0.25*sumInTerm);
 
 	samplePosR = halfSampleR*sampleDiffR;
-	qr = double(samplePosR)*deltaQR;
 	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 	sumUp.add(signKN*0.25*sumUpTerm);
 	sumIn.add(signKN*0.25*sumInTerm);
 
 	samplePosTh = 0;
-	qth = double(samplePosTh)*deltaQTh;
 	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 	sumUp.add(signN*0.25*sumUpTerm);
 	sumIn.add(signN*0.25*sumInTerm);
@@ -646,17 +641,14 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	// initial sum over qr values with fixed qth = 0. and qth = pi
 	for(int i = 1; i < halfSampleR; i++){
 		samplePosR = i*sampleDiffR;
-		qr = double(samplePosR)*deltaQR;
 
-		samplePosTh = 0.;
-		qth = double(samplePosTh)*deltaQTh;
+		samplePosTh = 0;
 		// first sum performs integration with qth = 0
 		integ.polarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 		sumUp.add(0.5*sumUpTerm);
 		sumIn.add(0.5*sumInTerm);
 
 		samplePosTh = halfSampleTh*sampleDiffTh;
-		qth = double(samplePosTh)*deltaQTh;
 		// second sum performs integration with qth = pi
 		integ.polarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 		sumUp.add(signK*0.5*sumUpTerm);
@@ -666,17 +658,14 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	// initial sum over qth values with fixed qr = 0. and qr = pi
 	for(int j = 1; j < halfSampleTh; j++){
 		samplePosTh = j*sampleDiffTh;
-		qth = double(samplePosTh)*deltaQTh;
 
-		samplePosR = 0.;
-		qr = double(samplePosR)*deltaQR;
+		samplePosR = 0;
 		// first sum performs integration between qr = 0 to qr = pi
 		integ.radialTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 		sumUp.add(0.5*sumUpTerm);
 		sumIn.add(0.5*sumInTerm);
 
 		samplePosR = halfSampleR*sampleDiffR;
-		qr = double(samplePosR)*deltaQR;
 		integ.radialTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 		sumUp.add(signN*0.5*sumUpTerm);
 		sumIn.add(signN*0.5*sumInTerm);
@@ -685,11 +674,9 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	// initial sum over mixed qr and qth values
 	for(int i = 1; i < halfSampleR; i++){
 		samplePosR = i*sampleDiffR;
-		qr = double(samplePosR)*deltaQR;
 
 		for(int j = 1; j < halfSampleTh; j++){
 			samplePosTh = j*sampleDiffTh;
-			qth = double(samplePosTh)*deltaQTh;
 			// first sum performs integration between qr = 0 to qr = pi
 			integ.generic(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 			sumUp.add(sumUpTerm);
@@ -726,23 +713,19 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 			}
 			for(int j = 0; j < halfSampleTh; j++){
 				samplePosTh = j*sampleDiffTh + sampleDiffTh/2;
-				qth = double(samplePosTh)*deltaQTh;
 
-				samplePosR = 0.;
-				qr = double(samplePosR)*deltaQR;
+				samplePosR = 0;
 				integ.radialTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 				sumUp.add(0.5*sumUpTerm);
 				sumIn.add(0.5*sumInTerm);
 
 				samplePosR = halfSampleR*sampleDiffR;
-				qr = double(samplePosR)*deltaQR;
 				integ.radialTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 				sumUp.add(signN*0.5*sumUpTerm);
 				sumIn.add(signN*0.5*sumInTerm);
 
 				for(int i = 1; i < halfSampleR; i++){
 					samplePosR = i*sampleDiffR;
-					qr = double(samplePosR)*deltaQR;
 					integ.generic(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 					sumUp.add(sumUpTerm);
 					sumIn.add(sumInTerm);
@@ -774,16 +757,13 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 		// additional qr sample points for fixed qth = 0. and qth = pi
 		for(int i = 0; i < halfSampleR; i++){
 			samplePosR = i*sampleDiffR + sampleDiffR/2;
-			qr = double(samplePosR)*deltaQR;
 
-			samplePosTh = 0.;
-			qth = double(samplePosTh)*deltaQTh;
+			samplePosTh = 0;
 			integ.polarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 			sumUp.add(0.5*sumUpTerm);
 			sumIn.add(0.5*sumInTerm);
 
 			samplePosTh = halfSampleTh*sampleDiffTh;
-			qth = double(samplePosTh)*deltaQTh;
 			integ.polarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 			sumUp.add(signK*0.5*sumUpTerm);
 			sumIn.add(signK*0.5*sumInTerm);
@@ -791,7 +771,6 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 			// additional qr sample points for interior qth points between 0 and pi
 			for(int j = 1; j < halfSampleTh; j++){
 				samplePosTh = j*sampleDiffTh;
-				qth = double(samplePosTh)*deltaQTh;
 				integ.generic(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
 				sumUp.add(sumUpTerm);
 				sumIn.add(sumInTerm);
@@ -939,23 +918,19 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	// first add the points at qr = 0 and qr = pi
 	// Note that we need to divide by two to avoid double counting, since we are integrating from 0 to pi
 	Complex ZlmUp, ZlmIn;
-	int samplePos = 0.;
-	double qr = samplePos*deltaQ;
-	double qth = 0.;
+	int samplePos = 0;
 	Complex sumUpTerm, sumInTerm;
 	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, radAt(samplePos), pol);
 	sumUp.add(0.5*sumUpTerm);
 	sumIn.add(0.5*sumInTerm);
 
 	samplePos = halfSample*sampleDiff;
-	qr = M_PI;
 	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, radAt(samplePos), pol);
 	sumUp.add(signN*0.5*sumUpTerm);
 	sumIn.add(signN*0.5*sumInTerm);
 
 	for(int i = 1; i < halfSample; i++){
 		samplePos = i*sampleDiff;
-		qr = double(samplePos)*deltaQ;
 		integ.polarTP(sumInTerm, sumUpTerm, mc, radAt(samplePos), pol);
 		sumUp.add(sumUpTerm);
 		sumIn.add(sumInTerm);
@@ -976,7 +951,6 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 		}
 		for(int i = 0; i < halfSample; i++){
 			samplePos = i*sampleDiff + sampleDiff/2;
-			qr = double(samplePos)*deltaQ;
 			integ.polarTP(sumInTerm, sumUpTerm, mc, radAt(samplePos), pol);
 			sumUp.add(sumUpTerm);
 			sumIn.add(sumInTerm);
@@ -1078,23 +1052,19 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 
 	// first add the points at qr = 0 and qr = pi
 	Complex ZlmUp, ZlmIn;
-	int samplePos = 0.;
-	double qth = 0.;
-	double qr = 0.;
+	int samplePos = 0;
 	Complex sumUpTerm, sumInTerm;
 	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, rad, polAt(samplePos));
 	sumUp.add(0.5*sumUpTerm);
 	sumIn.add(0.5*sumInTerm);
 
 	samplePos = halfSample*sampleDiff;
-	qth = M_PI;
 	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, rad, polAt(samplePos));
 	sumUp.add(signK*0.5*sumUpTerm);
 	sumIn.add(signK*0.5*sumInTerm);
 
 	for(int i = 1; i < halfSample; i++){
 		samplePos = i*sampleDiff;
-		qth = samplePos*deltaQ;
 		// first sum performs integration between qr = 0 to qr = pi
 		integ.radialTP(sumInTerm, sumUpTerm, mc, rad, polAt(samplePos));
 		sumUp.add(sumUpTerm);
@@ -1116,7 +1086,6 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 		}
 		for(int i = 0; i < halfSample; i++){
 			samplePos = i*sampleDiff + sampleDiff/2;
-			qth = samplePos*deltaQ;
 			integ.radialTP(sumInTerm, sumUpTerm, mc, rad, polAt(samplePos));
 			sumUp.add(sumUpTerm);
 			sumIn.add(sumInTerm);
