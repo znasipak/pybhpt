@@ -207,6 +207,7 @@ struct SrcModeConst {
 
 struct SrcRadial {
 	double rp, rp2;                       // rp, rp^2
+	double jac;                           // radial change-of-variable weight dq_r/dphase (1 for Mino)
 	Complex er;                           // exp(I*rphase)
 	double Kdelta, KpOverDelta, deltaPOverDelta;
 	double halfInvDelta2, invSqrt2delta;  // 0.5/delta^2, 1/(sqrt2*delta)
@@ -218,6 +219,7 @@ struct SrcRadial {
 
 struct SrcPolar {
 	double z, z2;                         // cos(theta), cos^2(theta)
+	double jac;                           // polar change-of-variable weight dq_theta/dphase (1 for Mino)
 	Complex eth;                          // exp(I*thphase)
 	double Slm, aSth;                     // S, a*sin(theta)
 	Complex thbracket;                    // I*sin(theta)*(a*En - Lz/sin^2(theta))
@@ -229,9 +231,10 @@ struct SrcPolar {
 };
 
 static void fill_src_radial(SrcRadial &r, const SrcModeConst &mc, int n,
-		double rp, double tR, double phiR, double qr,
+		double rp, double tR, double phiR, double qr, double jac,
 		Complex R0, Complex Rp0, Complex Rpp0, Complex R1, Complex Rp1, Complex Rpp1){
 	double a = mc.a;
+	r.jac = jac;
 	double varpi = rp*rp + a*a;
 	double delta = varpi - 2.*rp;
 	double deltaP = 2.*(rp - 1.);
@@ -265,10 +268,11 @@ static void fill_src_radial(SrcRadial &r, const SrcModeConst &mc, int n,
 }
 
 static void fill_src_polar(SrcPolar &p, const SrcModeConst &mc, int k,
-		double thp, double tTh, double phiTh, double qth,
+		double thp, double tTh, double phiTh, double qth, double jac,
 		double Slm, double SlmP, double SlmPP){
 	double a = mc.a, omega = mc.omega;
 	int m = mc.m;
+	p.jac = jac;
 	double cthp = cos(thp), sthp = sin(thp);
 	double s2 = sthp*sthp;
 	p.z = cthp;
@@ -353,7 +357,7 @@ static void tabMinus2(Complex &in, Complex &up, const SrcModeConst &mc, const Sr
 	Complex pR = A0*Cnn + A1*Cnmbar + A2*Cmbarmbar;
 	Complex pRp = A3*Cnmbar + A4*Cmbarmbar;
 	Complex pRpp = A5*Cmbarmbar;
-	combine_src_solutions(in, up, 0.25, r, pR, pRp, pRpp);
+	combine_src_solutions(in, up, 0.25*r.jac*p.jac, r, pR, pRp, pRpp);
 }
 
 static void tabMinus2PolarTP(Complex &in, Complex &up, const SrcModeConst &mc, const SrcRadial &r, const SrcPolar &p){
@@ -374,7 +378,7 @@ static void tabMinus2PolarTP(Complex &in, Complex &up, const SrcModeConst &mc, c
 	Complex pR = A0*Cnn + A1*Cnmbar + A2*Cmbarmbar;
 	Complex pRp = A3*Cnmbar + A4*Cmbarmbar;
 	Complex pRpp = A5*Cmbarmbar;
-	combine_src_solutions(in, up, 0.5, r, pR, pRp, pRpp);
+	combine_src_solutions(in, up, 0.5*r.jac*p.jac, r, pR, pRp, pRpp);
 }
 
 static void tabMinus2RadialTP(Complex &in, Complex &up, const SrcModeConst &mc, const SrcRadial &r, const SrcPolar &p){
@@ -396,7 +400,7 @@ static void tabMinus2RadialTP(Complex &in, Complex &up, const SrcModeConst &mc, 
 	Complex pR = A0*Cnn + A1*Cnmbar + A2*Cmbarmbar;
 	Complex pRp = A3*Cnmbar + A4*Cmbarmbar;
 	Complex pRpp = A5*Cmbarmbar;
-	combine_src_solutions(in, up, 0.5, r, pR, pRp, pRpp);
+	combine_src_solutions(in, up, 0.5*r.jac*p.jac, r, pR, pRp, pRpp);
 }
 
 static void tabMinus2RadialPolarTP(Complex &in, Complex &up, const SrcModeConst &mc, const SrcRadial &r, const SrcPolar &p){
@@ -415,7 +419,7 @@ static void tabMinus2RadialPolarTP(Complex &in, Complex &up, const SrcModeConst 
 	Complex pR = A0*Cnn + A1*Cnmbar + A2*Cmbarmbar;
 	Complex pRp = A3*Cnmbar + A4*Cmbarmbar;
 	Complex pRpp = A5*Cmbarmbar;
-	combine_src_solutions(in, up, 1.0, r, pR, pRp, pRpp);
+	combine_src_solutions(in, up, 1.0*r.jac*p.jac, r, pR, pRp, pRpp);
 }
 
 // --- s = +2 table integrands (r.Rin... already delta^2-weighted) ---
@@ -437,7 +441,7 @@ static void tabPlus2(Complex &in, Complex &up, const SrcModeConst &mc, const Src
 	Complex pR = A0*Cll + A1*Clm + A2*Cmm;
 	Complex pRp = A3*Clm + A4*Cmm;
 	Complex pRpp = A5*Cmm;
-	combine_src_solutions(in, up, 0.25, r, pR, pRp, pRpp);
+	combine_src_solutions(in, up, 0.25*r.jac*p.jac, r, pR, pRp, pRpp);
 }
 
 static void tabPlus2PolarTP(Complex &in, Complex &up, const SrcModeConst &mc, const SrcRadial &r, const SrcPolar &p){
@@ -455,7 +459,7 @@ static void tabPlus2PolarTP(Complex &in, Complex &up, const SrcModeConst &mc, co
 	Complex pR = A0*Cll + A1*Clm + A2*Cmm;
 	Complex pRp = A3*Clm + A4*Cmm;
 	Complex pRpp = A5*Cmm;
-	combine_src_solutions(in, up, 0.5, r, pR, pRp, pRpp);
+	combine_src_solutions(in, up, 0.5*r.jac*p.jac, r, pR, pRp, pRpp);
 }
 
 static void tabPlus2RadialTP(Complex &in, Complex &up, const SrcModeConst &mc, const SrcRadial &r, const SrcPolar &p){
@@ -475,7 +479,7 @@ static void tabPlus2RadialTP(Complex &in, Complex &up, const SrcModeConst &mc, c
 	Complex pR = A0*Cll + A1*Clm + A2*Cmm;
 	Complex pRp = A3*Clm + A4*Cmm;
 	Complex pRpp = A5*Cmm;
-	combine_src_solutions(in, up, 0.5, r, pR, pRp, pRpp);
+	combine_src_solutions(in, up, 0.5*r.jac*p.jac, r, pR, pRp, pRpp);
 }
 
 static void tabPlus2RadialPolarTP(Complex &in, Complex &up, const SrcModeConst &mc, const SrcRadial &r, const SrcPolar &p){
@@ -492,7 +496,7 @@ static void tabPlus2RadialPolarTP(Complex &in, Complex &up, const SrcModeConst &
 	Complex pR = A0*Cll + A1*Clm + A2*Cmm;
 	Complex pRp = A3*Clm + A4*Cmm;
 	Complex pRpp = A5*Cmm;
-	combine_src_solutions(in, up, 1.0, r, pR, pRp, pRpp);
+	combine_src_solutions(in, up, 1.0*r.jac*p.jac, r, pR, pRp, pRpp);
 }
 
 // dispatch tables: index by (spin==2), giving {generic, polarTP, radialTP, radialPolarTP}
@@ -572,13 +576,20 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	SrcModeConst mc = { m, s, geoConstants.a, geoConstants.En, geoConstants.Lz, geoConstants.Q,
 		(m*geoConstants.upsilonPhi + k*geoConstants.upsilonTheta + n*geoConstants.upsilonR)/geoConstants.upsilonT };
 	TabIntegrandSet integ = tab_integrands(s);
+	// Honor the trajectory's phase parametrization: use its stored Mino phase q_r/q_theta and
+	// change-of-variable weights when present (sized to the half-range grid), else fall back to
+	// the uniform-Mino grid (q = index*delta, jac = 1).
+	bool useTrajR = (int(traj.qr.size()) == radialLength) && (int(traj.jacR.size()) == radialLength);
+	bool useTrajTh = (int(traj.qth.size()) == polarLength) && (int(traj.jacTh.size()) == polarLength);
 	std::vector<SrcRadial> radTable(radialLength);
 	std::vector<char> radFilled(radialLength, 0);
 	std::vector<SrcPolar> polTable(polarLength);
 	std::vector<char> polFilled(polarLength, 0);
 	auto radAt = [&](int pos) -> const SrcRadial& {
 		if(!radFilled[pos]){
-			fill_src_radial(radTable[pos], mc, n, rp[pos], tR[pos], phiR[pos], double(pos)*deltaQR,
+			double phaseR = useTrajR ? traj.qr[pos] : double(pos)*deltaQR;
+			double jacR = useTrajR ? traj.jacR[pos] : 1.;
+			fill_src_radial(radTable[pos], mc, n, rp[pos], tR[pos], phiR[pos], phaseR, jacR,
 				R0[pos], Rp0[pos], Rpp0[pos], R1[pos], Rp1[pos], Rpp1[pos]);
 			radFilled[pos] = 1;
 		}
@@ -586,7 +597,9 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	};
 	auto polAt = [&](int pos) -> const SrcPolar& {
 		if(!polFilled[pos]){
-			fill_src_polar(polTable[pos], mc, k, thp[pos], tTh[pos], phiTh[pos], double(pos)*deltaQTh,
+			double phaseTh = useTrajTh ? traj.qth[pos] : double(pos)*deltaQTh;
+			double jacTh = useTrajTh ? traj.jacTh[pos] : 1.;
+			fill_src_polar(polTable[pos], mc, k, thp[pos], tTh[pos], phiTh[pos], phaseTh, jacTh,
 				S[pos], Sp[pos], Spp[pos]);
 			polFilled[pos] = 1;
 		}
@@ -900,13 +913,16 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 	SrcModeConst mc = { m, s, geoConstants.a, geoConstants.En, geoConstants.Lz, geoConstants.Q,
 		(m*geoConstants.upsilonPhi + n*geoConstants.upsilonR)/geoConstants.upsilonT };
 	TabIntegrandSet integ = tab_integrands(s);
+	bool useTrajR = (int(traj.qr.size()) == radialLength) && (int(traj.jacR.size()) == radialLength);
 	SrcPolar pol;
-	fill_src_polar(pol, mc, 0, thp, 0., 0., 0., S, Sp, Spp);
+	fill_src_polar(pol, mc, 0, thp, 0., 0., 0., 1., S, Sp, Spp);
 	std::vector<SrcRadial> radTable(radialLength);
 	std::vector<char> radFilled(radialLength, 0);
 	auto radAt = [&](int pos) -> const SrcRadial& {
 		if(!radFilled[pos]){
-			fill_src_radial(radTable[pos], mc, n, rp[pos], tR[pos], phiR[pos], double(pos)*deltaQ,
+			double phaseR = useTrajR ? traj.qr[pos] : double(pos)*deltaQ;
+			double jacR = useTrajR ? traj.jacR[pos] : 1.;
+			fill_src_radial(radTable[pos], mc, n, rp[pos], tR[pos], phiR[pos], phaseR, jacR,
 				R0[pos], Rp0[pos], Rpp0[pos], R1[pos], Rp1[pos], Rpp1[pos]);
 			radFilled[pos] = 1;
 		}
@@ -1037,13 +1053,16 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 	SrcModeConst mc = { m, s, geoConstants.a, geoConstants.En, geoConstants.Lz, geoConstants.Q,
 		(m*geoConstants.upsilonPhi + k*geoConstants.upsilonTheta)/geoConstants.upsilonT };
 	TabIntegrandSet integ = tab_integrands(s);
+	bool useTrajTh = (int(traj.qth.size()) == polarLength) && (int(traj.jacTh.size()) == polarLength);
 	SrcRadial rad;
-	fill_src_radial(rad, mc, 0, rp, 0., 0., 0., R0, Rp0, Rpp0, R1, Rp1, Rpp1);
+	fill_src_radial(rad, mc, 0, rp, 0., 0., 0., 1., R0, Rp0, Rpp0, R1, Rp1, Rpp1);
 	std::vector<SrcPolar> polTable(polarLength);
 	std::vector<char> polFilled(polarLength, 0);
 	auto polAt = [&](int pos) -> const SrcPolar& {
 		if(!polFilled[pos]){
-			fill_src_polar(polTable[pos], mc, k, thp[pos], tTh[pos], phiTh[pos], double(pos)*deltaQ,
+			double phaseTh = useTrajTh ? traj.qth[pos] : double(pos)*deltaQ;
+			double jacTh = useTrajTh ? traj.jacTh[pos] : 1.;
+			fill_src_polar(polTable[pos], mc, k, thp[pos], tTh[pos], phiTh[pos], phaseTh, jacTh,
 				S[pos], Sp[pos], Spp[pos]);
 			polFilled[pos] = 1;
 		}
@@ -1155,8 +1174,8 @@ TeukolskyAmplitudes teukolsky_amplitude_circeq(int s, int L, int m, GeodesicTraj
 	TabIntegrandSet integ = tab_integrands(s);
 	SrcRadial rad;
 	SrcPolar pol;
-	fill_src_radial(rad, mc, 0, rp, 0., 0., 0., R0, Rp0, Rpp0, R1, Rp1, Rpp1);
-	fill_src_polar(pol, mc, 0, thp, 0., 0., 0., S, Sp, Spp);
+	fill_src_radial(rad, mc, 0, rp, 0., 0., 0., 1., R0, Rp0, Rpp0, R1, Rp1, Rpp1);
+	fill_src_polar(pol, mc, 0, thp, 0., 0., 0., 1., S, Sp, Spp);
 
 	Complex ZlmUp, ZlmIn;
 	integ.radialPolarTP(ZlmIn, ZlmUp, mc, rad, pol);
@@ -1849,27 +1868,34 @@ int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int
 	int sampleDiff = halfSampleMax/halfSample;
 	double deltaQ = M_PI/double(halfSampleMax);
 
+	// Honor the trajectory's radial phase parametrization: use its stored Mino phase q_r for the
+	// integrand phase and its change-of-variable weight jacR for each sample, else fall back to
+	// the uniform-Mino grid (q = index*delta, jac = 1).
+	bool useTraj = (int(traj.qr.size()) == argLength) && (int(traj.jacR.size()) == argLength);
+	auto phaseAt = [&](int pos){ return useTraj ? traj.qr[pos] : double(pos)*deltaQ; };
+	auto jacAt = [&](int pos){ return useTraj ? traj.jacR[pos] : 1.; };
+
 	Complex sumTerm = 0.;
 	SummationHelper sumHelper;
 	sumHelper.setBasePrecision(5.e-14);   // solution-input noise floor, as in the |s|=2 path
 	double freq = teuk.getModeFrequency();
 
 	int samplePos = 0;
-	double q = samplePos*deltaQ;
+	double q = phaseAt(samplePos);
 	integrand(sumTerm, m, n, freq, traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
-	sumHelper.add(sumTerm);
+	sumHelper.add(jacAt(samplePos)*sumTerm);
 
 	samplePos = halfSample*sampleDiff;
-	q = samplePos*deltaQ;
+	q = phaseAt(samplePos);
 	integrand(sumTerm, m, n, freq, traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
-	sumHelper.add(sumTerm);
+	sumHelper.add(jacAt(samplePos)*sumTerm);
 
 	for(int i = 1; i < halfSample; i++){
 		samplePos = i*sampleDiff;
-		q = samplePos*deltaQ;
+		q = phaseAt(samplePos);
 
 		integrand(sumTerm, m, n, freq, traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
-		sumHelper.add(2.*sumTerm);
+		sumHelper.add(2.*jacAt(samplePos)*sumTerm);
 	}
 
 	II = sumHelper.getSum()/double(2*halfSample);
@@ -1878,10 +1904,10 @@ int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int
 	while(halfSample < halfSampleMax && !integrand_convergence(ICompare, II, errorTolerance, 10.*sumHelper.getPrecision())){
 		for(int i = 0; i < halfSample; i++){
 			samplePos = i*sampleDiff + sampleDiff/2;
-			q = double(samplePos)*deltaQ;
+			q = phaseAt(samplePos);
 
 			integrand(sumTerm, m, n, freq, traj.tR[samplePos], teuk.getRadialPoints(samplePos), traj.phiR[samplePos], q, teuk.getSolution(bc, samplePos));
-			sumHelper.add(2.*sumTerm);
+			sumHelper.add(2.*jacAt(samplePos)*sumTerm);
 		}
 		halfSample *= 2;
 		sampleDiff /= 2;
@@ -1926,6 +1952,13 @@ int polar_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int,
 	int sampleDiff = halfSampleMax/halfSample;
 	double deltaQ = M_PI/double(halfSampleMax);
 
+	// Honor the trajectory's polar phase parametrization: use its stored Mino phase q_theta for
+	// the integrand phase and its change-of-variable weight jacTh for each sample, else fall back
+	// to the uniform-Mino grid (q = index*delta, jac = 1).
+	bool useTraj = (int(traj.qth.size()) == argLength) && (int(traj.jacTh.size()) == argLength);
+	auto phaseAt = [&](int pos){ return useTraj ? traj.qth[pos] : double(pos)*deltaQ; };
+	auto jacAt = [&](int pos){ return useTraj ? traj.jacTh[pos] : 1.; };
+
 	Complex sumTerm = 0.;
 	SummationHelper sumHelper;
 	sumHelper.setBasePrecision(5.e-14);   // solution-input noise floor, as in the |s|=2 path
@@ -1933,21 +1966,21 @@ int polar_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int,
 	double a = geoConstants.a;
 
 	int samplePos = 0;
-	double q = samplePos*deltaQ;
+	double q = phaseAt(samplePos);
 	integrand(sumTerm, m, k, freq, traj.tTheta[samplePos], a*cos(swsh.getArguments(samplePos)), traj.phiTheta[samplePos], q, swsh.getSolution(samplePos));
-	sumHelper.add(sumTerm);
+	sumHelper.add(jacAt(samplePos)*sumTerm);
 
 	samplePos = halfSample*sampleDiff;
-	q = samplePos*deltaQ;
+	q = phaseAt(samplePos);
 	integrand(sumTerm, m, k, freq, traj.tTheta[samplePos], a*cos(swsh.getArguments(samplePos)), traj.phiTheta[samplePos], q, swsh.getSolution(samplePos));
-	sumHelper.add(sumTerm);
+	sumHelper.add(jacAt(samplePos)*sumTerm);
 
 	for(int i = 1; i < halfSample; i++){
 		samplePos = i*sampleDiff;
-		q = samplePos*deltaQ;
+		q = phaseAt(samplePos);
 
 		integrand(sumTerm, m, k, freq, traj.tTheta[samplePos], a*cos(swsh.getArguments(samplePos)), traj.phiTheta[samplePos], q, swsh.getSolution(samplePos));
-		sumHelper.add(2.*sumTerm);
+		sumHelper.add(2.*jacAt(samplePos)*sumTerm);
 	}
 
 	II = sumHelper.getSum()/double(2*halfSample);
@@ -1956,10 +1989,10 @@ int polar_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int,
 	while(halfSample < halfSampleMax && !integrand_convergence(ICompare, II, errorTolerance, 10.*sumHelper.getPrecision())){
 		for(int i = 0; i < halfSample; i++){
 			samplePos = i*sampleDiff + sampleDiff/2;
-			q = double(samplePos)*deltaQ;
+			q = phaseAt(samplePos);
 
 			integrand(sumTerm, m, k, freq, traj.tTheta[samplePos], a*cos(swsh.getArguments(samplePos)), traj.phiTheta[samplePos], q, swsh.getSolution(samplePos));
-			sumHelper.add(2.*sumTerm);
+			sumHelper.add(2.*jacAt(samplePos)*sumTerm);
 		}
 		halfSample *= 2;
 		sampleDiff /= 2;

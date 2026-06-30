@@ -7,10 +7,14 @@ cimport numpy as np
 from libcpp.vector cimport vector
 
 cdef extern from "geo.hpp":
+    cdef enum class GeodesicParametrization:
+        Mino
+        Darwin
+
     cdef cppclass GeodesicTrajectory:
         GeodesicTrajectory()
         GeodesicTrajectory(vector[double] tR, vector[double] tTheta, vector[double] r, vector[double] theta, vector[double] phiR, vector[double] phiTheta)
-        vector[double] tR, tTheta, r, theta, phiR, phiTheta
+        vector[double] tR, tTheta, r, theta, phiR, phiTheta, qr, qth, jacR, jacTh
 
     cdef cppclass GeodesicConstants:
         GeodesicConstants()
@@ -25,7 +29,7 @@ cdef extern from "geo.hpp":
 
     cpdef cppclass GeodesicSource:
         # GeodesicSource() except +
-        GeodesicSource(double a, double p, double e, double x, int Nsample) except +
+        GeodesicSource(double a, double p, double e, double x, int Nsample, GeodesicParametrization param) except +
         # ~GeodesicSource()
 
         int getOrbitalSampleNumber()
@@ -48,6 +52,10 @@ cdef extern from "geo.hpp":
         vector[double] getRadialPosition()
         vector[double] getPolarPosition()
         vector[double] getAzimuthalAccumulation(int j)
+        vector[double] getRadialPhase()
+        vector[double] getPolarPhase()
+        vector[double] getRadialJacobian()
+        vector[double] getPolarJacobian()
 
         double getTimeAccumulation(int j, int pos)
         double getRadialPosition(int pos)
@@ -82,7 +90,7 @@ cdef extern from "geo.hpp":
         GeodesicTrajectory getTrajectory()
         GeodesicTrajectory getCoefficients()
 
-    GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int n)
+    GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int n, GeodesicParametrization param)
     void kerr_geo_kepler_parameters(double &p, double &e, double &x, double &a, double &En, double &Lz, double &Qc)
     void kerr_geo_kepler_parameters(int n, double* p, double* e, double* x, const double* a, const double* En, const double* Lz, const double* Qc)
     void kerr_geo_orbital_constants(double &En, double &Lz, double &Qc, double &a, double &p, double &e, double &x)
@@ -134,10 +142,18 @@ def _kerr_geo_V32(double a, double En, double Lz, double Q, double theta):
 cdef class KerrGeodesic:
     cdef GeodesicSource *geocpp
     cdef int nsamplescpp
+    cdef int parametrizationcpp
 
-    def __init__(self, double a, double p, double e, double x, int nsamples = 2**8):
-        self.geocpp = new GeodesicSource(a, p, e, x, nsamples)
+    def __init__(self, double a, double p, double e, double x, int nsamples = 2**8, int parametrization = 0):
+        # parametrization: 0 = Mino (uniform q_r/q_theta), 1 = Darwin (uniform psi/chi)
+        cdef GeodesicParametrization param
+        if parametrization == 1:
+            param = GeodesicParametrization.Darwin
+        else:
+            param = GeodesicParametrization.Mino
+        self.geocpp = new GeodesicSource(a, p, e, x, nsamples, param)
         self.nsamplescpp = nsamples
+        self.parametrizationcpp = parametrization
 
     def __dealloc__(self):
         del self.geocpp
@@ -145,6 +161,10 @@ cdef class KerrGeodesic:
     @property
     def nsamples(self):
         return self.nsamplescpp
+
+    @property
+    def parametrization(self):
+        return self.parametrizationcpp
 
     @property
     def blackholespin(self):
@@ -415,6 +435,38 @@ cdef class KerrGeodesic:
     
     def get_azimuthal_accumulation(self, int j):
         cdef vector[double] deltaX_cpp = self.geocpp.getAzimuthalAccumulation(j)
+        cdef int n = deltaX_cpp.size()
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+        for i in range(n):
+            deltaX[i] = deltaX_cpp[i]
+        return deltaX
+
+    def get_radial_phase(self):
+        cdef vector[double] deltaX_cpp = self.geocpp.getRadialPhase()
+        cdef int n = deltaX_cpp.size()
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+        for i in range(n):
+            deltaX[i] = deltaX_cpp[i]
+        return deltaX
+
+    def get_polar_phase(self):
+        cdef vector[double] deltaX_cpp = self.geocpp.getPolarPhase()
+        cdef int n = deltaX_cpp.size()
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+        for i in range(n):
+            deltaX[i] = deltaX_cpp[i]
+        return deltaX
+
+    def get_radial_jacobian(self):
+        cdef vector[double] deltaX_cpp = self.geocpp.getRadialJacobian()
+        cdef int n = deltaX_cpp.size()
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
+        for i in range(n):
+            deltaX[i] = deltaX_cpp[i]
+        return deltaX
+
+    def get_polar_jacobian(self):
+        cdef vector[double] deltaX_cpp = self.geocpp.getPolarJacobian()
         cdef int n = deltaX_cpp.size()
         cdef np.ndarray[ndim=1, dtype=np.float64_t] deltaX = np.empty(n, dtype = np.float64)
         for i in range(n):

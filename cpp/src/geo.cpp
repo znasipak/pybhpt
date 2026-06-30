@@ -5,7 +5,19 @@
 #define FOURIER_EPS 1.e-13
 #define FREQ_EPS 1.e-14
 
+// Phase-grid / trajectory helpers used to support non-Mino phase parametrizations
+// (defined near kerr_trajectory below).
+static void build_phase_grids(Vector &qr, Vector &qth, Vector &jacR, Vector &jacTh,
+	GeodesicParametrization param, int Nsample, double a, double p, double e, double x,
+	double En, double Lz, double Qc, double r3, double r4, double z1, double z2,
+	double upR, double upTh, Vector &fourier_radial, Vector &fourier_polar);
+static void kerr_trajectory_from_phase(Vector& tR, Vector& tTh, Vector& rp, Vector& thetap,
+	Vector& phiR, Vector& phiTh, const Vector& qr, const Vector& qth,
+	double p, double e, double x, Vector fourier_tr, Vector fourier_tz, Vector fourier_psi,
+	Vector fourier_chi, Vector fourier_phir, Vector fourier_phiz);
+
 GeodesicTrajectory::GeodesicTrajectory(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta): tR(tR), tTheta(tTheta), r(r), theta(theta), phiR(phiR), phiTheta(phiTheta) {}
+GeodesicTrajectory::GeodesicTrajectory(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta, Vector qr, Vector qth, Vector jacR, Vector jacTh): tR(tR), tTheta(tTheta), r(r), theta(theta), phiR(phiR), phiTheta(phiTheta), qr(qr), qth(qth), jacR(jacR), jacTh(jacTh) {}
 double GeodesicTrajectory::getTimeAccumulationRadial(int pos){ return tR[pos]; }
 double GeodesicTrajectory::getTimeAccumulationPolar(int pos){ return tTheta[pos]; }
 double GeodesicTrajectory::getTimeAccumulation(int j, int pos){
@@ -48,7 +60,7 @@ double GeodesicConstants::getTimeFrequency(int m, int k, int n){
 	return (m*upsilonPhi + k*upsilonTheta + n*upsilonR)/upsilonT;
 }
 
-GeodesicSource::GeodesicSource(double a, double p, double e, double x, int Nsample){
+GeodesicSource::GeodesicSource(double a, double p, double e, double x, int Nsample, GeodesicParametrization param){
 	double En = 0., Lz = 0., Qc = 0.;
 	double r1 = 0., r2 = 0., r3 = 0., r4 = 0.;
 	double z1 = 0., z2 = 0.;
@@ -168,10 +180,19 @@ GeodesicSource::GeodesicSource(double a, double p, double e, double x, int Nsamp
 	Vector rp(halfSample);
 	Vector thetap(halfSample);
 
-	kerr_trajectory(tR, tTh, rp, thetap, phiR, phiTh, p, e, x, fourier_tr, fourier_tz, fourier_psi, fourier_chi, fourier_phir, fourier_phiz);
+	// Sampling-grid metadata: qr/qth are the Mino phases at each sample, jacR/jacTh the
+	// change-of-variable weights dq/dphase. For Mino these are the uniform index grid and
+	// unit weights; for Darwin they encode the relativistic-anomaly sampling.
+	Vector qr, qth, jacR, jacTh;
+	build_phase_grids(qr, qth, jacR, jacTh, param, Nsample, a, p, e, x, En, Lz, Qc, r3, r4, z1, z2, upR, upTh, fourier_radial, fourier_polar);
+	if(param == GeodesicParametrization::Mino){
+		kerr_trajectory(tR, tTh, rp, thetap, phiR, phiTh, p, e, x, fourier_tr, fourier_tz, fourier_psi, fourier_chi, fourier_phir, fourier_phiz);
+	}else{
+		kerr_trajectory_from_phase(tR, tTh, rp, thetap, phiR, phiTh, qr, qth, p, e, x, fourier_tr, fourier_tz, fourier_psi, fourier_chi, fourier_phir, fourier_phiz);
+	}
 
 	_geoConstants = GeodesicConstants(a, p, e, x, En, Lz, Qc, r1, r2, r3, r4, z1, z2, upT, upR, upTh, upPh, cR, cTh, cPh);
-	_geoTrajectory = GeodesicTrajectory(tR, tTh, rp, thetap, phiR, phiTh);
+	_geoTrajectory = GeodesicTrajectory(tR, tTh, rp, thetap, phiR, phiTh, qr, qth, jacR, jacTh);
 	_geoCoefficients = GeodesicTrajectory(fourier_tr, fourier_tz, fourier_psi, fourier_chi, fourier_phir, fourier_phiz);
 }
 int GeodesicSource::getOrbitalSampleNumber(){ return 2*(_geoTrajectory.tR.size() - 1); }
@@ -287,6 +308,10 @@ Vector GeodesicSource::getTimeAccumulation(int j){
 }
 Vector GeodesicSource::getRadialPosition(){ return _geoTrajectory.r; }
 Vector GeodesicSource::getPolarPosition(){ return _geoTrajectory.theta; }
+Vector GeodesicSource::getRadialPhase(){ return _geoTrajectory.qr; }
+Vector GeodesicSource::getPolarPhase(){ return _geoTrajectory.qth; }
+Vector GeodesicSource::getRadialJacobian(){ return _geoTrajectory.jacR; }
+Vector GeodesicSource::getPolarJacobian(){ return _geoTrajectory.jacTh; }
 Vector GeodesicSource::getAzimuthalAccumulation(int j){
 	switch(j){
 		case 1:
@@ -560,6 +585,18 @@ void GeodesicSource::setTrajectory(Vector tR, Vector tTheta, Vector r, Vector th
 	_geoTrajectory.theta = theta;
 	_geoTrajectory.phiR = phiR;
 	_geoTrajectory.phiTheta = phiTheta;
+}
+void GeodesicSource::setTrajectory(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta, Vector qr, Vector qth, Vector jacR, Vector jacTh){
+	_geoTrajectory.tR = tR;
+	_geoTrajectory.tTheta = tTheta;
+	_geoTrajectory.r = r;
+	_geoTrajectory.theta = theta;
+	_geoTrajectory.phiR = phiR;
+	_geoTrajectory.phiTheta = phiTheta;
+	_geoTrajectory.qr = qr;
+	_geoTrajectory.qth = qth;
+	_geoTrajectory.jacR = jacR;
+	_geoTrajectory.jacTh = jacTh;
 }
 void GeodesicSource::setCoefficients(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta){
 	_geoCoefficients.tR = tR;
@@ -2101,6 +2138,81 @@ double phip_of_angle(double angle, Vector &fourier){
 	return integrated_dct_sum(angle, fourier);
 }
 
+// Build the half-range (i = 0..Nsample/2) Mino-phase sampling grid (qr, qth) and the
+// per-sample change-of-variable weights jacR = dq_r/dphase, jacTh = dq_theta/dphase.
+//
+// Mino: the sampling phase IS the Mino phase, so qr = qth = 2*pi*i/Nsample and the
+// Jacobians are unity -- byte-for-byte the historical grid.
+//
+// Darwin: the sampling phase is the relativistic anomaly (psi radial, chi polar). The
+// Mino phase is reconstructed from the Kepler-phase Fourier series via mino_of_kepler_phase
+// (q = Upsilon * lambda(anomaly)), and the Jacobian is Upsilon * dmino/d(anomaly). That
+// weight is mean-one over a full period (its phase average is Upsilon * Lambda / 2pi = 1),
+// so multiplying it into the periodic-trapezoidal average leaves the integral value
+// unchanged while redistributing the sample density. Degenerate directions carry no
+// libration (e = 0 radial, |x| = 1 polar) and stay on the trivial unit grid.
+static void build_phase_grids(Vector &qr, Vector &qth, Vector &jacR, Vector &jacTh,
+		GeodesicParametrization param, int Nsample, double a, double p, double e, double x,
+		double En, double Lz, double Qc, double r3, double r4, double z1, double z2,
+		double upR, double upTh, Vector &fourier_radial, Vector &fourier_polar){
+	int halfSample = Nsample/2 + 1;
+	qr.resize(halfSample); qth.resize(halfSample);
+	jacR.resize(halfSample); jacTh.resize(halfSample);
+	bool darwinR = (param == GeodesicParametrization::Darwin) && (e != 0.) && (fourier_radial.size() > 0);
+	bool darwinTh = (param == GeodesicParametrization::Darwin) && (std::abs(x) != 1.) && (fourier_polar.size() > 0);
+	for(int i = 0; i < halfSample; i++){
+		double phase = 2.*M_PI*double(i)/double(Nsample);
+		if(darwinR){
+			qr[i] = upR*mino_of_kepler_phase(phase, fourier_radial);
+			jacR[i] = upR*dmino_dpsi(phase, a, p, e, En, r3, r4);
+		}else{
+			qr[i] = phase;
+			jacR[i] = 1.;
+		}
+		if(darwinTh){
+			qth[i] = upTh*mino_of_kepler_phase(phase, fourier_polar);
+			jacTh[i] = (std::abs(a) > 0.) ? upTh*dmino_dchi(phase, a, En, z1, z2) : upTh*dmino_dchi_schw(Lz, Qc);
+		}else{
+			qth[i] = phase;
+			jacTh[i] = 1.;
+		}
+	}
+}
+
+// Build the trajectory samples at an explicit Mino-phase grid (qr, qth). With
+// qr[i] = qth[i] = 2*pi*i/Nsample this reproduces kerr_trajectory; with the Darwin grids
+// it evaluates the same accumulation/position Fourier series at the reconstructed Mino
+// phase so the samples land on a uniform relativistic-anomaly grid. The degenerate-orbit
+// branches mirror kerr_trajectory (no radial libration for e = 0, no polar for |x| = 1).
+static void kerr_trajectory_from_phase(Vector& tR, Vector& tTh, Vector& rp, Vector& thetap,
+		Vector& phiR, Vector& phiTh, const Vector& qr, const Vector& qth,
+		double p, double e, double x, Vector fourier_tr, Vector fourier_tz, Vector fourier_psi,
+		Vector fourier_chi, Vector fourier_phir, Vector fourier_phiz){
+	int halfSample = tR.size();
+	bool radial = (e != 0.);
+	bool polar = (std::abs(x) != 1.);
+	for(int i = 0; i < halfSample; i++){
+		if(radial){
+			tR[i] = tp_of_angle(qr[i], fourier_tr);
+			phiR[i] = phip_of_angle(qr[i], fourier_phir);
+			rp[i] = rp_of_angle(qr[i], p, e, fourier_psi);
+		}else{
+			tR[i] = 0.;
+			phiR[i] = 0.;
+			rp[i] = p;
+		}
+		if(polar){
+			tTh[i] = tp_of_angle(qth[i], fourier_tz);
+			phiTh[i] = phip_of_angle(qth[i], fourier_phiz);
+			thetap[i] = acos(zp_of_angle(qth[i], x, fourier_chi));
+		}else{
+			tTh[i] = 0.;
+			phiTh[i] = 0.;
+			thetap[i] = 0.5*M_PI;
+		}
+	}
+}
+
 void kerr_trajectory(Vector& tR, Vector& tTh, Vector& rp, Vector& thetap, Vector& phiR, Vector& phiTh, double p, double e, double x, Vector fourier_tr, Vector fourier_tz, Vector fourier_psi, Vector fourier_chi, Vector fourier_phir, Vector fourier_phiz){
 	int halfSample = tR.size();
 	int Nsample = 2*(halfSample - 1);
@@ -2185,7 +2297,7 @@ void kerr_trajectory(Vector& tR, Vector& tTh, Vector& rp, Vector& thetap, Vector
 // 	std::cout << "phip(la = "<<la<<") = "<< phip <<"\n";
 // }
 
-GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsample = pow(2, 9)){
+GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsample, GeodesicParametrization param){
 	double En = 0., Lz = 0., Qc = 0.;
 	double r1 = 0., r2 = 0., r3 = 0., r4 = 0.;
 	double z1 = 0., z2 = 0.;
@@ -2260,11 +2372,17 @@ GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsampl
 	Vector rp(halfSample);
 	Vector thetap(halfSample);
 
-	kerr_trajectory(tR, tTh, rp, thetap, phiR, phiTh, p, e, x, fourier_tr, fourier_tz, fourier_psi, fourier_chi, fourier_phir, fourier_phiz);
+	Vector qr, qth, jacR, jacTh;
+	build_phase_grids(qr, qth, jacR, jacTh, param, Nsample, a, p, e, x, En, Lz, Qc, r3, r4, z1, z2, upR, upTh, fourier_radial, fourier_polar);
+	if(param == GeodesicParametrization::Mino){
+		kerr_trajectory(tR, tTh, rp, thetap, phiR, phiTh, p, e, x, fourier_tr, fourier_tz, fourier_psi, fourier_chi, fourier_phir, fourier_phiz);
+	}else{
+		kerr_trajectory_from_phase(tR, tTh, rp, thetap, phiR, phiTh, qr, qth, p, e, x, fourier_tr, fourier_tz, fourier_psi, fourier_chi, fourier_phir, fourier_phiz);
+	}
 
 	GeodesicSource geo;
 	geo.setConstants(a, p, e, x, En, Lz, Qc, r1, r2, r3, r4, z1, z2, upT, upR, upTh, upPh, cR, cTh, cPh);
-	geo.setTrajectory(tR, tTh, rp, thetap, phiR, phiTh);
+	geo.setTrajectory(tR, tTh, rp, thetap, phiR, phiTh, qr, qth, jacR, jacTh);
 	geo.setCoefficients(fourier_tr, fourier_tz, fourier_psi, fourier_chi, fourier_phir, fourier_phiz);
 
 	return geo;
