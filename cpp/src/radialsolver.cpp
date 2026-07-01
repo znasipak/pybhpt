@@ -777,6 +777,13 @@ Result RadialTeukolsky::getBoundaryDerivative(BoundaryCondition bc){
 	}
 }
 
+const ComplexVector& RadialTeukolsky::getSolutionReference(BoundaryCondition bc){
+	return (bc == In) ? _inSolution : _upSolution;
+}
+const ComplexVector& RadialTeukolsky::getDerivativeReference(BoundaryCondition bc){
+	return (bc == In) ? _inDerivative : _upDerivative;
+}
+
 ComplexVector RadialTeukolsky::getSolution(BoundaryCondition bc){
 	if(bc == In){
 		// if( std::abs(_inSolution[0]) == 0. && std::abs(_inDerivative[0]) == 0. ){

@@ -35,6 +35,9 @@ public:
 	Vector getSolution();
 	Vector getDerivative();
 	Vector getSecondDerivative();
+	// Non-copying references to the stored solution/derivative (source integration).
+	const Vector& getSolutionReference(){ return _Slm; }
+	const Vector& getDerivativeReference(){ return _SlmP; }
 
 	double getArguments(int pos);
 	double getSolution(int pos);

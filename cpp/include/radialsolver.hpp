@@ -48,6 +48,9 @@ public:
 	ComplexVector getSolution(BoundaryCondition bc);
 	ComplexVector getDerivative(BoundaryCondition bc);
 	ComplexVector getSecondDerivative(BoundaryCondition bc);
+	// Non-copying references to the stored solution/derivative (source integration).
+	const ComplexVector& getSolutionReference(BoundaryCondition bc);
+	const ComplexVector& getDerivativeReference(BoundaryCondition bc);
 	Complex getSolution(BoundaryCondition bc, int pos);
 	Complex getDerivative(BoundaryCondition bc, int pos);
 	Complex getSecondDerivative(BoundaryCondition bc, int pos);

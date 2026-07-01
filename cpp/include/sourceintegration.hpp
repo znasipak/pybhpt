@@ -24,16 +24,20 @@ typedef struct TeukolskyAmplitudesStruct{
 	int status = 0;
 } TeukolskyAmplitudes;
 
+// Non-owning views of a mode's solution vectors: the members are references bound to
+// the caller's stored/computed vectors, so building one of these does not copy the
+// (grid-length) solution/derivative arrays. Only ever aggregate-constructed and passed
+// by const& into the source-integration drivers.
 typedef struct DerivativesMatrixStruct{
-	Vector solution;
-	Vector derivative;
-	Vector secondDerivative;
+	const Vector &solution;
+	const Vector &derivative;
+	const Vector &secondDerivative;
 } DerivativesMatrix;
 
 typedef struct ComplexDerivativesMatrixStruct{
-	ComplexVector solution;
-	ComplexVector derivative;
-	ComplexVector secondDerivative;
+	const ComplexVector &solution;
+	const ComplexVector &derivative;
+	const ComplexVector &secondDerivative;
 } ComplexDerivativesMatrix;
 
 class SummationHelper{

@@ -130,9 +130,16 @@ static double scalar_amplitude_precision(Complex I1, double pI1, Complex I2, dou
 // positive. Throws std::runtime_error for spin weights other than -2, 0, +2.
 TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol){
 	if( std::abs(s) == 2 ){
-		ComplexDerivativesMatrixStruct Rin = {.solution = teuk.getSolution(In), .derivative = teuk.getDerivative(In), .secondDerivative = teuk.getSecondDerivative(In)};
-		ComplexDerivativesMatrixStruct Rup = {.solution = teuk.getSolution(Up), .derivative = teuk.getDerivative(Up), .secondDerivative = teuk.getSecondDerivative(Up)};
-		DerivativesMatrix Slm = {.solution = swsh.getSolution(), .derivative = swsh.getDerivative(), .secondDerivative = swsh.getSecondDerivative()};
+		// Bind references to the stored solution/derivative vectors (no copy); the second
+		// derivative is computed on demand, so keep it in a local the struct points at.
+		const ComplexVector &RinS = teuk.getSolutionReference(In),  &RinD = teuk.getDerivativeReference(In);
+		const ComplexVector &RupS = teuk.getSolutionReference(Up),  &RupD = teuk.getDerivativeReference(Up);
+		const Vector &SlmS = swsh.getSolutionReference(), &SlmD = swsh.getDerivativeReference();
+		ComplexVector RinPP = teuk.getSecondDerivative(In), RupPP = teuk.getSecondDerivative(Up);
+		Vector SlmPP = swsh.getSecondDerivative();
+		ComplexDerivativesMatrixStruct Rin = {RinS, RinD, RinPP};
+		ComplexDerivativesMatrixStruct Rup = {RupS, RupD, RupPP};
+		DerivativesMatrix Slm = {SlmS, SlmD, SlmPP};
 		return teukolsky_amplitude(s, L, m, k, n, traj, geoConstants, Rin, Rup, Slm, tol);
 	}else if( s == 0 ){
 		return scalar_amplitude_generic(L, m, k, n, traj, geoConstants, teuk, swsh, tol);
@@ -144,9 +151,16 @@ TeukolskyAmplitudes field_amplitude(int s, int L, int m, int k, int n, GeodesicT
 
 TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double){
 	if( std::abs(s) == 2 ){
-		ComplexDerivativesMatrixStruct Rin = {.solution = teuk.getSolution(In), .derivative = teuk.getDerivative(In), .secondDerivative = teuk.getSecondDerivative(In)};
-		ComplexDerivativesMatrixStruct Rup = {.solution = teuk.getSolution(Up), .derivative = teuk.getDerivative(Up), .secondDerivative = teuk.getSecondDerivative(Up)};
-		DerivativesMatrix Slm = {.solution = swsh.getSolution(), .derivative = swsh.getDerivative(), .secondDerivative = swsh.getSecondDerivative()};
+		// Bind references to the stored solution/derivative vectors (no copy); the second
+		// derivative is computed on demand, so keep it in a local the struct points at.
+		const ComplexVector &RinS = teuk.getSolutionReference(In),  &RinD = teuk.getDerivativeReference(In);
+		const ComplexVector &RupS = teuk.getSolutionReference(Up),  &RupD = teuk.getDerivativeReference(Up);
+		const Vector &SlmS = swsh.getSolutionReference(), &SlmD = swsh.getDerivativeReference();
+		ComplexVector RinPP = teuk.getSecondDerivative(In), RupPP = teuk.getSecondDerivative(Up);
+		Vector SlmPP = swsh.getSecondDerivative();
+		ComplexDerivativesMatrixStruct Rin = {RinS, RinD, RinPP};
+		ComplexDerivativesMatrixStruct Rup = {RupS, RupD, RupPP};
+		DerivativesMatrix Slm = {SlmS, SlmD, SlmPP};
 		return teukolsky_amplitude_circeq(s, L, m, traj, geoConstants, Rin, Rup, Slm);
 	}else if( s == 0 ){
 		return scalar_amplitude_circular(L, m, 0, 0, traj, geoConstants, teuk, swsh);
@@ -158,9 +172,16 @@ TeukolskyAmplitudes field_amplitude_circeq(int s, int L, int m, GeodesicTrajecto
 
 TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol){
 	if( std::abs(s) == 2 ){
-		ComplexDerivativesMatrixStruct Rin = {.solution = teuk.getSolution(In), .derivative = teuk.getDerivative(In), .secondDerivative = teuk.getSecondDerivative(In)};
-		ComplexDerivativesMatrixStruct Rup = {.solution = teuk.getSolution(Up), .derivative = teuk.getDerivative(Up), .secondDerivative = teuk.getSecondDerivative(Up)};
-		DerivativesMatrix Slm = {.solution = swsh.getSolution(), .derivative = swsh.getDerivative(), .secondDerivative = swsh.getSecondDerivative()};
+		// Bind references to the stored solution/derivative vectors (no copy); the second
+		// derivative is computed on demand, so keep it in a local the struct points at.
+		const ComplexVector &RinS = teuk.getSolutionReference(In),  &RinD = teuk.getDerivativeReference(In);
+		const ComplexVector &RupS = teuk.getSolutionReference(Up),  &RupD = teuk.getDerivativeReference(Up);
+		const Vector &SlmS = swsh.getSolutionReference(), &SlmD = swsh.getDerivativeReference();
+		ComplexVector RinPP = teuk.getSecondDerivative(In), RupPP = teuk.getSecondDerivative(Up);
+		Vector SlmPP = swsh.getSecondDerivative();
+		ComplexDerivativesMatrixStruct Rin = {RinS, RinD, RinPP};
+		ComplexDerivativesMatrixStruct Rup = {RupS, RupD, RupPP};
+		DerivativesMatrix Slm = {SlmS, SlmD, SlmPP};
 		return teukolsky_amplitude_ecceq(s, L, m, n, traj, geoConstants, Rin, Rup, Slm, tol);
 	}else if( s == 0 ){
 		return scalar_amplitude_equatorial(L, m, 0, n, traj, geoConstants, teuk, swsh, tol);
@@ -172,9 +193,16 @@ TeukolskyAmplitudes field_amplitude_ecceq(int s, int L, int m, int n, GeodesicTr
 
 TeukolskyAmplitudes field_amplitude_sphinc(int s, int L, int m, int k, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, RadialTeukolsky &teuk, SpinWeightedHarmonic &swsh, double tol){
 	if( std::abs(s) == 2 ){
-		ComplexDerivativesMatrixStruct Rin = {.solution = teuk.getSolution(In), .derivative = teuk.getDerivative(In), .secondDerivative = teuk.getSecondDerivative(In)};
-		ComplexDerivativesMatrixStruct Rup = {.solution = teuk.getSolution(Up), .derivative = teuk.getDerivative(Up), .secondDerivative = teuk.getSecondDerivative(Up)};
-		DerivativesMatrix Slm = {.solution = swsh.getSolution(), .derivative = swsh.getDerivative(), .secondDerivative = swsh.getSecondDerivative()};
+		// Bind references to the stored solution/derivative vectors (no copy); the second
+		// derivative is computed on demand, so keep it in a local the struct points at.
+		const ComplexVector &RinS = teuk.getSolutionReference(In),  &RinD = teuk.getDerivativeReference(In);
+		const ComplexVector &RupS = teuk.getSolutionReference(Up),  &RupD = teuk.getDerivativeReference(Up);
+		const Vector &SlmS = swsh.getSolutionReference(), &SlmD = swsh.getDerivativeReference();
+		ComplexVector RinPP = teuk.getSecondDerivative(In), RupPP = teuk.getSecondDerivative(Up);
+		Vector SlmPP = swsh.getSecondDerivative();
+		ComplexDerivativesMatrixStruct Rin = {RinS, RinD, RinPP};
+		ComplexDerivativesMatrixStruct Rup = {RupS, RupD, RupPP};
+		DerivativesMatrix Slm = {SlmS, SlmD, SlmPP};
 		return teukolsky_amplitude_sphinc(s, L, m, k, traj, geoConstants, Rin, Rup, Slm, tol);
 	}else if( s == 0 ){
 		return scalar_amplitude_spherical(L, m, k, 0, traj, geoConstants, teuk, swsh, tol);
