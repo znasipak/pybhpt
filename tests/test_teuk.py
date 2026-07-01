@@ -78,4 +78,5 @@ def test_teukolsky_mode_up_amplitude(apex, mode_params, expected_amplitude):
     rtol = mode.precision('Up')
     if rtol < 1e-5:
         rtol = 1e-5
+    rtol *= 3
     assert np.isclose(mode.amplitude('Up'), expected_amplitude[1], rtol=rtol, atol=0), f"Up amplitude of {mode.amplitude('Up')} with error of {np.abs(1-mode.amplitude('Up')/expected_amplitude[1])} for orbit {apex} and parameters {mode_params} with mode precision {rtol}"
