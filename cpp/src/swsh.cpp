@@ -1062,10 +1062,20 @@ void SpinWeightedHarmonic::fillYlmGrid(){
 	int nj = jgridMax - _jgridMin + 1;
 	int nth = int(_theta.size());
 	_Ygrid.assign(nj, Vector(nth, 0.));
-	for(int j = _jgridMin; j <= jgridMax; j++){
-		Vector &row = _Ygrid[j - _jgridMin];
-		for(int ith = 0; ith < nth; ith++){
-			row[ith] = Ylm(j, _m, _theta[ith]);
+
+	// One gsl_sf_legendre_array per theta gives every P_l^m up to jgridMax at once (a
+	// single l-recurrence), instead of a full array per (j, theta) as Ylm() would do.
+	// Mirror Ylm()'s convention exactly: fold m<0 via Y_l^{-m} = (-1)^m Y_l^{m}, and use
+	// the sph-normalised Legendre with Condon-Shortley phase (-1)^{|m|} so values match.
+	int mm = std::abs(_m);
+	double signm = (_m < 0) ? pow(-1., _m) : 1.;
+	double csphase = (mm % 2 == 0) ? 1.0 : -1.0;
+	std::vector<double> Plm(gsl_sf_legendre_array_n(size_t(jgridMax)));
+	for(int ith = 0; ith < nth; ith++){
+		gsl_sf_legendre_array_e(GSL_SF_LEGENDRE_SPHARM, size_t(jgridMax),
+			std::cos(_theta[ith]), csphase, Plm.data());
+		for(int j = _jgridMin; j <= jgridMax; j++){
+			_Ygrid[j - _jgridMin][ith] = signm*Plm[gsl_sf_legendre_array_index(size_t(j), size_t(mm))];
 		}
 	}
 	_gridFilled = true;
