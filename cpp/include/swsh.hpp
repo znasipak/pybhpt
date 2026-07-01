@@ -52,6 +52,20 @@ private:
 	Vector _theta;
 	Vector _Slm;
 	Vector _SlmP;
+
+	// Scalar spherical-harmonic grid: _Ygrid[j - _jgridMin][ith] = Ylm(j, m, theta[ith]).
+	// Filled once (fillYlmGrid) and reused by the spheroidal-harmonic sums and their
+	// theta-derivatives, so the expensive per-point Ylm evaluation is not repeated
+	// across coupling terms or between the solution and its derivative.
+	std::vector<Vector> _Ygrid;
+	int _jgridMin = 0;
+	int _imaxCoupling = 0;   // highest coupling index with a nonzero coefficient
+	bool _gridFilled = false;
+	void fillYlmGrid();
+	double YslmGrid(int l, int ith);
+	double YslmDerivativeGrid(int l, int ith);
+	double SslmGrid(int ith);
+	double SslmDerivativeGrid(int ith);
 };
 
 typedef struct coupling_convergence_struct{

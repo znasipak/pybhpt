@@ -1,6 +1,8 @@
 // swsh.c
 
 #include "swsh.hpp"
+#include <map>
+#include <tuple>
 
 // LAPACK dsyev: eigenvalues (and optionally eigenvectors) of a real symmetric matrix.
 // Available via -llapack (conda) or -framework Accelerate (macOS).
@@ -40,11 +42,12 @@ int SpinWeightedHarmonic::getMaxCouplingModeNumber(){
 
 int SpinWeightedHarmonic::generateSolutionsAndDerivatives(){
 	generateCouplingCoefficients();
+	fillYlmGrid();
 	for(size_t i = 0; i < _Slm.size(); i++){
-		_Slm[i] = Sslm(_s, _L, _m, _gamma, _bcoupling, _theta[i]);
+		_Slm[i] = SslmGrid(int(i));
 	}
 	for(size_t i = 0; i < _SlmP.size(); i++){
-		_SlmP[i] = Sslm_derivative(_s, _L, _m, _gamma, _bcoupling, _theta[i]);
+		_SlmP[i] = SslmDerivativeGrid(int(i));
 	}
 
 	return 0;
@@ -59,8 +62,9 @@ int SpinWeightedHarmonic::generateCouplingCoefficients(){
 
 int SpinWeightedHarmonic::generateSolutions(){
 	generateCouplingCoefficients();
+	fillYlmGrid();
 	for(size_t i = 0; i < _Slm.size(); i++){
-		_Slm[i] = Sslm(_s, _L, _m, _gamma, _bcoupling, _theta[i]);
+		_Slm[i] = SslmGrid(int(i));
 	}
 
 	return 0;
@@ -68,8 +72,9 @@ int SpinWeightedHarmonic::generateSolutions(){
 
 int SpinWeightedHarmonic::generateDerivatives(){
 	generateCouplingCoefficients();
+	fillYlmGrid();
 	for(size_t i = 0; i < _SlmP.size(); i++){
-		_SlmP[i] = Sslm_derivative(_s, _L, _m, _gamma, _bcoupling, _theta[i]);
+		_SlmP[i] = SslmDerivativeGrid(int(i));
 	}
 
 	return 0;
@@ -580,15 +585,28 @@ coupling_test spherical_spheroidal_coupling_convergence_test(const int &s, const
 
 // Coupling between scalar Yjm and spin-weighted harmonics sYlm
 double Asljm(const int &s, const int &l, const int &j, const int &m){
-	if( std::abs(l-j) > std::abs(s) ) return 0.;
-	if( j < std::abs(m) ) return 0.;
-	int lmin = std::abs(m) < std::abs(s) ? std::abs(s) : std::abs(m);
-	if( l < lmin ) return 0;
-	double aslmg = pow(-1., m + s*(1 + sgn<int>(s))/2);
-	aslmg *= sqrt(pow(4, std::abs(s))*pow(factorial(std::abs(s)), 2)*(2*j + 1)*(2*l + 1)/factorial(std::abs(2*s)));
-	aslmg *= w3j(std::abs(s), l, j, 0, m, -m);
-	aslmg *= w3j(std::abs(s), l, j, s, -s, 0);
+	// (s,l,j,m)-only coupling (Wigner-3j) -- independent of theta, but Yslm() calls this
+	// per grid point. Memoize so the 3j / factorial work runs once per distinct key.
+	static thread_local std::map<std::tuple<int,int,int,int>, double> cache;
+	auto key = std::make_tuple(s, l, j, m);
+	auto it = cache.find(key);
+	if(it != cache.end()) return it->second;
 
+	double aslmg;
+	if( std::abs(l-j) > std::abs(s) || j < std::abs(m) ){
+		aslmg = 0.;
+	}else{
+		int lmin = std::abs(m) < std::abs(s) ? std::abs(s) : std::abs(m);
+		if( l < lmin ){
+			aslmg = 0.;
+		}else{
+			aslmg = pow(-1., m + s*(1 + sgn<int>(s))/2);
+			aslmg *= sqrt(pow(4, std::abs(s))*pow(factorial(std::abs(s)), 2)*(2*j + 1)*(2*l + 1)/factorial(std::abs(2*s)));
+			aslmg *= w3j(std::abs(s), l, j, 0, m, -m);
+			aslmg *= w3j(std::abs(s), l, j, s, -s, 0);
+		}
+	}
+	cache[key] = aslmg;
 	return aslmg;
 }
 
@@ -746,9 +764,7 @@ double Sslm(const int &s, const int &l, const int &m, const double &, const Vect
 	if(i == imax){
 		swsh += bvec[i]*Yslm(s, lmin + i, m, th);
 	}
-	// for(int i = 0; i < bvec.size(); i++){
-	// 	swsh += bvec[i]*Yslm(s, lmin + i, m, th);
-	// }
+
 	return swsh;
 }
 
@@ -786,9 +802,6 @@ double Sslm_derivative(const int &s, const int &l, const int &m, const double &,
 	if(i == imax){
 		swsh += bvec[i]*Yslm_derivative(s, lmin + i, m, th);
 	}
-	// for(int i = 0; i < bvec.size(); i++){
-	// 	swsh += bvec[i]*Yslm_derivative(s, lmin + i, m, th);
-	// }
 
 	return swsh;
 }
@@ -1026,3 +1039,85 @@ void test_swsh_class(){
 	duration = (stop-start)/double(CLOCKS_PER_SEC);
 	std::cout << "test time 1: " << duration << " s" << std::endl;
 };
+
+/////////////////////////////////////////////////////////
+// Grid-accelerated spheroidal-harmonic evaluation      //
+/////////////////////////////////////////////////////////
+
+// Precompute the scalar spherical harmonics Ylm(j, m, theta) over the full theta grid,
+// once, for every j needed by the spheroidal sums and their theta-derivatives. The
+// spheroidal harmonic S = sum_i b_i Yslm(l_i), and each Yslm = sum_j Asljm Ylm(j);
+// the same Ylm(j, theta) basis is shared across all coupling terms i and between S and
+// S', so tabulating it removes the dominant per-point Ylm (Legendre) recomputation.
+void SpinWeightedHarmonic::fillYlmGrid(){
+	if(_gridFilled){ return; }
+	int as = std::abs(_s);
+	int lminC = getMinCouplingModeNumber();
+	int imax = int(_bcoupling.size()) - 1;
+	while(imax > 0 && _bcoupling[imax] == 0.){ imax--; }
+	_imaxCoupling = imax;
+	int lmaxC = lminC + imax;
+	_jgridMin = std::abs(_m);                 // Ylm(j, m) vanishes for j < |m|
+	int jgridMax = lmaxC + as + 1;            // +1 covers the derivative window
+	int nj = jgridMax - _jgridMin + 1;
+	int nth = int(_theta.size());
+	_Ygrid.assign(nj, Vector(nth, 0.));
+	for(int j = _jgridMin; j <= jgridMax; j++){
+		Vector &row = _Ygrid[j - _jgridMin];
+		for(int ith = 0; ith < nth; ith++){
+			row[ith] = Ylm(j, _m, _theta[ith]);
+		}
+	}
+	_gridFilled = true;
+}
+
+// Yslm(s, l, m, theta[ith]) from the tabulated Ylm grid (mirrors the free Yslm).
+double SpinWeightedHarmonic::YslmGrid(int l, int ith){
+	double th = _theta[ith];
+	int as = std::abs(_s);
+	if(_s == 0){ return _Ygrid[l - _jgridMin][ith]; }
+	// theta = 0 or pi are handled analytically by the free function (grid unused there).
+	if(std::abs(th) < 1.e-14 || std::abs(th - M_PI) < 1.e-14){ return Yslm(_s, l, _m, th); }
+	int jlo = std::max(std::abs(_m), l - as);
+	int jhi = l + as;
+	double sum = 0.;
+	for(int j = jlo; j <= jhi; j++){
+		sum += Asljm(_s, l, j, _m)*_Ygrid[j - _jgridMin][ith];
+	}
+	return sum/pow(sin(th), as);
+}
+
+// d/dtheta Yslm from the same grid (mirrors the free Yslm_derivative).
+double SpinWeightedHarmonic::YslmDerivativeGrid(int l, int ith){
+	double th = _theta[ith];
+	int as = std::abs(_s);
+	if(_s == 0 || std::abs(th) < 1.e-14 || std::abs(th - M_PI) < 1.e-14){
+		return Yslm_derivative(_s, l, _m, th);
+	}
+	int jlo = std::max(std::abs(_m), l - as - 1);
+	int jhi = l + as + 1;
+	double sum = 0.;
+	for(int j = jlo; j <= jhi; j++){
+		sum += dAsljm(_s, l, j, _m)*_Ygrid[j - _jgridMin][ith];
+	}
+	return -sum*pow(sin(th), -1 - as);
+}
+
+// S(theta[ith]) = sum over coupling terms of b_i * Yslm_i, using the grid.
+double SpinWeightedHarmonic::SslmGrid(int ith){
+	int lminC = getMinCouplingModeNumber();
+	double sum = 0.;
+	for(int i = 0; i <= _imaxCoupling; i++){
+		if(_bcoupling[i] != 0.){ sum += _bcoupling[i]*YslmGrid(lminC + i, ith); }
+	}
+	return sum;
+}
+
+double SpinWeightedHarmonic::SslmDerivativeGrid(int ith){
+	int lminC = getMinCouplingModeNumber();
+	double sum = 0.;
+	for(int i = 0; i <= _imaxCoupling; i++){
+		if(_bcoupling[i] != 0.){ sum += _bcoupling[i]*YslmDerivativeGrid(lminC + i, ith); }
+	}
+	return sum;
+}
