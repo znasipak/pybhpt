@@ -58,12 +58,14 @@ private:
 	// theta-derivatives, so the expensive per-point Ylm evaluation is not repeated
 	// across coupling terms or between the solution and its derivative.
 	std::vector<Vector> _Ygrid;
+	// Collapsed, theta-independent coefficients: S(theta)  = (sum_j _Ccoef[j] Ylm(j,theta))/sin^|s|,
+	// S'(theta) = -(sum_j _Dcoef[j] Ylm(j,theta))/sin^{|s|+1}, with j offset by _jgridMin.
+	Vector _Ccoef;
+	Vector _Dcoef;
 	int _jgridMin = 0;
 	int _imaxCoupling = 0;   // highest coupling index with a nonzero coefficient
 	bool _gridFilled = false;
 	void fillYlmGrid();
-	double YslmGrid(int l, int ith);
-	double YslmDerivativeGrid(int l, int ith);
 	double SslmGrid(int ith);
 	double SslmDerivativeGrid(int ith);
 };

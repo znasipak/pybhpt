@@ -1078,56 +1078,54 @@ void SpinWeightedHarmonic::fillYlmGrid(){
 			_Ygrid[j - _jgridMin][ith] = signm*Plm[gsl_sf_legendre_array_index(size_t(j), size_t(mm))];
 		}
 	}
+
+	// Collapse the coupling sums, which are theta-independent, once:
+	//   S  = sum_i b_i Yslm(l_i)          = (sum_j (sum_i b_i Asljm(l_i,j)) Ylm(j))/sin^|s|
+	//   S' = sum_i b_i Yslm_derivative(l_i) = -(sum_j (sum_i b_i dAsljm(l_i,j)) Ylm(j))/sin^{|s|+1}
+	// so per theta only a single sum_j over the tabulated Ylm remains (no per-point 3j).
+	_Ccoef.assign(nj, 0.);
+	_Dcoef.assign(nj, 0.);
+	for(int jrel = 0; jrel < nj; jrel++){
+		int j = _jgridMin + jrel;
+		for(int i = 0; i <= _imaxCoupling; i++){
+			double bi = _bcoupling[i];
+			if(bi == 0.){ continue; }
+			int l = lminC + i;
+			if(std::abs(l - j) <= as){        _Ccoef[jrel] += bi*Asljm(_s, l, j, _m); }
+			if(std::abs(l - j) <= as + 1){    _Dcoef[jrel] += bi*dAsljm(_s, l, j, _m); }
+		}
+	}
 	_gridFilled = true;
 }
 
-// Yslm(s, l, m, theta[ith]) from the tabulated Ylm grid (mirrors the free Yslm).
-double SpinWeightedHarmonic::YslmGrid(int l, int ith){
+// S(theta[ith]) = (sum_j C_j Ylm(j,theta))/sin^|s|.  theta = 0/pi handled analytically.
+double SpinWeightedHarmonic::SslmGrid(int ith){
 	double th = _theta[ith];
 	int as = std::abs(_s);
-	if(_s == 0){ return _Ygrid[l - _jgridMin][ith]; }
-	// theta = 0 or pi are handled analytically by the free function (grid unused there).
-	if(std::abs(th) < 1.e-14 || std::abs(th - M_PI) < 1.e-14){ return Yslm(_s, l, _m, th); }
-	int jlo = std::max(std::abs(_m), l - as);
-	int jhi = l + as;
-	double sum = 0.;
-	for(int j = jlo; j <= jhi; j++){
-		sum += Asljm(_s, l, j, _m)*_Ygrid[j - _jgridMin][ith];
+	if(as > 0 && (std::abs(th) < 1.e-14 || std::abs(th - M_PI) < 1.e-14)){
+		return Sslm(_s, _L, _m, _gamma, _bcoupling, th);
 	}
-	return sum/pow(sin(th), as);
+	double sum = 0.;
+	int nj = int(_Ccoef.size());
+	for(int jrel = 0; jrel < nj; jrel++){
+		sum += _Ccoef[jrel]*_Ygrid[jrel][ith];
+	}
+	return (as == 0) ? sum : sum/pow(sin(th), as);
 }
 
-// d/dtheta Yslm from the same grid (mirrors the free Yslm_derivative).
-double SpinWeightedHarmonic::YslmDerivativeGrid(int l, int ith){
+// S'(theta[ith]) = -(sum_j D_j Ylm(j,theta))/sin^{|s|+1}.
+double SpinWeightedHarmonic::SslmDerivativeGrid(int ith){
 	double th = _theta[ith];
 	int as = std::abs(_s);
-	if(_s == 0 || std::abs(th) < 1.e-14 || std::abs(th - M_PI) < 1.e-14){
-		return Yslm_derivative(_s, l, _m, th);
+	// s = 0 derivative is Ylm_derivative (not expressible via the Ylm grid); use the
+	// free function there (cheap: a single term). Same for the theta = 0/pi endpoints.
+	if(as == 0 || std::abs(th) < 1.e-14 || std::abs(th - M_PI) < 1.e-14){
+		return Sslm_derivative(_s, _L, _m, _gamma, _bcoupling, th);
 	}
-	int jlo = std::max(std::abs(_m), l - as - 1);
-	int jhi = l + as + 1;
 	double sum = 0.;
-	for(int j = jlo; j <= jhi; j++){
-		sum += dAsljm(_s, l, j, _m)*_Ygrid[j - _jgridMin][ith];
+	int nj = int(_Dcoef.size());
+	for(int jrel = 0; jrel < nj; jrel++){
+		sum += _Dcoef[jrel]*_Ygrid[jrel][ith];
 	}
 	return -sum*pow(sin(th), -1 - as);
-}
-
-// S(theta[ith]) = sum over coupling terms of b_i * Yslm_i, using the grid.
-double SpinWeightedHarmonic::SslmGrid(int ith){
-	int lminC = getMinCouplingModeNumber();
-	double sum = 0.;
-	for(int i = 0; i <= _imaxCoupling; i++){
-		if(_bcoupling[i] != 0.){ sum += _bcoupling[i]*YslmGrid(lminC + i, ith); }
-	}
-	return sum;
-}
-
-double SpinWeightedHarmonic::SslmDerivativeGrid(int ith){
-	int lminC = getMinCouplingModeNumber();
-	double sum = 0.;
-	for(int i = 0; i <= _imaxCoupling; i++){
-		if(_bcoupling[i] != 0.){ sum += _bcoupling[i]*YslmDerivativeGrid(lminC + i, ith); }
-	}
-	return sum;
 }
