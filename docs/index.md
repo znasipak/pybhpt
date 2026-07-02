@@ -41,6 +41,21 @@ notebooks/tutorial.ipynb
 
 ```{toctree}
 :maxdepth: 1
+:caption: Performance
+
+performance/index
+performance/geo
+performance/radial
+performance/swsh
+performance/teuk
+performance/hertz
+performance/flux
+performance/metric
+performance/redshift
+```
+
+```{toctree}
+:maxdepth: 1
 :caption: Background
 
 background/geo

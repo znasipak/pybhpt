@@ -1,0 +1,51 @@
+# Performance
+
+This section summarizes the runtime cost of the main `pybhpt` computations across their
+input parameter space, with a dedicated page per subpackage. It is a rough guide for
+planning large mode sweeps, not a precise micro-benchmark: absolute numbers depend on the
+machine, the BLAS/LAPACK backend, and the build flags, but the *scaling* with the physical
+parameters (grid resolution, spheroidal mode number, spheroidicity, orbit geometry) is
+representative.
+
+```{toctree}
+:maxdepth: 1
+
+geo
+radial
+swsh
+teuk
+hertz
+flux
+metric
+redshift
+```
+
+## Methodology
+
+All timings are produced locally by the harness in
+[`benchmarks/`](https://github.com/znasipak/pybhpt/tree/main/benchmarks) and committed as
+static CSV files under `benchmarks/data/`; nothing is timed at documentation-build time or
+in CI. Each reported number is the **median of 7 timed repetitions after 2 warm-up calls**
+(the warm-up absorbs first-call effects: lazy table fills, page faults, cold caches). The
+harness also records the best case (`min`) and the tail (`p90`) in the CSVs. BLAS/OpenMP
+are pinned to a single thread for reproducible single-core numbers.
+
+Reproduce (or regenerate on your own reference machine) with:
+
+```bash
+python -m benchmarks.run all          # geodesic, swsh, ...
+python -m benchmarks.run swsh --quick # fast subset for a smoke test
+```
+
+(reference-machine)=
+## Reference machine
+
+The committed numbers throughout this section were generated on:
+
+| | |
+|---|---|
+| CPU / arch | Apple silicon, `arm64` |
+| OS | Darwin 24.6.0 |
+| Python / NumPy | 3.12 / 2.2 |
+| BLAS backend | Accelerate |
+| `pybhpt` commit | `e8548bb` |

@@ -1,0 +1,38 @@
+{
+  "geodesic": {
+    "platform": {
+      "cpu": "arm",
+      "machine": "arm64",
+      "system": "Darwin 24.6.0",
+      "python": "3.12.13",
+      "numpy": "2.2.0",
+      "blas": "accelerate",
+      "pybhpt_commit": "e8548bb",
+      "timestamp": "2026-07-02 11:56:59 CEST"
+    }
+  },
+  "swsh_solve": {
+    "platform": {
+      "cpu": "arm",
+      "machine": "arm64",
+      "system": "Darwin 24.6.0",
+      "python": "3.12.13",
+      "numpy": "2.2.0",
+      "blas": "accelerate",
+      "pybhpt_commit": "e8548bb",
+      "timestamp": "2026-07-02 11:57:03 CEST"
+    }
+  },
+  "swsh_grid": {
+    "platform": {
+      "cpu": "arm",
+      "machine": "arm64",
+      "system": "Darwin 24.6.0",
+      "python": "3.12.13",
+      "numpy": "2.2.0",
+      "blas": "accelerate",
+      "pybhpt_commit": "e8548bb",
+      "timestamp": "2026-07-02 11:57:04 CEST"
+    }
+  }
+}
