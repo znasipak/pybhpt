@@ -13,7 +13,7 @@ import pytest
 
 from pybhpt.geo import KerrGeodesic
 from pybhpt.teuk import TeukolskyMode
-from pybhpt.swsh import SpinWeightedSpheroidalHarmonic
+from pybhpt.swsh import SpinWeightedSpheroidalHarmonic, SpinWeightedHarmonic
 
 # (s, l, m, k, n, a, p, e, x)
 CASES = [
@@ -54,6 +54,39 @@ def test_swsh_grid_matches_series(s, l, m, k, n, a, p, e, x):
         SPP_grid = np.asarray(mode.polarderivatives2)
         assert _relerr(SP_grid, np.asarray(series.Sslm_derivative(th))) < 1e-8, "S'(theta) grid vs series mismatch"
         assert _relerr(SPP_grid, np.asarray(series.Sslm_derivative2(th))) < 1e-7, "S''(theta) grid vs series mismatch"
+
+
+# (s, l, m, gamma) for the standalone grid class (independent of an orbit)
+GRID_CASES = [
+    (-2, 2,  1, 0.5),
+    ( 0, 3,  2, 1.3),
+    ( 2, 5, -3, 2.0),
+    (-2, 4,  0, -0.8),
+    ( 2, 2,  0, 0.0),   # spheroidicity 0 -> reduces to spherical harmonic
+    ( 0, 2,  0, 0.0),
+]
+
+
+@pytest.mark.parametrize("s, l, m, gamma", GRID_CASES)
+def test_swsh_grid_class_matches_series(s, l, m, gamma):
+    """The grid-backed SpinWeightedHarmonic must agree with the series class on its stored
+    grid, and its arbitrary-theta eval must reproduce the stored grid values."""
+    th = np.linspace(0.05, np.pi - 0.05, 40)
+    grid = SpinWeightedHarmonic(s, l, m, gamma, th)
+    series = SpinWeightedSpheroidalHarmonic(s, l, m, gamma)
+
+    assert abs(grid.eigenvalue - series.eigenvalue) < 1e-10
+    assert _relerr(grid.solutions, np.asarray(series.Sslm(th))) < 1e-8, "grid vs series"
+    # arbitrary-theta eval reuses the stored coupling -> must match the stored grid
+    assert _relerr(grid.eval(th, deriv=0), grid.solutions) < 1e-10, "eval vs stored grid"
+
+    assert _relerr(grid.derivatives, np.asarray(series.Sslm_derivative(th))) < 1e-8, "S' grid vs series"
+    assert _relerr(grid.secondderivatives, np.asarray(series.Sslm_derivative2(th))) < 1e-7, "S'' grid vs series"
+    assert _relerr(grid.eval(th, deriv=1), grid.derivatives) < 1e-10, "eval S' vs grid"
+    assert _relerr(grid.eval(th, deriv=2), grid.secondderivatives) < 1e-8, "eval S'' vs grid"
+
+    # scalar in -> scalar out
+    assert np.ndim(grid.eval(0.7)) == 0
 
 
 def test_swsh_series_array_matches_scalar():

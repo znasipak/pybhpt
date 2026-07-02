@@ -5,6 +5,8 @@ import scipy.sparse.linalg
 # from scipy.special import factorial
 import numpy as np
 from cybhpt_full import _YslmCy, _YslmCy_derivative, _YslmCy_derivative2, _clebschCy, _w3jCy
+from cybhpt_full import (_SpinWeightedHarmonic, _SslmCy_bvec,
+                         _SslmCy_derivative_bvec, _SslmCy_secondDerivative)
 
 """
 Wigner 3j-symbol and Clebsch-Gordon coefficients
@@ -422,6 +424,7 @@ class SWSHSeriesBase(SWSHBase):
             eigs_return = eigs_temp/eigs_norm
             eig = las[pos]
         return (eig, eigs_return)
+    
 class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
     """
     A class for generating a spin-weighted spheroidal harmonic.
@@ -614,6 +617,166 @@ class SpinWeightedSpheroidalHarmonic(SWSHSeriesBase):
         if ph is not None:
             out = out*np.exp(1.j*self.m*ph)
         return out
+
+class SpinWeightedHarmonic:
+    """
+    A grid-based spin-weighted spheroidal harmonic backed by the C++ solver.
+
+    On construction the harmonic and its first two derivatives are solved once and
+    stored on the supplied ``theta`` grid (the fast, precomputed path used internally
+    by :class:`~pybhpt.teuk.TeukolskyMode`). The stored values are exposed through the
+    ``solutions``/``derivatives``/``secondderivatives`` properties. The instance is also
+    callable at arbitrary angles via ``__call__``/:meth:`eval`, which reuse the stored
+    coupling coefficients (no eigenvalue re-solve).
+
+    Parameters
+    ----------
+    s : int
+        The spin weight of the harmonic.
+    j : int
+        The spheroidal (angular) mode number of the harmonic.
+    m : int
+        The azimuthal mode number of the harmonic.
+    g : float
+        The spheroidicity parameter (``a * omega``).
+    theta : array_like
+        The polar angles at which to precompute the harmonic and its derivatives.
+
+    Attributes
+    ----------
+    theta : ndarray
+        The polar-angle grid on which the harmonic is stored.
+    solutions : ndarray
+        The harmonic values on ``theta``.
+    derivatives : ndarray
+        The first theta-derivative values on ``theta``.
+    secondderivatives : ndarray
+        The second theta-derivative values on ``theta``.
+    eigenvalue : float
+        The spheroidal eigenvalue.
+    couplingcoefficients : ndarray
+        The spherical-spheroidal coupling coefficients.
+    """
+    def __init__(self, s, j, m, g, theta):
+        theta = np.ascontiguousarray(np.atleast_1d(theta), dtype=np.float64)
+        self._s = int(s)
+        self._j = int(j)
+        self._m = int(m)
+        self._g = float(g)
+        self._base = _SpinWeightedHarmonic(self._s, self._j, self._m, self._g, theta)
+        self._theta = theta
+        self._coeffs = np.asarray(self._base.couplingcoefficients, dtype=np.float64)
+        self._coeffs_list = self._coeffs.tolist()
+
+    @property
+    def s(self):
+        return self._s
+
+    @property
+    def spinweight(self):
+        return self._s
+
+    @property
+    def j(self):
+        return self._j
+
+    @property
+    def spheroidalmode(self):
+        return self._j
+
+    @property
+    def m(self):
+        return self._m
+
+    @property
+    def azimuthalmode(self):
+        return self._m
+
+    @property
+    def spheroidicity(self):
+        return self._g
+
+    @property
+    def theta(self):
+        return self._theta
+
+    @property
+    def arguments(self):
+        return self._theta
+
+    @property
+    def eigenvalue(self):
+        return self._base.eigenvalue
+
+    @property
+    def couplingcoefficients(self):
+        return self._coeffs
+
+    def couplingcoefficient(self, l):
+        return self._base.couplingcoefficient(l)
+
+    @property
+    def mincouplingmode(self):
+        return self._base.mincouplingmode
+
+    @property
+    def maxcouplingmode(self):
+        return self._base.maxcouplingmode
+
+    @property
+    def solutions(self):
+        return self._base.solutions
+
+    @property
+    def derivatives(self):
+        return self._base.derivatives
+
+    @property
+    def secondderivatives(self):
+        return self._base.secondderivatives
+
+    def eval(self, theta, deriv=0):
+        """
+        Evaluate the harmonic (or a derivative) at arbitrary angle(s).
+
+        Uses the stored coupling coefficients, so no eigenvalue solve is repeated.
+
+        Parameters
+        ----------
+        theta : float or array_like
+            The polar angle(s) at which to evaluate.
+        deriv : {0, 1, 2}, optional
+            Derivative order: 0 for the harmonic, 1 for the first theta-derivative,
+            2 for the second. Default 0.
+
+        Returns
+        -------
+        float or ndarray
+            The value(s) at ``theta``; scalar in, scalar out.
+        """
+        s, j, m, g = self._s, self._j, self._m, self._g
+        bvec = self._coeffs_list
+        if deriv == 0:
+            f = lambda t: _SslmCy_bvec(s, j, m, g, bvec, t)
+        elif deriv == 1:
+            f = lambda t: _SslmCy_derivative_bvec(s, j, m, g, bvec, t)
+        elif deriv == 2:
+            la = self._base.eigenvalue
+            def f(t):
+                S = _SslmCy_bvec(s, j, m, g, bvec, t)
+                Sp = _SslmCy_derivative_bvec(s, j, m, g, bvec, t)
+                return _SslmCy_secondDerivative(s, j, m, g, la, t, S, Sp)
+        else:
+            raise ValueError(f"Derivative order = {deriv} not supported")
+
+        th = np.asarray(theta, dtype=np.float64)
+        if th.ndim == 0:
+            return f(float(th))
+        return np.array([f(float(t)) for t in th.ravel()]).reshape(th.shape)
+
+    def __call__(self, theta, deriv=0):
+        return self.eval(theta, deriv=deriv)
+
 
 def muCoupling(s, l):
     """
