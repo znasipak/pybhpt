@@ -14,7 +14,7 @@ extern "C" {
 }
 #endif
 
-#define SPECTRAL_NMAX 300
+#define SPECTRAL_NMAX 600
 #define SPECTRAL_NMAX_INIT_ADD 15
 #define SPECTRAL_COUPLING_TEST_EPS 1.e-25
 #define SPECTRAL_COUPLING_JMAX_EPS 1.e-25
@@ -55,10 +55,14 @@ int SpinWeightedHarmonic::generateSolutionsAndDerivatives(){
 
 int SpinWeightedHarmonic::generateCouplingCoefficients(){
 	if(_bcoupling[_L - getMinCouplingModeNumber()] == 0 && _bcoupling[_L - getMinCouplingModeNumber() + 1] == 0){
-		spectral_solver(_s, _L, _m, _gamma, _lambda, _bcoupling);
+		// spectral_solver returns nonzero on success/stall and 0 when the convergence
+		// test failed at the truncation limit; record the latter as a failure status.
+		_couplingStatus = spectral_solver(_s, _L, _m, _gamma, _lambda, _bcoupling) == 0 ? 1 : 0;
 	}
-	return 0;
+	return _couplingStatus;
 }
+
+int SpinWeightedHarmonic::getCouplingStatus(){ return _couplingStatus; }
 
 int SpinWeightedHarmonic::generateSolutions(){
 	generateCouplingCoefficients();
@@ -281,9 +285,6 @@ int spectral_solver(const int &s, const int &l, const int &m, const double &g, d
 		test = spherical_spheroidal_coupling_convergence_test(s, l, m, g, bmat, bmat2, bkData);
 	}
 	gsl_spmatrix_free(mat);
-	if(nmax == SPECTRAL_NMAX){
-		std::cout << "(SWSH) Max number of iterations executed for spectral solver. \n";
-	}
 
 	if(test == SUCCESS){ // if convergence test was successful, return data from the most resolved (highest nmax) spectral eigenvalue problem
 		gsl_matrix_free(bmat);
@@ -293,7 +294,8 @@ int spectral_solver(const int &s, const int &l, const int &m, const double &g, d
 	}else if(test == FAIL){
 		gsl_matrix_free(bmat); gsl_matrix_free(bmat2);
 		gsl_vector_free(la); gsl_vector_free(la2);
-		std::cout << "(SWSH) Error in computing coupling coefficients for (s, l, m, gamma) = ("<<s<<", "<<l<<", "<<m<<", "<<g<<") \n";
+		// Convergence failed at the truncation limit; the caller surfaces this to Python
+		// as a warning via the coupling status rather than printing here.
 		return 0;
 	}else{ // if convergence test was stalled, return data from the second most resolved (second highest nmax) spectral eigenvalue problem
 		// std::cout << "(SWSH) Calculation of coupling coefficients stalled for (s, l, m, gamma) = ("<<s<<", "<<l<<", "<<m<<", "<<g<<") \n";

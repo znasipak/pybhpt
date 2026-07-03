@@ -81,6 +81,7 @@ int TeukolskyMode::generateSolutions(SpinWeightedHarmonic& swsh, RadialTeukolsky
 
 	_lambda = swsh.getEigenvalue();
 	_coupling = swsh.getCouplingCoefficient();
+	_couplingStatus = swsh.getCouplingStatus();
 	_Slm = swsh.getSolution();
 	// swsh.generateDerivatives();
 	// _SlmP = swsh.getDerivative();
@@ -224,6 +225,7 @@ double TeukolskyMode::getBlackHoleSpin(){ return _a; }
 double TeukolskyMode::getFrequency(){ return _omega; }
 double TeukolskyMode::getHorizonFrequency(){ return _omega - 0.5*_m*_a/(1. + sqrt(1. - _a*_a)); }
 double TeukolskyMode::getEigenvalue(){ return _lambda; }
+int TeukolskyMode::getCouplingStatus(){ return _couplingStatus; }
 Vector TeukolskyMode::getCouplingCoefficient(){ return _coupling; }
 double TeukolskyMode::getCouplingCoefficient(int l){
 	if(l <= getMaxCouplingModeNumber() && l >= getMinCouplingModeNumber()){

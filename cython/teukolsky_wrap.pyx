@@ -37,6 +37,7 @@ cdef extern from "teukolsky.hpp":
         double getFrequency()
         double getHorizonFrequency()
         double getEigenvalue()
+        int getCouplingStatus()
         vector[double] getCouplingCoefficient()
         double getCouplingCoefficient(int l)
         int getMinCouplingModeNumber()
@@ -281,6 +282,16 @@ cdef class _TeukolskyMode:
         cdef int status = self.teukcpp.generateSolutions(dereference(geo.geocpp), str_to_method(method), nsample)
         self.sampleR = self.teukcpp.getRadialSampleNumber()
         self.sampleTh = self.teukcpp.getPolarSampleNumber()
+        if self.teukcpp.getCouplingStatus() != 0:
+            import warnings
+            warnings.warn(
+                "mode (s=%d, l=%d, m=%d, k=%d, n=%d): the spin-weighted spheroidal harmonic "
+                "spectral coupling solve did not converge within the truncation limit; the "
+                "harmonic (and hence this amplitude) may be unreliable for this extreme mode."
+                % (self.teukcpp.getSpinWeight(), self.teukcpp.getSpheroidalModeNumber(),
+                   self.teukcpp.getAzimuthalModeNumber(), self.teukcpp.getPolarModeNumber(),
+                   self.teukcpp.getRadialModeNumber()),
+                RuntimeWarning, stacklevel=2)
         if status != 0:
             import warnings
             warnings.warn(

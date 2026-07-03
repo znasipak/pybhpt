@@ -25,6 +25,9 @@ public:
 	double getCouplingCoefficient(int l);
 	int getMinCouplingModeNumber();
 	int getMaxCouplingModeNumber();
+	// 0 if the spectral coupling solve converged; nonzero if it failed to converge
+	// within the truncation limit (coupling coefficients may be unreliable).
+	int getCouplingStatus();
 
 	int generateSolutionsAndDerivatives();
 	int generateCouplingCoefficients();
@@ -51,6 +54,7 @@ private:
 	double _gamma;
 	double _lambda;
 	Vector _bcoupling;
+	int _couplingStatus = 0;
 
 	Vector _theta;
 	Vector _Slm;

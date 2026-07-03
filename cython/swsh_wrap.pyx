@@ -22,6 +22,7 @@ cdef extern from "swsh.hpp":
         double getCouplingCoefficient(int l)
         int getMinCouplingModeNumber()
         int getMaxCouplingModeNumber()
+        int getCouplingStatus()
 
         int generateSolutionsAndDerivatives()
         int generateCouplingCoefficients()
@@ -101,6 +102,14 @@ cdef class _SpinWeightedHarmonic:
         if self.swshcpp == NULL:
             raise MemoryError('Not enough memory.')
         self.swshcpp.generateSolutionsAndDerivatives()
+        if self.swshcpp.getCouplingStatus() != 0:
+            import warnings
+            warnings.warn(
+                "spin-weighted spheroidal harmonic (s=%d, l=%d, m=%d, gamma=%.6g): the "
+                "spectral coupling solve did not converge within the truncation limit; "
+                "the coupling coefficients (and eigenvalue) may be unreliable for this "
+                "extreme mode." % (s, l, m, gamma),
+                RuntimeWarning, stacklevel=2)
 
     def __dealloc__(self):
         del self.swshcpp
@@ -119,6 +128,8 @@ cdef class _SpinWeightedHarmonic:
     def mincouplingmode(self): return self.swshcpp.getMinCouplingModeNumber()
     @property
     def maxcouplingmode(self): return self.swshcpp.getMaxCouplingModeNumber()
+    @property
+    def couplingstatus(self): return self.swshcpp.getCouplingStatus()
     def couplingcoefficient(self, int l): return self.swshcpp.getCouplingCoefficient(l)
     @property
     def couplingcoefficients(self): return np.array(self.swshcpp.getCouplingCoefficient())

@@ -36,6 +36,8 @@ public:
 	double getEigenvalue();
 	Vector getCouplingCoefficient();
 	double getCouplingCoefficient(int l);
+	// 0 if the spheroidal-harmonic coupling solve converged; nonzero if it did not.
+	int getCouplingStatus();
 	int getMinCouplingModeNumber();
 	int getMaxCouplingModeNumber();
 
@@ -83,6 +85,7 @@ private:
 	double _omega;
 	double _lambda;
 	Vector _coupling;
+	int _couplingStatus = 0;
 
 	Vector _theta;
 	Vector _Slm;

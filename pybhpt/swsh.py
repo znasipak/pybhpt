@@ -712,6 +712,12 @@ class SpinWeightedHarmonic:
     def couplingcoefficients(self):
         return self._coeffs
 
+    @property
+    def couplingstatus(self):
+        """0 if the spectral coupling solve converged; nonzero if it did not (the
+        coupling coefficients and eigenvalue may be unreliable for this mode)."""
+        return self._base.couplingstatus
+
     def couplingcoefficient(self, l):
         return self._base.couplingcoefficient(l)
 
