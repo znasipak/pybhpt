@@ -15,7 +15,7 @@ authors = [
   { name = "Zach Nasipak", email = "znasipak@gmail.com" }
 ]
 readme = "README.md"
-license = { text = "GPL" }
+license = "GPL-3.0-only"
 classifiers = [
   "Programming Language :: Python :: 3",
   "Programming Language :: Cython",
@@ -51,9 +51,9 @@ Github = "https://github.com/znasipak/pybhpt"
 "Bug Tracker" = "https://github.com/znasipak/pybhpt/issues"
 
 [tool.scikit-build]
-cmake.version = "3.18"
+cmake.version = ">=3.18"
 cmake.build-type = "Release"
-cmake.verbose = true
+build.verbose = true
 
 [tool.scikit-build.sdist]
 include = [ "cpp/", "cython/", "CMakeLists.txt" ]
@@ -64,4 +64,4 @@ packages = [ "pybhpt" ]
 
 [tool.pytest.ini_options]
 addopts = "--ignore=pybhpt/extern"
-norecursedirs = "extern"
+norecursedirs = ["extern"]
