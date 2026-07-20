@@ -34,5 +34,41 @@
       "pybhpt_commit": "e8548bb",
       "timestamp": "2026-07-02 11:57:04 CEST"
     }
+  },
+  "radial_method": {
+    "platform": {
+      "cpu": "arm",
+      "machine": "arm64",
+      "system": "Darwin 24.6.0",
+      "python": "3.12.13",
+      "numpy": "2.2.0",
+      "blas": "accelerate",
+      "pybhpt_commit": "0483acd",
+      "timestamp": "2026-07-20 10:23:54 BST"
+    }
+  },
+  "radial_grid": {
+    "platform": {
+      "cpu": "arm",
+      "machine": "arm64",
+      "system": "Darwin 24.6.0",
+      "python": "3.12.13",
+      "numpy": "2.2.0",
+      "blas": "accelerate",
+      "pybhpt_commit": "0483acd",
+      "timestamp": "2026-07-20 10:23:54 BST"
+    }
+  },
+  "radial_freq": {
+    "platform": {
+      "cpu": "arm",
+      "machine": "arm64",
+      "system": "Darwin 24.6.0",
+      "python": "3.12.13",
+      "numpy": "2.2.0",
+      "blas": "accelerate",
+      "pybhpt_commit": "0483acd",
+      "timestamp": "2026-07-20 10:24:30 BST"
+    }
   }
 }

@@ -16,7 +16,7 @@ DEFAULT_OUT = os.path.join(os.path.dirname(__file__), "data")
 BENCHMARKS = {
     "geodesic": "benchmarks.bench_geodesic",
     "swsh":    "benchmarks.bench_swsh",       # spectral solve + on-grid eval
-    # "radial":  "benchmarks.bench_radial",   # solve vs grid length x method (TODO)
+    "radial":  "benchmarks.bench_radial",     # method x grid length x frequency
     # "teuk":    "benchmarks.bench_teuk",      # aggregate mode solve + stage breakdown (TODO)
 }
 

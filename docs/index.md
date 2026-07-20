@@ -40,18 +40,10 @@ notebooks/tutorial.ipynb
 ```
 
 ```{toctree}
-:maxdepth: 1
+:maxdepth: 2
 :caption: Performance
 
 performance/index
-performance/geo
-performance/radial
-performance/swsh
-performance/teuk
-performance/hertz
-performance/flux
-performance/metric
-performance/redshift
 ```
 
 ```{toctree}
