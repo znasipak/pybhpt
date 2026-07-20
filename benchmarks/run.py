@@ -17,7 +17,7 @@ BENCHMARKS = {
     "geodesic": "benchmarks.bench_geodesic",
     "swsh":    "benchmarks.bench_swsh",       # spectral solve + on-grid eval
     "radial":  "benchmarks.bench_radial",     # method x grid length x frequency
-    # "teuk":    "benchmarks.bench_teuk",      # aggregate mode solve + stage breakdown (TODO)
+    "teuk":    "benchmarks.bench_teuk",       # aggregate mode solve + stage breakdown
 }
 
 

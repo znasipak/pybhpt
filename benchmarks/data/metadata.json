@@ -70,5 +70,29 @@
       "pybhpt_commit": "0483acd",
       "timestamp": "2026-07-20 10:24:30 BST"
     }
+  },
+  "teuk_aggregate": {
+    "platform": {
+      "cpu": "arm",
+      "machine": "arm64",
+      "system": "Darwin 24.6.0",
+      "python": "3.12.13",
+      "numpy": "2.2.0",
+      "blas": "accelerate",
+      "pybhpt_commit": "3e6287b",
+      "timestamp": "2026-07-20 10:31:28 BST"
+    }
+  },
+  "teuk_stages": {
+    "platform": {
+      "cpu": "arm",
+      "machine": "arm64",
+      "system": "Darwin 24.6.0",
+      "python": "3.12.13",
+      "numpy": "2.2.0",
+      "blas": "accelerate",
+      "pybhpt_commit": "3e6287b",
+      "timestamp": "2026-07-20 10:31:28 BST"
+    }
   }
 }
