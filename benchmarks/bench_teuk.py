@@ -4,7 +4,11 @@ Two axes:
 
   * teuk_aggregate.csv -- TeukolskyMode.solve() time across orbit class, mode number, and
                           spin, at a few resolutions. This is the end-to-end cost users
-                          actually pay per (s, l, m, k, n) mode.
+                          actually pay per (s, l, m, k, n) mode. Includes a few high-l/n
+                          spot checks (SPOTCHECK_MODES) beyond the curated MODES list, to
+                          bound the cost of the large-(l,n) tail that shows up in larger
+                          sweeps (e.g. benchmarks/regression_sweep.py, l up to 30/n up to
+                          50) but isn't otherwise exercised here.
   * teuk_stages.csv    -- a per-stage breakdown at one representative mode per orbit
                           class. TeukolskyMode.solve() is a single monolithic C++ call
                           (the Python/cython API accepts precomputed teuk/swsh objects for
@@ -49,6 +53,17 @@ MODES = [
     (2, 8, 4, 2, 10),
 ]
 
+# High-l/high-n spot checks, beyond anything above -- added to bound the cost of the
+# large-(l,n) tail of the 137k-case regression grid (benchmarks/regression_sweep.py sweeps
+# l up to 30 and n up to 50), which the modes above don't reach. Only the "generic" orbit
+# keeps these (nonzero k/n are filtered out for the equatorial/circular classes by
+# _mode_valid), which is also the class that dominates that grid's case count.
+SPOTCHECK_MODES = [
+    (-2, 13, 7, -5, 20),
+    (-2, 20, 10, 5, 30),
+    (-2, 30, 15, -8, 50),
+]
+
 TEUK_RESOLUTIONS = (2**6, 2**9, 2**12)
 
 STAGE_NS = 512
@@ -78,7 +93,7 @@ def run(outdir, quick=False):
     from pybhpt.radial import RadialTeukolsky
 
     orbits = ORBITS[:2] if quick else ORBITS
-    modes = MODES[:3] if quick else MODES
+    modes = MODES[:3] if quick else MODES + SPOTCHECK_MODES
     resolutions = (2**6, 2**10) if quick else TEUK_RESOLUTIONS
 
     # --- axis A: aggregate solve cost across the parameter space ---

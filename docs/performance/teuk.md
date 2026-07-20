@@ -22,12 +22,22 @@ Median solve time (`s = -2`) at `a = 0.9`, across orbit class, mode number, and 
 | generic | (2,2,0,0) | 0.42 ms | 3.4 ms | 29.7 ms |
 | generic | (5,3,-2,3) | 0.40 ms | 3.4 ms | 30.1 ms |
 | generic | (8,4,2,10) | 0.57 ms | 3.6 ms | 53.1 ms |
+| generic | (13,7,-5,20) | 0.69 ms | 3.8 ms | 100 ms |
+| generic | (20,10,5,30) | 1.1 ms | 4.4 ms | 101 ms |
+| generic | (30,15,-8,50) | 1.1 ms | 4.6 ms | 193 ms |
 
 `s = 0` and `s = +2` follow the same pattern at comparable cost to `s = -2` (see the full
 data). The dominant driver is **orbit class**, not mode number: generic (eccentric +
 inclined) orbits need a full 2D radial × polar source integral and are already ~5-7×
 slower than the equatorial/spherical classes at `nsamples = 512`, growing to a much larger
 gap at high resolution — see the stage breakdown below for why.
+
+The last three rows are high-`(l,n)` spot checks (`SPOTCHECK_MODES` in `bench_teuk.py`),
+added to bound the cost of the large-mode tail that appears in bigger sweeps (e.g. the
+regression grid in `benchmarks/regression_sweep.py`, which goes up to `l=30`, `n=50`) but
+isn't otherwise exercised by the curated modes above. Cost keeps climbing with `l`/`n`
+rather than plateauing — `nsamples=4096` goes from 30 ms at `l=2` to 193 ms at `l=30, n=50`,
+~6.5× over the tested range.
 
 Full data (all spins, all resolutions): [`benchmarks/data/teuk_aggregate.csv`](https://github.com/znasipak/pybhpt/blob/main/benchmarks/data/teuk_aggregate.csv).
 
