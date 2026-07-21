@@ -92,6 +92,16 @@ int integrand_convergence(Complex old_value, Complex new_value, double eps1, dou
 // Error estimate for the periodic-trapezoidal amplitude, which converges spectrally.
 // dLast is the relative change over the final sample doubling, |1 - Z_{N/2}/Z_N|, and
 // dPrev the change over the previous doubling. Treating the (geometric) tail with ratio
+// Relative change old_value -> new_value, |1 - old_value/new_value|, treating new_value == 0
+// (to machine precision) as a perfect match (0) rather than 0/0 = NaN. An exact zero shows up
+// whenever a compensated sum cancels bit-for-bit -- e.g. a parity-forbidden scalar sub-integral,
+// or any successive-refinement pair that lands on the same exact value -- and NaN does not
+// cancel when a caller later multiplies it against a (possibly zero) coefficient elsewhere,
+// since 0 * NaN = NaN, not 0.
+static double reldiff_or_zero(Complex old_value, Complex new_value){
+	return std::abs(new_value) > 0. ? std::abs(1. - old_value/new_value) : 0.;
+}
+
 // rho = dLast/dPrev, the remaining error sums to dLast*rho/(1-rho); we use that
 // extrapolation while the sequence is cleanly contracting (rho < 0.75) and otherwise fall
 // back to the bare last step (factor 1). The rho < 0.75 cap is essential: once the
@@ -817,8 +827,12 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	}
 
 	// total 2D error = radial-direction tail (geometric) + polar-direction tail (pTh*)
-	double precisionIn = conservative_precision(std::abs(1. - ZlmInCompare/ZlmIn), std::abs(1. - ZlmInComparePrev/ZlmInCompare), sumIn.getPrecision()) + pThIn;
-	double precisionUp = conservative_precision(std::abs(1. - ZlmUpCompare/ZlmUp), std::abs(1. - ZlmUpComparePrev/ZlmUpCompare), sumUp.getPrecision()) + pThUp;
+	double dLastZIn = reldiff_or_zero(ZlmInCompare, ZlmIn);
+	double dPrevZIn = (std::abs(ZlmInCompare) > 0.) ? std::abs(1. - ZlmInComparePrev/ZlmInCompare) : dLastZIn;
+	double precisionIn = conservative_precision(dLastZIn, dPrevZIn, sumIn.getPrecision()) + pThIn;
+	double dLastZUp = reldiff_or_zero(ZlmUpCompare, ZlmUp);
+	double dPrevZUp = (std::abs(ZlmUpCompare) > 0.) ? std::abs(1. - ZlmUpComparePrev/ZlmUpCompare) : dLastZUp;
+	double precisionUp = conservative_precision(dLastZUp, dPrevZUp, sumUp.getPrecision()) + pThUp;
 	if(precisionIn > PRECISION_THRESHOLD){
 		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
 	}
@@ -993,11 +1007,12 @@ TeukolskyAmplitudes teukolsky_amplitude_ecceq(int s, int L, int m, int n, Geodes
 		ZlmUp = sumUp.getSum()/double(halfSample);
 		ZlmIn = sumIn.getSum()/double(halfSample);
 	}
-	// if(sumIn.getPrecision()){
-
-	// }
-	double precisionIn = conservative_precision(std::abs(1. - ZlmInCompare/ZlmIn), std::abs(1. - ZlmInComparePrev/ZlmInCompare), sumIn.getPrecision());
-	double precisionUp = conservative_precision(std::abs(1. - ZlmUpCompare/ZlmUp), std::abs(1. - ZlmUpComparePrev/ZlmUpCompare), sumUp.getPrecision());
+	double dLastZIn = reldiff_or_zero(ZlmInCompare, ZlmIn);
+	double dPrevZIn = (std::abs(ZlmInCompare) > 0.) ? std::abs(1. - ZlmInComparePrev/ZlmInCompare) : dLastZIn;
+	double precisionIn = conservative_precision(dLastZIn, dPrevZIn, sumIn.getPrecision());
+	double dLastZUp = reldiff_or_zero(ZlmUpCompare, ZlmUp);
+	double dPrevZUp = (std::abs(ZlmUpCompare) > 0.) ? std::abs(1. - ZlmUpComparePrev/ZlmUpCompare) : dLastZUp;
+	double precisionUp = conservative_precision(dLastZUp, dPrevZUp, sumUp.getPrecision());
 
 	if(precisionIn > PRECISION_THRESHOLD){
 		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
@@ -1129,8 +1144,12 @@ TeukolskyAmplitudes teukolsky_amplitude_sphinc(int s, int L, int m, int k, Geode
 		ZlmIn = sumIn.getSum()/double(halfSample);
 	}
 
-	double precisionIn = conservative_precision(std::abs(1. - ZlmInCompare/ZlmIn), std::abs(1. - ZlmInComparePrev/ZlmInCompare), sumIn.getPrecision());
-	double precisionUp = conservative_precision(std::abs(1. - ZlmUpCompare/ZlmUp), std::abs(1. - ZlmUpComparePrev/ZlmUpCompare), sumUp.getPrecision());
+	double dLastZIn = reldiff_or_zero(ZlmInCompare, ZlmIn);
+	double dPrevZIn = (std::abs(ZlmInCompare) > 0.) ? std::abs(1. - ZlmInComparePrev/ZlmInCompare) : dLastZIn;
+	double precisionIn = conservative_precision(dLastZIn, dPrevZIn, sumIn.getPrecision());
+	double dLastZUp = reldiff_or_zero(ZlmUpCompare, ZlmUp);
+	double dPrevZUp = (std::abs(ZlmUpCompare) > 0.) ? std::abs(1. - ZlmUpComparePrev/ZlmUpCompare) : dLastZUp;
+	double precisionUp = conservative_precision(dLastZUp, dPrevZUp, sumUp.getPrecision());
 
 	if(precisionIn > PRECISION_THRESHOLD){
 		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
@@ -1912,8 +1931,10 @@ int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int
 		ICompare = II;
 		II = sumHelper.getSum()/double(2*halfSample);
 	}
+	double dLastP = reldiff_or_zero(ICompare, II);
 	{
-		double dLastP = std::abs(1. - ICompare/II);
+		// ICompare == 0: dPrev is undefined (0/0); conservatively assume no improvement over
+		// the last step (rho -> 1) rather than assuming perfect convergence (rho -> 0).
 		double dPrevP = (std::abs(ICompare) > 0.) ? std::abs(1. - IComparePrev/ICompare) : dLastP;
 		precisionOut = conservative_precision(dLastP, dPrevP, sumHelper.getPrecision());
 	}
@@ -1925,7 +1946,7 @@ int radial_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int
 	// precision; the calling driver turns status 1 into a Python warning rather than
 	// aborting, so the (poorly resolved) amplitude is still returned.
 	double effTol = std::max(errorTolerance, 10.*sumHelper.getPrecision());
-	if(std::abs(1. - ICompare/II) > effTol){
+	if(dLastP > effTol){
 		return 1;
 	}
 
@@ -1997,8 +2018,10 @@ int polar_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int,
 		ICompare = II;
 		II = sumHelper.getSum()/double(2*halfSample);
 	}
+	double dLastP = reldiff_or_zero(ICompare, II);
 	{
-		double dLastP = std::abs(1. - ICompare/II);
+		// ICompare == 0: dPrev is undefined (0/0); conservatively assume no improvement over
+		// the last step (rho -> 1) rather than assuming perfect convergence (rho -> 0).
 		double dPrevP = (std::abs(ICompare) > 0.) ? std::abs(1. - IComparePrev/ICompare) : dLastP;
 		precisionOut = conservative_precision(dLastP, dPrevP, sumHelper.getPrecision());
 	}
@@ -2008,7 +2031,7 @@ int polar_integral_convergence_sum(Complex &II, int (*integrand)(Complex &, int,
 	// Signal non-convergence (status 1) if we exhausted the grid without reaching the
 	// effective tolerance (see radial_integral_convergence_sum for the rationale).
 	double effTol = std::max(errorTolerance, 10.*sumHelper.getPrecision());
-	if(std::abs(1. - ICompare/II) > effTol){
+	if(dLastP > effTol){
 		return 1;
 	}
 
