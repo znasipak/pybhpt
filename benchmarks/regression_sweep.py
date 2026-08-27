@@ -3,9 +3,9 @@
 (this branch vs main).
 
     # build under test loaded explicitly (editable install hijacks cybhpt_full)
-    python dev/regression_sweep.py --module <branch>/cybhpt_full*.so --dump branch.npz
-    python dev/regression_sweep.py --module <main>/cybhpt_full*.so   --dump main.npz
-    python dev/regression_sweep.py --compare branch.npz main.npz
+    python benchmarks/regression_sweep.py --module <branch>/cybhpt_full*.so --dump branch.npz
+    python benchmarks/regression_sweep.py --module <main>/cybhpt_full*.so   --dump main.npz
+    python benchmarks/regression_sweep.py --compare branch.npz main.npz
 
 Uses only the API common to both builds: KerrGeodesic(a,p,e,x,ns),
 TeukolskyMode(s,l,m,k,n,orbit).solve(orbit), amplitude('In'/'Up'), precision('In'/'Up').

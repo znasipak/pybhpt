@@ -3,18 +3,19 @@
 **Verdict: no amplitude regression.** Across the full locked grid of 137,280
 mode/orbit/resolution combinations (spin s = −2, 0, +2; L up to 30; near-extremal and
 retrograde orbits; n up to 50; two resolutions), converged (`nsamples = 4096`)
-Teukolsky/scalar amplitudes on this branch match `main` to solver precision. The sweep
-also surfaced one real, since-fixed bug in this branch's precision estimate (amplitudes
-were unaffected) — see below.
+Teukolsky/scalar amplitudes on this branch match `main` to solver precision. An earlier
+run of this same sweep surfaced one real bug in this branch's precision estimate
+(amplitudes were unaffected); it was fixed in `98a7b66` and this re-sweep confirms the
+fix at full scale — see below.
 
 | | |
 |---|---|
-| branch (data) | `feature-continuous-solution` @ `6fbf442` |
-| precision fix (after this run, not re-swept) | `98a7b66` |
+| branch (data) | `feature-continuous-solution` @ `98a7b66` (includes the precision fix) |
 | baseline | `main` @ `1ccff1e` |
+| run | 2026-08-26 / 2026-08-27 (supersedes the 2026-07-20 run at `6fbf442`, taken before the fix) |
 | machine | Apple arm64, Darwin 24.6.0, Python 3.12.13, numpy 2.2.0, BLAS Accelerate |
 | modes compared | 137,280 (both builds) |
-| wall time | ~11.3 h total (branch dump ~53 min; main dump ~10.4 h; main is unoptimized and pays for it most on the generic-orbit, high-resolution tail) |
+| wall time | ~11.0 h total (branch dump ~50 min; main dump ~10.2 h; main is unoptimized and pays for it most on the generic-orbit, high-resolution tail) |
 
 ## Method
 
@@ -70,19 +71,20 @@ cover, and a handful of modes there sit at 2–5×10⁻⁴.
 
 3. **Reported precision changed by design** (error-estimate rework: RMS/L2 condition
    number, Neumaier compensated summation, geometric truncation estimate): median ratio
-   branch/main ≈ 1.0 for both boundary conditions, with a wide tail (p90 ≈ 130×, and an
-   extreme p99/max out to ~10¹⁵–10²⁷) driven by near-zero/parity-forbidden modes where
-   `main`'s older formula reports a fixed, vanishingly small constant regardless of context
-   — both sides mean "negligible/converged" there, just expressed at wildly different tiny
-   magnitudes, so the ratio itself is not physically meaningful. Intended, independent of
-   the amplitude values.
+   branch/main ≈ 1.0 for both boundary conditions, with a wide tail (p90 ≈ 194× for `In` /
+   261× for `Up`, and an extreme p99/max out to ~10¹⁵–10²⁷) driven by near-zero/
+   parity-forbidden modes where `main`'s older formula reports a fixed, vanishingly small
+   constant regardless of context — both sides mean "negligible/converged" there, just
+   expressed at wildly different tiny magnitudes, so the ratio itself is not physically
+   meaningful. Intended, independent of the amplitude values.
 
 ## Bug found and fixed: NaN precision for scalar modes at a = 0
 
-While comparing precision values, `precision('In'/'Up')` was **NaN** for a reproducible
-27–28% of scalar (s=0) modes at **exactly a=0** (Schwarzschild) — 3,254 (In) / 3,101 (Up)
-of 137,280 rows, all confined to that one (s, a) combination, reproducing identically at
-both `nsamples=128` and `4096` (so not a convergence artifact). Amplitudes were unaffected.
+In the earlier (2026-07-20) run of this sweep, `precision('In'/'Up')` was **NaN** for a
+reproducible 27–28% of scalar (s=0) modes at **exactly a=0** (Schwarzschild) — 3,254 (In)
+/ 3,101 (Up) of 137,280 rows, all confined to that one (s, a) combination, reproducing
+identically at both `nsamples=128` and `4096` (so not a convergence artifact). Amplitudes
+were unaffected.
 
 **Root cause:** `radial_integral_convergence_sum`/`polar_integral_convergence_sum`
 computed the relative-change estimate as `|1 − old/new|` with no guard on `new == 0`. A
@@ -92,17 +94,28 @@ combinations — making that division `0/0 = NaN`. The NaN then poisoned
 `scalar_amplitude_precision` even though the term's true contribution is exactly zero,
 because `0 * NaN = NaN`, not `0`.
 
-**Fix** (`98a7b66`, after this data was collected — not yet re-swept at scale): a
+**Fix** (`98a7b66`, the build this report's data was collected with): a
 `reldiff_or_zero` helper returns `0` instead of dividing when the new value is exactly
 zero, applied at the two scalar sub-integral sites (the confirmed cause) and, defensively,
 the three `|s|=2` amplitude-driver sites with the identical unguarded pattern (not observed
 to trigger there — a full |s|=2 amplitude landing on exact zero is far less likely than a
 single 1D sub-integral — but the same bug shape existed).
 
-**Verification:** rather than re-running the full 11-hour sweep, all 3,329
-previously-NaN cases from this run's dump were re-checked directly against the fixed
-build: all now return finite precision, and **zero amplitudes changed** (the fix only
-touches the precision estimate). Full unit test suite (67/67) still passes.
+**Verification (full re-sweep).** This run repeats the entire 137,280-case grid against
+the fixed build: **0 of the 11,440 `s=0, a=0` rows now return NaN precision** (was 3,254
+In / 3,101 Up), on either boundary condition, and no row anywhere in the grid has a
+NaN/inf amplitude. Amplitudes are unchanged — the converged (`ns=4096`) statistics above
+reproduce the pre-fix run exactly, as expected for a change that touches only the
+precision estimate. (The unit suite was run green at 67/67 when `98a7b66` landed; it was
+not re-run for this sweep.)
+
+**Residual: 12 rows with `precision('In') = inf`.** All one family — `s=−2, l=30, m=0,
+|k|=2, |n|=3, e=0.9, x=−0.3` at a ∈ {0.5, 0.9, 0.99}, both resolutions — where `main`
+reports ~1e-13. Their amplitudes are bitwise identical to `main` at magnitudes 1e-33 to
+1e-55, i.e. parity-suppressed modes with no physical content, so this does not affect
+any amplitude. Whether these 12 are new or predate the fix cannot be established from
+the July run, which tallied only NaN, not inf; the raw dumps from that run were
+overwritten by this one.
 
 ## Reproduce
 
