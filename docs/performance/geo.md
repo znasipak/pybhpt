@@ -11,10 +11,10 @@ Representative median times (`a = 0.9`):
 
 | orbit class | nsamples = 64 | 512 | 4096 |
 |---|---|---|---|
-| circular–equatorial | 6 µs | 9 µs | 26 µs |
-| eccentric–equatorial | 0.03–0.04 ms | 0.09–0.13 ms | 0.6–0.8 ms |
-| spherical (inclined circular) | 0.2–11 ms | 0.3–11 ms | 1–14 ms |
-| generic (eccentric + inclined) | 0.2–11 ms | 0.4–12 ms | 1.6–15 ms |
+| circular–equatorial | 7 µs | 9 µs | 28 µs |
+| eccentric–equatorial | 0.03–0.04 ms | 0.09–0.13 ms | 0.6–0.9 ms |
+| spherical (inclined circular) | 0.2–11 ms | 0.3–12 ms | 1–15 ms |
+| generic (eccentric + inclined) | 0.3–12 ms | 0.4–12 ms | 1.7–17 ms |
 
 - Circular–equatorial orbits are essentially free — the frequencies and trajectory are
   closed-form, so there is no grid-dependent solve.

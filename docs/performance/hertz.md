@@ -4,6 +4,8 @@ Timing of the Hertz-potential solve. See the [Performance overview](index) for t
 [reference machine](reference-machine).
 
 ```{note}
-Benchmarks for `pybhpt.hertz` are not yet available. They will be added here once the
-corresponding data files are committed under `benchmarks/data/`.
+No timing table on this page. `HertzMode(teuk, gauge).solve()` is a transform of an
+*already-solved* `TeukolskyMode`, so what a user waits for is the mode solve itself —
+see [`pybhpt.teuk` performance](teuk). The benchmark harness covers `geo`, `radial`,
+`swsh`, and `teuk` (with flux); `hertz` is deliberately not measured separately.
 ```

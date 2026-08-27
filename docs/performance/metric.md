@@ -4,6 +4,9 @@ Timing of the metric-reconstruction coefficients. See the [Performance overview]
 [reference machine](reference-machine).
 
 ```{note}
-Benchmarks for `pybhpt.metric` are not yet available. They will be added here once the
-corresponding data files are committed under `benchmarks/data/`.
+No timing table on this page. `MetricCoefficients` carries a real per-call cost of its
+own (unlike `flux`/`hertz`, it is not post-processing of a solved mode), but it is
+outside the current benchmark scope — the harness covers `geo`, `radial`, `swsh`, and
+`teuk` (with flux). Treat the [`pybhpt.teuk` numbers](teuk) as a lower bound on any
+pipeline that also reconstructs the metric.
 ```
