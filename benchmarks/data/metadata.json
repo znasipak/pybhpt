@@ -7,8 +7,8 @@
       "python": "3.12.13",
       "numpy": "2.2.0",
       "blas": "accelerate",
-      "pybhpt_commit": "e8548bb",
-      "timestamp": "2026-07-02 11:56:59 CEST"
+      "pybhpt_commit": "47263ba",
+      "timestamp": "2026-08-27 11:04:51 BST"
     }
   },
   "swsh_solve": {
@@ -19,8 +19,8 @@
       "python": "3.12.13",
       "numpy": "2.2.0",
       "blas": "accelerate",
-      "pybhpt_commit": "e8548bb",
-      "timestamp": "2026-07-02 11:57:03 CEST"
+      "pybhpt_commit": "47263ba",
+      "timestamp": "2026-08-27 11:48:47 BST"
     }
   },
   "swsh_grid": {
@@ -31,8 +31,8 @@
       "python": "3.12.13",
       "numpy": "2.2.0",
       "blas": "accelerate",
-      "pybhpt_commit": "e8548bb",
-      "timestamp": "2026-07-02 11:57:04 CEST"
+      "pybhpt_commit": "47263ba",
+      "timestamp": "2026-08-27 11:48:48 BST"
     }
   },
   "radial_method": {
@@ -43,8 +43,8 @@
       "python": "3.12.13",
       "numpy": "2.2.0",
       "blas": "accelerate",
-      "pybhpt_commit": "0483acd",
-      "timestamp": "2026-07-20 10:23:54 BST"
+      "pybhpt_commit": "47263ba",
+      "timestamp": "2026-08-27 11:43:12 BST"
     }
   },
   "radial_grid": {
@@ -55,8 +55,8 @@
       "python": "3.12.13",
       "numpy": "2.2.0",
       "blas": "accelerate",
-      "pybhpt_commit": "0483acd",
-      "timestamp": "2026-07-20 10:23:54 BST"
+      "pybhpt_commit": "47263ba",
+      "timestamp": "2026-08-27 11:43:12 BST"
     }
   },
   "radial_freq": {
@@ -67,8 +67,8 @@
       "python": "3.12.13",
       "numpy": "2.2.0",
       "blas": "accelerate",
-      "pybhpt_commit": "0483acd",
-      "timestamp": "2026-07-20 10:24:30 BST"
+      "pybhpt_commit": "47263ba",
+      "timestamp": "2026-08-27 11:43:13 BST"
     }
   },
   "teuk_aggregate": {
@@ -79,8 +79,8 @@
       "python": "3.12.13",
       "numpy": "2.2.0",
       "blas": "accelerate",
-      "pybhpt_commit": "ab4607f",
-      "timestamp": "2026-07-20 13:38:37 BST"
+      "pybhpt_commit": "47263ba",
+      "timestamp": "2026-08-27 11:05:41 BST"
     }
   },
   "teuk_stages": {
@@ -91,8 +91,68 @@
       "python": "3.12.13",
       "numpy": "2.2.0",
       "blas": "accelerate",
-      "pybhpt_commit": "ab4607f",
-      "timestamp": "2026-07-20 13:38:37 BST"
+      "pybhpt_commit": "47263ba",
+      "timestamp": "2026-08-27 11:05:42 BST"
+    }
+  },
+  "teuk_flux": {
+    "platform": {
+      "cpu": "arm",
+      "machine": "arm64",
+      "system": "Darwin 24.6.0",
+      "python": "3.12.13",
+      "numpy": "2.2.0",
+      "blas": "accelerate",
+      "pybhpt_commit": "47263ba",
+      "timestamp": "2026-08-27 11:05:43 BST"
+    }
+  },
+  "radial_mode": {
+    "platform": {
+      "cpu": "arm",
+      "machine": "arm64",
+      "system": "Darwin 24.6.0",
+      "python": "3.12.13",
+      "numpy": "2.2.0",
+      "blas": "accelerate",
+      "pybhpt_commit": "47263ba",
+      "timestamp": "2026-08-27 11:43:14 BST"
+    }
+  },
+  "radial_cube": {
+    "platform": {
+      "cpu": "arm",
+      "machine": "arm64",
+      "system": "Darwin 24.6.0",
+      "python": "3.12.13",
+      "numpy": "2.2.0",
+      "blas": "accelerate",
+      "pybhpt_commit": "47263ba",
+      "timestamp": "2026-08-27 11:36:26 BST"
+    }
+  },
+  "radial_random": {
+    "platform": {
+      "cpu": "arm",
+      "machine": "arm64",
+      "system": "Darwin 24.6.0",
+      "python": "3.12.13",
+      "numpy": "2.2.0",
+      "blas": "accelerate",
+      "pybhpt_commit": "47263ba",
+      "timestamp": "2026-08-27 11:43:23 BST"
+    }
+  },
+  "swsh_random": {
+    "platform": {
+      "cpu": "arm",
+      "machine": "arm64",
+      "system": "Darwin 24.6.0",
+      "python": "3.12.13",
+      "numpy": "2.2.0",
+      "blas": "accelerate",
+      "pybhpt_commit": "47263ba",
+      "timestamp": "2026-08-27 11:48:56 BST"
     }
   }
 }

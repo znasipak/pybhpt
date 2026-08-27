@@ -24,7 +24,14 @@ Two axes:
                           radial) is reported in the docs as a derived estimate of the
                           source-integration + orchestration cost, not a direct measurement.
 
-Emits benchmarks/data/teuk_aggregate.csv and benchmarks/data/teuk_stages.csv.
+  * teuk_flux.csv      -- FluxMode cost measured against the TeukolskyMode.solve it
+                          consumes, at the same mode. FluxMode(geo, teuk) is pure
+                          post-processing of an already-solved mode, so the flux page in
+                          the Performance docs reports the mode-solve cost rather than a
+                          flux-specific timing; this dataset is what justifies that.
+
+Emits benchmarks/data/teuk_aggregate.csv, benchmarks/data/teuk_stages.csv, and
+benchmarks/data/teuk_flux.csv.
 """
 import warnings
 
@@ -64,6 +71,15 @@ SPOTCHECK_MODES = [
     (-2, 30, 15, -8, 50),
 ]
 
+# Flux modes: s=-2 only (FluxMode is built from the s=-2 Teukolsky amplitudes), spanning
+# the low-l/high-l ends of MODES so the flux:solve ratio is bracketed rather than sampled
+# at one point.
+FLUX_MODES = [
+    (-2, 2, 2, 0, 0),
+    (-2, 5, 3, -2, 3),
+    (-2, 8, 4, 2, 10),
+]
+
 TEUK_RESOLUTIONS = (2**6, 2**9, 2**12)
 
 STAGE_NS = 512
@@ -91,6 +107,7 @@ def run(outdir, quick=False):
     from pybhpt.teuk import TeukolskyMode
     from pybhpt.swsh import SpinWeightedHarmonic
     from pybhpt.radial import RadialTeukolsky
+    from pybhpt.flux import FluxMode
 
     orbits = ORBITS[:2] if quick else ORBITS
     modes = MODES[:3] if quick else MODES + SPOTCHECK_MODES
@@ -135,4 +152,26 @@ def run(outdir, quick=False):
             rowsB.append({"orbit_class": cls, "s": s, "l": l, "m": m, "k": k, "n": n,
                           "nsamples_r": len(r), "nsamples_th": len(th), "stage": stage,
                           "min": t["min"], "median": t["median"], "p90": t["p90"]})
-    return save("teuk_stages", rowsB, outdir)
+    save("teuk_stages", rowsB, outdir)
+
+    # --- axis C: flux post-processing vs the mode solve it consumes ---
+    # FluxMode reads an already-solved TeukolskyMode, so its cost is reported next to that
+    # solve; the flux docs page cites the ratio instead of carrying its own timing table.
+    rowsC = []
+    for cls, a, p, e, x in orbits:
+        for ns in resolutions:
+            orbit = KerrGeodesic(a, p, e, x, ns)
+            for (s, l, m, k, n) in FLUX_MODES:
+                if not _mode_valid(s, l, m, k, n, e, x):
+                    continue
+                solved = TeukolskyMode(s, l, m, k, n, orbit)
+                solved.solve(orbit, nsamples=ns)
+                t_solve = bench(lambda s=s, l=l, m=m, k=k, n=n, orbit=orbit, ns=ns:
+                                TeukolskyMode(s, l, m, k, n, orbit).solve(orbit, nsamples=ns))
+                t_flux = bench(lambda orbit=orbit, solved=solved: FluxMode(orbit, solved))
+                for stage, tt in (("solve", t_solve), ("flux", t_flux)):
+                    rowsC.append({"orbit_class": cls, "a": a, "p": p, "e": e, "x": x,
+                                  "s": s, "l": l, "m": m, "k": k, "n": n, "nsamples": ns,
+                                  "stage": stage, "min": tt["min"], "median": tt["median"],
+                                  "p90": tt["p90"]})
+    return save("teuk_flux", rowsC, outdir)
