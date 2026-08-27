@@ -16,8 +16,14 @@ extern "C" {
 
 #define SPECTRAL_NMAX 600
 #define SPECTRAL_NMAX_INIT_ADD 15
-#define SPECTRAL_COUPLING_TEST_EPS 1.e-25
+/* The spectral basis is wide enough once every coupling coefficient beyond some index
+inside it has decayed to this fraction of the peak coefficient. Demanding decay far below
+double precision (the old 1.e-25) only ever probes round-off. */
+#define SPECTRAL_COUPLING_TEST_EPS 1.e-14
 #define SPECTRAL_COUPLING_JMAX_EPS 1.e-25
+/* Tolerance on how far the coupling vector moves between successive truncations, measured
+against the peak coefficient so that two round-off-level tails compare as converged. */
+#define SPECTRAL_COUPLING_RESIDUAL_EPS 1.e-14
 #define SPECTRAL_COUPLING_CONVERGE_EPS 1.e-25
 #define COUPLING_VECTOR_MAX 50
 #define ZERO_FREQ_LIMIT 1.e-11
@@ -500,7 +506,6 @@ coupling_test spherical_spheroidal_coupling_convergence_test(const int &s, const
 	gsl_vector* bcol = gsl_vector_alloc(dim);
 	gsl_vector* bcol2 = gsl_vector_alloc(dim2);
 	double relerror = b_data.test_err;
-	int testIndex = b_data.testIndex;
 
 	gsl_matrix_get_col(bcol, bmat, l - lmin);
 	if( gsl_vector_get(bcol, l - lmin) < 0 ){
@@ -511,7 +516,9 @@ coupling_test spherical_spheroidal_coupling_convergence_test(const int &s, const
 		gsl_vector_scale(bcol2, -1.);
 	}
 
-	double norm = gsl_vector_max(bcol);
+	double bmax = gsl_vector_max(bcol);
+	double bmin = gsl_vector_min(bcol);
+	double norm = std::abs(bmax) > std::abs(bmin) ? std::abs(bmax) : std::abs(bmin);
 	if(norm == 0.){
 		norm = 1.;
 	}
@@ -530,51 +537,56 @@ coupling_test spherical_spheroidal_coupling_convergence_test(const int &s, const
 		}
 	}
 
-	while(b_data.testIndex < dim - 1 && std::abs(gsl_vector_get(bcol, b_data.testIndex)/norm) > SPECTRAL_COUPLING_TEST_EPS){
-		if(s == 0){
-			b_data.testIndex += 2;
-		}else{
-			b_data.testIndex++;
-		}
+	/* Walk in from the truncation edge to the first index past which every coupling
+	coefficient has decayed below SPECTRAL_COUPLING_TEST_EPS of the peak. Scanning outward
+	from l - lmin instead would stop at the first sign change of an oscillating tail, which
+	at large spheroidicity sits far inside a band that is still growing. */
+	b_data.testIndex = dim;
+	while(b_data.testIndex > 0 && std::abs(gsl_vector_get(bcol, b_data.testIndex - 1)/norm) <= SPECTRAL_COUPLING_TEST_EPS){
+		b_data.testIndex--;
 	}
-	if(b_data.testIndex == dim){
-		if(s == 0){
-			b_data.testIndex-= 2;
-		}else{
-			b_data.testIndex--;
-		}
+	bool tailResolved = (b_data.testIndex < dim);
+	if(b_data.testIndex > dim - 1){
+		b_data.testIndex = dim - 1;
 	}
 
 	double jmax_denom = gsl_vector_get(bcol2, b_data.jmax);
-	double test_denom = gsl_vector_get(bcol2, b_data.testIndex);
 	if(jmax_denom == 0){
 		jmax_denom = DBL_EPSILON*pow(g, 1);
 	}
-	if(test_denom == 0){
-		test_denom = DBL_EPSILON*pow(g, 1);
-	}
 
 	double jmax_num = gsl_vector_get(bcol, b_data.jmax);
-	double test_num = gsl_vector_get(bcol, b_data.testIndex);
 	if(jmax_num == 0){
 		jmax_num = DBL_EPSILON*pow(g, 1);
 	}
-	if(test_num == 0){
-		test_num = DBL_EPSILON*pow(g, 1);
-	}
-
 
 	b_data.jmax_err = std::abs(1 - jmax_num/jmax_denom);
-	b_data.test_err = std::abs(1 - test_num/test_denom);
+	/* Measure how much widening the basis moved the coupling vector, on the scale of the
+	peak coefficient. The old test took the relative change of a single coefficient chosen
+	where it had already fallen to 1e-25 of the peak: a ratio of two round-off-level
+	numbers, decided by the low bits of the input, so it failed at random and drove the
+	truncation loop upward with nothing left to gain. */
+	b_data.test_err = 0.;
+	for(int i = 0; i < dim; i++){
+		double diff = std::abs(gsl_vector_get(bcol2, i) - gsl_vector_get(bcol, i))/norm;
+		if(diff > b_data.test_err){
+			b_data.test_err = diff;
+		}
+	}
 
-	double convergenceCriteria = SPECTRAL_COUPLING_CONVERGE_EPS;
+	double convergenceCriteria = SPECTRAL_COUPLING_RESIDUAL_EPS;
 	if(g > 1.){
 		convergenceCriteria *= pow(g, 2);
 	}
 
-	if( b_data.test_err < convergenceCriteria ){
+	gsl_vector_free(bcol);
+	gsl_vector_free(bcol2);
+
+	if( tailResolved && b_data.test_err < convergenceCriteria ){
 		return SUCCESS;
-	}else if( relerror < b_data.test_err && testIndex == b_data.testIndex ){
+	}else if( tailResolved && b_data.test_err >= relerror ){
+		/* Widening the basis stopped moving the coupling vector any closer: stop
+		regardless of whether the test index moved, and keep the previous truncation. */
 		return STALL;
 	}else{
 		return FAIL;

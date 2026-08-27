@@ -19,16 +19,17 @@ the solve dominates):
 
 | gamma | median solve time |
 |---|---|
-| 0 (spherical) | 4–15 µs |
-| 1 | 0.2–1.3 ms |
-| 4 | 0.35–0.87 ms |
-| 10 | 0.74–23 ms |
+| 0 (spherical) | 3.6–15 µs |
+| 1 | 62–112 µs |
+| 4 | 73–250 µs |
+| 10 | 0.23–0.45 ms |
 
 At `gamma = 0` the harmonic reduces to a spin-weighted *spherical* harmonic and no
-eigenvalue solve is needed, so it is ~100× cheaper. For nonzero `gamma` the cost is set by
-the coupling bandwidth rather than `l` alone, and grows sharply for large `gamma` (strong
+eigenvalue solve is needed, so it is ~50× cheaper. For nonzero `gamma` the cost is set by
+the coupling bandwidth rather than `l` alone, and rises with `gamma` (strong
 spheroidicity, e.g. high-frequency modes of a near-extremal black hole), where the
-truncated coupling matrix must be enlarged.
+truncated coupling matrix must be enlarged. The growth is smooth: the widest spread within
+a `gamma` column is a factor of ~3.4, across all `(s, l)` in the sweep.
 
 Full data: [`benchmarks/data/swsh_solve.csv`](https://github.com/znasipak/pybhpt/blob/main/benchmarks/data/swsh_solve.csv).
 
@@ -39,14 +40,14 @@ length, for three representative modes:
 
 | mode `(s, l, m, gamma)` | ns = 64 | 512 | 4096 |
 |---|---|---|---|
-| `(-2, 2, 2, 2)` | 0.40 ms | 0.74 ms | 3.7 ms |
-| `(-2, 8, 4, 4)` | 0.74 ms | 1.3 ms | 6.1 ms |
-| `(2, 13, 7, 8)` | 9.0 ms | 10.8 ms | 21.4 ms |
+| `(-2, 2, 2, 2)` | 0.18 ms | 0.56 ms | 3.8 ms |
+| `(-2, 8, 4, 4)` | 0.37 ms | 0.99 ms | 6.4 ms |
+| `(2, 13, 7, 8)` | 0.48 ms | 1.5 ms | 9.3 ms |
 
 The slope with `nsamples` is the on-grid evaluation cost; the intercept is the fixed
-per-mode spectral-solve offset (visible as the near-constant time at small grids for the
-high-`gamma` mode). Once solved, an instance can be re-evaluated at arbitrary angles via
-`.eval(theta, deriv=…)` without repeating the solve.
+per-mode spectral-solve offset, a few hundred µs even for the high-`gamma` mode, so from
+`ns = 512` up the grid evaluation dominates. Once solved, an instance can be re-evaluated
+at arbitrary angles via `.eval(theta, deriv=…)` without repeating the solve.
 
 Full data: [`benchmarks/data/swsh_grid.csv`](https://github.com/znasipak/pybhpt/blob/main/benchmarks/data/swsh_grid.csv).
 
@@ -57,14 +58,14 @@ of two: the radial solver takes spin and frequency separately, while the harmoni
 their product `gamma = a·omega`. 600 random points — `l` uniform on [2, 50], one random `m`
 per point in `[-l, l]`, `gamma` uniform on [0.02, 5] — at `s = -2` on a fixed 256-point
 `theta` grid, timing the full construction (spectral solve plus on-grid evaluation). Every
-point succeeded. Median 1.07 ms, p90 2.13 ms, p99 3.21 ms.
+point succeeded. Median 0.65 ms, p90 1.18 ms, p99 1.53 ms, slowest point 1.60 ms.
 
 ```{figure} ../_static/figures/swsh_random_l_vs_gamma.png
 :alt: Construction time over mode number l and spheroidicity gamma
 :width: 100%
 
-Cost rises with both, `l` more steeply than `gamma` — but the hottest points do not sit in
-the top-right corner where a smooth scaling would put them.
+Cost rises with both, `l` far more steeply than `gamma`; the hottest points are the
+high-`l` end, at no particular `gamma`.
 ```
 
 ```{figure} ../_static/figures/swsh_random_l_vs_m.png
@@ -87,38 +88,37 @@ Binning by `|m|/l` shows the effect cleanly, at fixed everything else:
 
 | `abs(m)/l` | n | median | p90 |
 |---|---|---|---|
-| 0.0–0.2 | 116 | 1.49 ms | 3.01 ms |
-| 0.2–0.5 | 157 | 1.38 ms | 2.23 ms |
-| 0.5–0.8 | 184 | 0.98 ms | 1.72 ms |
-| 0.8–1.0 | 143 | 0.84 ms | 1.28 ms |
+| 0.0–0.2 | 116 | 0.84 ms | 1.45 ms |
+| 0.2–0.5 | 157 | 0.81 ms | 1.24 ms |
+| 0.5–0.8 | 184 | 0.62 ms | 1.07 ms |
+| 0.8–1.0 | 143 | 0.51 ms | 0.86 ms |
 
-A log-log fit (R² = 0.75) gives `log l` +0.39, `log gamma` +0.25, and `|m|/l` **−0.65** —
+A log-log fit (R² = 0.69) gives `log l` +0.46, `log gamma` +0.15, and `|m|/l` **−0.46** —
 the only strongly negative coefficient anywhere in these benchmarks. Nearly axisymmetric
 modes need the widest spherical–spheroidal coupling band, so they carry the largest
 eigenproblem.
 
-```{warning}
-**Construction time is not a smooth function of `gamma`.** The slowest point in the sample
-(`l = 15, m = -1, gamma = 4.8123044703`) takes ~29 ms, roughly 20× its neighbours, and it
-reproduces on re-timing. Perturbing `gamma` in its tenth significant digit — to
-`4.8123044751` — drops it back to 1.5 ms.
+```{note}
+**Construction time used to be a discontinuous function of `gamma`.** Before the
+truncation-test fix, the slowest point in this sample (`l = 15, m = -1, gamma = 4.8123044703`) took ~29 ms,
+roughly 20× its neighbours, while perturbing `gamma` in its tenth significant digit — to
+`4.8123044751` — dropped it back to 1.5 ms. The results were unaffected; the extra time was
+wasted work.
 
-The **results are unaffected**: both values return the same eigenvalue, the same coupling
-range, and harmonics agreeing to 2.8e-10, with `couplingstatus = 0` and no warning. The
-extra time is wasted work, not a loss of accuracy.
+The cause was the truncation-growth loop in `swsh.cpp`, which raises `nmax` by 10 and
+re-solves the dense eigenproblem until a convergence test passes. That test took the
+*relative* change of a single coupling coefficient across successive truncations, evaluated
+at the first index where the coefficient had already fallen to 1e-25 of the peak — a ratio
+of two round-off-level numbers, so passing or failing was decided by the low bits of the
+input, and a failure sent `nmax` climbing toward its limit of 600 at O(nmax³) per retry.
 
-The cost is entirely in the spectral solve (identical spike at a 4-point `theta` grid) and
-comes from the truncation-growth loop in `swsh.cpp`: `nmax` is raised by 10 and the dense
-eigenproblem re-solved until a convergence test passes. That test compares a coupling
-coefficient across successive truncations against `SPECTRAL_COUPLING_CONVERGE_EPS = 1e-25`,
-evaluated at the first index where the coefficient has already fallen to 1e-25 of the peak
-— i.e. at the floating-point noise floor, where passing or failing is decided by the low
-bits of the input. When it keeps failing, `nmax` climbs toward the limit of 600 and each
-retry costs O(nmax³).
-
-Incidence is low: 3 of 600 points here, and 1 of 800 in a separate random probe, exceed 10×
-the median. Budget from the median and p90 columns and expect the occasional mode to cost
-an order of magnitude more than its neighbours.
+The test now measures the largest change in the coupling vector against the peak
+coefficient, requires the tail to have decayed below 1e-14 of the peak inside the current
+basis, and tolerates 1e-14 (scaled by `gamma²` above `gamma = 1`). Two round-off-level tails
+therefore compare as converged instead of at random. The same point now takes 0.42 ms with
+an unchanged eigenvalue and coupling range, no sample point exceeds 10× the median, and the
+solve is 3–20× faster across the whole `gamma` sweep. Eigenvalues and coupling coefficients
+agree with the old truncation to ~1e-13 relative over `|gamma| <= 10`.
 ```
 
 Full data: [`benchmarks/data/swsh_random.csv`](https://github.com/znasipak/pybhpt/blob/main/benchmarks/data/swsh_random.csv).

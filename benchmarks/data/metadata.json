@@ -20,7 +20,7 @@
       "numpy": "2.2.0",
       "blas": "accelerate",
       "pybhpt_commit": "47263ba",
-      "timestamp": "2026-08-27 11:48:47 BST"
+      "timestamp": "2026-08-27 12:19:27 BST"
     }
   },
   "swsh_grid": {
@@ -32,7 +32,7 @@
       "numpy": "2.2.0",
       "blas": "accelerate",
       "pybhpt_commit": "47263ba",
-      "timestamp": "2026-08-27 11:48:48 BST"
+      "timestamp": "2026-08-27 12:19:27 BST"
     }
   },
   "radial_method": {
@@ -152,7 +152,7 @@
       "numpy": "2.2.0",
       "blas": "accelerate",
       "pybhpt_commit": "47263ba",
-      "timestamp": "2026-08-27 11:48:56 BST"
+      "timestamp": "2026-08-27 12:19:31 BST"
     }
   }
 }
