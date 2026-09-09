@@ -98,27 +98,4 @@ the only strongly negative coefficient anywhere in these benchmarks. Nearly axis
 modes need the widest spherical–spheroidal coupling band, so they carry the largest
 eigenproblem.
 
-```{note}
-**Construction time used to be a discontinuous function of `gamma`.** Before the
-truncation-test fix, the slowest point in this sample (`l = 15, m = -1, gamma = 4.8123044703`) took ~29 ms,
-roughly 20× its neighbours, while perturbing `gamma` in its tenth significant digit — to
-`4.8123044751` — dropped it back to 1.5 ms. The results were unaffected; the extra time was
-wasted work.
-
-The cause was the truncation-growth loop in `swsh.cpp`, which raises `nmax` by 10 and
-re-solves the dense eigenproblem until a convergence test passes. That test took the
-*relative* change of a single coupling coefficient across successive truncations, evaluated
-at the first index where the coefficient had already fallen to 1e-25 of the peak — a ratio
-of two round-off-level numbers, so passing or failing was decided by the low bits of the
-input, and a failure sent `nmax` climbing toward its limit of 600 at O(nmax³) per retry.
-
-The test now measures the largest change in the coupling vector against the peak
-coefficient, requires the tail to have decayed below 1e-14 of the peak inside the current
-basis, and tolerates 1e-14 (scaled by `gamma²` above `gamma = 1`). Two round-off-level tails
-therefore compare as converged instead of at random. The same point now takes 0.42 ms with
-an unchanged eigenvalue and coupling range, no sample point exceeds 10× the median, and the
-solve is 3–20× faster across the whole `gamma` sweep. Eigenvalues and coupling coefficients
-agree with the old truncation to ~1e-13 relative over `|gamma| <= 10`.
-```
-
 Full data: [`benchmarks/data/swsh_random.csv`](https://github.com/znasipak/pybhpt/blob/main/benchmarks/data/swsh_random.csv).
