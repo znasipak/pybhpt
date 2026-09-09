@@ -1,20 +1,24 @@
 [build-system]
 requires = [
   "cython",
-  "numpy",
+  # Build against the oldest supported 2.x: numpy 2 wheels stay ABI-compatible with newer
+  # runtimes, so the floor here is what matters. The ceiling mirrors the runtime pin below;
+  # leaving it unpinned would compile against a numpy the install step then refuses.
+  "numpy>=2.0,<2.3",
   "scikit-build-core"
 ]
 build-backend = "scikit_build_core.build"
 
 [project]
 name = "pybhpt"
-version = "0.9.11"
+version = "1.0.0"
 description = "Black Hole Perturbation Theory and Self-Force Algorithms in Python"
 authors = [
   { name = "Zach Nasipak", email = "znasipak@gmail.com" }
 ]
 readme = "README.md"
 license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
 classifiers = [
   "Programming Language :: Python :: 3",
   "Programming Language :: Cython",
@@ -23,7 +27,10 @@ classifiers = [
 ]
 requires-python = ">=3.12"
 dependencies = [
-  "numpy <= 2.2",
+  # "<= 2.2" excluded 2.2.1-2.2.6 as well as 2.3; "<2.3" is the intended ceiling. That
+  # ceiling matches numba (pulled in by `spherical` in the extended extra), which requires
+  # numpy<2.3 -- check numba before raising it.
+  "numpy>=1.24,<2.3",
   "scipy"
 ]
 
