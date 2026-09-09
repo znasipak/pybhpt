@@ -1,3 +1,7 @@
+---
+orphan: true
+---
+
 # `pybhpt.redshift` performance
 
 Timing of the Detweiler redshift invariant. See the [Performance overview](index) for the methodology and

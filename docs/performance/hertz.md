@@ -1,3 +1,7 @@
+---
+orphan: true
+---
+
 # `pybhpt.hertz` performance
 
 Timing of the Hertz-potential solve. See the [Performance overview](index) for the methodology and

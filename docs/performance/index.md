@@ -14,10 +14,7 @@ geo
 radial
 swsh
 teuk
-hertz
 flux
-metric
-redshift
 ```
 
 ## Methodology

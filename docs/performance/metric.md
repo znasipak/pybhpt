@@ -1,3 +1,7 @@
+---
+orphan: true
+---
+
 # `pybhpt.metric` performance
 
 Timing of the metric-reconstruction coefficients. See the [Performance overview](index) for the methodology and
