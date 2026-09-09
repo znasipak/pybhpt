@@ -79,8 +79,10 @@ jobs:
         # serves a Packages.gz that disagrees with its own Release file. Drop those lists
         # first so a flake in them cannot fail the build, and retry the Ubuntu archives.
         run: |
-          sudo rm -f /etc/apt/sources.list.d/google-chrome.list \
-                     /etc/apt/sources.list.d/microsoft-prod.list
+          # Match any extension: 24.04 images use deb822 (.sources), older ones .list.
+          echo "third-party lists before:"; ls -1 /etc/apt/sources.list.d/ || true
+          sudo find /etc/apt/sources.list.d -maxdepth 1 -type f \
+               \( -iname '*google*' -o -iname '*chrome*' -o -iname '*microsoft*' \) -print -delete
           sudo apt-get update -o Acquire::Retries=3
           sudo apt-get install -y libopenblas-dev
 
