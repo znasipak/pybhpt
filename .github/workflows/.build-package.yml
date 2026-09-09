@@ -73,7 +73,16 @@ jobs:
 
       - name: Install LAPACK (Linux; macOS uses the Accelerate framework)
         if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y libopenblas-dev
+        # The runner image preinstalls third-party apt repos (Chrome, Microsoft) that this
+        # project does not use, and apt-get update exits non-zero if any index fails --
+        # which they intermittently do, e.g. a Chrome "Hash Sum mismatch" when its CDN
+        # serves a Packages.gz that disagrees with its own Release file. Drop those lists
+        # first so a flake in them cannot fail the build, and retry the Ubuntu archives.
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/google-chrome.list \
+                     /etc/apt/sources.list.d/microsoft-prod.list
+          sudo apt-get update -o Acquire::Retries=3
+          sudo apt-get install -y libopenblas-dev
 
       - name: Install package and run tests
         # Require LAPACK so a silent fallback to the slow gsl_eigen_symm path fails CI.
