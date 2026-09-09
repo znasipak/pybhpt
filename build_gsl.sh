@@ -14,19 +14,26 @@ fi
 
 # Download source.
 #
-# curl's --retry only covers transient HTTP responses (408, 429, 5xx) and timeouts, so a
-# mid-transfer connection reset -- exit 35, which is how a bad GNU mirror usually fails --
-# was not retried at all. --retry-all-errors fixes that; --speed-limit/--speed-time abort a
-# transfer that has stalled so the retry actually fires instead of hanging on a dead
-# mirror; and the loop falls through to named mirrors rather than trusting whichever host
-# the ftpmirror redirector picks.
+# curl's own --retry only covers transient HTTP responses (408, 429, 5xx) and timeouts, so
+# a mid-transfer connection reset -- exit 35, which is how a bad GNU mirror usually fails --
+# is not retried. --retry-all-errors would fix that but needs curl >= 7.71, and the
+# manylinux/musllinux build containers ship far older curl (CentOS 7 is on 7.29), so the
+# retrying is done here in shell instead: every attempt is retried across every mirror.
+# Only long-standing curl options are used. --speed-limit/--speed-time abort a transfer
+# that has stalled so the next attempt starts instead of hanging on a dead mirror.
 GSL_TARBALL="gsl-${GSL_VERSION}.tar.gz"
 # Optional integrity check: set GSL_SHA256 to the published checksum to enable it.
 GSL_SHA256="${GSL_SHA256:-}"
 
+GSL_MIRRORS="
+https://ftpmirror.gnu.org/gsl/${GSL_TARBALL}
+https://ftp.gnu.org/gnu/gsl/${GSL_TARBALL}
+https://mirrors.kernel.org/gnu/gsl/${GSL_TARBALL}
+"
+GSL_FETCH_ATTEMPTS="${GSL_FETCH_ATTEMPTS:-3}"
+
 fetch_gsl() {
     curl --fail --location \
-        --retry 5 --retry-delay 5 --retry-all-errors \
         --connect-timeout 30 --speed-limit 1024 --speed-time 30 \
         "$1" -o "${GSL_TARBALL}"
 }
@@ -34,17 +41,21 @@ fetch_gsl() {
 mkdir -p /tmp/gsl-src
 cd /tmp/gsl-src
 rm -f "${GSL_TARBALL}"
-for url in \
-    "https://ftpmirror.gnu.org/gsl/${GSL_TARBALL}" \
-    "https://ftp.gnu.org/gnu/gsl/${GSL_TARBALL}" \
-    "https://mirrors.kernel.org/gnu/gsl/${GSL_TARBALL}"
-do
-    echo "Fetching ${url}"
-    if fetch_gsl "${url}"; then
-        break
+attempt=1
+while [ "${attempt}" -le "${GSL_FETCH_ATTEMPTS}" ]; do
+    for url in ${GSL_MIRRORS}; do
+        echo "Fetching ${url} (attempt ${attempt}/${GSL_FETCH_ATTEMPTS})"
+        if fetch_gsl "${url}"; then
+            break 2
+        fi
+        echo "  mirror failed" >&2
+        rm -f "${GSL_TARBALL}"
+    done
+    attempt=$((attempt + 1))
+    if [ "${attempt}" -le "${GSL_FETCH_ATTEMPTS}" ]; then
+        echo "  all mirrors failed; retrying in 5s" >&2
+        sleep 5
     fi
-    echo "  mirror failed, trying next" >&2
-    rm -f "${GSL_TARBALL}"
 done
 
 if [ ! -s "${GSL_TARBALL}" ]; then
