@@ -40,6 +40,13 @@ notebooks/tutorial.ipynb
 ```
 
 ```{toctree}
+:maxdepth: 2
+:caption: Performance
+
+performance/index
+```
+
+```{toctree}
 :maxdepth: 1
 :caption: Background
 

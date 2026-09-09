@@ -1,0 +1,7 @@
+side,nsamples,n,reldiff_median,reldiff_p90,reldiff_p99,reldiff_max
+In,128,13312,9.4e-14,8.8e-01,1.6e+00,1.9e+00
+In,4096,12201,3.7e-14,1.2e-12,3.5e-10,3.9e-08
+Up,128,19655,6.6e-08,1.4e+00,1.9e+00,2.0e+00
+Up,4096,14688,5.2e-13,8.6e-09,8.6e-06,5.3e-04
+In_precisionRatio,all,137268,1.00,193.67,4.50e+15,4.16e+26
+Up_precisionRatio,all,137280,1.00,261.36,2.11e+16,2.09e+27

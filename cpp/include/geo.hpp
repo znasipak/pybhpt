@@ -8,10 +8,20 @@
 #include "specialfunc.hpp"
 #include <gsl/gsl_roots.h>
 
+// Phase parametrization used to sample the geodesic / source over the orbital
+// radial and polar libration. Mino: uniform in the Mino phases (q_r, q_theta) --
+// the historical default, reproduced byte-for-byte. Darwin: uniform in the
+// relativistic anomalies (psi radial, chi polar), which resolves high-e /
+// near-separatrix orbits more evenly. The enum is the extension point: adding a
+// new parametrization is a new value plus its phase/Jacobian fill in geo.cpp.
+enum class GeodesicParametrization { Mino, Darwin };
+
 class GeodesicTrajectory{
 public:
 	GeodesicTrajectory() {};
 	GeodesicTrajectory(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta);
+	GeodesicTrajectory(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta,
+		Vector qr, Vector qth, Vector jacR, Vector jacTh);
 	~GeodesicTrajectory() {};
 	Vector tR;
 	Vector tTheta;
@@ -19,6 +29,17 @@ public:
 	Vector theta;
 	Vector phiR;
 	Vector phiTheta;
+
+	// Sampling-grid metadata for the source integrator. qr/qth hold the Mino
+	// phase at each sample (which equals the uniform index grid for Mino, but is
+	// a nonlinear function of the sample index for other parametrizations).
+	// jacR/jacTh hold the change-of-variable weight dq_r/dphase, dq_theta/dphase.
+	// Empty for trajectories built with the 6-argument constructor, in which case
+	// the integrator falls back to the uniform-Mino grid (qr = index*delta, jac = 1).
+	Vector qr;
+	Vector qth;
+	Vector jacR;
+	Vector jacTh;
 
 	double getTimeAccumulationRadial(int pos);
 	double getTimeAccumulationPolar(int pos);
@@ -68,7 +89,7 @@ public:
 class GeodesicSource{
 public:
 	GeodesicSource(){};
-	GeodesicSource(double a, double p, double e, double x, int Nsample);
+	GeodesicSource(double a, double p, double e, double x, int Nsample, GeodesicParametrization param = GeodesicParametrization::Mino);
 	~GeodesicSource(){};
 
 	int getOrbitalSampleNumber();
@@ -91,6 +112,14 @@ public:
 	Vector getRadialPosition();
 	Vector getPolarPosition();
 	Vector getAzimuthalAccumulation(int j);
+
+	// Sampling-grid metadata: the Mino phases (q_r, q_theta) at each trajectory sample and
+	// the change-of-variable weights (dq_r/dphase, dq_theta/dphase) for the chosen phase
+	// parametrization. For the Mino parametrization these are the uniform grid and unit weights.
+	Vector getRadialPhase();
+	Vector getPolarPhase();
+	Vector getRadialJacobian();
+	Vector getPolarJacobian();
 
 	double getTimeAccumulation(int j, int pos);
 	double getRadialPosition(int pos);
@@ -132,6 +161,8 @@ public:
 	void setConstants(double a, double p, double e, double x,
 		double En, double Lz, double Qc, double r1, double r2, double r3, double r4, double z1, double z2, double upT, double upR, double upTh, double upPhi, double cR, double cTh, double cPh);
 	void setTrajectory(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta);
+	void setTrajectory(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta,
+		Vector qr, Vector qth, Vector jacR, Vector jacTh);
 	void setCoefficients(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta);
 	// void save(std::string dir);
 
@@ -269,7 +300,7 @@ double phip_of_angle(double angle, Vector &fourier);
 
 void kerr_trajectory(Vector& tR, Vector& tTh, Vector& rp, Vector& thetap, Vector& phiR, Vector& phiTh, double p, double e, double x, Vector fourier_tr, Vector fourier_tz, Vector fourier_psi, Vector fourier_chi, Vector fourier_phir, Vector fourier_phiz);
 
-GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsample);
+GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsample, GeodesicParametrization param = GeodesicParametrization::Mino);
 // void mino_of_psi_test();
 
 ///////////////////////

@@ -81,6 +81,7 @@ int TeukolskyMode::generateSolutions(SpinWeightedHarmonic& swsh, RadialTeukolsky
 
 	_lambda = swsh.getEigenvalue();
 	_coupling = swsh.getCouplingCoefficient();
+	_couplingStatus = swsh.getCouplingStatus();
 	_Slm = swsh.getSolution();
 	// swsh.generateDerivatives();
 	// _SlmP = swsh.getDerivative();
@@ -106,7 +107,7 @@ int TeukolskyMode::generateSolutions(SpinWeightedHarmonic& swsh, RadialTeukolsky
 
 	TeukolskyAmplitudes Zlm;
 	if(_s == 0){
-		Zlm = scalar_amplitude(_L, _m, _k, _n, traj, geoConst, teuk, swsh);
+		Zlm = scalar_amplitude(_L, _m, _k, _n, traj, geoConst, teuk, swsh, _sourceTolerance);
 		//
 		// ComplexDerivativesMatrixStruct RinMat = {.solution = _Rin, .derivative = _RinP, .secondDerivative = _Rin};
 		// ComplexDerivativesMatrixStruct RupMat = {.solution = _Rup, .derivative = _RupP, .secondDerivative = _Rup};
@@ -121,24 +122,24 @@ int TeukolskyMode::generateSolutions(SpinWeightedHarmonic& swsh, RadialTeukolsky
 				Zlm.in = 0.;
 				Zlm.up = 0.;
 			}else{
-				Zlm = field_amplitude_circeq(_s, _L, _m, traj, geoConst, teuk, swsh);
+				Zlm = field_amplitude_circeq(_s, _L, _m, traj, geoConst, teuk, swsh, _sourceTolerance);
 			}
 		}else if(geoConst.e == 0.){
 			if(std::abs(_n) > 0){
 				Zlm.in = 0.;
 				Zlm.up = 0.;
 			}else{
-				Zlm = field_amplitude_sphinc(_s, _L, _m, _k, traj, geoConst, teuk, swsh);
+				Zlm = field_amplitude_sphinc(_s, _L, _m, _k, traj, geoConst, teuk, swsh, _sourceTolerance);
 			}
 		}else if(std::abs(geoConst.x) == 1.){
 			if(std::abs(_k) > 0){
 				Zlm.in = 0.;
 				Zlm.up = 0.;
 			}else{
-				Zlm = field_amplitude_ecceq(_s, _L, _m, _n, traj, geoConst, teuk, swsh);
+				Zlm = field_amplitude_ecceq(_s, _L, _m, _n, traj, geoConst, teuk, swsh, _sourceTolerance);
 			}
 		}else{
-			Zlm = field_amplitude(_s, _L, _m, _k, _n, traj, geoConst, teuk, swsh);
+			Zlm = field_amplitude(_s, _L, _m, _k, _n, traj, geoConst, teuk, swsh, _sourceTolerance);
 		}
 	}
 
@@ -147,7 +148,9 @@ int TeukolskyMode::generateSolutions(SpinWeightedHarmonic& swsh, RadialTeukolsky
 	_ZlmUp = Zlm.up;
 	_ZlmInPrecision = Zlm.inPrecision;
 	_ZlmUpPrecision = Zlm.upPrecision;
-	return 0;
+	// Zlm.status == 1 flags a source integral that did not reach tolerance within the
+	// grid; the amplitude is still returned. Propagated so the Python layer can warn.
+	return Zlm.status;
 }
 
 int TeukolskyMode::flipSpinWeightAndFrequency(){
@@ -216,10 +219,13 @@ int TeukolskyMode::getAzimuthalModeNumber(){ return _m; }
 int TeukolskyMode::getPolarModeNumber(){ return _k; }
 int TeukolskyMode::getRadialModeNumber(){ return _n; }
 int TeukolskyMode::getSampleSize(){ return _sampleSize; }
+void TeukolskyMode::setSourceIntegrationTolerance(double tol){ _sourceTolerance = tol; }
+double TeukolskyMode::getSourceIntegrationTolerance(){ return _sourceTolerance; }
 double TeukolskyMode::getBlackHoleSpin(){ return _a; }
 double TeukolskyMode::getFrequency(){ return _omega; }
 double TeukolskyMode::getHorizonFrequency(){ return _omega - 0.5*_m*_a/(1. + sqrt(1. - _a*_a)); }
 double TeukolskyMode::getEigenvalue(){ return _lambda; }
+int TeukolskyMode::getCouplingStatus(){ return _couplingStatus; }
 Vector TeukolskyMode::getCouplingCoefficient(){ return _coupling; }
 double TeukolskyMode::getCouplingCoefficient(int l){
 	if(l <= getMaxCouplingModeNumber() && l >= getMinCouplingModeNumber()){

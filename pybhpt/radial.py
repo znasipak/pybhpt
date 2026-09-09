@@ -1,4 +1,5 @@
 from cybhpt_full import RadialTeukolsky as _RadialTeukolskyCython
+from cybhpt_full import InterpolatedRadialTeukolsky as _InterpolatedRadialTeukolskyCython
 from cybhpt_full import available_methods as _available_methods_cython
 from cybhpt_full import renormalized_angular_momentum as _nu_cython
 from cybhpt_full import renormalized_angular_momentum_monodromy as _nu_2_cython
@@ -236,7 +237,7 @@ class RadialTeukolsky:
         """
         self.base.set_bc(bc, R, Rp, r)
 
-    def solve(self, method = "AUTO", bc = None):
+    def solve(self, method = "AUTO", bc = None, rtol = None):
         """Solves the radial Teukolsky equation.
 
         Parameters
@@ -246,11 +247,16 @@ class RadialTeukolsky:
         bc : str, optional
             Specifies which homogeneous solutions to compute. If None, both "In" (horizon) and "Up" (infinity) solutions are computed.
             If "In", only the horizon solution is computed. If "Up", only the infinity solution is computed.
+        rtol : float, optional
+            Relative tolerance for the numerical ODE integrators (HBL/TEUK/GSN). ``None``
+            (the default) uses the built-in tolerance; a positive value trades accuracy
+            for fewer integration steps. Ignored by the analytic methods (MST/ASYMP).
         """
+        cyrtol = -1. if rtol is None else rtol
         if bc is None:
-            self.base.solve(method, "None")
+            self.base.solve(method, "None", rtol=cyrtol)
         else:
-            self.base.solve(method, bc)
+            self.base.solve(method, bc, rtol=cyrtol)
 
     def flipspinweight(self):
         """Flips the sign of the spin weight of the field."""
@@ -442,3 +448,211 @@ def hypergeo_2F1(a, b, c, x):
         The value of the hypergeometric function 2F1(a, b; c; x).
     """
     return _hypergeo_2F1_cython(a, b, c, x)
+
+
+class InterpolatedRadialTeukolsky:
+    """An interpolated representation of the homogeneous radial Teukolsky solution.
+
+    Builds the interpolant using **dense ODE output**: every accepted step of the
+    adaptive GSL rkf45 integrator is captured directly as an interpolation node.
+    Interpolation is performed in HBL (hyperboloidal) Ψ space — which is smooth
+    even for high-frequency modes — and a **septic Hermite polynomial** (matching
+    Ψ, Ψ', Ψ'', and Ψ''' at each node) gives O(h^8) accuracy.  The step size is
+    capped at ``h_max = 0.8*(8*rtol)^{1/8}/ν(r)`` where ν(r) is the local HBL
+    oscillation frequency:
+
+    * **In solution** (oscillatory at large r): ν_In(r) → 2ω as r → ∞, giving
+      the constant cap ``h_max = 0.8*(8*rtol)^{1/8}/(2|ω|)``.  Near rmin the
+      frequency is larger (ν = 2ω(r²+a²)/Δ), but rkf45 adapts naturally there.
+    * **Up solution** (oscillatory near r_hor): ν_Up(r) ∝ 1/(r−r+) diverges at the
+      horizon, so the cap is ``h_max(r) = slope × (r−r+)`` where
+      ``slope = 0.8*(8*rtol)^{1/8}*(r+−r−)/(2|ω|(r+²+a²))``.  This is
+      non-binding at large r (smooth Up) and tightens automatically near r+.
+
+    At rtol=1e-10 the septic step cap is **3.4× larger** than the equivalent
+    quintic (O(h^6)) cap, giving proportionally fewer nodes and faster builds.
+
+    The underlying Teukolsky solution R(r) is recovered via the HBL back-transform
+    at evaluation time.  For s < 0 Up solutions a SpinFlip stabilisation is applied
+    automatically (integrate with s → −s, then apply the Teukolsky–Starobinsky
+    transform).
+
+    Construction requires a single ODE pass per solution (one temporary
+    RadialTeukolsky object for boundary conditions only).
+
+    Parameters
+    ----------
+    s : int
+        Spin weight of the field.
+    j : int
+        Spheroidal harmonic mode number.
+    m : int
+        Azimuthal harmonic mode number.
+    a : float
+        Black hole spin parameter in [0, 1].
+    omega : float
+        Mode frequency.
+    rmin : float
+        Left boundary of the interpolation domain (must be > r+).
+    rmax : float
+        Right boundary of the interpolation domain.
+    method : str, optional
+        Solution method for computing boundary conditions. Default is "AUTO".
+    bc : str or None, optional
+        Which homogeneous solutions to solve: "In", "Up", or None for both.
+        Default is None.
+    rtol : float, optional
+        ODE step tolerance.  Both the ODE integration error at each node and the
+        septic Hermite interpolation error between nodes are bounded by a small
+        multiple of ``rtol``.  The step cap ensures monotonic build-time scaling:
+        tighter ``rtol`` → more nodes → slower build, no anomalous slow regions.
+        Typical node count: ``N ~ (rmax-rmin)*|2ω|/(8*rtol)^{1/8}`` (In).
+        Achieved relative accuracy is typically ``2–30×rtol`` (the exact factor
+        depends on domain length and frequency).  Default ``1e-10`` gives
+        accuracy ~1e-9 for small domains, ~1e-8 for large high-frequency domains.
+
+    Properties
+    ----------
+    blackholespin, spinweight / s, spheroidalmode / j, azimuthalmode / m,
+    frequency / omega / mode_frequency, eigenvalue : same as RadialTeukolsky.
+
+    Methods
+    -------
+    radialpoints(bc)
+        Return the interpolation nodes (numpy array) for boundary condition bc.
+        In and Up use separate grids with different node densities.
+    nsamples(bc)
+        Return the number of interpolation nodes for boundary condition bc.
+    __call__(r_eval, bc, deriv=0)
+        Evaluate the Teukolsky solution (deriv=0) or its first derivative
+        (deriv=1) at r_eval (scalar or array) for boundary condition bc.
+    """
+
+    def __init__(self, s, j, m, a, omega, rmin, rmax,
+                 method="AUTO", bc=None, rtol=1e-10):
+        if a < 0 or a > 1:
+            raise ValueError(f"Black hole spin parameter {a} must be in [0, 1].")
+        if j < np.abs(m):
+            raise ValueError(
+                f"Spheroidal mode {j} must be >= |azimuthal mode| {abs(m)}.")
+        r_horizon = 1 + np.sqrt(1 - a**2)
+        if rmin <= r_horizon:
+            raise ValueError(
+                f"rmin={rmin} must be greater than the horizon radius r+={r_horizon}.")
+        if rmax <= rmin:
+            raise ValueError(f"rmax={rmax} must be greater than rmin={rmin}.")
+        if rtol <= 0:
+            raise ValueError(
+                f"rtol={rtol} must be positive. Unlike RadialTeukolsky.solve, where "
+                "rtol <= 0 selects the built-in ODE tolerance, the interpolant derives "
+                "its node spacing from rtol and has no default-sentinel behaviour: a "
+                "non-positive value collapses the step cap to zero and the build never "
+                "terminates.")
+
+        solve_in = bc is None or bc == "In"
+        solve_up = bc is None or bc == "Up"
+        self.base = _InterpolatedRadialTeukolskyCython(
+            a, s, j, m, omega, float(rmin), float(rmax),
+            method, solve_in, solve_up, rtol)
+
+    @property
+    def blackholespin(self):
+        return self.base.blackholespin
+
+    @property
+    def spinweight(self):
+        return self.base.spinweight
+
+    @property
+    def s(self):
+        return self.spinweight
+
+    @property
+    def spheroidalmode(self):
+        return self.base.spheroidalmode
+
+    @property
+    def j(self):
+        return self.spheroidalmode
+
+    @property
+    def azimuthalmode(self):
+        return self.base.azimuthalmode
+
+    @property
+    def m(self):
+        return self.azimuthalmode
+
+    @property
+    def frequency(self):
+        return self.base.frequency
+
+    @property
+    def mode_frequency(self):
+        return self.frequency
+
+    @property
+    def omega(self):
+        return self.frequency
+
+    @property
+    def eigenvalue(self):
+        return self.base.eigenvalue
+
+    def radialpoints(self, bc):
+        """Return the interpolation nodes for the given boundary condition.
+
+        Parameters
+        ----------
+        bc : str
+            Boundary condition: "In" or "Up".
+
+        Returns
+        -------
+        numpy.ndarray
+            Radial grid points used for the bc interpolant.
+        """
+        return self.base.radialpoints(bc)
+
+    def nsamples(self, bc):
+        """Return the number of interpolation nodes for the given boundary condition.
+
+        Parameters
+        ----------
+        bc : str
+            Boundary condition: "In" or "Up".
+
+        Returns
+        -------
+        int
+            Number of nodes in the bc grid.
+        """
+        return self.base.nsamples(bc)
+
+    def __call__(self, r_eval, bc, deriv=0):
+        """Evaluate the interpolated Teukolsky solution at arbitrary radial points.
+
+        Parameters
+        ----------
+        r_eval : float or array-like
+            Radial point(s) at which to evaluate. Must lie within [rmin, rmax].
+        bc : str
+            Boundary condition: "In" (horizon) or "Up" (infinity).
+        deriv : int, optional
+            0 for R(r), 1 for R'(r). Default is 0.
+
+        Returns
+        -------
+        numpy.ndarray
+            Complex solution values at the requested points.
+        """
+        r = np.asarray(r_eval, dtype=float).ravel()
+        if deriv == 0:
+            return self.base.solutions(bc, r)
+        elif deriv == 1:
+            return self.base.derivatives(bc, r)
+        else:
+            raise ValueError(
+                "InterpolatedRadialTeukolsky supports deriv=0 (solution) "
+                "or deriv=1 (first derivative)."
+            )

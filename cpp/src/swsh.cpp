@@ -1,11 +1,29 @@
 // swsh.c
 
 #include "swsh.hpp"
+#include <map>
+#include <tuple>
 
-#define SPECTRAL_NMAX 300
+// LAPACK dsyev: eigenvalues (and optionally eigenvectors) of a real symmetric matrix.
+// Available via -llapack (conda) or -framework Accelerate (macOS).
+// Much faster than gsl_eigen_symm for small matrices (8 µs vs 600 µs for 15×15).
+#ifdef PYBHPT_HAS_LAPACK
+extern "C" {
+    void dsyev_(char* jobz, char* uplo, int* n, double* a, int* lda,
+                double* w, double* work, int* lwork, int* info);
+}
+#endif
+
+#define SPECTRAL_NMAX 600
 #define SPECTRAL_NMAX_INIT_ADD 15
-#define SPECTRAL_COUPLING_TEST_EPS 1.e-25
+/* The spectral basis is wide enough once every coupling coefficient beyond some index
+inside it has decayed to this fraction of the peak coefficient. Demanding decay far below
+double precision (the old 1.e-25) only ever probes round-off. */
+#define SPECTRAL_COUPLING_TEST_EPS 1.e-14
 #define SPECTRAL_COUPLING_JMAX_EPS 1.e-25
+/* Tolerance on how far the coupling vector moves between successive truncations, measured
+against the peak coefficient so that two round-off-level tails compare as converged. */
+#define SPECTRAL_COUPLING_RESIDUAL_EPS 1.e-14
 #define SPECTRAL_COUPLING_CONVERGE_EPS 1.e-25
 #define COUPLING_VECTOR_MAX 50
 #define ZERO_FREQ_LIMIT 1.e-11
@@ -30,11 +48,12 @@ int SpinWeightedHarmonic::getMaxCouplingModeNumber(){
 
 int SpinWeightedHarmonic::generateSolutionsAndDerivatives(){
 	generateCouplingCoefficients();
+	fillYlmGrid();
 	for(size_t i = 0; i < _Slm.size(); i++){
-		_Slm[i] = Sslm(_s, _L, _m, _gamma, _bcoupling, _theta[i]);
+		_Slm[i] = SslmGrid(int(i));
 	}
 	for(size_t i = 0; i < _SlmP.size(); i++){
-		_SlmP[i] = Sslm_derivative(_s, _L, _m, _gamma, _bcoupling, _theta[i]);
+		_SlmP[i] = SslmDerivativeGrid(int(i));
 	}
 
 	return 0;
@@ -42,15 +61,20 @@ int SpinWeightedHarmonic::generateSolutionsAndDerivatives(){
 
 int SpinWeightedHarmonic::generateCouplingCoefficients(){
 	if(_bcoupling[_L - getMinCouplingModeNumber()] == 0 && _bcoupling[_L - getMinCouplingModeNumber() + 1] == 0){
-		spectral_solver(_s, _L, _m, _gamma, _lambda, _bcoupling);
+		// spectral_solver returns nonzero on success/stall and 0 when the convergence
+		// test failed at the truncation limit; record the latter as a failure status.
+		_couplingStatus = spectral_solver(_s, _L, _m, _gamma, _lambda, _bcoupling) == 0 ? 1 : 0;
 	}
-	return 0;
+	return _couplingStatus;
 }
+
+int SpinWeightedHarmonic::getCouplingStatus(){ return _couplingStatus; }
 
 int SpinWeightedHarmonic::generateSolutions(){
 	generateCouplingCoefficients();
+	fillYlmGrid();
 	for(size_t i = 0; i < _Slm.size(); i++){
-		_Slm[i] = Sslm(_s, _L, _m, _gamma, _bcoupling, _theta[i]);
+		_Slm[i] = SslmGrid(int(i));
 	}
 
 	return 0;
@@ -58,8 +82,9 @@ int SpinWeightedHarmonic::generateSolutions(){
 
 int SpinWeightedHarmonic::generateDerivatives(){
 	generateCouplingCoefficients();
+	fillYlmGrid();
 	for(size_t i = 0; i < _SlmP.size(); i++){
-		_SlmP[i] = Sslm_derivative(_s, _L, _m, _gamma, _bcoupling, _theta[i]);
+		_SlmP[i] = SslmDerivativeGrid(int(i));
 	}
 
 	return 0;
@@ -266,9 +291,6 @@ int spectral_solver(const int &s, const int &l, const int &m, const double &g, d
 		test = spherical_spheroidal_coupling_convergence_test(s, l, m, g, bmat, bmat2, bkData);
 	}
 	gsl_spmatrix_free(mat);
-	if(nmax == SPECTRAL_NMAX){
-		std::cout << "(SWSH) Max number of iterations executed for spectral solver. \n";
-	}
 
 	if(test == SUCCESS){ // if convergence test was successful, return data from the most resolved (highest nmax) spectral eigenvalue problem
 		gsl_matrix_free(bmat);
@@ -278,7 +300,8 @@ int spectral_solver(const int &s, const int &l, const int &m, const double &g, d
 	}else if(test == FAIL){
 		gsl_matrix_free(bmat); gsl_matrix_free(bmat2);
 		gsl_vector_free(la); gsl_vector_free(la2);
-		std::cout << "(SWSH) Error in computing coupling coefficients for (s, l, m, gamma) = ("<<s<<", "<<l<<", "<<m<<", "<<g<<") \n";
+		// Convergence failed at the truncation limit; the caller surfaces this to Python
+		// as a warning via the coupling status rather than printing here.
 		return 0;
 	}else{ // if convergence test was stalled, return data from the second most resolved (second highest nmax) spectral eigenvalue problem
 		// std::cout << "(SWSH) Calculation of coupling coefficients stalled for (s, l, m, gamma) = ("<<s<<", "<<l<<", "<<m<<", "<<g<<") \n";
@@ -332,6 +355,34 @@ int spectral_solver_n(const int &s, const int &l, const int &m, const double &g,
 		return 1; // error, need larger nmax tolerance
 	}
 
+	double weight = spectral_weight(g);
+
+#ifdef PYBHPT_HAS_LAPACK
+	// Use bmat directly as working buffer: zero it, fill with the spectral matrix,
+	// run dsyev in-place, then transpose so eigenvectors end up as columns (GSL convention).
+	// LAPACK dsyev writes eigenvectors as columns in Fortran column-major order; in the
+	// C row-major layout of bmat->data this appears as eigenvectors stored as rows.
+	// A subsequent in-place transpose restores the GSL convention used by the rest of the code.
+	gsl_matrix_set_zero(bmat);
+	int error = spectral_matrix(s, lmin, m, g, bmat);
+	if( error ) return 1;
+
+	int n = nmax;
+	// Workspace query for optimal lwork
+	int lwork_query = -1;
+	double work_opt = 0.;
+	int info = 0;
+	char jobz = 'V', uplo = 'U';
+	dsyev_(&jobz, &uplo, &n, bmat->data, &n, la->data, &work_opt, &lwork_query, &info);
+	int lwork = std::max((int)work_opt, 3*n + 64);
+	std::vector<double> work(lwork);
+	dsyev_(&jobz, &uplo, &n, bmat->data, &n, la->data, work.data(), &lwork, &info);
+	if( info != 0 ) return 1;
+	// dsyev returns eigenvalues in ascending order; no explicit sort needed.
+	// Transpose in-place to convert LAPACK's row-stored eigenvectors to GSL column convention.
+	gsl_matrix_transpose(bmat);
+	gsl_vector_scale(la, 1./weight);
+#else
 	gsl_matrix* specMat = gsl_matrix_calloc(nmax, nmax);
 	int error = spectral_matrix(s, lmin, m, g, specMat);
 	if( error ) return 1;
@@ -345,8 +396,8 @@ int spectral_solver_n(const int &s, const int &l, const int &m, const double &g,
 	gsl_eigen_symmv_free(w);
 	gsl_matrix_free(specMat);
 
-	double weight = spectral_weight(g);
 	gsl_vector_scale(la, 1/weight);
+#endif
 
 	return 0;
 }
@@ -358,6 +409,29 @@ int spectral_solver_n(const int &s, const int &l, const int &m, const double &g,
 		return 1; // error, need larger nmax tolerance
 	}
 
+	double weight = spectral_weight(g);
+
+#ifdef PYBHPT_HAS_LAPACK
+	// Zero bmat first: gsl_spmatrix_sp2d only sets non-zero entries, leaving the
+	// remaining positions untouched. The matrix must be zeroed to avoid garbage
+	// in off-band positions that would corrupt the eigenvalue solve.
+	gsl_matrix_set_zero(bmat);
+	int error = gsl_spmatrix_sp2d(bmat, mat);
+	if( error ) return 1;
+
+	int n = nmax;
+	int lwork_query = -1;
+	double work_opt = 0.;
+	int info = 0;
+	char jobz = 'V', uplo = 'U';
+	dsyev_(&jobz, &uplo, &n, bmat->data, &n, la->data, &work_opt, &lwork_query, &info);
+	int lwork = std::max((int)work_opt, 3*n + 64);
+	std::vector<double> work(lwork);
+	dsyev_(&jobz, &uplo, &n, bmat->data, &n, la->data, work.data(), &lwork, &info);
+	if( info != 0 ) return 1;
+	gsl_matrix_transpose(bmat);
+	gsl_vector_scale(la, 1./weight);
+#else
 	gsl_matrix* specMat = gsl_matrix_calloc(nmax, nmax);
 	int error = gsl_spmatrix_sp2d(specMat, mat);
 	if( error ) return 1;
@@ -371,8 +445,69 @@ int spectral_solver_n(const int &s, const int &l, const int &m, const double &g,
 	gsl_eigen_symmv_free(w);
 	gsl_matrix_free(specMat);
 
-	double weight = spectral_weight(g);
 	gsl_vector_scale(la, 1/weight);
+#endif
+
+	return 0;
+}
+
+// Compute eigenvalues only (no eigenvectors) from an existing sparse matrix.
+// When LAPACK is available (PYBHPT_HAS_LAPACK), uses dsyev_ which is ~60-100x
+// faster than gsl_eigen_symm for the small matrices we encounter here (15-35×15-35).
+// Falls back to gsl_eigen_symm when LAPACK is unavailable.
+// Note: gsl_eigen_symm only uses the lower triangular part, which is consistent
+// with how spectral_matrix_sparse fills both triangles of the COO sparse matrix.
+static int spectral_solver_eigenvalues_n(const int &s, const int &l, const int &m, const double &g, gsl_vector* la, gsl_spmatrix* mat){
+	int lmin = std::max(std::abs(s), std::abs(m));
+	int nmax = la->size;
+	if( nmax < l - lmin ){
+		return 1;
+	}
+
+	gsl_matrix* specMat = gsl_matrix_calloc(nmax, nmax);
+	int error = gsl_spmatrix_sp2d(specMat, mat);
+	if( error ) { gsl_matrix_free(specMat); return 1; }
+
+	double weight = spectral_weight(g);
+
+#ifdef PYBHPT_HAS_LAPACK
+	// LAPACK dsyev: eigenvalues only ('N'), use upper triangle ('U').
+	// For a symmetric matrix, row-major == col-major (A = A^T), so passing
+	// the GSL row-major buffer to Fortran LAPACK is always correct here.
+	// dsyev returns eigenvalues in la->data in ascending order.
+	int n = nmax;
+	int lwork = std::max(1, 3*n - 1);  // minimum workspace for N mode
+	std::vector<double> work(lwork);
+	int info = 0;
+	char jobz = 'N', uplo = 'U';
+	dsyev_(&jobz, &uplo, &n, specMat->data, &n, la->data, work.data(), &lwork, &info);
+	if( info != 0 ){
+		// dsyev did not converge. Rebuild the matrix (dsyev overwrote it) and fall back to
+		// GSL: returning here would leave la unwritten, and callers read it either way.
+		gsl_matrix_set_zero(specMat);
+		if( gsl_spmatrix_sp2d(specMat, mat) ){ gsl_matrix_free(specMat); return 1; }
+		gsl_eigen_symm_workspace* w = gsl_eigen_symm_alloc(nmax);
+		int gslError = gsl_eigen_symm(specMat, la, w);
+		gsl_eigen_symm_free(w);
+		gsl_matrix_free(specMat);
+		if( gslError ) return 1;
+		std::sort(la->data, la->data + nmax);
+		gsl_vector_scale(la, 1.0/weight);
+		return 0;
+	}
+	gsl_matrix_free(specMat);
+	// eigenvalues already in ascending order; just unscale
+	gsl_vector_scale(la, 1.0/weight);
+#else
+	// Fallback: gsl_eigen_symm (~60-100x slower than LAPACK for small n)
+	gsl_eigen_symm_workspace* w = gsl_eigen_symm_alloc(nmax);
+	gsl_eigen_symm(specMat, la, w);
+	// gsl_eigen_symm has no sort function; sort manually ascending.
+	std::sort(la->data, la->data + nmax);
+	gsl_eigen_symm_free(w);
+	gsl_matrix_free(specMat);
+	gsl_vector_scale(la, 1.0/weight);
+#endif
 
 	return 0;
 }
@@ -384,7 +519,6 @@ coupling_test spherical_spheroidal_coupling_convergence_test(const int &s, const
 	gsl_vector* bcol = gsl_vector_alloc(dim);
 	gsl_vector* bcol2 = gsl_vector_alloc(dim2);
 	double relerror = b_data.test_err;
-	int testIndex = b_data.testIndex;
 
 	gsl_matrix_get_col(bcol, bmat, l - lmin);
 	if( gsl_vector_get(bcol, l - lmin) < 0 ){
@@ -395,7 +529,9 @@ coupling_test spherical_spheroidal_coupling_convergence_test(const int &s, const
 		gsl_vector_scale(bcol2, -1.);
 	}
 
-	double norm = gsl_vector_max(bcol);
+	double bmax = gsl_vector_max(bcol);
+	double bmin = gsl_vector_min(bcol);
+	double norm = std::abs(bmax) > std::abs(bmin) ? std::abs(bmax) : std::abs(bmin);
 	if(norm == 0.){
 		norm = 1.;
 	}
@@ -414,51 +550,56 @@ coupling_test spherical_spheroidal_coupling_convergence_test(const int &s, const
 		}
 	}
 
-	while(b_data.testIndex < dim - 1 && std::abs(gsl_vector_get(bcol, b_data.testIndex)/norm) > SPECTRAL_COUPLING_TEST_EPS){
-		if(s == 0){
-			b_data.testIndex += 2;
-		}else{
-			b_data.testIndex++;
-		}
+	/* Walk in from the truncation edge to the first index past which every coupling
+	coefficient has decayed below SPECTRAL_COUPLING_TEST_EPS of the peak. Scanning outward
+	from l - lmin instead would stop at the first sign change of an oscillating tail, which
+	at large spheroidicity sits far inside a band that is still growing. */
+	b_data.testIndex = dim;
+	while(b_data.testIndex > 0 && std::abs(gsl_vector_get(bcol, b_data.testIndex - 1)/norm) <= SPECTRAL_COUPLING_TEST_EPS){
+		b_data.testIndex--;
 	}
-	if(b_data.testIndex == dim){
-		if(s == 0){
-			b_data.testIndex-= 2;
-		}else{
-			b_data.testIndex--;
-		}
+	bool tailResolved = (b_data.testIndex < dim);
+	if(b_data.testIndex > dim - 1){
+		b_data.testIndex = dim - 1;
 	}
 
 	double jmax_denom = gsl_vector_get(bcol2, b_data.jmax);
-	double test_denom = gsl_vector_get(bcol2, b_data.testIndex);
 	if(jmax_denom == 0){
 		jmax_denom = DBL_EPSILON*pow(g, 1);
 	}
-	if(test_denom == 0){
-		test_denom = DBL_EPSILON*pow(g, 1);
-	}
 
 	double jmax_num = gsl_vector_get(bcol, b_data.jmax);
-	double test_num = gsl_vector_get(bcol, b_data.testIndex);
 	if(jmax_num == 0){
 		jmax_num = DBL_EPSILON*pow(g, 1);
 	}
-	if(test_num == 0){
-		test_num = DBL_EPSILON*pow(g, 1);
-	}
-
 
 	b_data.jmax_err = std::abs(1 - jmax_num/jmax_denom);
-	b_data.test_err = std::abs(1 - test_num/test_denom);
+	/* Measure how much widening the basis moved the coupling vector, on the scale of the
+	peak coefficient. The old test took the relative change of a single coefficient chosen
+	where it had already fallen to 1e-25 of the peak: a ratio of two round-off-level
+	numbers, decided by the low bits of the input, so it failed at random and drove the
+	truncation loop upward with nothing left to gain. */
+	b_data.test_err = 0.;
+	for(int i = 0; i < dim; i++){
+		double diff = std::abs(gsl_vector_get(bcol2, i) - gsl_vector_get(bcol, i))/norm;
+		if(diff > b_data.test_err){
+			b_data.test_err = diff;
+		}
+	}
 
-	double convergenceCriteria = SPECTRAL_COUPLING_CONVERGE_EPS;
+	double convergenceCriteria = SPECTRAL_COUPLING_RESIDUAL_EPS;
 	if(g > 1.){
 		convergenceCriteria *= pow(g, 2);
 	}
 
-	if( b_data.test_err < convergenceCriteria ){
+	gsl_vector_free(bcol);
+	gsl_vector_free(bcol2);
+
+	if( tailResolved && b_data.test_err < convergenceCriteria ){
 		return SUCCESS;
-	}else if( relerror < b_data.test_err && testIndex == b_data.testIndex ){
+	}else if( tailResolved && b_data.test_err >= relerror ){
+		/* Widening the basis stopped moving the coupling vector any closer: stop
+		regardless of whether the test index moved, and keep the previous truncation. */
 		return STALL;
 	}else{
 		return FAIL;
@@ -471,15 +612,31 @@ coupling_test spherical_spheroidal_coupling_convergence_test(const int &s, const
 
 // Coupling between scalar Yjm and spin-weighted harmonics sYlm
 double Asljm(const int &s, const int &l, const int &j, const int &m){
-	if( std::abs(l-j) > std::abs(s) ) return 0.;
-	if( j < std::abs(m) ) return 0.;
-	int lmin = std::abs(m) < std::abs(s) ? std::abs(s) : std::abs(m);
-	if( l < lmin ) return 0;
-	double aslmg = pow(-1., m + s*(1 + sgn<int>(s))/2);
-	aslmg *= sqrt(pow(4, std::abs(s))*pow(factorial(std::abs(s)), 2)*(2*j + 1)*(2*l + 1)/factorial(std::abs(2*s)));
-	aslmg *= w3j(std::abs(s), l, j, 0, m, -m);
-	aslmg *= w3j(std::abs(s), l, j, s, -s, 0);
+	// (s,l,j,m)-only coupling (Wigner-3j) -- independent of theta, but Yslm() calls this
+	// per grid point. Memoize so the 3j / factorial work runs once per distinct key.
+	static thread_local std::map<std::tuple<int,int,int,int>, double> cache;
+	// Bound the table: entries are never invalidated, so a long-lived process sweeping a
+	// wide mode range would otherwise grow it without limit. Refilling is cheap.
+	if(cache.size() > 200000) cache.clear();
+	auto key = std::make_tuple(s, l, j, m);
+	auto it = cache.find(key);
+	if(it != cache.end()) return it->second;
 
+	double aslmg;
+	if( std::abs(l-j) > std::abs(s) || j < std::abs(m) ){
+		aslmg = 0.;
+	}else{
+		int lmin = std::abs(m) < std::abs(s) ? std::abs(s) : std::abs(m);
+		if( l < lmin ){
+			aslmg = 0.;
+		}else{
+			aslmg = pow(-1., m + s*(1 + sgn<int>(s))/2);
+			aslmg *= sqrt(pow(4, std::abs(s))*pow(factorial(std::abs(s)), 2)*(2*j + 1)*(2*l + 1)/factorial(std::abs(2*s)));
+			aslmg *= w3j(std::abs(s), l, j, 0, m, -m);
+			aslmg *= w3j(std::abs(s), l, j, s, -s, 0);
+		}
+	}
+	cache[key] = aslmg;
 	return aslmg;
 }
 
@@ -637,9 +794,7 @@ double Sslm(const int &s, const int &l, const int &m, const double &, const Vect
 	if(i == imax){
 		swsh += bvec[i]*Yslm(s, lmin + i, m, th);
 	}
-	// for(int i = 0; i < bvec.size(); i++){
-	// 	swsh += bvec[i]*Yslm(s, lmin + i, m, th);
-	// }
+
 	return swsh;
 }
 
@@ -677,9 +832,6 @@ double Sslm_derivative(const int &s, const int &l, const int &m, const double &,
 	if(i == imax){
 		swsh += bvec[i]*Yslm_derivative(s, lmin + i, m, th);
 	}
-	// for(int i = 0; i < bvec.size(); i++){
-	// 	swsh += bvec[i]*Yslm_derivative(s, lmin + i, m, th);
-	// }
 
 	return swsh;
 }
@@ -689,23 +841,76 @@ double Sslm_secondDerivative(const int &s, const int &, const int &m, const doub
 }
 
 // SWSH Eigenvalues
+// Optimized version: builds the spectral matrix once using the sparse
+// incremental approach (adding only new rows on each extension) and uses
+// gsl_eigen_symm (eigenvalues only, ~2x faster than gsl_eigen_symmv).
+// This avoids rebuilding the full matrix from scratch on each convergence
+// iteration, which was the dominant cost in the old implementation.
 double swsh_eigenvalue(const int &s, const int &l, const int &m, const double &g){
 	unsigned int lmin = std::max(std::abs(s), std::abs(m));
-	unsigned int nmax = l - lmin + SPECTRAL_NMAX_INIT_ADD;
 
-	double swshtest = spectral_solver(s, l, m, g, nmax);
-	nmax += 2;
-	double swshtest2 = spectral_solver(s, l, m, g, nmax);
-	double relerror = std::abs(1 - swshtest/swshtest2);
-
-	while(0.01*relerror > DBL_EPSILON && relerror > 0. && nmax < SPECTRAL_NMAX){
-		swshtest = swshtest2;
-		nmax += 5;
-		swshtest2 = spectral_solver(s, l, m, g, nmax);
-		relerror = std::abs(1-swshtest/swshtest2);
+	// Spherical limit: eigenvalue is exact, no matrix needed.
+	if(g == 0 || std::abs(g) < ZERO_FREQ_LIMIT){
+		return l*(l + 1) - s*(s + 1);
 	}
 
-	return swshtest2;
+	unsigned int nmax = l - lmin + SPECTRAL_NMAX_INIT_ADD;
+
+	// Allocate sparse matrix with enough storage for SPECTRAL_NMAX non-zeros.
+	// The pentadiagonal structure means ~5*SPECTRAL_NMAX entries at most.
+	gsl_spmatrix* mat = gsl_spmatrix_alloc_nzmax(nmax, nmax, 5*SPECTRAL_NMAX, GSL_SPMATRIX_COO);
+	spectral_matrix_sparse_init(s, lmin, m, g, mat);
+
+	// calloc, not alloc: if a solver path ever fails to write la, a zero eigenvalue is a
+	// visible wrong answer rather than whatever happened to be on the heap.
+	gsl_vector* la_prev = gsl_vector_calloc(nmax);
+	if( spectral_solver_eigenvalues_n(s, l, m, g, la_prev, mat) ){
+		gsl_vector_free(la_prev); gsl_spmatrix_free(mat);
+		std::cout << "(SWSH) Eigenvalue solve failed for (s, l, m, gamma) = ("<<s<<", "<<l<<", "<<m<<", "<<g<<"); returning the spherical limit.\n";
+		return l*(l + 1) - s*(s + 1);
+	}
+	double val_prev = gsl_vector_get(la_prev, l - lmin);
+
+	nmax += 2;
+	spectral_matrix_sparse(s, lmin, m, g, mat, nmax); // only 2 new rows added
+	gsl_vector* la_cur = gsl_vector_calloc(nmax);
+	if( spectral_solver_eigenvalues_n(s, l, m, g, la_cur, mat) ){
+		// keep the coarser but valid result rather than reading an unwritten vector
+		double coarse = val_prev;
+		gsl_vector_free(la_cur); gsl_vector_free(la_prev); gsl_spmatrix_free(mat);
+		return coarse;
+	}
+	double val_cur = gsl_vector_get(la_cur, l - lmin);
+
+	double relerror = std::abs(1. - val_prev/val_cur);
+
+	while(0.01*relerror > DBL_EPSILON && relerror > 0. && nmax < SPECTRAL_NMAX){
+		gsl_vector_free(la_prev);
+		la_prev = la_cur;
+		val_prev = val_cur;
+
+		nmax += 5;
+		spectral_matrix_sparse(s, lmin, m, g, mat, nmax); // only 5 new rows
+		la_cur = gsl_vector_calloc(nmax);
+		if( spectral_solver_eigenvalues_n(s, l, m, g, la_cur, mat) ){
+			// stop refining and keep the last converged value; la_cur is zeroed, not stale
+			val_cur = val_prev;
+			break;
+		}
+		val_cur = gsl_vector_get(la_cur, l - lmin);
+		relerror = std::abs(1. - val_prev/val_cur);
+	}
+
+	if(nmax >= SPECTRAL_NMAX){
+		std::cout << "(SWSH) Max number of iterations executed for swsh_eigenvalue. \n";
+	}
+
+	gsl_spmatrix_free(mat);
+	gsl_vector_free(la_prev);
+	double result = val_cur;
+	gsl_vector_free(la_cur);
+
+	return result;
 }
 
 ///////////////////////////////////////
@@ -879,3 +1084,93 @@ void test_swsh_class(){
 	duration = (stop-start)/double(CLOCKS_PER_SEC);
 	std::cout << "test time 1: " << duration << " s" << std::endl;
 };
+
+/////////////////////////////////////////////////////////
+// Grid-accelerated spheroidal-harmonic evaluation      //
+/////////////////////////////////////////////////////////
+
+// Precompute the scalar spherical harmonics Ylm(j, m, theta) over the full theta grid,
+// once, for every j needed by the spheroidal sums and their theta-derivatives. The
+// spheroidal harmonic S = sum_i b_i Yslm(l_i), and each Yslm = sum_j Asljm Ylm(j);
+// the same Ylm(j, theta) basis is shared across all coupling terms i and between S and
+// S', so tabulating it removes the dominant per-point Ylm (Legendre) recomputation.
+void SpinWeightedHarmonic::fillYlmGrid(){
+	if(_gridFilled){ return; }
+	int as = std::abs(_s);
+	int lminC = getMinCouplingModeNumber();
+	int imax = int(_bcoupling.size()) - 1;
+	while(imax > 0 && _bcoupling[imax] == 0.){ imax--; }
+	_imaxCoupling = imax;
+	int lmaxC = lminC + imax;
+	_jgridMin = std::abs(_m);                 // Ylm(j, m) vanishes for j < |m|
+	int jgridMax = lmaxC + as + 1;            // +1 covers the derivative window
+	int nj = jgridMax - _jgridMin + 1;
+	int nth = int(_theta.size());
+	_Ygrid.assign(nj, Vector(nth, 0.));
+
+	// One gsl_sf_legendre_array per theta gives every P_l^m up to jgridMax at once (a
+	// single l-recurrence), instead of a full array per (j, theta) as Ylm() would do.
+	// Mirror Ylm()'s convention exactly: fold m<0 via Y_l^{-m} = (-1)^m Y_l^{m}, and use
+	// the sph-normalised Legendre with Condon-Shortley phase (-1)^{|m|} so values match.
+	int mm = std::abs(_m);
+	double signm = (_m < 0) ? pow(-1., _m) : 1.;
+	double csphase = (mm % 2 == 0) ? 1.0 : -1.0;
+	std::vector<double> Plm(gsl_sf_legendre_array_n(size_t(jgridMax)));
+	for(int ith = 0; ith < nth; ith++){
+		gsl_sf_legendre_array_e(GSL_SF_LEGENDRE_SPHARM, size_t(jgridMax),
+			std::cos(_theta[ith]), csphase, Plm.data());
+		for(int j = _jgridMin; j <= jgridMax; j++){
+			_Ygrid[j - _jgridMin][ith] = signm*Plm[gsl_sf_legendre_array_index(size_t(j), size_t(mm))];
+		}
+	}
+
+	// Collapse the coupling sums, which are theta-independent, once:
+	//   S  = sum_i b_i Yslm(l_i)          = (sum_j (sum_i b_i Asljm(l_i,j)) Ylm(j))/sin^|s|
+	//   S' = sum_i b_i Yslm_derivative(l_i) = -(sum_j (sum_i b_i dAsljm(l_i,j)) Ylm(j))/sin^{|s|+1}
+	// so per theta only a single sum_j over the tabulated Ylm remains (no per-point 3j).
+	_Ccoef.assign(nj, 0.);
+	_Dcoef.assign(nj, 0.);
+	for(int jrel = 0; jrel < nj; jrel++){
+		int j = _jgridMin + jrel;
+		for(int i = 0; i <= _imaxCoupling; i++){
+			double bi = _bcoupling[i];
+			if(bi == 0.){ continue; }
+			int l = lminC + i;
+			if(std::abs(l - j) <= as){        _Ccoef[jrel] += bi*Asljm(_s, l, j, _m); }
+			if(std::abs(l - j) <= as + 1){    _Dcoef[jrel] += bi*dAsljm(_s, l, j, _m); }
+		}
+	}
+	_gridFilled = true;
+}
+
+// S(theta[ith]) = (sum_j C_j Ylm(j,theta))/sin^|s|.  theta = 0/pi handled analytically.
+double SpinWeightedHarmonic::SslmGrid(int ith){
+	double th = _theta[ith];
+	int as = std::abs(_s);
+	if(as > 0 && (std::abs(th) < 1.e-14 || std::abs(th - M_PI) < 1.e-14)){
+		return Sslm(_s, _L, _m, _gamma, _bcoupling, th);
+	}
+	double sum = 0.;
+	int nj = int(_Ccoef.size());
+	for(int jrel = 0; jrel < nj; jrel++){
+		sum += _Ccoef[jrel]*_Ygrid[jrel][ith];
+	}
+	return (as == 0) ? sum : sum/pow(sin(th), as);
+}
+
+// S'(theta[ith]) = -(sum_j D_j Ylm(j,theta))/sin^{|s|+1}.
+double SpinWeightedHarmonic::SslmDerivativeGrid(int ith){
+	double th = _theta[ith];
+	int as = std::abs(_s);
+	// s = 0 derivative is Ylm_derivative (not expressible via the Ylm grid); use the
+	// free function there (cheap: a single term). Same for the theta = 0/pi endpoints.
+	if(as == 0 || std::abs(th) < 1.e-14 || std::abs(th - M_PI) < 1.e-14){
+		return Sslm_derivative(_s, _L, _m, _gamma, _bcoupling, th);
+	}
+	double sum = 0.;
+	int nj = int(_Dcoef.size());
+	for(int jrel = 0; jrel < nj; jrel++){
+		sum += _Dcoef[jrel]*_Ygrid[jrel][ith];
+	}
+	return -sum*pow(sin(th), -1 - as);
+}

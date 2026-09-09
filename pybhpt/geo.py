@@ -360,6 +360,24 @@ def jacobian_pex_to_ELQ(a: ScalarOrArray,
 def is_power_of_two(n: int) -> bool:
     return n > 0 and (n & (n - 1)) == 0
 
+# Phase parametrizations used to sample the geodesic / source over the orbital libration.
+# "mino" samples uniformly in the Mino phases (q_r, q_theta); "darwin" (alias "psi") samples
+# uniformly in the relativistic anomalies (psi radial, chi polar) and carries the
+# change-of-variable Jacobian into the source integral. The integer codes match the C++
+# GeodesicParametrization enum exposed through the Cython layer.
+_PARAMETRIZATION_CODES = {"mino": 0, "darwin": 1, "psi": 1}
+_PARAMETRIZATION_NAMES = {0: "mino", 1: "darwin"}
+
+def _parametrization_code(parametrization) -> int:
+    if isinstance(parametrization, int) and not isinstance(parametrization, bool):
+        if parametrization in _PARAMETRIZATION_NAMES:
+            return parametrization
+        raise ValueError(f"Unknown parametrization code {parametrization}; expected one of {sorted(_PARAMETRIZATION_NAMES)}.")
+    key = str(parametrization).lower()
+    if key not in _PARAMETRIZATION_CODES:
+        raise ValueError(f"Unknown parametrization {parametrization!r}; expected one of {sorted(set(_PARAMETRIZATION_CODES))}.")
+    return _PARAMETRIZATION_CODES[key]
+
 class KerrGeodesic:
     """
     Class that produces a Kerr geodesic given the parameters of the orbit.
@@ -377,6 +395,11 @@ class KerrGeodesic:
         The inclination of the orbit.
     nsamples : int
         The number of samples to use for the geodesic. Must be a power of two. Default is 256.
+    parametrization : str
+        The phase variable used to sample the geodesic and source. "mino" (default) samples
+        uniformly in the Mino phases (q_r, q_theta); "darwin" (alias "psi") samples uniformly
+        in the relativistic anomalies (psi radial, chi polar), which resolves high-eccentricity
+        / near-separatrix orbits more efficiently. Both yield identical mode amplitudes.
 
     Attributes
     ----------
@@ -421,13 +444,14 @@ class KerrGeodesic:
     azimuthalpolarfourier : numpy.ndarray
         The Fourier coefficients of azimuthal position with respect to the polar Mino phase.  
     """
-    def __init__(self, a, p, e, x, nsamples = 2**8):
+    def __init__(self, a, p, e, x, nsamples = 2**8, parametrization = "darwin"):
         if a < 0 or a > 1:
             raise ValueError(f"Black hole spin parameter {a} must be in the range [0, 1].")
         if not is_power_of_two(nsamples):
             raise ValueError(f"Number of samples {nsamples} must be a power of 2.")
+        param_code = _parametrization_code(parametrization)
 
-        self.base = _KerrGeodesicCython(a, p, e, x, nsamples)
+        self.base = _KerrGeodesicCython(a, p, e, x, nsamples, param_code)
         """The base class that contains the Cython implementation of the Kerr geodesic."""
         self.timeradial = self.base.get_time_accumulation(1)
         self.timepolar = self.base.get_time_accumulation(2)
@@ -439,6 +463,45 @@ class KerrGeodesic:
 
         if np.isnan(self.frequencies).any():
             raise ValueError(f"Orbital parameters (a, p, e, x) = {self.apex} do not represent a valid bound non-plunging orbit.")
+
+    @property
+    def parametrization(self):
+        """
+        The phase parametrization used to sample the geodesic: "mino" (uniform in the Mino
+        phases q_r, q_theta) or "darwin" (uniform in the relativistic anomalies psi, chi).
+        """
+        return _PARAMETRIZATION_NAMES[self.base.parametrization]
+
+    @property
+    def radialphase(self):
+        """
+        The radial Mino phase q_r at each trajectory sample (a nonlinear function of the
+        sampling index for non-Mino parametrizations).
+        """
+        return self.base.get_radial_phase()
+
+    @property
+    def polarphase(self):
+        """
+        The polar Mino phase q_theta at each trajectory sample.
+        """
+        return self.base.get_polar_phase()
+
+    @property
+    def radialjacobian(self):
+        """
+        The radial change-of-variable weight dq_r/dphase at each trajectory sample (unity for
+        the Mino parametrization).
+        """
+        return self.base.get_radial_jacobian()
+
+    @property
+    def polarjacobian(self):
+        """
+        The polar change-of-variable weight dq_theta/dphase at each trajectory sample (unity
+        for the Mino parametrization).
+        """
+        return self.base.get_polar_jacobian()
 
     @property
     def blackholespin(self):

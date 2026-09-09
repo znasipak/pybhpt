@@ -29,6 +29,11 @@ add_custom_command(
           -3 -+ --module-name "cybhpt_full"
           -I "${CMAKE_CURRENT_SOURCE_DIR}/cpp/include"
   DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/cython/redshift_wrap.pyx"
+          "${CMAKE_CURRENT_SOURCE_DIR}/cython/flux_wrap.pyx"
+          "${CMAKE_CURRENT_SOURCE_DIR}/cython/teukolsky_wrap.pyx"
+          "${CMAKE_CURRENT_SOURCE_DIR}/cython/geo_wrap.pyx"
+          "${CMAKE_CURRENT_SOURCE_DIR}/cython/radialsolver_wrap.pyx"
+          "${CMAKE_CURRENT_SOURCE_DIR}/cython/swsh_wrap.pyx"
   COMMENT "Generating redshift_wrap.cpp from Cython"
   VERBATIM
 )
@@ -93,6 +98,26 @@ set_target_properties(cybhpt_full PROPERTIES
   INSTALL_RPATH "$ORIGIN/../../opt/gsl-install/lib"
   BUILD_WITH_INSTALL_RPATH TRUE
 )
+
+# LAPACK — used in swsh.cpp for fast symmetric eigenvalue computation.
+# gsl_eigen_symm is ~100x slower than LAPACK dsyev for small matrices.
+# By default LAPACK is optional (graceful fallback). Set -DPYBHPT_REQUIRE_LAPACK=ON
+# (done in the wheel CI and the Apptainer image) to fail the build instead of
+# silently degrading to the slow path. Hint the implementation with -DBLA_VENDOR=...
+# (e.g. OpenBLAS) and point CMAKE_PREFIX_PATH at the conda env if needed.
+option(PYBHPT_REQUIRE_LAPACK "Fail the build if LAPACK is not found" OFF)
+if(PYBHPT_REQUIRE_LAPACK)
+  find_package(LAPACK REQUIRED)
+else()
+  find_package(LAPACK)
+endif()
+if(LAPACK_FOUND)
+  target_link_libraries(cybhpt_full PRIVATE ${LAPACK_LIBRARIES})
+  target_compile_definitions(cybhpt_full PRIVATE PYBHPT_HAS_LAPACK)
+  message(STATUS "LAPACK found: ${LAPACK_LIBRARIES}")
+else()
+  message(STATUS "LAPACK not found — spectral solver will use (slow) gsl_eigen_symm")
+endif()
 
 
 # Optional install

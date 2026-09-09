@@ -25,6 +25,9 @@ public:
 	double getCouplingCoefficient(int l);
 	int getMinCouplingModeNumber();
 	int getMaxCouplingModeNumber();
+	// 0 if the spectral coupling solve converged; nonzero if it failed to converge
+	// within the truncation limit (coupling coefficients may be unreliable).
+	int getCouplingStatus();
 
 	int generateSolutionsAndDerivatives();
 	int generateCouplingCoefficients();
@@ -35,6 +38,9 @@ public:
 	Vector getSolution();
 	Vector getDerivative();
 	Vector getSecondDerivative();
+	// Non-copying references to the stored solution/derivative (source integration).
+	const Vector& getSolutionReference(){ return _Slm; }
+	const Vector& getDerivativeReference(){ return _SlmP; }
 
 	double getArguments(int pos);
 	double getSolution(int pos);
@@ -48,10 +54,27 @@ private:
 	double _gamma;
 	double _lambda;
 	Vector _bcoupling;
+	int _couplingStatus = 0;
 
 	Vector _theta;
 	Vector _Slm;
 	Vector _SlmP;
+
+	// Scalar spherical-harmonic grid: _Ygrid[j - _jgridMin][ith] = Ylm(j, m, theta[ith]).
+	// Filled once (fillYlmGrid) and reused by the spheroidal-harmonic sums and their
+	// theta-derivatives, so the expensive per-point Ylm evaluation is not repeated
+	// across coupling terms or between the solution and its derivative.
+	std::vector<Vector> _Ygrid;
+	// Collapsed, theta-independent coefficients: S(theta)  = (sum_j _Ccoef[j] Ylm(j,theta))/sin^|s|,
+	// S'(theta) = -(sum_j _Dcoef[j] Ylm(j,theta))/sin^{|s|+1}, with j offset by _jgridMin.
+	Vector _Ccoef;
+	Vector _Dcoef;
+	int _jgridMin = 0;
+	int _imaxCoupling = 0;   // highest coupling index with a nonzero coefficient
+	bool _gridFilled = false;
+	void fillYlmGrid();
+	double SslmGrid(int ith);
+	double SslmDerivativeGrid(int ith);
 };
 
 typedef struct coupling_convergence_struct{

@@ -36,6 +36,8 @@ public:
 	double getEigenvalue();
 	Vector getCouplingCoefficient();
 	double getCouplingCoefficient(int l);
+	// 0 if the spheroidal-harmonic coupling solve converged; nonzero if it did not.
+	int getCouplingStatus();
 	int getMinCouplingModeNumber();
 	int getMaxCouplingModeNumber();
 
@@ -66,6 +68,11 @@ public:
 	double getPolarDerivative(int pos);
 	double getPolarSecondDerivative(int pos);
 
+	// Source-integration error tolerance. A non-positive value (the default)
+	// uses the per-driver built-in tolerance; a positive value overrides it.
+	void setSourceIntegrationTolerance(double tol);
+	double getSourceIntegrationTolerance();
+
 private:
 	int _s;
 	int _L;
@@ -78,6 +85,7 @@ private:
 	double _omega;
 	double _lambda;
 	Vector _coupling;
+	int _couplingStatus = 0;
 
 	Vector _theta;
 	Vector _Slm;
@@ -93,6 +101,8 @@ private:
 	Complex _ZlmUp;
 	double _ZlmInPrecision;
 	double _ZlmUpPrecision;
+
+	double _sourceTolerance = -1.;
 };
 
 void flip_spin_of_coupling_coefficients(Vector &bslmo, int L, int m);

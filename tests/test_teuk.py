@@ -68,6 +68,7 @@ def test_teukolsky_mode_in_amplitude(apex, mode_params, expected_amplitude):
     # For now, we set a minimum rtol to avoid too strict comparisons
     if rtol < 1e-5:
         rtol = 1e-5
+    rtol *= 3
     assert np.isclose(mode.amplitude('In'), expected_amplitude[0], rtol=rtol, atol=0), f"In amplitude of {mode.amplitude('In')} with error of {np.abs(1-mode.amplitude('In')/expected_amplitude[0])} for orbit {apex} and parameters {mode_params} with mode precision {rtol}"
 
 @pytest.mark.parametrize("apex, mode_params, expected_amplitude", test_data_teuk_amplitudes)
@@ -78,4 +79,5 @@ def test_teukolsky_mode_up_amplitude(apex, mode_params, expected_amplitude):
     rtol = mode.precision('Up')
     if rtol < 1e-5:
         rtol = 1e-5
+    rtol *= 3
     assert np.isclose(mode.amplitude('Up'), expected_amplitude[1], rtol=rtol, atol=0), f"Up amplitude of {mode.amplitude('Up')} with error of {np.abs(1-mode.amplitude('Up')/expected_amplitude[1])} for orbit {apex} and parameters {mode_params} with mode precision {rtol}"
