@@ -15,13 +15,13 @@ Measured against the solve it consumes, at the same mode (`s = -2`, `a = 0.9`):
 
 | orbit class | mode `(l,m,k,n)` | nsamples | solve | flux | flux share |
 |---|---|---|---|---|---|
-| circular–equatorial | (2,2,0,0) | 64 | 0.30 ms | 2 µs | 0.52% |
-| circular–equatorial | (2,2,0,0) | 4096 | 7.8 ms | 5 µs | 0.06% |
-| spherical | (2,2,0,0) | 64 | 0.30 ms | 1 µs | 0.43% |
-| generic | (5,3,-2,3) | 512 | 3.6 ms | 2 µs | 0.04% |
-| generic | (8,4,2,10) | 4096 | 53.5 ms | 11 µs | 0.02% |
+| circular–equatorial | (2,2,0,0) | 64 | 0.24 ms | 1 µs | 0.61% |
+| circular–equatorial | (2,2,0,0) | 4096 | 6.5 ms | 4 µs | 0.06% |
+| spherical | (2,2,0,0) | 64 | 0.23 ms | 1 µs | 0.55% |
+| generic | (5,3,-2,3) | 512 | 3.6 ms | 1 µs | 0.04% |
+| generic | (8,4,2,10) | 4096 | 54.5 ms | 4 µs | 0.01% |
 
-The largest flux share anywhere in the swept grid is **0.52%**, at the cheapest mode on the
+The largest flux share anywhere in the swept grid is **0.61%**, at the cheapest mode on the
 coarsest grid; it drops to a few hundredths of a percent for the expensive modes, because
 the flux step is essentially constant in `nsamples` while the solve is not.
 
@@ -40,7 +40,7 @@ wall time ≈ (number of (l, m, k, n) modes summed) × (per-mode solve cost)
 with the per-mode cost read off the teuk aggregate table for your orbit class and
 resolution. Two consequences from that table:
 
-- **Orbit class dominates.** A generic (eccentric + inclined) orbit costs ~7× a
+- **Orbit class dominates.** A generic (eccentric + inclined) orbit costs ~8× a
   circular–equatorial one at `nsamples = 512`, because its source integral is a full 2D
   radial × polar loop.
 - **The mode count, not the flux algebra, sets the bill.** Cost per mode keeps climbing

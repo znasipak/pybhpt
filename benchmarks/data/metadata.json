@@ -79,8 +79,8 @@
       "python": "3.12.13",
       "numpy": "2.2.0",
       "blas": "accelerate",
-      "pybhpt_commit": "47263ba",
-      "timestamp": "2026-08-27 11:05:41 BST"
+      "pybhpt_commit": "e54688d",
+      "timestamp": "2026-09-09 11:35:46 BST"
     }
   },
   "teuk_stages": {
@@ -91,8 +91,8 @@
       "python": "3.12.13",
       "numpy": "2.2.0",
       "blas": "accelerate",
-      "pybhpt_commit": "47263ba",
-      "timestamp": "2026-08-27 11:05:42 BST"
+      "pybhpt_commit": "e54688d",
+      "timestamp": "2026-09-09 11:35:46 BST"
     }
   },
   "teuk_flux": {
@@ -103,8 +103,8 @@
       "python": "3.12.13",
       "numpy": "2.2.0",
       "blas": "accelerate",
-      "pybhpt_commit": "47263ba",
-      "timestamp": "2026-08-27 11:05:43 BST"
+      "pybhpt_commit": "e54688d",
+      "timestamp": "2026-09-09 11:35:47 BST"
     }
   },
   "radial_mode": {

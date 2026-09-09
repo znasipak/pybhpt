@@ -16,19 +16,19 @@ Median solve time (`s = -2`) at `a = 0.9`, across orbit class, mode number, and 
 
 | orbit class | mode `(l,m,k,n)` | nsamples = 64 | 512 | 4096 |
 |---|---|---|---|---|
-| circular–equatorial | (2,2,0,0) | 0.27 ms | 0.49 ms | 6.9 ms |
-| eccentric–equatorial | (2,2,0,0) | 0.36 ms | 0.64 ms | 8.4 ms |
-| spherical | (2,2,0,0) | 0.28 ms | 0.49 ms | 6.7 ms |
-| generic | (2,2,0,0) | 0.44 ms | 3.6 ms | 30.5 ms |
-| generic | (5,3,-2,3) | 0.41 ms | 3.5 ms | 29.8 ms |
-| generic | (8,4,2,10) | 0.60 ms | 3.6 ms | 51.8 ms |
-| generic | (13,7,-5,20) | 0.64 ms | 3.7 ms | 98.2 ms |
-| generic | (20,10,5,30) | 1.0 ms | 4.2 ms | 98.4 ms |
-| generic | (30,15,-8,50) | 1.1 ms | 4.4 ms | 187 ms |
+| circular–equatorial | (2,2,0,0) | 0.23 ms | 0.43 ms | 6.7 ms |
+| eccentric–equatorial | (2,2,0,0) | 0.22 ms | 0.54 ms | 7.3 ms |
+| spherical | (2,2,0,0) | 0.21 ms | 0.57 ms | 6.6 ms |
+| generic | (2,2,0,0) | 0.30 ms | 3.4 ms | 29.2 ms |
+| generic | (5,3,-2,3) | 0.35 ms | 3.4 ms | 30.4 ms |
+| generic | (8,4,2,10) | 0.41 ms | 3.6 ms | 53.5 ms |
+| generic | (13,7,-5,20) | 0.50 ms | 3.8 ms | 99.6 ms |
+| generic | (20,10,5,30) | 0.55 ms | 4.1 ms | 99.3 ms |
+| generic | (30,15,-8,50) | 0.78 ms | 4.2 ms | 192 ms |
 
 `s = 0` and `s = +2` follow the same pattern at comparable cost to `s = -2` (see the full
 data). The dominant driver is **orbit class**, not mode number: generic (eccentric +
-inclined) orbits need a full 2D radial × polar source integral and are already ~7×
+inclined) orbits need a full 2D radial × polar source integral and are already ~8×
 slower than the equatorial/spherical classes at `nsamples = 512`, growing to a much larger
 gap at high resolution — see the stage breakdown below for why.
 
@@ -36,8 +36,8 @@ The last three rows are high-`(l,n)` spot checks (`SPOTCHECK_MODES` in `bench_te
 added to bound the cost of the large-mode tail that appears in bigger sweeps (e.g. the
 regression grid in `benchmarks/regression_sweep.py`, which goes up to `l=30`, `n=50`) but
 isn't otherwise exercised by the curated modes above. Cost keeps climbing with `l`/`n`
-rather than plateauing — `nsamples=4096` goes from 30 ms at `l=2` to 187 ms at `l=30, n=50`,
-~6× over the tested range.
+rather than plateauing — `nsamples=4096` goes from 29 ms at `l=2` to 192 ms at `l=30, n=50`,
+~6.6× over the tested range.
 
 Full data (all spins, all resolutions): [`benchmarks/data/teuk_aggregate.csv`](https://github.com/znasipak/pybhpt/blob/main/benchmarks/data/teuk_aggregate.csv).
 
@@ -57,17 +57,16 @@ One representative mode per orbit class (`s = -2, l = 5, m = 3`), `nsamples = 51
 
 | orbit class | full | swsh | radial | remainder (source integration) |
 |---|---|---|---|---|
-| circular–equatorial | 0.56 ms | 0.23 ms | 0.33 ms | −0.006 ms (**≈0**) |
-| eccentric–equatorial | 0.67 ms | 0.22 ms | 0.40 ms | 0.051 ms (**8%**) |
-| spherical | 0.54 ms | 0.20 ms | 0.32 ms | 0.023 ms (**4%**) |
-| generic | 3.39 ms | 0.27 ms | 0.40 ms | 2.72 ms (**80%**) |
+| circular–equatorial | 0.57 ms | 0.18 ms | 0.31 ms | 0.09 ms (**15%**) |
+| eccentric–equatorial | 0.69 ms | 0.16 ms | 0.43 ms | 0.10 ms (**15%**) |
+| spherical | 0.57 ms | 0.16 ms | 0.32 ms | 0.09 ms (**16%**) |
+| generic | 3.35 ms | 0.16 ms | 0.43 ms | 2.76 ms (**82%**) |
 
-For equatorial/spherical orbits, `swsh` and `radial` together account for essentially all
-of the solve time — source integration is cheap because it only needs a 1D loop. The
-circular–equatorial remainder even comes out slightly *negative*: the derived
-`full − swsh − radial` estimate is below run-to-run timing noise there, which is the
-honest reading of "negligible" rather than a meaningful number. For generic orbits,
-source integration dominates (~80% of the total), consistent with the
+For equatorial/spherical orbits, `swsh` and `radial` together account for ~85% of the solve
+time — source integration is cheap because it only needs a 1D loop. Treat those three
+remainder values as order-of-magnitude only: they are a small difference of two larger
+measurements, and repeat runs put them anywhere between ~8% and ~20%. For generic orbits,
+source integration dominates (~82% of the total), consistent with the
 optimization work this project has focused on for the |s|=2 generic path: the source
 integrand is evaluated on the full 2D radial × polar grid, and that 2D loop — not the
 spheroidal harmonic or the radial solve — is where a generic-orbit mode actually spends
@@ -82,13 +81,13 @@ against the solve it depends on rather than on its own page. Median times, `s = 
 
 | orbit class | mode `(l,m,k,n)` | nsamples | solve | flux | flux share |
 |---|---|---|---|---|---|
-| circular–equatorial | (2,2,0,0) | 64 | 0.30 ms | 2 µs | 0.52% |
-| circular–equatorial | (2,2,0,0) | 4096 | 7.8 ms | 5 µs | 0.06% |
-| spherical | (2,2,0,0) | 64 | 0.30 ms | 1 µs | 0.43% |
-| generic | (5,3,-2,3) | 512 | 3.6 ms | 2 µs | 0.04% |
-| generic | (8,4,2,10) | 4096 | 53.5 ms | 11 µs | 0.02% |
+| circular–equatorial | (2,2,0,0) | 64 | 0.24 ms | 1 µs | 0.61% |
+| circular–equatorial | (2,2,0,0) | 4096 | 6.5 ms | 4 µs | 0.06% |
+| spherical | (2,2,0,0) | 64 | 0.23 ms | 1 µs | 0.55% |
+| generic | (5,3,-2,3) | 512 | 3.6 ms | 1 µs | 0.04% |
+| generic | (8,4,2,10) | 4096 | 54.5 ms | 4 µs | 0.01% |
 
-Across every orbit class, mode, and resolution tested, the flux step is **at most 0.52%**
+Across every orbit class, mode, and resolution tested, the flux step is **at most 0.61%**
 of the mode solve, and its share *falls* with resolution — the flux is a fixed algebraic
 combination of the mode amplitudes, while the solve grows with `nsamples`. This is why
 [`pybhpt.flux` performance](flux) reports the mode-solve cost instead of a flux-specific
