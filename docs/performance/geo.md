@@ -24,4 +24,18 @@ Representative median times (`a = 0.9`):
   orbits are the expensive end). Because this cost is paid once per orbit and shared by
   all modes, it is rarely the bottleneck of a production run.
 
+```{figure} ../_static/figures/geo_hist.png
+:alt: Distribution of KerrGeodesic construction times by orbit class
+:width: 100%
+
+Construction time across every sampled `(a, p, e, x, nsamples)`, split by orbit class.
+The classes separate by orders of magnitude, and the two inclined classes are visibly
+bimodal — the upper cluster is the near-polar sampling.
+```
+
+The bimodality is inclination, not resolution: at `x = 0.5` the spherical and generic
+orbits sit at 0.29 and 0.40 ms median, while at `x = 0.1` both jump to ~11.7 ms, a factor
+of ~30 with everything else held equal. That split is what widens the ranges in the table
+above, so read those as two populations rather than a spread.
+
 Full data: [`benchmarks/data/geodesic.csv`](https://github.com/znasipak/pybhpt/blob/main/benchmarks/data/geodesic.csv).
