@@ -2796,6 +2796,11 @@ int teuk_in_HBL_integrate_dense(
 		Vector &r_out, ComplexVector &Psi_out, ComplexVector &dPsi_out,
 		RadialTeukolsky &teuk, double rmin, double rmax, double rtol)
 {
+	// Backstop: a non-positive rtol collapses the Hermite step cap to zero and the
+	// dense integrator never advances. Callers should validate, but fall back to the
+	// built-in tolerance rather than hang (same sentinel as teuk_integrate_gsl).
+	if(rtol <= 0.) rtol = TEUK_ODE_REL_ERR;
+
 	hbl_parameters params = {
 		.a  = teuk.getBlackHoleSpin(),
 		.s  = teuk.getSpinWeight(),
@@ -2864,6 +2869,11 @@ int teuk_up_HBL_integrate_dense(
 		Vector &r_out, ComplexVector &Psi_out, ComplexVector &dPsi_out,
 		RadialTeukolsky &teuk, double rmin, double rmax, double rtol)
 {
+	// Backstop: a non-positive rtol collapses the Hermite step cap to zero and the
+	// dense integrator never advances. Callers should validate, but fall back to the
+	// built-in tolerance rather than hang (same sentinel as teuk_integrate_gsl).
+	if(rtol <= 0.) rtol = TEUK_ODE_REL_ERR;
+
 	hbl_parameters params = {
 		.a  = teuk.getBlackHoleSpin(),
 		.s  = teuk.getSpinWeight(),

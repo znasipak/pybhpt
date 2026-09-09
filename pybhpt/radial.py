@@ -541,6 +541,13 @@ class InterpolatedRadialTeukolsky:
                 f"rmin={rmin} must be greater than the horizon radius r+={r_horizon}.")
         if rmax <= rmin:
             raise ValueError(f"rmax={rmax} must be greater than rmin={rmin}.")
+        if rtol <= 0:
+            raise ValueError(
+                f"rtol={rtol} must be positive. Unlike RadialTeukolsky.solve, where "
+                "rtol <= 0 selects the built-in ODE tolerance, the interpolant derives "
+                "its node spacing from rtol and has no default-sentinel behaviour: a "
+                "non-positive value collapses the step cap to zero and the build never "
+                "terminates.")
 
         solve_in = bc is None or bc == "In"
         solve_up = bc is None or bc == "Up"

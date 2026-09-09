@@ -481,8 +481,21 @@ static int spectral_solver_eigenvalues_n(const int &s, const int &l, const int &
 	int info = 0;
 	char jobz = 'N', uplo = 'U';
 	dsyev_(&jobz, &uplo, &n, specMat->data, &n, la->data, work.data(), &lwork, &info);
+	if( info != 0 ){
+		// dsyev did not converge. Rebuild the matrix (dsyev overwrote it) and fall back to
+		// GSL: returning here would leave la unwritten, and callers read it either way.
+		gsl_matrix_set_zero(specMat);
+		if( gsl_spmatrix_sp2d(specMat, mat) ){ gsl_matrix_free(specMat); return 1; }
+		gsl_eigen_symm_workspace* w = gsl_eigen_symm_alloc(nmax);
+		int gslError = gsl_eigen_symm(specMat, la, w);
+		gsl_eigen_symm_free(w);
+		gsl_matrix_free(specMat);
+		if( gslError ) return 1;
+		std::sort(la->data, la->data + nmax);
+		gsl_vector_scale(la, 1.0/weight);
+		return 0;
+	}
 	gsl_matrix_free(specMat);
-	if( info != 0 ) return 1;
 	// eigenvalues already in ascending order; just unscale
 	gsl_vector_scale(la, 1.0/weight);
 #else
@@ -602,6 +615,9 @@ double Asljm(const int &s, const int &l, const int &j, const int &m){
 	// (s,l,j,m)-only coupling (Wigner-3j) -- independent of theta, but Yslm() calls this
 	// per grid point. Memoize so the 3j / factorial work runs once per distinct key.
 	static thread_local std::map<std::tuple<int,int,int,int>, double> cache;
+	// Bound the table: entries are never invalidated, so a long-lived process sweeping a
+	// wide mode range would otherwise grow it without limit. Refilling is cheap.
+	if(cache.size() > 200000) cache.clear();
 	auto key = std::make_tuple(s, l, j, m);
 	auto it = cache.find(key);
 	if(it != cache.end()) return it->second;
@@ -845,14 +861,25 @@ double swsh_eigenvalue(const int &s, const int &l, const int &m, const double &g
 	gsl_spmatrix* mat = gsl_spmatrix_alloc_nzmax(nmax, nmax, 5*SPECTRAL_NMAX, GSL_SPMATRIX_COO);
 	spectral_matrix_sparse_init(s, lmin, m, g, mat);
 
-	gsl_vector* la_prev = gsl_vector_alloc(nmax);
-	spectral_solver_eigenvalues_n(s, l, m, g, la_prev, mat);
+	// calloc, not alloc: if a solver path ever fails to write la, a zero eigenvalue is a
+	// visible wrong answer rather than whatever happened to be on the heap.
+	gsl_vector* la_prev = gsl_vector_calloc(nmax);
+	if( spectral_solver_eigenvalues_n(s, l, m, g, la_prev, mat) ){
+		gsl_vector_free(la_prev); gsl_spmatrix_free(mat);
+		std::cout << "(SWSH) Eigenvalue solve failed for (s, l, m, gamma) = ("<<s<<", "<<l<<", "<<m<<", "<<g<<"); returning the spherical limit.\n";
+		return l*(l + 1) - s*(s + 1);
+	}
 	double val_prev = gsl_vector_get(la_prev, l - lmin);
 
 	nmax += 2;
 	spectral_matrix_sparse(s, lmin, m, g, mat, nmax); // only 2 new rows added
-	gsl_vector* la_cur = gsl_vector_alloc(nmax);
-	spectral_solver_eigenvalues_n(s, l, m, g, la_cur, mat);
+	gsl_vector* la_cur = gsl_vector_calloc(nmax);
+	if( spectral_solver_eigenvalues_n(s, l, m, g, la_cur, mat) ){
+		// keep the coarser but valid result rather than reading an unwritten vector
+		double coarse = val_prev;
+		gsl_vector_free(la_cur); gsl_vector_free(la_prev); gsl_spmatrix_free(mat);
+		return coarse;
+	}
 	double val_cur = gsl_vector_get(la_cur, l - lmin);
 
 	double relerror = std::abs(1. - val_prev/val_cur);
@@ -864,8 +891,12 @@ double swsh_eigenvalue(const int &s, const int &l, const int &m, const double &g
 
 		nmax += 5;
 		spectral_matrix_sparse(s, lmin, m, g, mat, nmax); // only 5 new rows
-		la_cur = gsl_vector_alloc(nmax);
-		spectral_solver_eigenvalues_n(s, l, m, g, la_cur, mat);
+		la_cur = gsl_vector_calloc(nmax);
+		if( spectral_solver_eigenvalues_n(s, l, m, g, la_cur, mat) ){
+			// stop refining and keep the last converged value; la_cur is zeroed, not stale
+			val_cur = val_prev;
+			break;
+		}
 		val_cur = gsl_vector_get(la_cur, l - lmin);
 		relerror = std::abs(1. - val_prev/val_cur);
 	}
