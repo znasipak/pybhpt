@@ -29,6 +29,7 @@ Developers can compile from source using the instructions in [Installation](inst
 :caption: User Guides
 
 about
+citations
 installation
 notebooks/geodesics.ipynb
 notebooks/radial.ipynb

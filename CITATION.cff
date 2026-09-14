@@ -31,18 +31,25 @@ abstract: >-
   self-forces and metric-perturbations experienced by small
   bodies moving in a Kerr background.
 license: GPL-3.0
-version: v0.9.10
-date-released: '2026-01-20'
+version: v1.0.0
+date-released: '2026-09-09'
 references: 
   - abbreviation: "Nasipak:2025tby"
     authors:
       - family-names: Nasipak
         given-names: Zachary
-    doi: 10.48550/arXiv.2506.09470
-    year: 2025
-    month: 7
+    doi: 10.1103/7zkx-vbg9
+    year: 2026
+    month: 6
+    journal: Physical Review D
+    volume: 113
+    issue: 12
     title: >-
       Metric reconstruction and the Hamiltonian for eccentric, precessing binaries in the small-mass-ratio limit
+    start: 124051
+    publisher:
+      name: American Physical Society
+    url: 'https://link.aps.org/doi/10.1103/7zkx-vbg9'
     identifiers:
       - type: other
         value: 'arXiv:gr-qc/2507.07746'

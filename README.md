@@ -102,13 +102,17 @@ To include the necessary compiler on Linux:
 conda install gcc_linux-64 gxx_linux-64
 ```
 
+## Citing `pybhpt`
+
+If you make use of `pybhpt` for your work, we request that you cite the codebase using [CITATION.cff](https://github.com/znasipak/pybhpt/blob/main/CITATION.cff), which includes bibliographic information for the repository and accompanying papers. More details are provided on the [Citations](https://pybhpt.readthedocs.io/en/latest/citations) documentation page.
+
 ## References
 
 Theoretical background for the code and explanations of the numerical methods used within are summarized in the references below: 
 
-- Z. Nasipak, *Metric reconstruction and the Hamiltonian for eccentric, precessing binaries in the small-mass-ratio limit* (2025) [arXiv:2507.07746](https://arxiv.org/abs/2507.07746)
-- Z. Nasipak, *An adiabatic gravitational waveform model for compact objects undergoing quasi-circular inspirals into rotating massive black holes*, Phys. Rev. D 109, 044020 (2024) [arXiv:2310.19706](https://arxiv.org/abs/2310.19706)
-- Z. Nasipak, *Adiabatic evolution due to the conservative scalar self-force during orbital resonances*, Phys. Rev. D 106, 064042 (2022) [arXiv:2207.02224](https://arxiv.org/abs/2207.02224)
+- Z. Nasipak, *Metric reconstruction and the Hamiltonian for eccentric, precessing binaries in the small-mass-ratio limit* [Phys. Rev. D 113, 124051 (2026)](https://doi.org/10.1103/7zkx-vbg9) [arXiv:2507.07746](https://arxiv.org/abs/2507.07746)
+- Z. Nasipak, *An adiabatic gravitational waveform model for compact objects undergoing quasi-circular inspirals into rotating massive black holes*,[Phys. Rev. D 109, 044020 (2024)](https://doi.org/10.1103/PhysRevD.109.044020) [arXiv:2310.19706](https://arxiv.org/abs/2310.19706)
+- Z. Nasipak, *Adiabatic evolution due to the conservative scalar self-force during orbital resonances*, [Phys. Rev. D 106, 064042 (2022)](https://doi.org/10.1103/PhysRevD.106.064042) [arXiv:2207.02224](https://arxiv.org/abs/2207.02224)
 
 ## Authors
 
@@ -119,3 +123,5 @@ Zachary Nasipak
 Zachary Nasipak
 
 Christian Chapman-Bird
+
+Contributions have also been made by Github Copilot and Anthropic's Claude as part of code review processes.
