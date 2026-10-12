@@ -421,7 +421,10 @@ void RadialTeukolsky::GSNsolve(BoundaryCondition bc){
 		if(bc == In){
 			SpinFlipsolve(In, &teuk_in_GSN_integrate);
 		}else{
-			SpinFlipsolve(Up, &teuk_up_GSN_integrate);
+			// GSN equations are only implemented for s = -2. Mapping an s = -2 Up solution
+			// to s = +2 via Teukolsky-Starobinsky loses ~(omega r)^8 in relative precision,
+			// so integrate the s = +2 Up solution directly instead.
+			HBLsolve(Up, true);
 		}
 	}
 }

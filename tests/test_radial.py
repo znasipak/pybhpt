@@ -32,6 +32,29 @@ def test_radial_teukolsky_solve():
         Rt = RadialTeukolsky(0.5, 2, 2, 0.5, 0.1, [5.])
         Rt.solve("AUTO", "Down") # invalid boundary condition
 
+@pytest.mark.parametrize("s", [0, 1, -1])
+def test_radial_teukolsky_gsn_unsupported_spin(s):
+    Rt = RadialTeukolsky(s, 2, 2, 0.5, 2.0, np.linspace(3, 30, 8))
+    with pytest.raises(ValueError):
+        Rt.solve("GSN", "Up")
+
+@pytest.mark.parametrize("s, j, m, a, omega", [
+    (2, 2, 2, 0.99, 2.0),
+    (2, 3, 3, 0.99, 2.0),
+    (2, 2, 2, 0.9, 2.0),
+    (2, 2, 0, 0.5, 2.0),
+    (-2, 2, 2, 0.99, 2.0),
+])
+@pytest.mark.parametrize("bc", ["In", "Up"])
+def test_radial_teukolsky_gsn_matches_auto(s, j, m, a, omega, bc):
+    r = np.linspace(3, 30, 8)
+    ref = RadialTeukolsky(s, j, m, a, omega, r)
+    ref.solve("AUTO", bc)
+    gsn = RadialTeukolsky(s, j, m, a, omega, r)
+    gsn.solve("GSN", bc)
+    np.testing.assert_allclose(gsn.radialsolutions(bc), ref.radialsolutions(bc), rtol=1e-7, atol=0)
+    np.testing.assert_allclose(gsn.radialderivatives(bc), ref.radialderivatives(bc), rtol=1e-7, atol=0)
+
 @pytest.mark.parametrize("method", ["AUTO", "MST", "ASYMP", "HBL", "GSN", "TEUK"])
 def test_radial_teukolsky_solve_auto(method):
     r = np.linspace(2.1, 100, 100)

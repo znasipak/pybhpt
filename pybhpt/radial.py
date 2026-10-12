@@ -244,6 +244,9 @@ class RadialTeukolsky:
         ----------
         method : str, optional
             The method to use for solving the equation. Default is "AUTO".
+            "GSN" is only available for spin-weight s = -2 or +2. For s = +2, the
+            "Up" solution is integrated with "HBL", because mapping the s = -2 GSN
+            solution to s = +2 is numerically ill-conditioned at large radii.
         bc : str, optional
             Specifies which homogeneous solutions to compute. If None, both "In" (horizon) and "Up" (infinity) solutions are computed.
             If "In", only the horizon solution is computed. If "Up", only the infinity solution is computed.
@@ -252,6 +255,8 @@ class RadialTeukolsky:
             (the default) uses the built-in tolerance; a positive value trades accuracy
             for fewer integration steps. Ignored by the analytic methods (MST/ASYMP).
         """
+        if method == "GSN" and abs(self.spinweight) != 2:
+            raise ValueError(f"Method GSN only supports spin-weight s = -2 or +2, not s = {self.spinweight}.")
         cyrtol = -1. if rtol is None else rtol
         if bc is None:
             self.base.solve(method, "None", rtol=cyrtol)
