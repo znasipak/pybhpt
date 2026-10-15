@@ -351,6 +351,23 @@ def swsh_eigenvalue(s, l, m, g, nmax=None):
     else:
         eigen = las[sorted_indices[idx]]
     return eigen
+
+def _bilinear_normalize(coeffs, ref_index):
+    """Normalize complex coupling coefficients with the bilinear pairing.
+
+    For complex spheroidicity the angular equation is complex-symmetric, not Hermitian,
+    so the harmonics are normalized by int S^2 sin(th) dth = 1/(2 pi), i.e. sum b_l^2 = 1
+    (the spherical basis is real and orthogonal). This keeps S analytic in the
+    spheroidicity. The sign is fixed by Re(b_ref) > 0, which reduces to the real-gamma
+    convention b_ref > 0.
+    """
+    coeffs = coeffs/coeffs[ref_index]
+    norm2 = np.dot(coeffs, coeffs)  # bilinear sum b_l^2 (np.dot does not conjugate)
+    if np.abs(norm2) < 1e-12*np.vdot(coeffs, coeffs).real:
+        raise ValueError("Spheroidal eigenfunction is self-orthogonal (sum b^2 = 0); "
+                         "the bilinear normalization is undefined at this spheroidicity.")
+    return coeffs/np.sqrt(norm2)
+
 class SWSHBase:
     def __init__(self, *args):
         arg_num = np.array(args).shape[0]
@@ -417,11 +434,7 @@ class SWSHSeriesBase(SWSHBase):
             eigs_return = np.sign(eigs_temp[self.j - self.jmin])*eigs_temp
             eig = np.real(las[pos])
         else:
-            eigs_temp = eigs[:, pos]
-            ref = eigs_temp[self.j - self.jmin]
-            eigs_temp = eigs_temp/ref
-            eigs_norm = np.linalg.norm(eigs_temp)
-            eigs_return = eigs_temp/eigs_norm
+            eigs_return = _bilinear_normalize(eigs[:, pos], self.j - self.jmin)
             eig = las[pos]
         return (eig, eigs_return)
     
