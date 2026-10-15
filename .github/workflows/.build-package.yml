@@ -144,7 +144,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: false  # do NOT checkout submodules here, we'll handle them manually
-          fetch-depth: 1 # shallow clone to speed up the process
+          fetch-depth: 0 # full history and tags, needed by setuptools-scm for the version
+
+      # Compute the version on the host and pass it into cibuildwheel, so Linux
+      # container builds do not depend on git working inside the container.
+      - name: Determine package version
+        id: version
+        run: |
+          version=$(pipx run setuptools-scm)
+          test -n "$version"
+          echo "Building pybhpt $version"
+          echo "version=$version" >> $GITHUB_OUTPUT
 
       - name: Get Boost submodule commit
         id: boost_commit
@@ -175,6 +185,7 @@ jobs:
             CMAKE_PREFIX_PATH=/opt/gsl-install
             LD_LIBRARY_PATH=/opt/gsl-install/lib:$LD_LIBRARY_PATH
             CMAKE_ARGS=-DPYBHPT_REQUIRE_LAPACK=ON
+            SETUPTOOLS_SCM_PRETEND_VERSION=${{ steps.version.outputs.version }}
           CIBW_ARCHS_LINUX: ${{ matrix.arch }}
           CIBW_SKIP: ${{ matrix.cibw_skip }}
 
@@ -185,6 +196,7 @@ jobs:
           CIBW_ENVIRONMENT: |
             MACOSX_DEPLOYMENT_TARGET=${{ matrix.macosx_deployment_target }}
             CMAKE_ARGS=-DPYBHPT_REQUIRE_LAPACK=ON
+            SETUPTOOLS_SCM_PRETEND_VERSION=${{ steps.version.outputs.version }}
 
       - name: Remove broken Git submodule metadata before cleanup
         if: steps.cache-boost.outputs.cache-hit == 'true'
@@ -206,6 +218,8 @@ jobs:
       github.event_name == 'release'
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history and tags, needed by setuptools-scm for the version
 
       - name: Build sdist
         run: pipx run build --sdist

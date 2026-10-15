@@ -5,13 +5,15 @@ requires = [
   # runtimes, so the floor here is what matters. The ceiling mirrors the runtime pin below;
   # leaving it unpinned would compile against a numpy the install step then refuses.
   "numpy>=2.0,<2.3",
-  "scikit-build-core"
+  "scikit-build-core",
+  "setuptools-scm>=8"
 ]
 build-backend = "scikit_build_core.build"
 
 [project]
 name = "pybhpt"
-version = "1.0.0"
+# Version comes from git tags (vX.Y.Z) via setuptools-scm; see [tool.setuptools_scm].
+dynamic = ["version"]
 description = "Black Hole Perturbation Theory and Self-Force Algorithms in Python"
 authors = [
   { name = "Zach Nasipak", email = "znasipak@gmail.com" }
@@ -59,6 +61,7 @@ Github = "https://github.com/znasipak/pybhpt"
 cmake.version = ">=3.18"
 cmake.build-type = "Release"
 build.verbose = true
+metadata.version.provider = "scikit_build_core.metadata.setuptools_scm"
 
 [tool.scikit-build.sdist]
 include = [ "cpp/", "cython/", "CMakeLists.txt" ]
@@ -66,6 +69,12 @@ exclude = [ ".github/", "tutorial*", ".gitignore" ]
 
 [tool.scikit-build.wheel]
 packages = [ "pybhpt" ]
+
+[tool.setuptools_scm]
+# A tagged commit (v1.0.1) builds as 1.0.1; commits after the last tag build as
+# the next patch version's dev release (1.0.2.devN, N = commits since the tag).
+# Package indexes reject local versions ("+g<hash>"), so drop them.
+local_scheme = "no-local-version"
 
 [tool.pytest.ini_options]
 addopts = "--ignore=pybhpt/extern"

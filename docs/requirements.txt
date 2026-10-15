@@ -1,6 +1,6 @@
 sphinx
 sphinx_rtd_theme
-toml
+setuptools-scm>=8
 sphinx-book-theme
 nbsphinx
 myst-nb
