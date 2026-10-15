@@ -362,8 +362,8 @@ def _bilinear_normalize(coeffs, ref_index):
     convention b_ref > 0.
     """
     coeffs = coeffs/coeffs[ref_index]
-    norm2 = np.sum(coeffs**2)
-    if np.abs(norm2) < 1e-12*np.sum(np.abs(coeffs)**2):
+    norm2 = np.dot(coeffs, coeffs)  # bilinear sum b_l^2 (np.dot does not conjugate)
+    if np.abs(norm2) < 1e-12*np.vdot(coeffs, coeffs).real:
         raise ValueError("Spheroidal eigenfunction is self-orthogonal (sum b^2 = 0); "
                          "the bilinear normalization is undefined at this spheroidicity.")
     return coeffs/np.sqrt(norm2)
