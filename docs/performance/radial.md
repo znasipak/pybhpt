@@ -26,7 +26,8 @@ picks the cheap integrator for a generic mode.
 
 ```{note}
 The analytic `MST` series solver is not benchmarked here. It was removed from `AUTO`'s
-dispatch in `6d214d5` as unreliable at high `l`, so `AUTO` will never select it. It
+dispatch in `6d214d5` as unreliable at high `l`, and its use as a fallback for boundary values
+has since been removed, so `AUTO` will never select it. It
 remains callable explicitly via `solve("MST")`, but it is deprecated (selecting it emits a
 `FutureWarning`) and is not part of the supported solve path these numbers describe.
 ```
