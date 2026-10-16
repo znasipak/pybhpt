@@ -14,6 +14,25 @@ on:
       - published
 
 jobs:
+  check_version:
+    name: Check version consistency
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compare pyproject.toml, CITATION.cff, and release tag
+        run: |
+          PY=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
+          CFF=$(grep '^version:' CITATION.cff | sed -E 's/^version: *v?//')
+          echo "pyproject.toml: $PY"
+          echo "CITATION.cff:   $CFF"
+          [ "$PY" = "$CFF" ] || { echo "::error::CITATION.cff version ($CFF) does not match pyproject.toml ($PY)"; exit 1; }
+          if [ "${{ github.event_name }}" = "release" ]; then
+            TAG="${GITHUB_REF_NAME#v}"
+            echo "release tag:    $TAG"
+            [ "$TAG" = "$PY" ] || { echo "::error::Release tag ($TAG) does not match pyproject.toml ($PY)"; exit 1; }
+          fi
+
   build_and_run_tests:
     name: Build and run unit tests
     runs-on: ${{ matrix.os }}
@@ -216,7 +235,7 @@ jobs:
             path: dist/*.tar.gz
 
   upload_pypi:
-    needs: [build_wheels, build_sdist]
+    needs: [check_version, build_wheels, build_sdist]
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
@@ -237,7 +256,7 @@ jobs:
           verbose: true
 
   upload_testpypi:
-    needs: [build_wheels, build_sdist]
+    needs: [check_version, build_wheels, build_sdist]
     runs-on: ubuntu-latest
     environment: testpypi
     permissions:

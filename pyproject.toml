@@ -67,6 +67,28 @@ exclude = [ ".github/", "tutorial*", ".gitignore" ]
 [tool.scikit-build.wheel]
 packages = [ "pybhpt" ]
 
+[tool.bumpversion]
+current_version = "1.0.0"
+commit = true
+tag = true
+tag_name = "v{new_version}"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "CITATION.cff"
+search = "version: v{current_version}"
+replace = "version: v{new_version}"
+
+[[tool.bumpversion.files]]
+filename = "CITATION.cff"
+regex = true
+search = "date-released: '\\d{{4}}-\\d{{2}}-\\d{{2}}'"
+replace = "date-released: '{now:%Y-%m-%d}'"
+
 [tool.pytest.ini_options]
 addopts = "--ignore=pybhpt/extern"
 norecursedirs = ["extern"]
