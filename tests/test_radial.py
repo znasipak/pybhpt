@@ -1,5 +1,7 @@
 from pybhpt.radial import renormalized_angular_momentum, RadialTeukolsky
 import pytest
+import subprocess
+import sys
 import numpy as np
 
 test_data_renormalized_angular_momentum = [
@@ -69,6 +71,21 @@ def test_radial_teukolsky_auto_far_zone():
     for bc in ["In", "Up"]:
         assert np.allclose(Rt.radialsolutions(bc), Rhbl.radialsolutions(bc), rtol=1e-8, atol=0), f"AUTO {bc} solution disagrees with HBL"
         assert np.allclose(Rt.radialderivatives(bc), Rhbl.radialderivatives(bc), rtol=1e-8, atol=0), f"AUTO {bc} derivative disagrees with HBL"
+
+def test_radial_teukolsky_asymptotic_boundary_failure_reported():
+    # For a = 1 the asymptotic series give NaN boundary data at every retry. Once the retries
+    # run out the failure must still be reported; it used to be dropped silently. The report
+    # is printed by C++ and only flushed at exit, so run the solve in a separate process.
+    code = (
+        "import numpy as np\n"
+        "from pybhpt.radial import RadialTeukolsky\n"
+        "Rt = RadialTeukolsky(-2, 2, 2, 1., 0.1, np.array([3., 10.]))\n"
+        "Rt.solveboundarycondition('ASYMP')\n"
+    )
+    result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=120)
+    assert result.returncode == 0, result.stderr
+    assert "(RADIALSOLVER) ERROR: Calculation of horizon side boundary value failed" in result.stdout
+    assert "(RADIALSOLVER) ERROR: Calculation of infinity side boundary value failed" in result.stdout
 
 def test_radial_teukolsky_near_extremal_horizon_boundary():
     # For a = 0.999 the default In boundary 1.1 r_+ lies outside the horizon series' radius of
