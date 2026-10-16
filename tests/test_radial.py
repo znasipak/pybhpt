@@ -1,4 +1,6 @@
-from pybhpt.radial import renormalized_angular_momentum, RadialTeukolsky
+from pybhpt.radial import renormalized_angular_momentum, RadialTeukolsky, InterpolatedRadialTeukolsky
+import pybhpt.radial
+import warnings
 import pytest
 import numpy as np
 
@@ -36,7 +38,11 @@ def test_radial_teukolsky_solve():
 def test_radial_teukolsky_solve_auto(method):
     r = np.linspace(2.1, 100, 100)
     Rt = RadialTeukolsky(-2, 2, 2, 0.5, 0.1, r)
-    Rt.solve(method, "None")
+    if method == "MST":
+        with pytest.warns(FutureWarning, match="deprecated"):
+            Rt.solve(method, "None")
+    else:
+        Rt.solve(method, "None")
     assert Rt.radialsolutions('Up').shape == r.shape, f"Radial Up solutions shape mismatch for {method} method"
     assert Rt.radialsolutions('In').shape == r.shape, f"Radial In solutions shape mismatch for {method} method"
 
@@ -86,3 +92,24 @@ def test_radial_teukolsky_near_extremal_horizon_boundary():
     Rp_ref = np.array([-5610.473993908352+1414.5623325168212j, -46577097.17367911-3197014.1241712696j])
     assert np.allclose(Rt.radialsolutions("In"), R_ref, rtol=1e-10, atol=0)
     assert np.allclose(Rt.radialderivatives("In"), Rp_ref, rtol=1e-10, atol=0)
+
+def test_radial_teukolsky_mst_deprecation_warning():
+    r = np.array([10., 20.])
+    Rt = RadialTeukolsky(-2, 2, 2, 0.5, 0.1, r)
+    with pytest.warns(FutureWarning, match='"MST" solution method is deprecated') as record:
+        Rt.solveboundarycondition("MST")
+    # the warning should point at the caller, not at pybhpt internals
+    assert record[0].filename == __file__
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        Rt = RadialTeukolsky(-2, 2, 2, 0.5, 0.1, r)
+        Rt.solveboundarycondition("AUTO")
+        Rt.solve("AUTO")
+
+def test_interpolated_radial_teukolsky_mst_deprecation_warning(monkeypatch):
+    # stub out the Cython build; only the warning is under test
+    monkeypatch.setattr(pybhpt.radial, "_InterpolatedRadialTeukolskyCython", lambda *args: None)
+    with pytest.warns(FutureWarning, match='"MST" solution method is deprecated') as record:
+        InterpolatedRadialTeukolsky(-2, 2, 2, 0.5, 0.1, 3., 10., method="MST")
+    assert record[0].filename == __file__

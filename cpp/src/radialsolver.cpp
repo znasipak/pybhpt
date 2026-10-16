@@ -135,18 +135,11 @@ void RadialTeukolsky::solveBoundaryPoint(BoundaryCondition bc){
 void RadialTeukolsky::generateRetardedBoundaryCondition(BoundaryCondition bc, SolutionMethod method){
 	solveBoundaryPoint(bc);
 	int test = 1;
-	if( method != ASYM && method != MST ){
+	// Every method other than MST takes its boundary data from the asymptotic series. MST
+	// is deprecated and is only used when requested explicitly.
+	if( method != MST ){
 		test = ASYMsolveBoundary(bc);
-		if( test == 0 && validMethodDomain(MST) ){
-			test = MSTsolveBoundary(bc);
-		}
-
-		if( test == 0 ){
-			ASYMsolveBoundary(bc);
-		}
-	}else if( method == ASYM ){
-		test = ASYMsolveBoundary(bc);
-	}else if( method == MST ){
+	}else{
 		test = MSTsolveBoundary(bc);
 	}
 
