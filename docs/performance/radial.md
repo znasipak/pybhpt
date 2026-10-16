@@ -27,8 +27,8 @@ picks the cheap integrator for a generic mode.
 ```{note}
 The analytic `MST` series solver is not benchmarked here. It was removed from `AUTO`'s
 dispatch in `6d214d5` as unreliable at high `l`, so `AUTO` will never select it. It
-remains callable explicitly via `solve("MST")`, but it is not part of the supported
-solve path these numbers describe.
+remains callable explicitly via `solve("MST")`, but it is deprecated (selecting it emits a
+`FutureWarning`) and is not part of the supported solve path these numbers describe.
 ```
 
 Full data: [`benchmarks/data/radial_method.csv`](https://github.com/znasipak/pybhpt/blob/main/benchmarks/data/radial_method.csv).

@@ -1,4 +1,5 @@
 from cybhpt_full import _TeukolskyMode as _TeukolskyModeCython
+from pybhpt.radial import _warn_if_deprecated_method
 
 class TeukolskyMode:
     """A class for computing Teukolsky modes sourced by a point-particle orbiting in a Kerr background.
@@ -227,6 +228,7 @@ class TeukolskyMode:
             KerrGeodesic object containing the background motion of the point-particle source.
         method : str, optional
             The method to use for solving the Teukolsky equation. Default is "AUTO".
+            "MST" is deprecated and emits a FutureWarning.
         nsamples : int, optional
             The number of samples to use for the solution. Default is 256.
         teuk : RadialTeukolsky, optional
@@ -239,6 +241,7 @@ class TeukolskyMode:
             value overrides it (smaller = more samples / tighter convergence).
 
         """
+        _warn_if_deprecated_method(method)
         cytol = -1. if tol is None else tol
         if teuk is None or swsh is None:
             self.base.solve(geo.base, method, nsamples, tol=cytol)
