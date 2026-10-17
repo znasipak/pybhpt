@@ -54,7 +54,7 @@ int RadialTeukolsky::ASYMsolveBoundary(BoundaryCondition bc){
 			boundaryFlag++;
 		}
 
-		if((std::abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundarySolution.getValue())) || isinf(std::abs(_horizonBoundarySolution.getValue())) || std::abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundaryDerivative.getValue())) || isinf(std::abs(_horizonBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
+		if((std::abs(_horizonBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundarySolution.getValue())) || isinf(std::abs(_horizonBoundarySolution.getValue())) || std::abs(_horizonBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_horizonBoundaryDerivative.getValue())) || isinf(std::abs(_horizonBoundaryDerivative.getValue())))){
 			success = 0; // consider method failed
 		}
 	}else{
@@ -68,7 +68,7 @@ int RadialTeukolsky::ASYMsolveBoundary(BoundaryCondition bc){
 			boundaryFlag++;
 		}
 
-		if( (std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
+		if( (std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue())))){
 			success = 0; // consider method failed
 		}
 	}
