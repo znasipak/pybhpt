@@ -3197,15 +3197,31 @@ void hbl_Psi_to_teuk_R_RP(Complex &R, Complex &RP, Complex Psi, Complex dPsi, do
 }
 
 
-int teuk_hbl_gsl(double r, const double y[], double dydr[], void* parameters){
-  hbl_parameters params = *(hbl_parameters *)parameters;
+// potential_GR/GI/UR/UI evaluated together: delta and varpi are computed once (by the
+// same statements those functions use) and the parameters are read by reference instead
+// of copied four times. Each potential expression is unchanged, so results are bitwise
+// identical to calling the four functions.
+static inline void hbl_potentials(double r, const hbl_parameters &params,
+		double &GR, double &GI, double &UR, double &UI, double &delta){
+	double a = params.a, om = params.om, la = params.la;
+	int s = params.s, H = params.H, m = params.m;
+	delta = r*r - 2.*r + a*a;
+	double varpi = r*r + a*a;
 
-	double a = params.a;
-	double delta = r*r - 2.*r + a*a;
-	double GR = potential_GR(r, params);
-	double GI = potential_GI(r, params);
-	double UR = potential_UR(r, params);
-	double UI = potential_UI(r, params);
+	GR = delta*(pow(a, 2.) + r*(r*s - (1. + s)));
+	GI = -(delta*r*(a*m + H*om*varpi));
+	UR = delta*(2*pow(a, 2) - la*pow(r, 2) - 2.*r*(1. + s))
+		- 2.*a*(1. + H)*m*om*pow(r, 2)*varpi
+		+ (1. - pow(H, 2))*pow(om, 2)*pow(r, 2)*pow(varpi, 2);
+	UI = -2.*a*delta*(m + a*H*om)*r + 2.*om*pow(r, 2)*(delta*(1. - H)*r
+		- (1. + H)*(-pow(a, 2) + pow(r, 2)))*s;
+}
+
+int teuk_hbl_gsl(double r, const double y[], double dydr[], void* parameters){
+	const hbl_parameters &params = *(const hbl_parameters *)parameters;
+
+	double GR, GI, UR, UI, delta;
+	hbl_potentials(r, params, GR, GI, UR, UI, delta);
 
 	dydr[0] = y[2];
 	dydr[1] = y[3];
