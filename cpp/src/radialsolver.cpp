@@ -3197,24 +3197,23 @@ void hbl_Psi_to_teuk_R_RP(Complex &R, Complex &RP, Complex Psi, Complex dPsi, do
 }
 
 
-// potential_GR/GI/UR/UI evaluated together: delta and varpi are computed once (by the
-// same statements those functions use) and the parameters are read by reference instead
-// of copied four times. Each potential expression is unchanged, so results are bitwise
-// identical to calling the four functions.
+// potential_GR/GI/UR/UI evaluated together, with r^2, a^2, delta and varpi computed once
+// and the expressions regrouped to share factors (pow(.,2) written as products; the
+// omega*r^2*varpi factor and the 2r factor of UI pulled out). Algebraically identical to
+// the separate potential_* functions; differs from them at the ulp level only.
 static inline void hbl_potentials(double r, const hbl_parameters &params,
 		double &GR, double &GI, double &UR, double &UI, double &delta){
 	double a = params.a, om = params.om, la = params.la;
-	int s = params.s, H = params.H, m = params.m;
-	delta = r*r - 2.*r + a*a;
-	double varpi = r*r + a*a;
+	double s = params.s, H = params.H, m = params.m;
+	double r2 = r*r, a2 = a*a;
+	delta = r2 - 2.*r + a2;
+	double varpi = r2 + a2;
 
-	GR = delta*(pow(a, 2.) + r*(r*s - (1. + s)));
-	GI = -(delta*r*(a*m + H*om*varpi));
-	UR = delta*(2*pow(a, 2) - la*pow(r, 2) - 2.*r*(1. + s))
-		- 2.*a*(1. + H)*m*om*pow(r, 2)*varpi
-		+ (1. - pow(H, 2))*pow(om, 2)*pow(r, 2)*pow(varpi, 2);
-	UI = -2.*a*delta*(m + a*H*om)*r + 2.*om*pow(r, 2)*(delta*(1. - H)*r
-		- (1. + H)*(-pow(a, 2) + pow(r, 2)))*s;
+	GR = delta*(a2 + r*(r*s - (1. + s)));
+	GI = -delta*r*(a*m + H*om*varpi);
+	UR = delta*(2.*a2 - la*r2 - 2.*r*(1. + s))
+		+ om*r2*varpi*((1. - H*H)*om*varpi - 2.*a*(1. + H)*m);
+	UI = 2.*r*(om*r*s*(delta*(1. - H)*r - (1. + H)*(r2 - a2)) - a*delta*(m + a*H*om));
 }
 
 int teuk_hbl_gsl(double r, const double y[], double dydr[], void* parameters){
@@ -3225,8 +3224,9 @@ int teuk_hbl_gsl(double r, const double y[], double dydr[], void* parameters){
 
 	dydr[0] = y[2];
 	dydr[1] = y[3];
-	dydr[2] = (2.*r*(GR*y[2] - GI*y[3]) - (UR*y[0] - UI*y[1]))/(delta*delta*r*r);
-	dydr[3] = (2.*r*(GR*y[3] + GI*y[2]) - (UR*y[1] + UI*y[0]))/(delta*delta*r*r);
+	double invDenom = 1./(delta*delta*r*r), twoR = 2.*r;
+	dydr[2] = (twoR*(GR*y[2] - GI*y[3]) - (UR*y[0] - UI*y[1]))*invDenom;
+	dydr[3] = (twoR*(GR*y[3] + GI*y[2]) - (UR*y[1] + UI*y[0]))*invDenom;
 
   return GSL_SUCCESS;
 }
