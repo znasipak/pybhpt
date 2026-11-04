@@ -1061,13 +1061,16 @@ Complex spin_plus_1_df_coeff_TS_static(double a, double lambdaCH, double r){ // 
 Complex spin_minus_2_f_coeff_TS(int m, double a, double omega, double lambdaCH, double r){ // this is lambda_{s=-2}
 	double delta = r*r - 2.*r + a*a;
   	double Kteuk = (r*r + a*a)*omega - m*a;
-	return pow(delta,-3)*(-4.*Kteuk*(-1. + r)*(Complex(0.,1.)*(2. - lambdaCH) +  8.*omega*r) - 8.*(lambdaCH - 1. + Complex(0.,3.)*omega*r)*pow(Kteuk,2)) + pow(delta,-4)*(8.*pow(Kteuk,4) + 8.*pow(Kteuk,2)*pow(-1. + r,2)) + pow(delta,-2)*((lambdaCH - 2.)*lambdaCH + 20.*Kteuk*omega + Complex(0.,4.)*omega*(3. + (lambdaCH - 2.)*r) + 12.*pow(omega,2)*pow(r,2));
+	double invDelta = 1./delta, invDelta2 = invDelta*invDelta;
+	double K2 = Kteuk*Kteuk, rm1 = r - 1.;
+	return invDelta2*invDelta*(-4.*Kteuk*rm1*(Complex(0.,1.)*(2. - lambdaCH) +  8.*omega*r) - 8.*(lambdaCH - 1. + Complex(0.,3.)*omega*r)*K2) + invDelta2*invDelta2*(8.*K2*K2 + 8.*K2*rm1*rm1) + invDelta2*((lambdaCH - 2.)*lambdaCH + 20.*Kteuk*omega + Complex(0.,4.)*omega*(3. + (lambdaCH - 2.)*r) + 12.*omega*omega*r*r);
 }
 
 Complex spin_minus_2_g_coeff_TS(int m, double a, double omega, double lambdaCH, double r){ // this is lambda_{s=-2}
 	double delta = r*r - 2.*r + a*a;
   	double Kteuk = (r*r + a*a)*omega - m*a;
-	return 4.*I*((2.*pow(r - 1., 2) - lambdaCH*delta)*Kteuk + 2.*pow(Kteuk, 3) + 2.*omega*delta*(delta - r*(r - 1.)))/pow(delta, 3);
+	double rm1 = r - 1.;
+	return 4.*I*((2.*rm1*rm1 - lambdaCH*delta)*Kteuk + 2.*Kteuk*Kteuk*Kteuk + 2.*omega*delta*(delta - r*rm1))/(delta*delta*delta);
 }
 
 Complex spin_minus_2_df_coeff_TS_static(double a, double lambdaCH, double r){ // this is lambda_{s=-2}
@@ -1171,10 +1174,14 @@ Complex df_coeff_TS_static(int s, double a, double lambdaCH, double r){
 void flip_spin_of_radial_teukolsky_TS_subfunc(Complex &RFlip, Complex &RPFlip, Complex Cm, Complex Cp, int s, int m, double a, double omega, double lambdaCH, double r, Complex R, Complex RP){
 	Complex g0p, f0p, g0m, f0m;
 	if(std::abs(s) == 2){
+		// the s=+2 coefficients are built from the s=-2 ones (see spin_plus_2_*_coeff_TS);
+		// form them from the already-evaluated s=-2 values instead of recomputing those
 		g0m = spin_minus_2_g_coeff_TS(m, a, omega, lambdaCH, r);
 		f0m = spin_minus_2_f_coeff_TS(m, a, omega, lambdaCH, r);
-		g0p = spin_plus_2_g_coeff_TS(m, a, omega, lambdaCH, r);
-		f0p = spin_plus_2_f_coeff_TS(m, a, omega, lambdaCH, r);
+		double delta = r*r - 2.*r + a*a;
+		double delta2 = delta*delta, delta4 = delta2*delta2;
+		g0p = delta4*std::conj(g0m);
+		f0p = delta4*std::conj(f0m + 4.*(r - 1.)/delta*g0m);
 	}else if(std::abs(s) == 1){
 		g0m = spin_minus_1_g_coeff_TS(m, a, omega, lambdaCH, r);
 		f0m = spin_minus_1_f_coeff_TS(m, a, omega, lambdaCH, r);
@@ -1219,7 +1226,13 @@ void flip_spin_of_radial_teukolsky_TS(ComplexVector &RFlip, ComplexVector &RPFli
 	Cp = teukolsky_starobinsky_amplitude(bc, std::abs(s), m, a, omega, lambdaCH);
 	Cm = teukolsky_starobinsky_amplitude(bc, -std::abs(s), m, a, omega, lambdaCH);
 	for(size_t i = 0; i < r.size(); i++){
-		flip_spin_of_radial_teukolsky_TS_subfunc(RFlip[i], RPFlip[i], Cm, Cp, s, m, a, omega, lambdaCH, r[i], R[i], RP[i]);
+		if(i > 0 && r[i] == r[i - 1] && R[i] == R[i - 1] && RP[i] == RP[i - 1]){
+			// repeated grid point (e.g. circular/spherical orbits): identical result
+			RFlip[i] = RFlip[i - 1];
+			RPFlip[i] = RPFlip[i - 1];
+		}else{
+			flip_spin_of_radial_teukolsky_TS_subfunc(RFlip[i], RPFlip[i], Cm, Cp, s, m, a, omega, lambdaCH, r[i], R[i], RP[i]);
+		}
 	}
 }
 
@@ -2731,8 +2744,13 @@ int teuk_in_HBL_integrate(ComplexVector &R_return, ComplexVector &Rp_return, Rad
 	// std::cout << "(RADIALSOLVER) Rin'(r = "<< rReverse[stepNum - 1] << ") = " << RP_f << "\n";
 
 	for(int i = 0; i < stepNum; i++){
-		R_return[i] = hbl_Psi_to_teuk_R(norm*PsiVec[i], r[i], params);
-		Rp_return[i] = hbl_dPsi_to_teuk_RP(norm*dPsiVec[i], norm*PsiVec[i], r[i], params);
+		if(i > 0 && r[i] == r[i - 1] && PsiVec[i] == PsiVec[i - 1] && dPsiVec[i] == dPsiVec[i - 1]){
+			// repeated grid point (e.g. circular/spherical orbits): identical result
+			R_return[i] = R_return[i - 1];
+			Rp_return[i] = Rp_return[i - 1];
+		}else{
+			hbl_Psi_to_teuk_R_RP(R_return[i], Rp_return[i], norm*PsiVec[i], norm*dPsiVec[i], r[i], params);
+		}
 	}
 
 	if(r0 >= r.back()){
@@ -2801,8 +2819,13 @@ int teuk_up_HBL_integrate(ComplexVector &R_return, ComplexVector &Rp_return, Rad
 	// std::cout << "(RADIALSOLVER) Psi'(r = "<< rReverse[0] << ") = " << dPsiVec[0] << "\n";
 
 	for(int i = 0; i < stepNum; i++){
-		R_return[i] = hbl_Psi_to_teuk_R(norm*PsiVec[i], rReverse[i], params);
-		Rp_return[i] = hbl_dPsi_to_teuk_RP(norm*dPsiVec[i], norm*PsiVec[i], rReverse[i], params);
+		if(i > 0 && rReverse[i] == rReverse[i - 1] && PsiVec[i] == PsiVec[i - 1] && dPsiVec[i] == dPsiVec[i - 1]){
+			// repeated grid point (e.g. circular/spherical orbits): identical result
+			R_return[i] = R_return[i - 1];
+			Rp_return[i] = Rp_return[i - 1];
+		}else{
+			hbl_Psi_to_teuk_R_RP(R_return[i], Rp_return[i], norm*PsiVec[i], norm*dPsiVec[i], rReverse[i], params);
+		}
 	}
 
 	if(r0 >= r.back()){
@@ -3143,6 +3166,34 @@ Complex hbl_dPsi_to_teuk_RP(Complex dPsi, Complex Psi, double r, hbl_parameters 
 	Complex RinP = (dPsi - dprefactor*Psi)/prefactor;
 
 	return RinP;
+}
+
+static inline double integer_power(double x, int n){
+	double y = 1., b = x;
+	for(int k = std::abs(n); k > 0; k >>= 1){
+		if(k & 1){ y *= b; }
+		b *= b;
+	}
+	return (n < 0) ? 1./y : y;
+}
+
+// Fused hbl_Psi_to_teuk_R + hbl_dPsi_to_teuk_RP for the per-grid-point conversion loops.
+// Same prefactor r*delta^s*exp(-i(m*Phi + om*h)), but evaluated once per point with an
+// integer power, one complex exponential, and the two logarithms shared between Phi and h
+// (the separate functions use a complex pow and two complex exps, each computed twice).
+void hbl_Psi_to_teuk_R_RP(Complex &R, Complex &RP, Complex Psi, Complex dPsi, double r, const hbl_parameters &params){
+	double a = params.a, om = params.om;
+	double kappa = sqrt(1. - a*a);
+	double delta = r*r - 2.*r + a*a;
+	double logPlus = log(r - (1. + kappa)), logMinus = log(r - (1. - kappa));
+	double h = params.H*(r + (1. + kappa)*logPlus/kappa - (1. - kappa)*logMinus/kappa);
+	double Phi = a/(2.*kappa)*(logPlus - logMinus);
+	double dh = params.H*(r*r + a*a)/delta, dPhi = a/delta;
+
+	Complex invPrefactor = std::polar(1./(r*integer_power(delta, params.s)), params.m*Phi + om*h);
+	Complex dprefactor(1./r + params.s*2.*(r - 1.)/delta, -(dPhi*params.m + dh*om));
+	R = Psi*invPrefactor;
+	RP = (dPsi - dprefactor*Psi)*invPrefactor;
 }
 
 

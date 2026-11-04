@@ -1115,12 +1115,49 @@ void SpinWeightedHarmonic::fillYlmGrid(){
 	int mm = std::abs(_m);
 	double signm = (_m < 0) ? pow(-1., _m) : 1.;
 	double csphase = (mm % 2 == 0) ? 1.0 : -1.0;
-	std::vector<double> Plm(gsl_sf_legendre_array_n(size_t(jgridMax)));
+	//
+	// Only the single order mm is needed, so rather than gsl_sf_legendre_array (every order
+	// m' <= l, O(lmax^2) per theta) run the fixed-order upward l-recurrence for the
+	// sph-normalised Y_l^mm(theta, 0), O(lmax) per theta:
+	//   Y_mm^mm      = csphase^mm sqrt((2mm+1)/(4 pi) prod_{i<=mm} (2i-1)/(2i)) u^mm,  u = sin(theta)
+	//   Y_{mm+1}^mm  = sqrt(2mm+3) x Y_mm^mm
+	//   Y_l^mm       = alpha_l (x Y_{l-1}^mm - Y_{l-2}^mm/alpha_{l-1}),  alpha_l = sqrt((4l^2-1)/(l^2-mm^2))
+	// u is taken as sin(theta) directly rather than sqrt((1-x)(1+x)) from the rounded x = cos(theta)
+	// (what GSL does), which is more accurate near the poles. Theta-independent factors are hoisted.
+	double ymmNorm = (2.*mm + 1.)/(4.*M_PI);
+	for(int i = 1; i <= mm; i++){
+		ymmNorm *= (2.*i - 1.)/(2.*i);
+	}
+	ymmNorm = sqrt(ymmNorm);
+	if(mm % 2 == 1){ ymmNorm *= csphase; }   // csphase^mm with csphase = (-1)^mm
+	int nl = jgridMax - mm + 1;
+	std::vector<double> alpha(nl > 0 ? nl : 0, 0.), invAlphaPrev(nl > 0 ? nl : 0, 0.);
+	for(int l = mm + 2; l <= jgridMax; l++){
+		double l2 = double(l)*l, lm1 = double(l - 1)*(l - 1), m2 = double(mm)*mm;
+		alpha[l - mm] = sqrt((4.*l2 - 1.)/(l2 - m2));
+		invAlphaPrev[l - mm] = sqrt((lm1 - m2)/(4.*lm1 - 1.));
+	}
+	double sqrt2mp3 = sqrt(2.*mm + 3.);
+	std::vector<double> Ym(nl > 0 ? nl : 0, 0.);
 	for(int ith = 0; ith < nth; ith++){
-		gsl_sf_legendre_array_e(GSL_SF_LEGENDRE_SPHARM, size_t(jgridMax),
-			std::cos(_theta[ith]), csphase, Plm.data());
+		if(ith > 0 && _theta[ith] == _theta[ith - 1]){
+			// repeated grid point (e.g. equatorial orbits): identical column
+			for(int jrel = 0; jrel < nj; jrel++){
+				_Ygrid[jrel][ith] = _Ygrid[jrel][ith - 1];
+			}
+			continue;
+		}
+		double x = std::cos(_theta[ith]);
+		double u = std::sin(_theta[ith]);
+		double y = ymmNorm;
+		for(int i = 0; i < mm; i++){ y *= u; }
+		if(nl > 0){ Ym[0] = y; }
+		if(nl > 1){ Ym[1] = sqrt2mp3*x*Ym[0]; }
+		for(int lrel = 2; lrel < nl; lrel++){
+			Ym[lrel] = alpha[lrel]*(x*Ym[lrel - 1] - invAlphaPrev[lrel]*Ym[lrel - 2]);
+		}
 		for(int j = _jgridMin; j <= jgridMax; j++){
-			_Ygrid[j - _jgridMin][ith] = signm*Plm[gsl_sf_legendre_array_index(size_t(j), size_t(mm))];
+			_Ygrid[j - _jgridMin][ith] = signm*Ym[j - mm];
 		}
 	}
 
