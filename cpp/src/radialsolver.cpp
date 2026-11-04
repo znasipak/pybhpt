@@ -3,6 +3,11 @@
 #include "radialsolver.hpp"
 
 #define TEUK_ODE_REL_ERR 1.e-14
+// Default relative tolerance for the GSL radial integrators (HBL/TEUK/GSN) when the user
+// does not set one (RadialTeukolsky::getODETolerance). 1e-13 was audited against a 1e-15
+// reference over the bench_teuk modes: amplitudes are indistinguishable from the previous
+// 1e-14 default, which is still used by the paths that read TEUK_ODE_REL_ERR directly.
+#define TEUK_ODE_DEFAULT_RTOL 1.e-13
 #define TEUK_ODE_STEP_SIZE_INIT 1.e-8
 #define DELTA_R_HORIZON 1.e-2
 #define R_INFINITY 50.
@@ -35,7 +40,7 @@ int RadialTeukolsky::getAzimuthalModeNumber(){ return _m; }
 double RadialTeukolsky::getModeFrequency(){ return _omega; }
 double RadialTeukolsky::getSpinWeightedSpheroidalEigenvalue(){ return _lambda; }
 void RadialTeukolsky::setODETolerance(double rtol){ _odeRtol = rtol; }
-double RadialTeukolsky::getODETolerance(){ return _odeRtol > 0. ? _odeRtol : TEUK_ODE_REL_ERR; }
+double RadialTeukolsky::getODETolerance(){ return _odeRtol > 0. ? _odeRtol : TEUK_ODE_DEFAULT_RTOL; }
 
 // Generate retarded boundary conditions for Teukolsky equation. This is neccessary if one is
 // going to generate solutions with any of the integration methods {HBL, GSN, TEUK}

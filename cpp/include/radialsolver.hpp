@@ -103,7 +103,7 @@ protected:
 	ComplexVector _upSolution;
 	ComplexVector _upDerivative;
 
-	double _odeRtol = -1.;   // <=0 -> use the built-in TEUK_ODE_REL_ERR default
+	double _odeRtol = -1.;   // <=0 -> use the built-in TEUK_ODE_DEFAULT_RTOL default
 };
 
 typedef struct hbl_parameters_struct{
