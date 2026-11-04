@@ -68,7 +68,10 @@ int RadialTeukolsky::ASYMsolveBoundary(BoundaryCondition bc){
 
 		int boundaryFlag = 0;
 		while( (std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
-			_infinityBoundary *= 2;
+			// grow geometrically but finely: doubling overshot the radius where the series first
+			// converges by up to 2x (e.g. landing at omega*r = 40 when 21 suffices). Each series
+			// evaluation costs ~1 us, far less than integrating over the overshoot.
+			_infinityBoundary *= 1.25;
 			teuk_up_ASYM_series_both(_infinityBoundarySolution, _infinityBoundaryDerivative, *this, _infinityBoundary);
 			boundaryFlag++;
 		}
@@ -124,12 +127,20 @@ void RadialTeukolsky::solveBoundaryPoint(BoundaryCondition bc){
 			_horizonBoundary = rplus + 0.5*(_radialPoints.front() - rplus);
 		}
 	}else{
-		_infinityBoundary = R_INFINITY;
-		if(20./std::abs(_omega) > _infinityBoundary && std::abs(_omega) > DBL_EPSILON){
+		// Start at omega*r = 20, roughly where the asymptotic series at infinity first reaches
+		// the 1e-13 precision ASYMsolveBoundary demands (for s = +2, which is the spin the Up
+		// solution is integrated in; s = -2 converges earlier); ASYMsolveBoundary then pushes
+		// the point outward until it does. The fixed R_INFINITY floor is kept only for
+		// near-zero frequencies: at high frequency it put the boundary far beyond where the
+		// series already converges (e.g. omega = 1.5 needs r ~ 16, not 50), lengthening the
+		// inward integration for nothing.
+		if(std::abs(_omega) > DBL_EPSILON){
 			_infinityBoundary = 20./std::abs(_omega);
 			if(_infinityBoundary > 50*_radialPoints.back()){
 				_infinityBoundary = 50*_radialPoints.back();
 			}
+		}else{
+			_infinityBoundary = R_INFINITY;
 		}
 		if(_infinityBoundary <= _radialPoints.back()){
 			_infinityBoundary = 1.1*_radialPoints.back();
