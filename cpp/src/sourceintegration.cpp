@@ -554,12 +554,14 @@ static TabIntegrandSet tab_integrands(int s){
 
 // Generic |s|=2 amplitude: a 2-D periodic-trapezoidal average of the source over the
 // radial and polar phases (q_r, q_theta), normalised by the radial Wronskian. The
-// per-mode constants and the radial/polar tables are filled lazily (see fill_src_*),
-// and the sample counts in each direction are doubled independently until the In/Up
-// amplitudes stop changing to within `errorTolerance` or the SummationHelper noise
-// floor (whichever is looser). The reported precision combines the radial-direction
-// truncation estimate with the polar-direction estimate at the final radial
-// resolution. `tol` overrides errorTolerance when positive.
+// per-mode constants and the radial/polar tables are filled lazily (see fill_src_*).
+// The grid is refined one direction at a time, doubling whichever direction's
+// truncation estimate is furthest from tolerance, until the summed radial + polar
+// estimate for both In and Up meets `errorTolerance` (or 3x the noise floor of the
+// sampled integrand values, whichever is looser). Samples are kept in per-level
+// buckets, so the coarser nested grids the estimates compare against come for free.
+// The reported precision is the radial + polar estimate, floored at the noise level.
+// `tol` overrides errorTolerance when positive.
 TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, GeodesicTrajectory& traj, GeodesicConstants &geoConstants, const ComplexDerivativesMatrixStruct &Rin, const ComplexDerivativesMatrixStruct &Rup, const DerivativesMatrix &Slm, double tol){
 	
 	const ComplexVector &R0 = (Rin.solution);
@@ -602,11 +604,9 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	}
 
 	int halfSampleR = NsampleR/2, halfSampleTh = NsampleTh/2;
-	int sampleDiffR = sampleSizeR/halfSampleR, sampleDiffTh = sampleSizeTh/halfSampleTh;
 	double deltaQR = M_PI/double(sampleSizeR), deltaQTh = M_PI/double(sampleSizeTh);
 	const double signK = (k % 2 == 0) ? 1. : -1.;
 	const double signN = (n % 2 == 0) ? 1. : -1.;
-	const double signKN = signK*signN;
 
 	// per-mode precomputed source tables: each grid position's 1D quantities
 	// (transcendentals, ladder operators, delta^2-weighting) are computed at
@@ -644,201 +644,179 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 		return polTable[pos];
 	};
 
-	// first add the points at qr = 0 and qr = pi
-	Complex ZlmUp, ZlmIn;
-	int samplePosR = 0, samplePosTh = 0;
+	// Nested-grid bookkeeping. On the half-range grid with 2^l intervals ("level l") a
+	// radial index first appears at level 0 (the endpoints q_r = 0, pi) or, for l >= 1, as
+	// an odd multiple of sampleSizeR/2^l; likewise in the polar direction. Every sample is
+	// accumulated into the bucket of its (radial level, polar level), so the trapezoid value
+	// on any coarser nested grid is a partial sum of buckets: the comparisons the error
+	// estimate needs cost no extra integrand evaluations.
+	int maxLevelR = 0, maxLevelTh = 0;
+	while((2 << maxLevelR) <= sampleSizeR && sampleSizeR % (2 << maxLevelR) == 0) maxLevelR++;
+	while((2 << maxLevelTh) <= sampleSizeTh && sampleSizeTh % (2 << maxLevelTh) == 0) maxLevelTh++;
+	// start where the old scheme did (enough samples to resolve the n/k harmonics), but with
+	// at least 4 intervals per direction so two coarser levels exist for the ratio test
+	int levelR = 0, levelTh = 0;
+	while((1 << levelR) < halfSampleR && levelR < maxLevelR) levelR++;
+	while((1 << levelTh) < halfSampleTh && levelTh < maxLevelTh) levelTh++;
+	levelR = std::max(levelR, std::min(2, maxLevelR));
+	levelTh = std::max(levelTh, std::min(2, maxLevelTh));
+
+	const int nBucketTh = maxLevelTh + 1;
+	std::vector<SummationHelper> bucketUp((maxLevelR + 1)*nBucketTh), bucketIn((maxLevelR + 1)*nBucketTh);
+
+	// Noise floor bookkeeping. Every sample at radial index i shares the same radial data
+	// (R(r_i) and its derivatives), and likewise along a polar index, so errors in the
+	// sampled values are correlated along rows and columns of the grid rather than
+	// independent per sample. Accumulating sum_j |x_ij| per radial index and sum_i |x_ij| per
+	// polar index gives a floor base*sqrt(sum_i row_i^2 + sum_j col_j^2)/|sum| that averages
+	// down only with the number of independent radial/polar points. The per-value relative
+	// error `basePrecision` is calibrated against doubled-grid references of
+	// cancellation-limited amplitudes (strong-field generic orbits), where it keeps the
+	// reported precision within a few times of the observed error.
+	const double basePrecision = 1.5e-13;
+	std::vector<double> rowAbsUp(radialLength, 0.), rowAbsIn(radialLength, 0.);
+	std::vector<double> colAbsUp(polarLength, 0.), colAbsIn(polarLength, 0.);
+
+	// one sample: trapezoid weight 1/2 at each turning-point endpoint, the (-1)^n / (-1)^k
+	// parity factors at q = pi, and the integrand variant matching the turning points
 	Complex sumUpTerm, sumInTerm;
-	SummationHelper sumUp;
-	SummationHelper sumIn;
-
-	// first account for the fact that we expect some numerical error in our
-	// radial and polar solutions on the order of 10^-14
-	sumUp.setBasePrecision(5.e-14);
-	sumIn.setBasePrecision(5.e-14);
-
-	// initial sum over fixed qr = 0. and qr = pi; qth = 0 and qth = pi
-	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-	sumUp.add(0.25*sumUpTerm);
-	sumIn.add(0.25*sumInTerm);
-
-	samplePosTh = halfSampleTh*sampleDiffTh;
-	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-	sumUp.add(signK*0.25*sumUpTerm);
-	sumIn.add(signK*0.25*sumInTerm);
-
-	samplePosR = halfSampleR*sampleDiffR;
-	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-	sumUp.add(signKN*0.25*sumUpTerm);
-	sumIn.add(signKN*0.25*sumInTerm);
-
-	samplePosTh = 0;
-	integ.radialPolarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-	sumUp.add(signN*0.25*sumUpTerm);
-	sumIn.add(signN*0.25*sumInTerm);
-
-	// initial sum over qr values with fixed qth = 0. and qth = pi
-	for(int i = 1; i < halfSampleR; i++){
-		samplePosR = i*sampleDiffR;
-
-		samplePosTh = 0;
-		// first sum performs integration with qth = 0
-		integ.polarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-		sumUp.add(0.5*sumUpTerm);
-		sumIn.add(0.5*sumInTerm);
-
-		samplePosTh = halfSampleTh*sampleDiffTh;
-		// second sum performs integration with qth = pi
-		integ.polarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-		sumUp.add(signK*0.5*sumUpTerm);
-		sumIn.add(signK*0.5*sumInTerm);
-	}
-
-	// initial sum over qth values with fixed qr = 0. and qr = pi
-	for(int j = 1; j < halfSampleTh; j++){
-		samplePosTh = j*sampleDiffTh;
-
-		samplePosR = 0;
-		// first sum performs integration between qr = 0 to qr = pi
-		integ.radialTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-		sumUp.add(0.5*sumUpTerm);
-		sumIn.add(0.5*sumInTerm);
-
-		samplePosR = halfSampleR*sampleDiffR;
-		integ.radialTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-		sumUp.add(signN*0.5*sumUpTerm);
-		sumIn.add(signN*0.5*sumInTerm);
-	}
-
-	// initial sum over mixed qr and qth values
-	for(int i = 1; i < halfSampleR; i++){
-		samplePosR = i*sampleDiffR;
-
-		for(int j = 1; j < halfSampleTh; j++){
-			samplePosTh = j*sampleDiffTh;
-			// first sum performs integration between qr = 0 to qr = pi
-			integ.generic(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-			sumUp.add(sumUpTerm);
-			sumIn.add(sumInTerm);
-		}
-	}
-
-	ZlmUp = sumUp.getSum()/double(halfSampleR*halfSampleTh);
-	ZlmIn = sumIn.getSum()/double(halfSampleR*halfSampleTh);
-	Complex ZlmUpCompare = 0., ZlmInCompare = 0.;
-	Complex ZlmUpComparePrev = 0., ZlmInComparePrev = 0.;
-	double pThUp = 0., pThIn = 0.;   // polar-direction error estimate (last radial resolution)
-
-	double errorTolerance = (tol > 0. ? tol : 5.e-11);
-	int convergenceTest = 0;
-	while(NsampleR < NsampleMaxR && convergenceTest < 2){
-		// needs to pass the convergence test twice
-		if(integrand_convergence(ZlmUpCompare, ZlmUp, errorTolerance, 10.*sumUp.getPrecision()) && integrand_convergence(ZlmInCompare, ZlmIn, errorTolerance, 10.*sumIn.getPrecision())){
-			convergenceTest += 1;
+	auto addPoint = [&](int posR, int posTh, SummationHelper &bUp, SummationHelper &bIn){
+		bool tpR = (posR == 0 || posR == sampleSizeR);
+		bool tpTh = (posTh == 0 || posTh == sampleSizeTh);
+		double w = (tpR ? 0.5 : 1.)*(tpTh ? 0.5 : 1.);
+		if(posR == sampleSizeR) w *= signN;
+		if(posTh == sampleSizeTh) w *= signK;
+		const SrcRadial &rad = radAt(posR);
+		const SrcPolar &pol = polAt(posTh);
+		if(tpR && tpTh){
+			integ.radialPolarTP(sumInTerm, sumUpTerm, mc, rad, pol);
+		}else if(tpR){
+			integ.radialTP(sumInTerm, sumUpTerm, mc, rad, pol);
+		}else if(tpTh){
+			integ.polarTP(sumInTerm, sumUpTerm, mc, rad, pol);
 		}else{
-			convergenceTest = 0;
+			integ.generic(sumInTerm, sumUpTerm, mc, rad, pol);
 		}
-
-		Complex ZlmUpCompareTh = 0., ZlmInCompareTh = 0.;
-		Complex ZlmUpCompareThPrev = 0., ZlmInCompareThPrev = 0.;
-		Complex ZlmUpTh = ZlmUp, ZlmInTh = ZlmIn;
-		int convergenceTestTh = 0;
-		while(NsampleTh < NsampleMaxTh && convergenceTestTh < 2){
-			// needs to pass the convergence test twice
-			if(integrand_convergence(ZlmUpCompareTh, ZlmUpTh, errorTolerance, 10.*sumUp.getPrecision()) && integrand_convergence(ZlmInCompareTh, ZlmInTh, errorTolerance, 10.*sumIn.getPrecision())){
-				convergenceTestTh += 1;
-			}else{
-				convergenceTestTh = 0;
-			}
-			for(int j = 0; j < halfSampleTh; j++){
-				samplePosTh = j*sampleDiffTh + sampleDiffTh/2;
-
-				samplePosR = 0;
-				integ.radialTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-				sumUp.add(0.5*sumUpTerm);
-				sumIn.add(0.5*sumInTerm);
-
-				samplePosR = halfSampleR*sampleDiffR;
-				integ.radialTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-				sumUp.add(signN*0.5*sumUpTerm);
-				sumIn.add(signN*0.5*sumInTerm);
-
-				for(int i = 1; i < halfSampleR; i++){
-					samplePosR = i*sampleDiffR;
-					integ.generic(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-					sumUp.add(sumUpTerm);
-					sumIn.add(sumInTerm);
-				}
-			}
-
-			NsampleTh *= 2;
-			halfSampleTh *= 2;
-			sampleDiffTh /= 2;
-			ZlmUpCompareThPrev = ZlmUpCompareTh;
-			ZlmInCompareThPrev = ZlmInCompareTh;
-			ZlmUpCompareTh = ZlmUpTh;
-			ZlmInCompareTh = ZlmInTh;
-			ZlmUpTh = sumUp.getSum()/double(halfSampleR*halfSampleTh);
-			ZlmInTh = sumIn.getSum()/double(halfSampleR*halfSampleTh);
-		}
-		// geometric estimate of the polar-direction tail at this radial resolution;
-		// the final radial iteration's value is combined with the radial estimate below
-		if(std::abs(ZlmUpCompareTh) > 0.){
-			double dTh = std::abs(1. - ZlmUpCompareTh/ZlmUpTh);
-			double dThPrev = (std::abs(ZlmUpCompareThPrev) > 0.) ? std::abs(1. - ZlmUpCompareThPrev/ZlmUpCompareTh) : dTh;
-			pThUp = conservative_precision(dTh, dThPrev, sumUp.getPrecision());
-		}
-		if(std::abs(ZlmInCompareTh) > 0.){
-			double dTh = std::abs(1. - ZlmInCompareTh/ZlmInTh);
-			double dThPrev = (std::abs(ZlmInCompareThPrev) > 0.) ? std::abs(1. - ZlmInCompareThPrev/ZlmInCompareTh) : dTh;
-			pThIn = conservative_precision(dTh, dThPrev, sumIn.getPrecision());
-		}
-		// additional qr sample points for fixed qth = 0. and qth = pi
-		for(int i = 0; i < halfSampleR; i++){
-			samplePosR = i*sampleDiffR + sampleDiffR/2;
-
-			samplePosTh = 0;
-			integ.polarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-			sumUp.add(0.5*sumUpTerm);
-			sumIn.add(0.5*sumInTerm);
-
-			samplePosTh = halfSampleTh*sampleDiffTh;
-			integ.polarTP(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-			sumUp.add(signK*0.5*sumUpTerm);
-			sumIn.add(signK*0.5*sumInTerm);
-
-			// additional qr sample points for interior qth points between 0 and pi
-			for(int j = 1; j < halfSampleTh; j++){
-				samplePosTh = j*sampleDiffTh;
-				integ.generic(sumInTerm, sumUpTerm, mc, radAt(samplePosR), polAt(samplePosTh));
-				sumUp.add(sumUpTerm);
-				sumIn.add(sumInTerm);
+		Complex up = w*sumUpTerm, in = w*sumInTerm;
+		bUp.add(up);
+		bIn.add(in);
+		double absUp = std::abs(up), absIn = std::abs(in);
+		rowAbsUp[posR] += absUp;
+		rowAbsIn[posR] += absIn;
+		colAbsUp[posTh] += absUp;
+		colAbsIn[posTh] += absIn;
+	};
+	// positions first appearing at a given level (see above)
+	auto levelPositions = [](int level, int sampleSize, std::vector<int> &pos){
+		pos.clear();
+		if(level == 0){
+			pos.push_back(0);
+			pos.push_back(sampleSize);
+		}else{
+			int step = sampleSize >> level;
+			for(int q = 1; q < (1 << level); q += 2){
+				pos.push_back(q*step);
 			}
 		}
-
-		NsampleR *= 2;
-		halfSampleR *= 2;
-		sampleDiffR /= 2;
-		ZlmUpComparePrev = ZlmUpCompare;
-		ZlmInComparePrev = ZlmInCompare;
-		ZlmUpCompare = ZlmUp;
-		ZlmInCompare = ZlmIn;
-		ZlmUp = sumUp.getSum()/double(halfSampleR*halfSampleTh);
-		ZlmIn = sumIn.getSum()/double(halfSampleR*halfSampleTh);
+	};
+	std::vector<int> posListR, posListTh;
+	auto addBlock = [&](int a, int b){
+		levelPositions(a, sampleSizeR, posListR);
+		levelPositions(b, sampleSizeTh, posListTh);
+		SummationHelper &bUp = bucketUp[a*nBucketTh + b];
+		SummationHelper &bIn = bucketIn[a*nBucketTh + b];
+		for(int posR : posListR){
+			for(int posTh : posListTh){
+				addPoint(posR, posTh, bUp, bIn);
+			}
+		}
+	};
+	for(int a = 0; a <= levelR; a++){
+		for(int b = 0; b <= levelTh; b++){
+			addBlock(a, b);
+		}
 	}
 
-	// total 2D error = radial-direction tail (geometric) + polar-direction tail (pTh*)
-	double dLastZIn = reldiff_or_zero(ZlmInCompare, ZlmIn);
-	double dPrevZIn = (std::abs(ZlmInCompare) > 0.) ? std::abs(1. - ZlmInComparePrev/ZlmInCompare) : dLastZIn;
-	double precisionIn = conservative_precision(dLastZIn, dPrevZIn, sumIn.getPrecision()) + pThIn;
-	double dLastZUp = reldiff_or_zero(ZlmUpCompare, ZlmUp);
-	double dPrevZUp = (std::abs(ZlmUpCompare) > 0.) ? std::abs(1. - ZlmUpComparePrev/ZlmUpCompare) : dLastZUp;
-	double precisionUp = conservative_precision(dLastZUp, dPrevZUp, sumUp.getPrecision()) + pThUp;
-	if(precisionIn > PRECISION_THRESHOLD){
-		precisionIn = std::max(sumIn.getPrecision(), precisionIn);
+	// trapezoid value on the nested (i, j) grid
+	auto gridSum = [&](std::vector<SummationHelper> &bucket, int i, int j) -> Complex {
+		Complex sum = 0.;
+		for(int a = 0; a <= i; a++){
+			for(int b = 0; b <= j; b++){
+				sum += bucket[a*nBucketTh + b].getSum();
+			}
+		}
+		return sum;
+	};
+	auto gridValue = [&](std::vector<SummationHelper> &bucket, int i, int j) -> Complex {
+		return gridSum(bucket, i, j)/(double(1 << i)*double(1 << j));
+	};
+	// relative noise floor of the current (full) grid sum, see rowAbs*/colAbs* above
+	auto noiseFloor = [&](Complex sum, const std::vector<double> &rowAbs, const std::vector<double> &colAbs){
+		if(!(std::abs(sum) > 0.)) return 0.;
+		double sq = 0.;
+		for(double x : rowAbs) sq += x*x;
+		for(double x : colAbs) sq += x*x;
+		return basePrecision*std::sqrt(sq)/std::abs(sum);
+	};
+	// Truncation estimate in each direction from the last two refinements along it, holding
+	// the other direction at its current level: errors of the 2-D periodic trapezoid rule
+	// separate into radial and polar parts, so differencing along one direction isolates
+	// that direction's contribution.
+	auto estimate = [&](std::vector<SummationHelper> &bucket, const std::vector<double> &rowAbs, const std::vector<double> &colAbs,
+			int i, int j, Complex &value, double &eR, double &eTh, double &floor){
+		Complex sum = gridSum(bucket, i, j);
+		floor = noiseFloor(sum, rowAbs, colAbs);
+		value = sum/(double(1 << i)*double(1 << j));
+		double absValue = std::abs(value);
+		auto change = [&](Complex fine, Complex coarse){
+			return absValue > 0. ? std::abs(fine - coarse)/absValue : 0.;
+		};
+		auto directional = [&](int level, auto valueAt){
+			if(level < 1) return 1.;
+			double dLast = change(valueAt(level), valueAt(level - 1));
+			double dPrev = (level >= 2) ? change(valueAt(level - 1), valueAt(level - 2)) : dLast;
+			return conservative_precision(dLast, dPrev, floor);
+		};
+		eR = directional(i, [&](int l){ return l == i ? value : gridValue(bucket, l, j); });
+		eTh = directional(j, [&](int l){ return l == j ? value : gridValue(bucket, i, l); });
+	};
+
+	// Refine one direction at a time -- whichever is furthest from the tolerance -- and stop
+	// as soon as the summed radial + polar estimate meets the tolerance (or 3x the noise
+	// floor, for amplitudes limited by cancellation; their reported precision is then the
+	// floor). Spectral convergence makes the geometric estimate reliable once it is below
+	// tolerance, so no confirming doubling is needed.
+	double errorTolerance = (tol > 0. ? tol : 5.e-11);
+	Complex ZlmUp, ZlmIn;
+	double eRUp, eThUp, floorUp, eRIn, eThIn, floorIn;
+	while(true){
+		estimate(bucketUp, rowAbsUp, colAbsUp, levelR, levelTh, ZlmUp, eRUp, eThUp, floorUp);
+		estimate(bucketIn, rowAbsIn, colAbsIn, levelR, levelTh, ZlmIn, eRIn, eThIn, floorIn);
+		double thresholdUp = std::max(errorTolerance, 3.*floorUp);
+		double thresholdIn = std::max(errorTolerance, 3.*floorIn);
+		bool converged = (eRUp + eThUp < thresholdUp) && (eRIn + eThIn < thresholdIn);
+		bool canRefineR = levelR < maxLevelR, canRefineTh = levelTh < maxLevelTh;
+		if(converged || !(canRefineR || canRefineTh)){
+			break;
+		}
+		double scoreR = std::max(eRUp/thresholdUp, eRIn/thresholdIn);
+		double scoreTh = std::max(eThUp/thresholdUp, eThIn/thresholdIn);
+		if(canRefineR && (scoreR >= scoreTh || !canRefineTh)){
+			levelR++;
+			for(int b = 0; b <= levelTh; b++){
+				addBlock(levelR, b);
+			}
+		}else{
+			levelTh++;
+			for(int a = 0; a <= levelR; a++){
+				addBlock(a, levelTh);
+			}
+		}
 	}
-	if(precisionUp > PRECISION_THRESHOLD){
-		precisionUp = std::max(sumUp.getPrecision(), precisionUp);
-	}
+
+	// total 2D error = radial-direction tail + polar-direction tail, never below the noise floor
+	double precisionIn = std::max(eRIn + eThIn, floorIn);
+	double precisionUp = std::max(eRUp + eThUp, floorUp);
 
 	ZlmUp *= -8.*M_PI/W/geoConstants.upsilonT;
 	ZlmIn *= -8.*M_PI/W/geoConstants.upsilonT;
