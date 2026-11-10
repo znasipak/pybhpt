@@ -1,10 +1,11 @@
 [build-system]
 requires = [
   "cython",
-  # Build against the oldest supported 2.x: numpy 2 wheels stay ABI-compatible with newer
-  # runtimes, so the floor here is what matters. The ceiling mirrors the runtime pin below;
-  # leaving it unpinned would compile against a numpy the install step then refuses.
-  "numpy>=2.0,<2.3",
+  # No ceiling: an old cap leaves new Pythons (e.g. 3.14) without numpy wheels, forcing
+  # a source build of numpy. Extensions built against numpy 2.x headers run on older
+  # numpy down to the headers' default target API (1.25 for numpy 2.5), which sits below
+  # the runtime floor below.
+  "numpy>=2.0",
   "scikit-build-core",
   "setuptools-scm>=8"
 ]
@@ -29,10 +30,9 @@ classifiers = [
 ]
 requires-python = ">=3.12"
 dependencies = [
-  # "<= 2.2" excluded 2.2.1-2.2.6 as well as 2.3; "<2.3" is the intended ceiling. That
-  # ceiling matches numba (pulled in by `spherical` in the extended extra), which requires
-  # numpy<2.3 -- check numba before raising it.
-  "numpy>=1.24,<2.3",
+  # Floor: first numpy with wheels for Python 3.12 (requires-python). No ceiling here;
+  # numba (via `spherical` in the extended extra) carries its own numpy cap.
+  "numpy>=1.26",
   "scipy"
 ]
 
