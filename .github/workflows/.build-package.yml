@@ -256,4 +256,7 @@ jobs:
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
+          # Merged PRs and CI reruns can rebuild a version that is already on TestPyPI;
+          # skip those files instead of failing. PyPI uploads stay strict.
+          skip-existing: true
           verbose: true

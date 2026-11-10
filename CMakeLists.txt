@@ -16,7 +16,9 @@ endif()
 find_package(GSL REQUIRED)
 
 # ------------------------- Boost Headers Only -------------------------
-set(BOOST_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost")
+# Defaults to the extern/boost submodule (after `./b2 headers`). Override with
+# -DBOOST_INCLUDE_DIR=<path> to reuse headers from another checkout.
+set(BOOST_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extern/boost" CACHE PATH "Directory containing the boost/ header tree")
 
 # ------------------------- Cython -------------------------
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/cython")

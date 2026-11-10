@@ -211,6 +211,8 @@ int teuk_up_derivative_ASYM_series(Result &R, RadialTeukolsky &teuk, const doubl
 // Combined: R and dR/dr in one recurrence pass
 void teuk_in_ASYM_series_both(Result &R, Result &Rp, RadialTeukolsky &teuk, const double &r);
 void teuk_up_ASYM_series_both(Result &R, Result &Rp, RadialTeukolsky &teuk, const double &r);
+int teuk_in_ASYM_series_both(ComplexVector &R, ComplexVector &Rp, RadialTeukolsky &teuk, const Vector &r);
+int teuk_up_ASYM_series_both(ComplexVector &R, ComplexVector &Rp, RadialTeukolsky &teuk, const Vector &r);
 
 // static solutions
 int teuk_static(ComplexVector &Rin, ComplexVector &RinP, ComplexVector &Rup, ComplexVector &RupP, RadialTeukolsky &teuk, Vector &r);
