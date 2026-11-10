@@ -857,9 +857,13 @@ Complex RadialTeukolsky::getDerivative(BoundaryCondition bc, int pos){
 }
 
 ComplexVector RadialTeukolsky::getSecondDerivative(BoundaryCondition bc){
-	ComplexVector Rpp(getDerivative(bc));
+	// bind by reference: getSolution(bc)/getDerivative(bc) return copies, and calling
+	// them per element made this O(N^2) in the number of radial points
+	const ComplexVector &R = getSolutionReference(bc);
+	const ComplexVector &Rp = getDerivativeReference(bc);
+	ComplexVector Rpp(Rp.size());
 	for(size_t i = 0; i < Rpp.size(); i++){
-		Rpp[i] = teuk_secondDerivative(_a, _s, _m, _omega, _lambda, _radialPoints[i], getSolution(bc)[i], getDerivative(bc)[i]);
+		Rpp[i] = teuk_secondDerivative(_a, _s, _m, _omega, _lambda, _radialPoints[i], R[i], Rp[i]);
 	}
 	return Rpp;
 }
