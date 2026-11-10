@@ -81,3 +81,11 @@ def test_teukolsky_mode_up_amplitude(apex, mode_params, expected_amplitude):
         rtol = 1e-5
     rtol *= 3
     assert np.isclose(mode.amplitude('Up'), expected_amplitude[1], rtol=rtol, atol=0), f"Up amplitude of {mode.amplitude('Up')} with error of {np.abs(1-mode.amplitude('Up')/expected_amplitude[1])} for orbit {apex} and parameters {mode_params} with mode precision {rtol}"
+
+@pytest.mark.parametrize("s", [0, 1, -1])
+def test_teukolsky_mode_gsn_unsupported_spin(s):
+    # GSN is only implemented for |s| = 2; it must raise rather than return NaN amplitudes.
+    orbit = KerrGeodesic(0.9, 10., 0., 1.)
+    mode = TeukolskyMode(s, 2, 2, 0, 0, orbit)
+    with pytest.raises(ValueError):
+        mode.solve(orbit, method="GSN")
