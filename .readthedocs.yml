@@ -4,6 +4,10 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.9"
+  jobs:
+    # setuptools-scm needs the full history and tags to compute the docs version
+    post_checkout:
+      - git fetch --unshallow --tags || true
 
 python:
   install:
