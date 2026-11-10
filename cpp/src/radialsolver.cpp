@@ -2,12 +2,14 @@
 
 #include "radialsolver.hpp"
 
-#define TEUK_ODE_REL_ERR 1.e-14
 // Default relative tolerance for the GSL radial integrators (HBL/TEUK/GSN) when the user
-// does not set one (RadialTeukolsky::getODETolerance). 1e-13 was audited against a 1e-15
-// reference over the bench_teuk modes: amplitudes are indistinguishable from the previous
-// 1e-14 default, which is still used by the paths that read TEUK_ODE_REL_ERR directly.
+// does not set one (RadialTeukolsky::getODETolerance), and the fallback whenever an
+// integrator receives rtol <= 0. 1e-13 was audited against a 1e-15 reference over the
+// bench_teuk modes: amplitudes are indistinguishable from the previous 1e-14 default.
 #define TEUK_ODE_DEFAULT_RTOL 1.e-13
+// Previous 1e-14 default, kept only for the integrators that do not take a tolerance:
+// the Boost paths (disabled, BOOST_INTEGRATE 0) and the unused Jacobian GSL overload.
+#define TEUK_ODE_LEGACY_RTOL 1.e-14
 #define TEUK_ODE_STEP_SIZE_INIT 1.e-8
 #define DELTA_R_HORIZON 1.e-2
 #define R_INFINITY 50.
@@ -1778,7 +1780,7 @@ int teuk_integrate_boost(ComplexVector &psi, ComplexVector &dpsidr, ODE_FUNC sys
 
 	int stepNum = r.size();
 
-	double abs_err = 0., rel_err = TEUK_ODE_REL_ERR;
+	double abs_err = 0., rel_err = TEUK_ODE_LEGACY_RTOL;
 
 	//Explicit methods
 
@@ -1814,7 +1816,7 @@ int teuk_integrate_boost_implicit(ComplexVector &psi, ComplexVector &dpsidr, ODE
 	}
 	int stepNum = r.size();
 
-	double abs_err = TEUK_ODE_REL_ERR, rel_err = TEUK_ODE_REL_ERR;
+	double abs_err = TEUK_ODE_LEGACY_RTOL, rel_err = TEUK_ODE_LEGACY_RTOL;
 	// Implicit methods
 
 	//rosenbrock4 with error control
@@ -1844,7 +1846,7 @@ int teuk_jac_null_gsl(double, const double*, double *, double*, void*){
 }
 
 int teuk_integrate_gsl(ComplexVector &psi, ComplexVector &dpsidr, int (*sys)(double, const double*, double*, void*), state_type psi0, const double r0, const Vector &r, void *params, double rtol){
-	if(rtol <= 0.) rtol = TEUK_ODE_REL_ERR;   // <=0 sentinel -> built-in default
+	if(rtol <= 0.) rtol = TEUK_ODE_DEFAULT_RTOL;   // <=0 sentinel -> built-in default
 	size_t dim = 4;
 	double Psi[dim];
 	for(size_t i = 0; i < dim; i++){
@@ -2024,12 +2026,12 @@ int teuk_integrate_gsl(ComplexVector &psi, ComplexVector &dpsidr, int (*sys)(dou
 	//std::cout << "(RADIALSOLVER) Initial step size = " << initialStep << "\n";
 
 	gsl_odeiv2_system gsl_sys = {sys, jac, dim, params};
-	double abs_error = sqrt(Psi[0]*Psi[0] + Psi[1]*Psi[1])*TEUK_ODE_REL_ERR*(1.e-5);
+	double abs_error = sqrt(Psi[0]*Psi[0] + Psi[1]*Psi[1])*TEUK_ODE_LEGACY_RTOL*(1.e-5);
 	abs_error = 0.;
 
 	const gsl_odeiv2_step_type *T = gsl_odeiv2_step_bsimp;
 	gsl_odeiv2_step* s = gsl_odeiv2_step_alloc(T, dim);
-	gsl_odeiv2_control* c = gsl_odeiv2_control_y_new(abs_error, TEUK_ODE_REL_ERR);
+	gsl_odeiv2_control* c = gsl_odeiv2_control_y_new(abs_error, TEUK_ODE_LEGACY_RTOL);
 	gsl_odeiv2_evolve* e = gsl_odeiv2_evolve_alloc(dim);
 
 
@@ -2868,7 +2870,7 @@ int teuk_in_HBL_integrate_dense(
 	// Backstop: a non-positive rtol collapses the Hermite step cap to zero and the
 	// dense integrator never advances. Callers should validate, but fall back to the
 	// built-in tolerance rather than hang (same sentinel as teuk_integrate_gsl).
-	if(rtol <= 0.) rtol = TEUK_ODE_REL_ERR;
+	if(rtol <= 0.) rtol = TEUK_ODE_DEFAULT_RTOL;
 
 	hbl_parameters params = {
 		.a  = teuk.getBlackHoleSpin(),
@@ -2941,7 +2943,7 @@ int teuk_up_HBL_integrate_dense(
 	// Backstop: a non-positive rtol collapses the Hermite step cap to zero and the
 	// dense integrator never advances. Callers should validate, but fall back to the
 	// built-in tolerance rather than hang (same sentinel as teuk_integrate_gsl).
-	if(rtol <= 0.) rtol = TEUK_ODE_REL_ERR;
+	if(rtol <= 0.) rtol = TEUK_ODE_DEFAULT_RTOL;
 
 	hbl_parameters params = {
 		.a  = teuk.getBlackHoleSpin(),
