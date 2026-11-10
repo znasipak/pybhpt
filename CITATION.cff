@@ -31,8 +31,8 @@ abstract: >-
   self-forces and metric-perturbations experienced by small
   bodies moving in a Kerr background.
 license: GPL-3.0
-version: v1.0.0
-date-released: '2026-09-09'
+version: v1.1.0
+date-released: '2026-11-10'
 references: 
   - abbreviation: "Nasipak:2025tby"
     authors:
