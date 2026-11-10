@@ -5,11 +5,11 @@ If you make use of `pybhpt`, we request that you cite the Github package and acc
 @software{Nasipak_pybhpt_2026,
     author = {Nasipak, Zachary},
     license = {GPL-3.0},
-    month = sep,
+    month = nov,
     title = {{pybhpt}},
     url = {https://github.com/znasipak/pybhpt},
     doi = {10.5281/zenodo.18317623},
-    version = {v1.0.0},
+    version = {v1.1.0},
     year = {2026}
 }
 @article{Nasipak:2025tby,
