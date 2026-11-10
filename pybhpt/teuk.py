@@ -253,17 +253,14 @@ class TeukolskyMode:
         else:
             self.base.solve(geo.base, method, nsamples, teuk.base, swsh.base, tol=cytol)
 
-    """
-    Flips the spin-weight of the Teukolsky solutions from :math:`s \rightarrow -s`
-    """
     def flipspinweight(self):
+        r"""
+        Flips the spin-weight of the Teukolsky solutions from :math:`s \rightarrow -s`
+        """
         self.base.flip_spinweight()
 
-    """
-    Flips the spin-weight and frequency of the Teukolsky solutions from :math:`s \rightarrow -s` and :math:`\omega \rightarrow -\omega`
-    """
     def flipspinweightandfrequency(self):
-        """
+        r"""
         Flips the spin-weight and frequency of the Teukolsky solutions from :math:`s \rightarrow -s` and :math:`\omega \rightarrow -\omega`
         """
         self.base.flip_spinweight_frequency()

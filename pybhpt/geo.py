@@ -83,7 +83,7 @@ def kerrgeo_Vr(a: float, En: float, Lz: float, Q: float, r: float) -> float:
     return _kerr_geo_V11(a, En, Lz, Q, r)
 
 def kerrgeo_Vtheta(a: float, En: float, Lz: float, Q: float, theta: float) -> float:
-    """
+    r"""
     The (squared) polar potential Vtheta for the geodesic evolution of $\theta_p$.
 
     Parameters

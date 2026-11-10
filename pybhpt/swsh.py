@@ -174,7 +174,7 @@ def clebsch(l1, l2, l3, m1, m2, m3):
     return _clebschCy(l1, l2, l3, m1, m2, m3)
 
 def w3j(l1, l2, l3, m1, m2, m3):
-    """
+    r"""
     Compute the Wigner 3j-symbol
         | l1  l2  l3 |
         | m1  m2  m3 |

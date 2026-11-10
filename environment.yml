@@ -6,3 +6,11 @@ channels:
 dependencies:
   - python >=3.12
   - gsl >= 2.7.1
+  - liblapack
+  - numpy >=2.0
+  - scipy
+  # build tools, needed for `pip install --no-build-isolation`
+  - cmake
+  - cython
+  - scikit-build-core
+  - setuptools-scm >=8
