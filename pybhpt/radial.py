@@ -5,6 +5,16 @@ from cybhpt_full import renormalized_angular_momentum as _nu_cython
 from cybhpt_full import renormalized_angular_momentum_monodromy as _nu_2_cython
 from cybhpt_full import hypergeo_2F1 as _hypergeo_2F1_cython
 import numpy as np
+import warnings
+
+def _warn_gsn_spin_plus_2_up(s, stacklevel=3):
+    """Warn that GSN's s = +2 Up solution is inaccurate at large omega*r."""
+    if s == 2:
+        warnings.warn(
+            "GSN computes the s = +2 Up solution by Teukolsky-Starobinsky flipping the s = -2 "
+            "solution, which loses ~(omega r)^8 in relative precision (~1e-2 at omega = 2, "
+            "r = 30). Use AUTO, HBL, or TEUK for accurate s = +2 Up solutions.",
+            RuntimeWarning, stacklevel=stacklevel)
 
 def available_methods():
     """
@@ -244,6 +254,13 @@ class RadialTeukolsky:
         ----------
         method : str, optional
             The method to use for solving the equation. Default is "AUTO".
+            "GSN" is only available for spin-weight s = -2 or +2 and raises
+            ``ValueError`` otherwise. The GSN equations are implemented for s = -2, so
+            for s = +2 the solutions are obtained by Teukolsky-Starobinsky
+            transformations of the s = -2 GSN solutions. For the "Up" solution this
+            transformation is numerically unstable: it loses ~(omega r)^8 in relative
+            precision (~1e-2 at omega = 2, r = 30) and emits a ``RuntimeWarning``.
+            Use "AUTO", "HBL", or "TEUK" for accurate s = +2 "Up" solutions.
         bc : str, optional
             Specifies which homogeneous solutions to compute. If None, both "In" (horizon) and "Up" (infinity) solutions are computed.
             If "In", only the horizon solution is computed. If "Up", only the infinity solution is computed.
@@ -252,6 +269,8 @@ class RadialTeukolsky:
             (the default) uses the built-in tolerance; a positive value trades accuracy
             for fewer integration steps. Ignored by the analytic methods (MST/ASYMP).
         """
+        if method == "GSN" and bc in (None, "Up"):
+            _warn_gsn_spin_plus_2_up(self.spinweight)
         cyrtol = -1. if rtol is None else rtol
         if bc is None:
             self.base.solve(method, "None", rtol=cyrtol)

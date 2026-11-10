@@ -1,6 +1,7 @@
 // radialsolver.c
 
 #include "radialsolver.hpp"
+#include <stdexcept>
 
 #define TEUK_ODE_REL_ERR 1.e-14
 #define TEUK_ODE_STEP_SIZE_INIT 1.e-8
@@ -421,6 +422,9 @@ void RadialTeukolsky::GSNsolve(BoundaryCondition bc){
 		if(bc == In){
 			SpinFlipsolve(In, &teuk_in_GSN_integrate);
 		}else{
+			// GSN equations are only implemented for s = -2, so the s = +2 Up solution is
+			// obtained by Teukolsky-Starobinsky flipping the s = -2 GSN solution. This flip is
+			// ill-conditioned for Up and loses ~(omega r)^8 in relative precision at large r.
 			SpinFlipsolve(Up, &teuk_up_GSN_integrate);
 		}
 	}
@@ -614,6 +618,9 @@ void RadialTeukolsky::generateSolutions(SolutionMethod method, bool make_stable)
 	}else if(method == ASYM){
 		ASYMsolve();
 	}else{
+		if(method == GSN && std::abs(_s) != 2){
+			throw std::invalid_argument("(RADIALSOLVER) Method GSN only supports spin-weight s = -2 or +2.");
+		}
 		if( _horizonBoundary == 0. || _infinityBoundary == 0. ){
 			generateRetardedBoundaryConditions(method);
 		}
@@ -642,6 +649,9 @@ void RadialTeukolsky::generateSolutions(BoundaryCondition bc, SolutionMethod met
 	}else if(method == ASYM){
 		ASYMsolve(bc);
 	}else{
+		if(method == GSN && std::abs(_s) != 2){
+			throw std::invalid_argument("(RADIALSOLVER) Method GSN only supports spin-weight s = -2 or +2.");
+		}
 		if( _horizonBoundary == 0. || _infinityBoundary == 0. ){
 			generateRetardedBoundaryConditions(method);
 		}
