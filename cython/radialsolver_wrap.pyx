@@ -35,8 +35,8 @@ cdef extern from "radialsolver.hpp":
 
         void generateRetardedBoundaryConditions(SolutionMethod method)
         void setBoundaryConditions(BoundaryCondition bc, cpp_complex[double] R, cpp_complex[double] Rp, double r)
-        void generateSolutions(SolutionMethod method)
-        void generateSolutions(BoundaryCondition bc, SolutionMethod method)
+        void generateSolutions(SolutionMethod method) except +
+        void generateSolutions(BoundaryCondition bc, SolutionMethod method) except +
         void setODETolerance(double rtol)
         double getODETolerance()
         int resampleSolutions(vector[double] radialSamples)

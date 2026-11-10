@@ -1,6 +1,7 @@
 from pybhpt.geo import KerrGeodesic
 from pybhpt.teuk import TeukolskyMode
 import pytest
+import warnings
 import numpy as np
 
 test_data_teuk_amplitudes = [
@@ -81,3 +82,27 @@ def test_teukolsky_mode_up_amplitude(apex, mode_params, expected_amplitude):
         rtol = 1e-5
     rtol *= 3
     assert np.isclose(mode.amplitude('Up'), expected_amplitude[1], rtol=rtol, atol=0), f"Up amplitude of {mode.amplitude('Up')} with error of {np.abs(1-mode.amplitude('Up')/expected_amplitude[1])} for orbit {apex} and parameters {mode_params} with mode precision {rtol}"
+
+def test_teukolsky_mode_mst_deprecation_warning():
+    class _StubSolver:
+        def solve(self, *args, **kwargs):
+            pass
+
+    geo = KerrGeodesic(0.9, 10., 0., 1.)
+    teuk = TeukolskyMode(-2, 2, 2, 0, 0, geo)
+    teuk.base = _StubSolver()  # only the warning is under test
+    with pytest.warns(FutureWarning, match='"MST" solution method is deprecated') as record:
+        teuk.solve(geo, method="MST")
+    assert record[0].filename == __file__
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        teuk.solve(geo, method="AUTO")
+
+@pytest.mark.parametrize("s", [0, 1, -1])
+def test_teukolsky_mode_gsn_unsupported_spin(s):
+    # GSN is only implemented for |s| = 2; it must raise rather than return NaN amplitudes.
+    orbit = KerrGeodesic(0.9, 10., 0., 1.)
+    mode = TeukolskyMode(s, 2, 2, 0, 0, orbit)
+    with pytest.raises(ValueError):
+        mode.solve(orbit, method="GSN")
