@@ -2,14 +2,14 @@
 
 ## Quick Installation
 
-Tagged releases of `pybhpt` are available as wheel packages for macOS and 64-bit Linux on [PyPI](https://pypi.org/project/matplotlib/). Install using `pip`:
+Tagged releases of `pybhpt` are available as wheel packages for macOS and 64-bit Linux on [PyPI](https://pypi.org/project/pybhpt). Install using `pip`:
 ```
 python3 -m pip install pybhpt
 ```
 
 ## Developer Installation
 
-`pybhpt` relies on several dependencies to install and run, namely a C/C++ compiler (e.g., `g++`), `gsl`, `boost`, `Cython`, `numpy`, `scipy`, and `python >= 3.8`. To reduce package conflicts and ensure that the proper dependencies are installed, we recommend using [conda](https://docs.conda.io/en/latest/) (paricularly through [Miniforge](https://github.com/conda-forge/miniforge)) and its virtual environments.
+`pybhpt` relies on several dependencies to install and run, namely a C/C++ compiler (e.g., `g++`), `cmake`, `gsl`, LAPACK (optional but strongly recommended; without it the spin-weighted spheroidal harmonic eigenvalue solver falls back to a much slower GSL routine), `Cython`, `numpy`, `scipy`, and `python >= 3.12`. `boost` is included as a git submodule (see below). To reduce package conflicts and ensure that the proper dependencies are installed, we recommend using [conda](https://docs.conda.io/en/latest/) (paricularly through [Miniforge](https://github.com/conda-forge/miniforge)) and its virtual environments.
 
 To create a conda environment `pybhpt-env` with just the necessary dependencies use `environment.yml`:
 ```
