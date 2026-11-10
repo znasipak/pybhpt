@@ -98,3 +98,11 @@ def test_teukolsky_mode_mst_deprecation_warning():
     with warnings.catch_warnings():
         warnings.simplefilter("error")
         teuk.solve(geo, method="AUTO")
+
+@pytest.mark.parametrize("s", [0, 1, -1])
+def test_teukolsky_mode_gsn_unsupported_spin(s):
+    # GSN is only implemented for |s| = 2; it must raise rather than return NaN amplitudes.
+    orbit = KerrGeodesic(0.9, 10., 0., 1.)
+    mode = TeukolskyMode(s, 2, 2, 0, 0, orbit)
+    with pytest.raises(ValueError):
+        mode.solve(orbit, method="GSN")
