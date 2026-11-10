@@ -1,5 +1,5 @@
 from cybhpt_full import _TeukolskyMode as _TeukolskyModeCython
-from pybhpt.radial import _warn_gsn_spin_plus_2_up
+from pybhpt.radial import _warn_if_deprecated_method, _warn_gsn_spin_plus_2_up
 
 class TeukolskyMode:
     """A class for computing Teukolsky modes sourced by a point-particle orbiting in a Kerr background.
@@ -228,6 +228,7 @@ class TeukolskyMode:
             KerrGeodesic object containing the background motion of the point-particle source.
         method : str, optional
             The method to use for solving the Teukolsky equation. Default is "AUTO".
+            "MST" is deprecated and emits a FutureWarning.
             "GSN" requires spin-weight s = -2 or +2; for s = +2 its Up solution is
             numerically unstable (see ``RadialTeukolsky.solve``) and a
             ``RuntimeWarning`` is emitted.
@@ -243,6 +244,7 @@ class TeukolskyMode:
             value overrides it (smaller = more samples / tighter convergence).
 
         """
+        _warn_if_deprecated_method(method)
         cytol = -1. if tol is None else tol
         if teuk is None or swsh is None:
             if method == "GSN":
