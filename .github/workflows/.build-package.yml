@@ -14,6 +14,31 @@ on:
       - published
 
 jobs:
+  check_version:
+    name: Check CITATION.cff version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history and tags, to find the latest release tag
+
+      - name: Compare CITATION.cff with release tags
+        run: |
+          CFF=$(grep '^version:' CITATION.cff | sed -E 's/^version: *v?//')
+          echo "CITATION.cff: $CFF"
+          if [ "${{ github.event_name }}" = "release" ]; then
+            # The release tag must match CITATION.cff exactly
+            TAG="${GITHUB_REF_NAME#v}"
+            echo "release tag:  $TAG"
+            [ "$TAG" = "$CFF" ] || { echo "::error::Release tag ($TAG) does not match CITATION.cff ($CFF); update CITATION.cff before tagging"; exit 1; }
+          else
+            # Between releases CITATION.cff may equal the latest tag or be bumped ahead of it, never behind
+            LATEST=$(git describe --tags --abbrev=0 --match 'v[0-9]*' | sed 's/^v//')
+            echo "latest tag:   $LATEST"
+            OLDEST=$(printf '%s\n%s\n' "$LATEST" "$CFF" | sort -V | head -n1)
+            [ "$OLDEST" = "$LATEST" ] || { echo "::error::CITATION.cff ($CFF) is behind the latest tag ($LATEST)"; exit 1; }
+          fi
+
   build_and_run_tests:
     name: Build and run unit tests
     runs-on: ${{ matrix.os }}
@@ -230,7 +255,7 @@ jobs:
             path: dist/*.tar.gz
 
   upload_pypi:
-    needs: [build_wheels, build_sdist]
+    needs: [check_version, build_wheels, build_sdist]
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
@@ -251,7 +276,7 @@ jobs:
           verbose: true
 
   upload_testpypi:
-    needs: [build_wheels, build_sdist]
+    needs: [check_version, build_wheels, build_sdist]
     runs-on: ubuntu-latest
     environment: testpypi
     permissions:
