@@ -1,4 +1,5 @@
 from cybhpt_full import _TeukolskyMode as _TeukolskyModeCython
+from pybhpt.radial import _warn_gsn_spin_plus_2_up
 
 class TeukolskyMode:
     """A class for computing Teukolsky modes sourced by a point-particle orbiting in a Kerr background.
@@ -227,6 +228,9 @@ class TeukolskyMode:
             KerrGeodesic object containing the background motion of the point-particle source.
         method : str, optional
             The method to use for solving the Teukolsky equation. Default is "AUTO".
+            "GSN" requires spin-weight s = -2 or +2; for s = +2 its Up solution is
+            numerically unstable (see ``RadialTeukolsky.solve``) and a
+            ``RuntimeWarning`` is emitted.
         nsamples : int, optional
             The number of samples to use for the solution. Default is 256.
         teuk : RadialTeukolsky, optional
@@ -241,6 +245,8 @@ class TeukolskyMode:
         """
         cytol = -1. if tol is None else tol
         if teuk is None or swsh is None:
+            if method == "GSN":
+                _warn_gsn_spin_plus_2_up(self.spinweight)
             self.base.solve(geo.base, method, nsamples, tol=cytol)
         else:
             self.base.solve(geo.base, method, nsamples, teuk.base, swsh.base, tol=cytol)

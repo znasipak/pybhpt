@@ -38,14 +38,18 @@ def test_radial_teukolsky_gsn_unsupported_spin(s):
     with pytest.raises(ValueError):
         Rt.solve("GSN", "Up")
 
-@pytest.mark.parametrize("s, j, m, a, omega", [
-    (2, 2, 2, 0.99, 2.0),
-    (2, 3, 3, 0.99, 2.0),
-    (2, 2, 2, 0.9, 2.0),
-    (2, 2, 0, 0.5, 2.0),
-    (-2, 2, 2, 0.99, 2.0),
+# s = +2 Up is excluded: GSN obtains it by an ill-conditioned Teukolsky-Starobinsky flip of
+# the s = -2 solution (see test_radial_teukolsky_gsn_spin_plus_2_up_warns).
+@pytest.mark.parametrize("s, j, m, a, omega, bc", [
+    (2, 2, 2, 0.99, 2.0, "In"),
+    (2, 3, 3, 0.99, 2.0, "In"),
+    (2, 2, 2, 0.9, 2.0, "In"),
+    (2, 2, 0, 0.5, 2.0, "In"),
+    (-2, 2, 2, 0.99, 2.0, "In"),
+    (-2, 2, 2, 0.99, 2.0, "Up"),
+    (-2, 3, 3, 0.99, 2.0, "Up"),
+    (-2, 2, 0, 0.5, 2.0, "Up"),
 ])
-@pytest.mark.parametrize("bc", ["In", "Up"])
 def test_radial_teukolsky_gsn_matches_auto(s, j, m, a, omega, bc):
     r = np.linspace(3, 30, 8)
     ref = RadialTeukolsky(s, j, m, a, omega, r)
@@ -54,6 +58,20 @@ def test_radial_teukolsky_gsn_matches_auto(s, j, m, a, omega, bc):
     gsn.solve("GSN", bc)
     np.testing.assert_allclose(gsn.radialsolutions(bc), ref.radialsolutions(bc), rtol=1e-7, atol=0)
     np.testing.assert_allclose(gsn.radialderivatives(bc), ref.radialderivatives(bc), rtol=1e-7, atol=0)
+
+@pytest.mark.parametrize("s, bc, warns", [
+    (2, "Up", True),
+    (2, None, True),
+    (2, "In", False),
+    (-2, "Up", False),
+])
+def test_radial_teukolsky_gsn_spin_plus_2_up_warns(s, bc, warns):
+    import warnings
+    Rt = RadialTeukolsky(s, 2, 2, 0.9, 2.0, np.linspace(3, 30, 8))
+    with warnings.catch_warnings(record=True) as record:
+        warnings.simplefilter("always")
+        Rt.solve("GSN", bc)
+    assert any(issubclass(w.category, RuntimeWarning) for w in record) == warns
 
 @pytest.mark.parametrize("method", ["AUTO", "MST", "ASYMP", "HBL", "GSN", "TEUK"])
 def test_radial_teukolsky_solve_auto(method):
