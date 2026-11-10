@@ -3,7 +3,14 @@
 #include "radialsolver.hpp"
 #include <stdexcept>
 
-#define TEUK_ODE_REL_ERR 1.e-14
+// Default relative tolerance for the GSL radial integrators (HBL/TEUK/GSN) when the user
+// does not set one (RadialTeukolsky::getODETolerance), and the fallback whenever an
+// integrator receives rtol <= 0. 1e-13 was audited against a 1e-15 reference over the
+// bench_teuk modes: amplitudes are indistinguishable from the previous 1e-14 default.
+#define TEUK_ODE_DEFAULT_RTOL 1.e-13
+// Previous 1e-14 default, kept only for the integrators that do not take a tolerance:
+// the Boost paths (disabled, BOOST_INTEGRATE 0) and the unused Jacobian GSL overload.
+#define TEUK_ODE_LEGACY_RTOL 1.e-14
 #define TEUK_ODE_STEP_SIZE_INIT 1.e-8
 #define DELTA_R_HORIZON 1.e-2
 #define R_INFINITY 50.
@@ -36,7 +43,7 @@ int RadialTeukolsky::getAzimuthalModeNumber(){ return _m; }
 double RadialTeukolsky::getModeFrequency(){ return _omega; }
 double RadialTeukolsky::getSpinWeightedSpheroidalEigenvalue(){ return _lambda; }
 void RadialTeukolsky::setODETolerance(double rtol){ _odeRtol = rtol; }
-double RadialTeukolsky::getODETolerance(){ return _odeRtol > 0. ? _odeRtol : TEUK_ODE_REL_ERR; }
+double RadialTeukolsky::getODETolerance(){ return _odeRtol > 0. ? _odeRtol : TEUK_ODE_DEFAULT_RTOL; }
 
 // Generate retarded boundary conditions for Teukolsky equation. This is neccessary if one is
 // going to generate solutions with any of the integration methods {HBL, GSN, TEUK}
@@ -64,7 +71,10 @@ int RadialTeukolsky::ASYMsolveBoundary(BoundaryCondition bc){
 
 		int boundaryFlag = 0;
 		while( (std::abs(_infinityBoundarySolution.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundarySolution.getValue())) || isinf(std::abs(_infinityBoundarySolution.getValue())) || std::abs(_infinityBoundaryDerivative.getPrecision()) > 1.e-13 || isnan(std::abs(_infinityBoundaryDerivative.getValue())) || isinf(std::abs(_infinityBoundaryDerivative.getValue()))) && boundaryFlag < boundaryFlagMax){
-			_infinityBoundary *= 2;
+			// grow geometrically but finely: doubling overshot the radius where the series first
+			// converges by up to 2x (e.g. landing at omega*r = 40 when 21 suffices). Each series
+			// evaluation costs ~1 us, far less than integrating over the overshoot.
+			_infinityBoundary *= 1.25;
 			teuk_up_ASYM_series_both(_infinityBoundarySolution, _infinityBoundaryDerivative, *this, _infinityBoundary);
 			boundaryFlag++;
 		}
@@ -120,12 +130,20 @@ void RadialTeukolsky::solveBoundaryPoint(BoundaryCondition bc){
 			_horizonBoundary = rplus + 0.5*(_radialPoints.front() - rplus);
 		}
 	}else{
-		_infinityBoundary = R_INFINITY;
-		if(20./std::abs(_omega) > _infinityBoundary && std::abs(_omega) > DBL_EPSILON){
+		// Start at omega*r = 20, roughly where the asymptotic series at infinity first reaches
+		// the 1e-13 precision ASYMsolveBoundary demands (for s = +2, which is the spin the Up
+		// solution is integrated in; s = -2 converges earlier); ASYMsolveBoundary then pushes
+		// the point outward until it does. The fixed R_INFINITY floor is kept only for
+		// near-zero frequencies: at high frequency it put the boundary far beyond where the
+		// series already converges (e.g. omega = 1.5 needs r ~ 16, not 50), lengthening the
+		// inward integration for nothing.
+		if(std::abs(_omega) > DBL_EPSILON){
 			_infinityBoundary = 20./std::abs(_omega);
 			if(_infinityBoundary > 50*_radialPoints.back()){
 				_infinityBoundary = 50*_radialPoints.back();
 			}
+		}else{
+			_infinityBoundary = R_INFINITY;
 		}
 		if(_infinityBoundary <= _radialPoints.back()){
 			_infinityBoundary = 1.1*_radialPoints.back();
@@ -1064,13 +1082,16 @@ Complex spin_plus_1_df_coeff_TS_static(double a, double lambdaCH, double r){ // 
 Complex spin_minus_2_f_coeff_TS(int m, double a, double omega, double lambdaCH, double r){ // this is lambda_{s=-2}
 	double delta = r*r - 2.*r + a*a;
   	double Kteuk = (r*r + a*a)*omega - m*a;
-	return pow(delta,-3)*(-4.*Kteuk*(-1. + r)*(Complex(0.,1.)*(2. - lambdaCH) +  8.*omega*r) - 8.*(lambdaCH - 1. + Complex(0.,3.)*omega*r)*pow(Kteuk,2)) + pow(delta,-4)*(8.*pow(Kteuk,4) + 8.*pow(Kteuk,2)*pow(-1. + r,2)) + pow(delta,-2)*((lambdaCH - 2.)*lambdaCH + 20.*Kteuk*omega + Complex(0.,4.)*omega*(3. + (lambdaCH - 2.)*r) + 12.*pow(omega,2)*pow(r,2));
+	double invDelta = 1./delta, invDelta2 = invDelta*invDelta;
+	double K2 = Kteuk*Kteuk, rm1 = r - 1.;
+	return invDelta2*invDelta*(-4.*Kteuk*rm1*(Complex(0.,1.)*(2. - lambdaCH) +  8.*omega*r) - 8.*(lambdaCH - 1. + Complex(0.,3.)*omega*r)*K2) + invDelta2*invDelta2*(8.*K2*K2 + 8.*K2*rm1*rm1) + invDelta2*((lambdaCH - 2.)*lambdaCH + 20.*Kteuk*omega + Complex(0.,4.)*omega*(3. + (lambdaCH - 2.)*r) + 12.*omega*omega*r*r);
 }
 
 Complex spin_minus_2_g_coeff_TS(int m, double a, double omega, double lambdaCH, double r){ // this is lambda_{s=-2}
 	double delta = r*r - 2.*r + a*a;
   	double Kteuk = (r*r + a*a)*omega - m*a;
-	return 4.*I*((2.*pow(r - 1., 2) - lambdaCH*delta)*Kteuk + 2.*pow(Kteuk, 3) + 2.*omega*delta*(delta - r*(r - 1.)))/pow(delta, 3);
+	double rm1 = r - 1.;
+	return 4.*I*((2.*rm1*rm1 - lambdaCH*delta)*Kteuk + 2.*Kteuk*Kteuk*Kteuk + 2.*omega*delta*(delta - r*rm1))/(delta*delta*delta);
 }
 
 Complex spin_minus_2_df_coeff_TS_static(double a, double lambdaCH, double r){ // this is lambda_{s=-2}
@@ -1174,10 +1195,14 @@ Complex df_coeff_TS_static(int s, double a, double lambdaCH, double r){
 void flip_spin_of_radial_teukolsky_TS_subfunc(Complex &RFlip, Complex &RPFlip, Complex Cm, Complex Cp, int s, int m, double a, double omega, double lambdaCH, double r, Complex R, Complex RP){
 	Complex g0p, f0p, g0m, f0m;
 	if(std::abs(s) == 2){
+		// the s=+2 coefficients are built from the s=-2 ones (see spin_plus_2_*_coeff_TS);
+		// form them from the already-evaluated s=-2 values instead of recomputing those
 		g0m = spin_minus_2_g_coeff_TS(m, a, omega, lambdaCH, r);
 		f0m = spin_minus_2_f_coeff_TS(m, a, omega, lambdaCH, r);
-		g0p = spin_plus_2_g_coeff_TS(m, a, omega, lambdaCH, r);
-		f0p = spin_plus_2_f_coeff_TS(m, a, omega, lambdaCH, r);
+		double delta = r*r - 2.*r + a*a;
+		double delta2 = delta*delta, delta4 = delta2*delta2;
+		g0p = delta4*std::conj(g0m);
+		f0p = delta4*std::conj(f0m + 4.*(r - 1.)/delta*g0m);
 	}else if(std::abs(s) == 1){
 		g0m = spin_minus_1_g_coeff_TS(m, a, omega, lambdaCH, r);
 		f0m = spin_minus_1_f_coeff_TS(m, a, omega, lambdaCH, r);
@@ -1222,7 +1247,13 @@ void flip_spin_of_radial_teukolsky_TS(ComplexVector &RFlip, ComplexVector &RPFli
 	Cp = teukolsky_starobinsky_amplitude(bc, std::abs(s), m, a, omega, lambdaCH);
 	Cm = teukolsky_starobinsky_amplitude(bc, -std::abs(s), m, a, omega, lambdaCH);
 	for(size_t i = 0; i < r.size(); i++){
-		flip_spin_of_radial_teukolsky_TS_subfunc(RFlip[i], RPFlip[i], Cm, Cp, s, m, a, omega, lambdaCH, r[i], R[i], RP[i]);
+		if(i > 0 && r[i] == r[i - 1] && R[i] == R[i - 1] && RP[i] == RP[i - 1]){
+			// repeated grid point (e.g. circular/spherical orbits): identical result
+			RFlip[i] = RFlip[i - 1];
+			RPFlip[i] = RPFlip[i - 1];
+		}else{
+			flip_spin_of_radial_teukolsky_TS_subfunc(RFlip[i], RPFlip[i], Cm, Cp, s, m, a, omega, lambdaCH, r[i], R[i], RP[i]);
+		}
 	}
 }
 
@@ -1752,7 +1783,7 @@ int teuk_integrate_boost(ComplexVector &psi, ComplexVector &dpsidr, ODE_FUNC sys
 
 	int stepNum = r.size();
 
-	double abs_err = 0., rel_err = TEUK_ODE_REL_ERR;
+	double abs_err = 0., rel_err = TEUK_ODE_LEGACY_RTOL;
 
 	//Explicit methods
 
@@ -1788,7 +1819,7 @@ int teuk_integrate_boost_implicit(ComplexVector &psi, ComplexVector &dpsidr, ODE
 	}
 	int stepNum = r.size();
 
-	double abs_err = TEUK_ODE_REL_ERR, rel_err = TEUK_ODE_REL_ERR;
+	double abs_err = TEUK_ODE_LEGACY_RTOL, rel_err = TEUK_ODE_LEGACY_RTOL;
 	// Implicit methods
 
 	//rosenbrock4 with error control
@@ -1818,7 +1849,7 @@ int teuk_jac_null_gsl(double, const double*, double *, double*, void*){
 }
 
 int teuk_integrate_gsl(ComplexVector &psi, ComplexVector &dpsidr, int (*sys)(double, const double*, double*, void*), state_type psi0, const double r0, const Vector &r, void *params, double rtol){
-	if(rtol <= 0.) rtol = TEUK_ODE_REL_ERR;   // <=0 sentinel -> built-in default
+	if(rtol <= 0.) rtol = TEUK_ODE_DEFAULT_RTOL;   // <=0 sentinel -> built-in default
 	size_t dim = 4;
 	double Psi[dim];
 	for(size_t i = 0; i < dim; i++){
@@ -1998,12 +2029,12 @@ int teuk_integrate_gsl(ComplexVector &psi, ComplexVector &dpsidr, int (*sys)(dou
 	//std::cout << "(RADIALSOLVER) Initial step size = " << initialStep << "\n";
 
 	gsl_odeiv2_system gsl_sys = {sys, jac, dim, params};
-	double abs_error = sqrt(Psi[0]*Psi[0] + Psi[1]*Psi[1])*TEUK_ODE_REL_ERR*(1.e-5);
+	double abs_error = sqrt(Psi[0]*Psi[0] + Psi[1]*Psi[1])*TEUK_ODE_LEGACY_RTOL*(1.e-5);
 	abs_error = 0.;
 
 	const gsl_odeiv2_step_type *T = gsl_odeiv2_step_bsimp;
 	gsl_odeiv2_step* s = gsl_odeiv2_step_alloc(T, dim);
-	gsl_odeiv2_control* c = gsl_odeiv2_control_y_new(abs_error, TEUK_ODE_REL_ERR);
+	gsl_odeiv2_control* c = gsl_odeiv2_control_y_new(abs_error, TEUK_ODE_LEGACY_RTOL);
 	gsl_odeiv2_evolve* e = gsl_odeiv2_evolve_alloc(dim);
 
 
@@ -2734,8 +2765,13 @@ int teuk_in_HBL_integrate(ComplexVector &R_return, ComplexVector &Rp_return, Rad
 	// std::cout << "(RADIALSOLVER) Rin'(r = "<< rReverse[stepNum - 1] << ") = " << RP_f << "\n";
 
 	for(int i = 0; i < stepNum; i++){
-		R_return[i] = hbl_Psi_to_teuk_R(norm*PsiVec[i], r[i], params);
-		Rp_return[i] = hbl_dPsi_to_teuk_RP(norm*dPsiVec[i], norm*PsiVec[i], r[i], params);
+		if(i > 0 && r[i] == r[i - 1] && PsiVec[i] == PsiVec[i - 1] && dPsiVec[i] == dPsiVec[i - 1]){
+			// repeated grid point (e.g. circular/spherical orbits): identical result
+			R_return[i] = R_return[i - 1];
+			Rp_return[i] = Rp_return[i - 1];
+		}else{
+			hbl_Psi_to_teuk_R_RP(R_return[i], Rp_return[i], norm*PsiVec[i], norm*dPsiVec[i], r[i], params);
+		}
 	}
 
 	if(r0 >= r.back()){
@@ -2804,8 +2840,13 @@ int teuk_up_HBL_integrate(ComplexVector &R_return, ComplexVector &Rp_return, Rad
 	// std::cout << "(RADIALSOLVER) Psi'(r = "<< rReverse[0] << ") = " << dPsiVec[0] << "\n";
 
 	for(int i = 0; i < stepNum; i++){
-		R_return[i] = hbl_Psi_to_teuk_R(norm*PsiVec[i], rReverse[i], params);
-		Rp_return[i] = hbl_dPsi_to_teuk_RP(norm*dPsiVec[i], norm*PsiVec[i], rReverse[i], params);
+		if(i > 0 && rReverse[i] == rReverse[i - 1] && PsiVec[i] == PsiVec[i - 1] && dPsiVec[i] == dPsiVec[i - 1]){
+			// repeated grid point (e.g. circular/spherical orbits): identical result
+			R_return[i] = R_return[i - 1];
+			Rp_return[i] = Rp_return[i - 1];
+		}else{
+			hbl_Psi_to_teuk_R_RP(R_return[i], Rp_return[i], norm*PsiVec[i], norm*dPsiVec[i], rReverse[i], params);
+		}
 	}
 
 	if(r0 >= r.back()){
@@ -2832,7 +2873,7 @@ int teuk_in_HBL_integrate_dense(
 	// Backstop: a non-positive rtol collapses the Hermite step cap to zero and the
 	// dense integrator never advances. Callers should validate, but fall back to the
 	// built-in tolerance rather than hang (same sentinel as teuk_integrate_gsl).
-	if(rtol <= 0.) rtol = TEUK_ODE_REL_ERR;
+	if(rtol <= 0.) rtol = TEUK_ODE_DEFAULT_RTOL;
 
 	hbl_parameters params = {
 		.a  = teuk.getBlackHoleSpin(),
@@ -2905,7 +2946,7 @@ int teuk_up_HBL_integrate_dense(
 	// Backstop: a non-positive rtol collapses the Hermite step cap to zero and the
 	// dense integrator never advances. Callers should validate, but fall back to the
 	// built-in tolerance rather than hang (same sentinel as teuk_integrate_gsl).
-	if(rtol <= 0.) rtol = TEUK_ODE_REL_ERR;
+	if(rtol <= 0.) rtol = TEUK_ODE_DEFAULT_RTOL;
 
 	hbl_parameters params = {
 		.a  = teuk.getBlackHoleSpin(),
@@ -3148,21 +3189,65 @@ Complex hbl_dPsi_to_teuk_RP(Complex dPsi, Complex Psi, double r, hbl_parameters 
 	return RinP;
 }
 
+static inline double integer_power(double x, int n){
+	double y = 1., b = x;
+	for(int k = std::abs(n); k > 0; k >>= 1){
+		if(k & 1){ y *= b; }
+		b *= b;
+	}
+	return (n < 0) ? 1./y : y;
+}
+
+// Fused hbl_Psi_to_teuk_R + hbl_dPsi_to_teuk_RP for the per-grid-point conversion loops.
+// Same prefactor r*delta^s*exp(-i(m*Phi + om*h)), but evaluated once per point with an
+// integer power, one complex exponential, and the two logarithms shared between Phi and h
+// (the separate functions use a complex pow and two complex exps, each computed twice).
+void hbl_Psi_to_teuk_R_RP(Complex &R, Complex &RP, Complex Psi, Complex dPsi, double r, const hbl_parameters &params){
+	double a = params.a, om = params.om;
+	double kappa = sqrt(1. - a*a);
+	double delta = r*r - 2.*r + a*a;
+	double logPlus = log(r - (1. + kappa)), logMinus = log(r - (1. - kappa));
+	double h = params.H*(r + (1. + kappa)*logPlus/kappa - (1. - kappa)*logMinus/kappa);
+	double Phi = a/(2.*kappa)*(logPlus - logMinus);
+	double dh = params.H*(r*r + a*a)/delta, dPhi = a/delta;
+
+	Complex invPrefactor = std::polar(1./(r*integer_power(delta, params.s)), params.m*Phi + om*h);
+	Complex dprefactor(1./r + params.s*2.*(r - 1.)/delta, -(dPhi*params.m + dh*om));
+	R = Psi*invPrefactor;
+	RP = (dPsi - dprefactor*Psi)*invPrefactor;
+}
+
+
+// potential_GR/GI/UR/UI evaluated together, with r^2, a^2, delta and varpi computed once
+// and the expressions regrouped to share factors (pow(.,2) written as products; the
+// omega*r^2*varpi factor and the 2r factor of UI pulled out). Algebraically identical to
+// the separate potential_* functions; differs from them at the ulp level only.
+static inline void hbl_potentials(double r, const hbl_parameters &params,
+		double &GR, double &GI, double &UR, double &UI, double &delta){
+	double a = params.a, om = params.om, la = params.la;
+	double s = params.s, H = params.H, m = params.m;
+	double r2 = r*r, a2 = a*a;
+	delta = r2 - 2.*r + a2;
+	double varpi = r2 + a2;
+
+	GR = delta*(a2 + r*(r*s - (1. + s)));
+	GI = -delta*r*(a*m + H*om*varpi);
+	UR = delta*(2.*a2 - la*r2 - 2.*r*(1. + s))
+		+ om*r2*varpi*((1. - H*H)*om*varpi - 2.*a*(1. + H)*m);
+	UI = 2.*r*(om*r*s*(delta*(1. - H)*r - (1. + H)*(r2 - a2)) - a*delta*(m + a*H*om));
+}
 
 int teuk_hbl_gsl(double r, const double y[], double dydr[], void* parameters){
-  hbl_parameters params = *(hbl_parameters *)parameters;
+	const hbl_parameters &params = *(const hbl_parameters *)parameters;
 
-	double a = params.a;
-	double delta = r*r - 2.*r + a*a;
-	double GR = potential_GR(r, params);
-	double GI = potential_GI(r, params);
-	double UR = potential_UR(r, params);
-	double UI = potential_UI(r, params);
+	double GR, GI, UR, UI, delta;
+	hbl_potentials(r, params, GR, GI, UR, UI, delta);
 
 	dydr[0] = y[2];
 	dydr[1] = y[3];
-	dydr[2] = (2.*r*(GR*y[2] - GI*y[3]) - (UR*y[0] - UI*y[1]))/(delta*delta*r*r);
-	dydr[3] = (2.*r*(GR*y[3] + GI*y[2]) - (UR*y[1] + UI*y[0]))/(delta*delta*r*r);
+	double invDenom = 1./(delta*delta*r*r), twoR = 2.*r;
+	dydr[2] = (twoR*(GR*y[2] - GI*y[3]) - (UR*y[0] - UI*y[1]))*invDenom;
+	dydr[3] = (twoR*(GR*y[3] + GI*y[2]) - (UR*y[1] + UI*y[0]))*invDenom;
 
   return GSL_SUCCESS;
 }

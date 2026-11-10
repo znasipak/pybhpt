@@ -103,7 +103,7 @@ protected:
 	ComplexVector _upSolution;
 	ComplexVector _upDerivative;
 
-	double _odeRtol = -1.;   // <=0 -> use the built-in TEUK_ODE_REL_ERR default
+	double _odeRtol = -1.;   // <=0 -> use the built-in TEUK_ODE_DEFAULT_RTOL default
 };
 
 typedef struct hbl_parameters_struct{
@@ -398,6 +398,7 @@ Complex teuk_R_to_hbl_Psi(Complex Rin, double r, hbl_parameters params);
 Complex teuk_RP_to_hbl_dPsi(Complex RinP, Complex Rin, double r, hbl_parameters params);
 Complex hbl_Psi_to_teuk_R(Complex Psi, double r, hbl_parameters params);
 Complex hbl_dPsi_to_teuk_RP(Complex dPsi, Complex Psi, double r, hbl_parameters params);
+void hbl_Psi_to_teuk_R_RP(Complex &R, Complex &RP, Complex Psi, Complex dPsi, double r, const hbl_parameters &params);
 
 int teuk_hbl_gsl(double r, const double y[], double f[], void* params);
 int jacobian(double r, const double y[], double *dfdy, double dfdr[], void* params);
