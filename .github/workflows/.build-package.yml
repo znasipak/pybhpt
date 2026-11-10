@@ -15,22 +15,28 @@ on:
 
 jobs:
   check_version:
-    name: Check version consistency
+    name: Check CITATION.cff version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history and tags, to find the latest release tag
 
-      - name: Compare pyproject.toml, CITATION.cff, and release tag
+      - name: Compare CITATION.cff with release tags
         run: |
-          PY=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
           CFF=$(grep '^version:' CITATION.cff | sed -E 's/^version: *v?//')
-          echo "pyproject.toml: $PY"
-          echo "CITATION.cff:   $CFF"
-          [ "$PY" = "$CFF" ] || { echo "::error::CITATION.cff version ($CFF) does not match pyproject.toml ($PY)"; exit 1; }
+          echo "CITATION.cff: $CFF"
           if [ "${{ github.event_name }}" = "release" ]; then
+            # The release tag must match CITATION.cff exactly
             TAG="${GITHUB_REF_NAME#v}"
-            echo "release tag:    $TAG"
-            [ "$TAG" = "$PY" ] || { echo "::error::Release tag ($TAG) does not match pyproject.toml ($PY)"; exit 1; }
+            echo "release tag:  $TAG"
+            [ "$TAG" = "$CFF" ] || { echo "::error::Release tag ($TAG) does not match CITATION.cff ($CFF); update CITATION.cff before tagging"; exit 1; }
+          else
+            # Between releases CITATION.cff may equal the latest tag or be bumped ahead of it, never behind
+            LATEST=$(git describe --tags --abbrev=0 --match 'v[0-9]*' | sed 's/^v//')
+            echo "latest tag:   $LATEST"
+            OLDEST=$(printf '%s\n%s\n' "$LATEST" "$CFF" | sort -V | head -n1)
+            [ "$OLDEST" = "$LATEST" ] || { echo "::error::CITATION.cff ($CFF) is behind the latest tag ($LATEST)"; exit 1; }
           fi
 
   build_and_run_tests:
@@ -163,7 +169,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: false  # do NOT checkout submodules here, we'll handle them manually
-          fetch-depth: 1 # shallow clone to speed up the process
+          fetch-depth: 0 # full history and tags, needed by setuptools-scm for the version
+
+      # Compute the version on the host and pass it into cibuildwheel, so Linux
+      # container builds do not depend on git working inside the container.
+      - name: Determine package version
+        id: version
+        run: |
+          version=$(pipx run setuptools-scm)
+          test -n "$version"
+          echo "Building pybhpt $version"
+          echo "version=$version" >> $GITHUB_OUTPUT
 
       - name: Get Boost submodule commit
         id: boost_commit
@@ -194,6 +210,7 @@ jobs:
             CMAKE_PREFIX_PATH=/opt/gsl-install
             LD_LIBRARY_PATH=/opt/gsl-install/lib:$LD_LIBRARY_PATH
             CMAKE_ARGS=-DPYBHPT_REQUIRE_LAPACK=ON
+            SETUPTOOLS_SCM_PRETEND_VERSION=${{ steps.version.outputs.version }}
           CIBW_ARCHS_LINUX: ${{ matrix.arch }}
           CIBW_SKIP: ${{ matrix.cibw_skip }}
 
@@ -204,6 +221,7 @@ jobs:
           CIBW_ENVIRONMENT: |
             MACOSX_DEPLOYMENT_TARGET=${{ matrix.macosx_deployment_target }}
             CMAKE_ARGS=-DPYBHPT_REQUIRE_LAPACK=ON
+            SETUPTOOLS_SCM_PRETEND_VERSION=${{ steps.version.outputs.version }}
 
       - name: Remove broken Git submodule metadata before cleanup
         if: steps.cache-boost.outputs.cache-hit == 'true'
@@ -225,6 +243,8 @@ jobs:
       github.event_name == 'release'
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history and tags, needed by setuptools-scm for the version
 
       - name: Build sdist
         run: pipx run build --sdist

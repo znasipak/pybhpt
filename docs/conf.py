@@ -1,17 +1,17 @@
 import os
 import sys
-import toml
 sys.path.insert(0, os.path.abspath('..'))
 
 project = 'pybhpt'
 copyright = '2025, znasipak'
 author = 'znasipak'
 
-# Read version from pyproject.toml
-pyproject_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'pyproject.toml'))
-with open(pyproject_path, 'r') as f:
-    pyproject = toml.load(f)
-release = pyproject['project']['version']
+# Version comes from git tags via setuptools-scm (see pyproject.toml)
+try:
+    from setuptools_scm import get_version
+    release = get_version(root='..', relative_to=__file__, local_scheme='no-local-version')
+except Exception:
+    release = 'unknown'
 
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.autosummary',
