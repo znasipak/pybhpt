@@ -206,7 +206,9 @@ jobs:
         if: runner.os == 'Linux'
         uses: pypa/cibuildwheel@v3.1.2
         env:
-          CIBW_ENVIRONMENT: |
+          # cibuildwheel reads CIBW_ENVIRONMENT as ONE space-separated line and silently
+          # drops everything after the first newline, so fold with ">-", never "|".
+          CIBW_ENVIRONMENT: >-
             CMAKE_PREFIX_PATH=/opt/gsl-install
             LD_LIBRARY_PATH=/opt/gsl-install/lib:$LD_LIBRARY_PATH
             CMAKE_ARGS=-DPYBHPT_REQUIRE_LAPACK=ON
@@ -218,7 +220,8 @@ jobs:
         if: runner.os == 'macOS'
         uses: pypa/cibuildwheel@v3.1.2
         env:
-          CIBW_ENVIRONMENT: |
+          # Folded with ">-" on purpose; see the Linux step above.
+          CIBW_ENVIRONMENT: >-
             MACOSX_DEPLOYMENT_TARGET=${{ matrix.macosx_deployment_target }}
             CMAKE_ARGS=-DPYBHPT_REQUIRE_LAPACK=ON
             SETUPTOOLS_SCM_PRETEND_VERSION=${{ steps.version.outputs.version }}
@@ -228,6 +231,20 @@ jobs:
         run: |
           git submodule deinit --force --all || true
           rm -rf .git/modules/extern || true
+
+      # Fail fast if any wheel was built with a version other than the one computed
+      # above (e.g. a setuptools-scm fallback like 0.1.devN reaching PyPI).
+      - name: Check wheel versions
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          ls wheelhouse/*.whl
+          bad=$(ls wheelhouse/*.whl | grep -v -- "/pybhpt-${VERSION}-" || true)
+          if [ -n "$bad" ]; then
+            echo "::error::Wheels do not match version ${VERSION}:"
+            echo "$bad"
+            exit 1
+          fi
 
       - uses: actions/upload-artifact@v4
         with:
