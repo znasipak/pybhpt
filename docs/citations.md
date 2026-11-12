@@ -9,7 +9,7 @@ If you make use of `pybhpt`, we request that you cite the Github package and acc
     title = {{pybhpt}},
     url = {https://github.com/znasipak/pybhpt},
     doi = {10.5281/zenodo.18317623},
-    version = {v1.1.0},
+    version = {v1.1.1},
     year = {2026}
 }
 @article{Nasipak:2025tby,
