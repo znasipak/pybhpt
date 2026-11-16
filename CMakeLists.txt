@@ -101,6 +101,15 @@ set_target_properties(cybhpt_full PROPERTIES
   BUILD_WITH_INSTALL_RPATH TRUE
 )
 
+# Source builds (conda, venv + Homebrew, cluster modules): also record the
+# directories of linked libraries (e.g. $CONDA_PREFIX/lib for GSL and OpenBLAS)
+# so they are found at run time. Skipped for cibuildwheel builds, where
+# auditwheel/delocate bundle the libraries, so build-machine paths stay out
+# of published wheels.
+if(NOT DEFINED ENV{CIBUILDWHEEL})
+  set_property(TARGET cybhpt_full PROPERTY INSTALL_RPATH_USE_LINK_PATH TRUE)
+endif()
+
 # LAPACK — used in swsh.cpp for fast symmetric eigenvalue computation.
 # gsl_eigen_symm is ~100x slower than LAPACK dsyev for small matrices.
 # By default LAPACK is optional (graceful fallback). Set -DPYBHPT_REQUIRE_LAPACK=ON
