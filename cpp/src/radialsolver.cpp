@@ -18,7 +18,7 @@
 #define MST_AUTO_FREQ 1.e-2
 #define MST_AUTO_RADIAL 1000.
 #define MST_AUTO_POINTS_MAX 256
-#define ZERO_FREQ_MAX 1.e-11
+#define ZERO_FREQ_MAX ZERO_FREQUENCY_LIMIT
 #define ASYM_AUTO_RMIN 100
 
 // Constructor

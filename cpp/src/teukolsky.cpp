@@ -2,7 +2,7 @@
 
 #include "teukolsky.hpp"
 
-#define ZERO_FREQ_LIMIT 1.e-10
+#define ZERO_FREQ_LIMIT ZERO_FREQUENCY_LIMIT
 #define MST_AUTO_FREQ 0.1
 #define SAMPLE_SIZE_INIT 256
 

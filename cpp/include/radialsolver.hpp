@@ -7,6 +7,20 @@
 #include <gsl/gsl_odeiv2.h>
 #include <boost/numeric/odeint.hpp>
 #include "mst.hpp"
+
+// Below this |omega| a mode is treated as zero-frequency: the radial solver
+// uses the static solutions and the mode carries no flux. It is shared by the
+// radial solver, TeukolskyMode and the flux functions so all three agree on
+// which modes are static (a mode solved statically but given a flux from the
+// dynamic formula would be wrong). It must sit above floating-point zero for
+// a combination m*Omega_phi + k*Omega_theta + n*Omega_r that cancels (about
+// 1e-16 * |n| * Omega, so <~ 1e-14), and below the frequencies of real orbits:
+// a circular orbit at r = 2.6e7 M radiates at omega = 2 r^{-3/2} = 1.5e-11.
+// The old per-file values (1e-8 in fluxes.cpp, 1e-10 in teukolsky.cpp, 1e-11
+// here) zeroed every mode of orbits beyond r ~ 3.4e5 M.
+#ifndef ZERO_FREQUENCY_LIMIT
+#define ZERO_FREQUENCY_LIMIT 1.e-12
+#endif
 #include "gsn_asymp.hpp"
 
 enum SolutionMethod {AUTO, MST, ASYM, HBL, GSN, TEUK};
