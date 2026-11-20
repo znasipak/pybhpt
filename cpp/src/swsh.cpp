@@ -46,22 +46,16 @@ against the peak coefficient so that two round-off-level tails compare as conver
 // eps/theta^(|s| + |m+s|): 4e-3 for s = -2, m = 0 at theta = 5e-4, the angles a nearly
 // polar orbit samples. The Jacobi form has the vanishing factors explicit and no
 // cancellation anywhere on [0, pi].
-struct JacobiForm{ int a; int b; int lam; };
-
-static JacobiForm jacobi_form(int s, int m){
+static void jacobi_parameters(int &a, int &b, int &lam, int s, int m){
 	// candidates j + (-s), j - (-s), j + m, j - m, with j dropped (common to all four)
 	int mp = m, mm = -s;
 	int c[4] = { mm, -mm, mp, -mp };
 	int which = 0;
 	for(int i = 1; i < 4; i++){ if(c[i] < c[which]){ which = i; } }
-	JacobiForm jf;
-	if(which == 0){        jf.a = mp - mm; jf.lam = mp - mm; }
-	else if(which == 1){   jf.a = mm - mp; jf.lam = 0; }
-	else if(which == 2){   jf.a = mm - mp; jf.lam = 0; }
-	else{                  jf.a = mp - mm; jf.lam = mp - mm; }
+	if(which == 0 || which == 3){ a = mp - mm; lam = mp - mm; }
+	else{                         a = mm - mp; lam = 0; }
 	// b = 2j - 2k - a with k = j + c[which], so b = -2 c[which] - a
-	jf.b = -2*c[which] - jf.a;
-	return jf;
+	b = -2*c[which] - a;
 }
 
 static inline double log_binomial(int n, int r){
@@ -69,10 +63,10 @@ static inline double log_binomial(int n, int r){
 }
 
 // The theta-independent factor of sY_lm, including both signs.
-static double jacobi_norm(const JacobiForm &jf, int s, int l, int m){
+static double jacobi_norm(int a, int b, int lam, int s, int l, int m){
 	int k = l - std::max(std::abs(m), std::abs(s));
-	double lognorm = 0.5*(log_binomial(2*l - k, k + jf.a) - log_binomial(k + jf.b, jf.b));
-	double sign = ((jf.lam + s) % 2 == 0) ? 1. : -1.;
+	double lognorm = 0.5*(log_binomial(2*l - k, k + a) - log_binomial(k + b, b));
+	double sign = ((lam + s) % 2 == 0) ? 1. : -1.;
 	return sign*sqrt((2.*l + 1.)/(4.*M_PI))*exp(lognorm);
 }
 
@@ -101,13 +95,13 @@ static inline double int_power(double v, int n){
 }
 
 // sin^a(theta/2) cos^b(theta/2)
-static inline double jacobi_envelope(double sh, double ch, int a, int b){
+static inline double jacobi_prefactor(double sh, double ch, int a, int b){
 	return int_power(sh, a)*int_power(ch, b);
 }
 
 // d/dtheta [sin^a(theta/2) cos^b(theta/2)] = (a/2) sh^(a-1) ch^(b+1) - (b/2) sh^(a+1) ch^(b-1),
 // written without dividing by sh or ch so it is exact at the poles.
-static inline double jacobi_envelope_derivative_factor(double sh, double ch, int a, int b){
+static inline double jacobi_prefactor_derivative(double sh, double ch, int a, int b){
 	double out = 0.;
 	if(a > 0){ out += 0.5*a*int_power(sh, a - 1)*int_power(ch, b + 1); }
 	if(b > 0){ out -= 0.5*b*int_power(sh, a + 1)*int_power(ch, b - 1); }
@@ -116,30 +110,31 @@ static inline double jacobi_envelope_derivative_factor(double sh, double ch, int
 
 static double yslm_jacobi(int s, int l, int m, double th){
 	if(l < std::max(std::abs(m), std::abs(s))){ return 0.; }
-	JacobiForm jf = jacobi_form(s, m);
+	int a, b, lam;
+	jacobi_parameters(a, b, lam, s, m);
 	int k = l - std::max(std::abs(m), std::abs(s));
 	Vector P(k + 1, 0.);
-	jacobi_recurrence(P, k + 1, jf.a, jf.b, cos(th));
-	return jacobi_norm(jf, s, l, m)*jacobi_envelope(sin(0.5*th), cos(0.5*th), jf.a, jf.b)*P[k];
+	jacobi_recurrence(P, k + 1, a, b, cos(th));
+	return jacobi_norm(a, b, lam, s, l, m)*jacobi_prefactor(sin(0.5*th), cos(0.5*th), a, b)*P[k];
 }
 
 static double yslm_derivative_jacobi(int s, int l, int m, double th){
 	if(l < std::max(std::abs(m), std::abs(s))){ return 0.; }
-	JacobiForm jf = jacobi_form(s, m);
-	int a = jf.a, b = jf.b;
+	int a, b, lam;
+	jacobi_parameters(a, b, lam, s, m);
 	int k = l - std::max(std::abs(m), std::abs(s));
 	double sh = sin(0.5*th), ch = cos(0.5*th), x = cos(th);
 	Vector P(k + 1, 0.);
 	jacobi_recurrence(P, k + 1, a, b, x);
-	double out = jacobi_envelope_derivative_factor(sh, ch, a, b)*P[k];
+	double out = jacobi_prefactor_derivative(sh, ch, a, b)*P[k];
 	if(k > 0){
 		// d/dtheta P_k(cos theta) = -sin(theta) P_k'(x), P_k' = (k+a+b+1)/2 P_{k-1}^(a+1,b+1),
-		// and sin(theta) = 2 sh ch folds into the envelope
+		// and sin(theta) = 2 sh ch folds into the prefactor
 		Vector Q(k, 0.);
 		jacobi_recurrence(Q, k, a + 1, b + 1, x);
-		out -= 2.*jacobi_envelope(sh, ch, a + 1, b + 1)*0.5*double(k + a + b + 1)*Q[k - 1];
+		out -= 2.*jacobi_prefactor(sh, ch, a + 1, b + 1)*0.5*double(k + a + b + 1)*Q[k - 1];
 	}
-	return jacobi_norm(jf, s, l, m)*out;
+	return jacobi_norm(a, b, lam, s, l, m)*out;
 }
 
 
@@ -1037,14 +1032,13 @@ Complex Yslm(const int &s, const int &l, const int &m, const double &th, const d
 }
 
 double Yslm(const int &s, const int &l, const int &m, const double &th){
-	if( s == 0 ) return Ylm(l, m, th);
-	// Jacobi form: accurate to the poles (see jacobi_form). The old sum of scalar Ylm over
-	// sin^|s| lost up to all of its digits there.
+	// Jacobi form for every s, accurate to the poles (see jacobi_parameters). The old sum of
+	// scalar Ylm over sin^|s| lost up to all of its digits there, and even the scalar Ylm
+	// (s = 0) was off by ~1e-4 relative within 1e-6 of a pole.
 	return yslm_jacobi(s, l, m, th);
 }
 
 double Yslm_derivative(const int &s, const int &l, const int &m, const double &th){
-	if( s == 0 ) return Ylm_derivative(l, m, th);
 	return yslm_derivative_jacobi(s, l, m, th);
 }
 
@@ -1159,7 +1153,7 @@ void test_swsh_class(){
 // Jacobi parameters (a, b): one recurrence in n per theta gives every coupling term, and
 // the derivative needs one more recurrence at (a + 1, b + 1). The old grid built sY from
 // scalar Ylm divided by sin^|s|, which lost all precision near the poles (see
-// jacobi_form).
+// jacobi_parameters).
 void SpinWeightedHarmonic::fillYlmGrid(){
 	if(_gridFilled){ return; }
 	int lmin = getMinCouplingModeNumber();
@@ -1167,14 +1161,14 @@ void SpinWeightedHarmonic::fillYlmGrid(){
 	while(imax > 0 && _bcoupling[imax] == 0.){ imax--; }
 	_imaxCoupling = imax;
 
-	JacobiForm jf = jacobi_form(_s, _m);
-	int a = jf.a, b = jf.b;
+	int a, b, lam;
+	jacobi_parameters(a, b, lam, _s, _m);
 	int nterm = imax + 1;
 	// theta-independent weights: c_i = b_i * norm(l_i), and the P' factor (n+a+b+1)/2
 	Vector coef(nterm, 0.), dcoef(nterm, 0.);
 	for(int i = 0; i < nterm; i++){
 		if(_bcoupling[i] == 0.){ continue; }
-		coef[i] = _bcoupling[i]*jacobi_norm(jf, _s, lmin + i, _m);
+		coef[i] = _bcoupling[i]*jacobi_norm(a, b, lam, _s, lmin + i, _m);
 		dcoef[i] = 0.5*double(i + a + b + 1)*coef[i];
 	}
 
@@ -1199,9 +1193,9 @@ void SpinWeightedHarmonic::fillYlmGrid(){
 			jacobi_recurrence(Q, nterm - 1, a + 1, b + 1, x);
 			for(int i = 1; i < nterm; i++){ sumQ += dcoef[i]*Q[i - 1]; }
 		}
-		_Sgrid[ith] = jacobi_envelope(sh, ch, a, b)*sumP;
-		_SPgrid[ith] = jacobi_envelope_derivative_factor(sh, ch, a, b)*sumP
-			- 2.*jacobi_envelope(sh, ch, a + 1, b + 1)*sumQ;
+		_Sgrid[ith] = jacobi_prefactor(sh, ch, a, b)*sumP;
+		_SPgrid[ith] = jacobi_prefactor_derivative(sh, ch, a, b)*sumP
+			- 2.*jacobi_prefactor(sh, ch, a + 1, b + 1)*sumQ;
 	}
 	_gridFilled = true;
 }

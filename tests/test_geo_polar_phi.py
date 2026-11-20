@@ -4,7 +4,7 @@ d phi_theta / d lambda = Lz/(1 - z^2) - a E with z = z2 cos(chi) and 1 - z2^2 = 
 a nearly polar orbit the integrand is a spike of height ~1/x^2 and width ~x at each pole
 crossing, and phi_theta jumps by ~pi there.  Its Fourier series in the Mino phase decays
 only like (1 - x)^n.  It used to be truncated at 2^15 coefficients with the tail still at
-~7e-7 for x = 4.76e-4, which put a phase error into every m != 0 Teukolsky mode and an
+~7e-7 for x = 5e-4, which put a phase error into every m != 0 Teukolsky mode and an
 8.9e-4 relative error into dL_z/dt.
 """
 import numpy as np
@@ -43,19 +43,19 @@ def phi_theta_reference(geo, chi):
 
 
 ORBITS = [
-    (0.0029461646102816605, 112.10133694191467, 0.00047588920907111877),   # GSN near-polar row
-    (0.0029461646102816605, 112.10133694191467, 0.0042776),
+    (0.003, 100.0, 5e-4),    # nearly polar, as in the GSN spherical dataset
+    (0.003, 100.0, 4e-3),
     (0.9, 6.0, 0.02),
     (0.9, 8.0, -0.3),
     (0.5, 10.0, 0.7),
 ]
 
 
-@pytest.mark.parametrize("a, p, x", ORBITS + [(1e-6, 112.10133694191467, 0.00047588920907111877)])
+@pytest.mark.parametrize("a, p, x", ORBITS + [(1e-6, 100.0, 5e-4)])
 def test_azimuthal_mino_frequency_matches_quadrature(a, p, x):
     """Upsilon_phi on circular spherical orbits.  The polar part is the mean of the spiked
     integrand; a uniform trapezoid rule capped at 2^15 points only reaches e^(-N x), so it
-    was 3.4e-7 off at x = 4.76e-4, which shifted every mode frequency by m Omega 3.4e-7
+    was ~3e-7 off at x = 5e-4, which shifted every mode frequency by m Omega 3.4e-7
     and split the dEdt of +m and -m modes by ~1e-6."""
     geo = KerrGeodesic(a, p, 0., x, 2**4)
     En, Lz, _ = geo.orbitalconstants
@@ -95,7 +95,7 @@ def test_near_polar_l2_modes_distribute_lz_like_a_rotated_circular_orbit():
     sum_m m Edot_{2,m,2-m} / sum_m Edot_{2,m,2-m} = 2x.  The m != 0 terms are the ones
     that see phi_theta.  Spin adds a term ~2e-3 a/x to this ratio (about 5e-6 at a = 1e-6, as
     GSN's data also show), so a is taken small enough for that to be negligible."""
-    a, p, x = 1e-9, 112.10133694191467, 0.00047588920907111877
+    a, p, x = 1e-9, 100.0, 5e-4
     geo = KerrGeodesic(a, p, 0., x, 2**12)
     E = {}
     for m in range(-2, 3):
@@ -103,3 +103,88 @@ def test_near_polar_l2_modes_distribute_lz_like_a_rotated_circular_orbit():
         E[m] = FluxMode(geo, mode).infinityfluxes[0]
     ratio = sum(m*E[m] for m in E)/sum(E.values())
     assert abs(ratio/(2*x) - 1.) < 1e-6
+
+
+def _spherical_trajectory_reference(geo, chi):
+    """(lambda, t, r, theta, phi) at polar anomaly chi on a spherical (e = 0) orbit, by
+    adaptive quadrature of the Mino-time geodesic equations in chi, independently of
+    pybhpt's Fourier series.  The orbit starts at chi = 0 (z = z2) with t = phi = 0."""
+    a, p = geo.a, geo.p
+    En, Lz, _ = geo.orbitalconstants
+    z1, z2 = geo.polarroots
+    x = abs(geo.x)
+    Delta = p*p - 2.*p + a*a
+    P = En*(p*p + a*a) - a*Lz
+    Tr = (p*p + a*a)*P/Delta        # radial parts of dt/dlambda and dphi/dlambda
+    Phr = a*P/Delta
+
+    def dmino(c):
+        return 1./(a*np.sqrt(1. - En*En)*np.sqrt(z1*z1 - (z2*np.cos(c))**2))
+
+    def one_minus_z2(c):
+        # 1 - z^2 = x^2 cos^2 + sin^2 (1 - z2^2 = x^2): no cancellation at the pole
+        return (x*np.cos(c))**2 + np.sin(c)**2
+
+    integrands = (
+        dmino,
+        lambda c: (Tr - a*a*En*one_minus_z2(c) + a*Lz)*dmino(c),
+        lambda c: (Phr + Lz/one_minus_z2(c) - a*En)*dmino(c),
+    )
+    # the phi integrand spikes at the poles, chi = n pi
+    brk = sorted(n*np.pi + d for n in range(4) for d in (-10*x, -x, x, 10*x))
+
+    def cumulative(f, c):
+        pts = [b for b in brk if 0. < b < c]
+        return quad(f, 0., c, points=pts or None, limit=4000, epsabs=1e-14, epsrel=1e-14)[0]
+
+    lam, t, phi = (np.array([cumulative(f, c) for c in chi]) for f in integrands)
+    theta = np.arccos(z2*np.cos(chi))
+    return lam, t, np.full_like(chi, p), theta, phi
+
+
+TRAJECTORY_ORBITS = [
+    (0.003, 100.0, 5e-4),
+    (0.003, 100.0, -5e-4),
+    (0.9, 6.0, 0.02),
+    (0.5, 10.0, 0.7),
+]
+
+
+def _trajectory_samples(x):
+    """Polar anomalies over two polar periods, clustered at the pole crossings chi = n pi
+    where phi jumps by ~pi over a width ~|x|."""
+    ax = abs(x)
+    chi = list(np.linspace(0., 4.*np.pi, 33)[1:])
+    for n in (1, 2, 3):
+        chi += [n*np.pi + d*ax for d in (-3., -1., -0.3, 0.3, 1., 3.)]
+    return np.sort(np.array(chi))
+
+
+@pytest.mark.parametrize("a, p, x", TRAJECTORY_ORBITS)
+def test_position_of_mino_time_on_near_polar_orbit(a, p, x):
+    """geo.position(lambda) = (t, r, theta, phi) against direct integration, including
+    lambda just before and after a pole crossing.  Before the polar azimuthal frequency
+    was fixed, phi drifted secularly (1.9e-6 rad after two polar periods at x = 5e-4).
+    The remaining ~4e-9 rad error in phi near the pole is the truncated Fourier series
+    for phi_theta that position() still evaluates (azimuthalpolarfourier); it does not
+    grow with lambda."""
+    geo = KerrGeodesic(a, p, 0., x, 2**8)
+    chi = _trajectory_samples(x)
+    lam, t, r, theta, phi = _spherical_trajectory_reference(geo, chi)
+    got = np.array([geo.position(la) for la in lam])
+    assert np.allclose(got[:, 1], r, rtol=1e-14, atol=0.)
+    assert np.max(np.abs(got[:, 2] - theta)) < 1e-10
+    assert np.max(np.abs(got[:, 0] - t)/np.abs(t)) < 1e-10
+    assert np.max(np.abs(got[:, 3] - phi)) < 1e-8
+
+
+@pytest.mark.parametrize("a, p, x", TRAJECTORY_ORBITS)
+def test_position_of_coordinate_time_on_near_polar_orbit(a, p, x):
+    """geo.position_of_t(t) = (r, theta, phi) against direct integration."""
+    geo = KerrGeodesic(a, p, 0., x, 2**8)
+    chi = _trajectory_samples(x)
+    _, t, r, theta, phi = _spherical_trajectory_reference(geo, chi)
+    got = np.array([geo.position_of_t(tt) for tt in t])
+    assert np.allclose(got[:, 0], r, rtol=1e-14, atol=0.)
+    assert np.max(np.abs(got[:, 1] - theta)) < 1e-10
+    assert np.max(np.abs(got[:, 2] - phi)) < 1e-8

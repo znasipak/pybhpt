@@ -61,7 +61,7 @@ private:
 	Vector _SlmP;
 
 	// S and S' on the theta grid, filled once (fillYlmGrid) from the Jacobi form of the
-	// spin-weighted harmonics (see jacobi_form in swsh.cpp), which stays accurate to the
+	// spin-weighted harmonics (see jacobi_parameters in swsh.cpp), which stays accurate to the
 	// poles. One recurrence per theta serves every coupling term and both the solution
 	// and its derivative.
 	Vector _Sgrid;

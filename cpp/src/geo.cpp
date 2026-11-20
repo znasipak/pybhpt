@@ -11,8 +11,6 @@ static void build_phase_grids(Vector &qr, Vector &qth, Vector &jacR, Vector &jac
 	GeodesicParametrization param, int Nsample, double a, double p, double e, double x,
 	double En, double Lz, double Qc, double r3, double r4, double z1, double z2,
 	double upR, double upTh, Vector &fourier_radial, Vector &fourier_polar);
-static void polar_phi_samples_exact(Vector &phiTh, const Vector &qth, bool mino, double a, double En,
-	double Lz, double Qc, double z1, double z2, double x, Vector &fourier_chi);
 static void kerr_trajectory_from_phase(Vector& tR, Vector& tTh, Vector& rp, Vector& thetap,
 	Vector& phiR, Vector& phiTh, const Vector& qr, const Vector& qth,
 	double p, double e, double x, Vector fourier_tr, Vector fourier_tz, Vector fourier_psi,
@@ -2625,7 +2623,7 @@ double kerr_isco_frequency(double a){
 // in the Mino phase q is Delta phi_theta(q) = Phi(chi(q)) - (Phi(pi)/pi) q, whose mean
 // Phi(pi)/pi is exactly the polar azimuthal frequency. The old series decays like
 // (1 - |x|)^n: truncated at 2^15 terms it left 3e-10 rad at x = 4.76e-4.
-static void polar_phi_samples_exact(Vector &phiTh, const Vector &qth, bool mino, double a, double En,
+void polar_phi_samples_exact(Vector &phiTh, const Vector &qth, bool mino, double a, double En,
 		double Lz, double Qc, double z1, double z2, double x, Vector &fourier_chi){
 	int halfSample = int(phiTh.size());
 	if(halfSample < 1){ return; }

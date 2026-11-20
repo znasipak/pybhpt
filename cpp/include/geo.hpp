@@ -273,6 +273,11 @@ void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &u
 void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &upPh, double a, double p, double e, double x, double En, double Lz, double Qc, double r1, double r2, double r3, double r4, double z1, double z2);
 void kerr_geo_carter_frequencies(double &cR, double &cTh, double &cPh, double upT, double upR, double upTh, double upPh, double a, double En, double Lz, double Qc, double z1, double z2);
 void kerr_geo_carter_frequencies(double &cR, double &cTh, double &cPh, double upT, double upR, double upTh, double upPh, double a, double En, double Lz, double Qc, double z1, double z2, double x);
+// Delta phi_theta at the polar phase samples qth, evaluated in closed form plus a smooth
+// cosine series rather than from the truncated Fourier series in the polar phase.
+// mino = true when qth is uniform in the Mino phase; fourier_chi maps phase to chi.
+void polar_phi_samples_exact(Vector &phiTh, const Vector &qth, bool mino, double a, double En,
+	double Lz, double Qc, double z1, double z2, double x, Vector &fourier_chi);
 
 // void kerr_geo_time(Vector &tR, Vector &tTh, double upR, double upTh, double a, double p, double e, double x, double En, double Lz, double Qc, double r1, double r2, double r3, double r4, double z1, double z2);
 // void kerr_geo_radial_time(Vector &tR, double upR, double a, double p, double e, double En, double Lz, double r1, double r2, double r3, double r4);
