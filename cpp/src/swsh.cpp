@@ -28,6 +28,121 @@ against the peak coefficient so that two round-off-level tails compare as conver
 #define COUPLING_VECTOR_MAX 50
 #define ZERO_FREQ_LIMIT 1.e-11
 
+//////////////////////////////////////////////////////
+// Jacobi form of the spin-weighted harmonics        //
+//////////////////////////////////////////////////////
+
+// sY_lm(theta) = (-1)^s sqrt((2l+1)/(4 pi)) d^l_{m,-s}(theta), and the Wigner d-function is
+//
+//   d^j_{m'm} = (-1)^lam sqrt(C(2j-k, k+a)/C(k+b, b)) sin^a(theta/2) cos^b(theta/2) P_k^(a,b)(cos theta),
+//
+// with k = min(j+m, j-m, j+m', j-m') and (a, lam) fixed by which of the four is smallest,
+// b = 2j - 2k - a. Here m' = m and m = -s, so a = |m+s| or |m-s| up to the branch, and
+// k = l - max(|m|, |s|). The branch depends only on (s, m), so every l in a coupling sum
+// shares (a, b) and one recurrence in k serves them all.
+//
+// This replaces sY = (sum_j A_slj Y_jm)/sin^|s|. That numerator has to cancel down to
+// sY*sin^|s| ~ theta^(|s| + |m+s|) near theta = 0, so its relative error grew like
+// eps/theta^(|s| + |m+s|): 4e-3 for s = -2, m = 0 at theta = 5e-4, the angles a nearly
+// polar orbit samples. The Jacobi form has the vanishing factors explicit and no
+// cancellation anywhere on [0, pi].
+struct JacobiForm{ int a; int b; int lam; };
+
+static JacobiForm jacobi_form(int s, int m){
+	// candidates j + (-s), j - (-s), j + m, j - m, with j dropped (common to all four)
+	int mp = m, mm = -s;
+	int c[4] = { mm, -mm, mp, -mp };
+	int which = 0;
+	for(int i = 1; i < 4; i++){ if(c[i] < c[which]){ which = i; } }
+	JacobiForm jf;
+	if(which == 0){        jf.a = mp - mm; jf.lam = mp - mm; }
+	else if(which == 1){   jf.a = mm - mp; jf.lam = 0; }
+	else if(which == 2){   jf.a = mm - mp; jf.lam = 0; }
+	else{                  jf.a = mp - mm; jf.lam = mp - mm; }
+	// b = 2j - 2k - a with k = j + c[which], so b = -2 c[which] - a
+	jf.b = -2*c[which] - jf.a;
+	return jf;
+}
+
+static inline double log_binomial(int n, int r){
+	return std::lgamma(n + 1.) - std::lgamma(r + 1.) - std::lgamma(n - r + 1.);
+}
+
+// The theta-independent factor of sY_lm, including both signs.
+static double jacobi_norm(const JacobiForm &jf, int s, int l, int m){
+	int k = l - std::max(std::abs(m), std::abs(s));
+	double lognorm = 0.5*(log_binomial(2*l - k, k + jf.a) - log_binomial(k + jf.b, jf.b));
+	double sign = ((jf.lam + s) % 2 == 0) ? 1. : -1.;
+	return sign*sqrt((2.*l + 1.)/(4.*M_PI))*exp(lognorm);
+}
+
+// P[n] = P_n^(a,b)(x) for n = 0 .. nmax-1 (three-term recurrence in n, stable on [-1, 1]).
+static void jacobi_recurrence(Vector &P, int nmax, int a, int b, double x){
+	if(nmax < 1){ return; }
+	P[0] = 1.;
+	if(nmax < 2){ return; }
+	double ab = double(a + b);
+	P[1] = 0.5*(double(a - b) + (ab + 2.)*x);
+	for(int n = 2; n < nmax; n++){
+		double nn = double(n);
+		double c = 2.*nn + ab;
+		double a1 = 2.*nn*(nn + ab)*(c - 2.);
+		double a2 = (c - 1.)*(double(a*a - b*b));
+		double a3 = (c - 1.)*c*(c - 2.);
+		double a4 = 2.*(nn + a - 1.)*(nn + b - 1.)*c;
+		P[n] = ((a2 + a3*x)*P[n - 1] - a4*P[n - 2])/a1;
+	}
+}
+
+static inline double int_power(double v, int n){
+	double out = 1.;
+	for(int i = 0; i < n; i++){ out *= v; }
+	return out;
+}
+
+// sin^a(theta/2) cos^b(theta/2)
+static inline double jacobi_envelope(double sh, double ch, int a, int b){
+	return int_power(sh, a)*int_power(ch, b);
+}
+
+// d/dtheta [sin^a(theta/2) cos^b(theta/2)] = (a/2) sh^(a-1) ch^(b+1) - (b/2) sh^(a+1) ch^(b-1),
+// written without dividing by sh or ch so it is exact at the poles.
+static inline double jacobi_envelope_derivative_factor(double sh, double ch, int a, int b){
+	double out = 0.;
+	if(a > 0){ out += 0.5*a*int_power(sh, a - 1)*int_power(ch, b + 1); }
+	if(b > 0){ out -= 0.5*b*int_power(sh, a + 1)*int_power(ch, b - 1); }
+	return out;
+}
+
+static double yslm_jacobi(int s, int l, int m, double th){
+	if(l < std::max(std::abs(m), std::abs(s))){ return 0.; }
+	JacobiForm jf = jacobi_form(s, m);
+	int k = l - std::max(std::abs(m), std::abs(s));
+	Vector P(k + 1, 0.);
+	jacobi_recurrence(P, k + 1, jf.a, jf.b, cos(th));
+	return jacobi_norm(jf, s, l, m)*jacobi_envelope(sin(0.5*th), cos(0.5*th), jf.a, jf.b)*P[k];
+}
+
+static double yslm_derivative_jacobi(int s, int l, int m, double th){
+	if(l < std::max(std::abs(m), std::abs(s))){ return 0.; }
+	JacobiForm jf = jacobi_form(s, m);
+	int a = jf.a, b = jf.b;
+	int k = l - std::max(std::abs(m), std::abs(s));
+	double sh = sin(0.5*th), ch = cos(0.5*th), x = cos(th);
+	Vector P(k + 1, 0.);
+	jacobi_recurrence(P, k + 1, a, b, x);
+	double out = jacobi_envelope_derivative_factor(sh, ch, a, b)*P[k];
+	if(k > 0){
+		// d/dtheta P_k(cos theta) = -sin(theta) P_k'(x), P_k' = (k+a+b+1)/2 P_{k-1}^(a+1,b+1),
+		// and sin(theta) = 2 sh ch folds into the envelope
+		Vector Q(k, 0.);
+		jacobi_recurrence(Q, k, a + 1, b + 1, x);
+		out -= 2.*jacobi_envelope(sh, ch, a + 1, b + 1)*0.5*double(k + a + b + 1)*Q[k - 1];
+	}
+	return jacobi_norm(jf, s, l, m)*out;
+}
+
+
 SpinWeightedHarmonic::SpinWeightedHarmonic(int s, int L, int m, double gamma, const Vector& theta): _s(s), _L(L), _m(m), _gamma(gamma),
 	_bcoupling(COUPLING_VECTOR_MAX + L - std::abs(m), 0.), _theta(theta), _Slm(_theta.size(), 0.), _SlmP(_theta.size(), 0.){}
 SpinWeightedHarmonic::~SpinWeightedHarmonic(){}
@@ -923,63 +1038,14 @@ Complex Yslm(const int &s, const int &l, const int &m, const double &th, const d
 
 double Yslm(const int &s, const int &l, const int &m, const double &th){
 	if( s == 0 ) return Ylm(l, m, th);
-	if( std::abs(th) < 1.e-14 ){
-		if (m == -s) {
-			double phase = pow(-1., -s);
-			return phase * std::sqrt((2.*l + 1.)/(4.*M_PI));
-		}
-		else return 0.;
-	}
-	if( std::abs(th - M_PI) < 1.e-14 ){
-		if (m == s) {
-			double phase = pow(-1., l);
-			return phase * std::sqrt((2.*l + 1.)/(4.*M_PI));
-		}
-		else return 0.;
-	}
-	int lmin = std::max(std::abs(m), l - std::abs(s));
-	int lmax = l + std::abs(s);
-	double yslm = 0;
-
-	for(int i = lmin; i <= lmax; i++){
-		yslm += Asljm(s, l, i, m)*Ylm(i, m, th);
-	}
-
-	return yslm/pow(sin(th), std::abs(s));
+	// Jacobi form: accurate to the poles (see jacobi_form). The old sum of scalar Ylm over
+	// sin^|s| lost up to all of its digits there.
+	return yslm_jacobi(s, l, m, th);
 }
 
 double Yslm_derivative(const int &s, const int &l, const int &m, const double &th){
 	if( s == 0 ) return Ylm_derivative(l, m, th);
-	if( std::abs(th) < 1.e-14 ){
-		if (m == -s + 1) {
-			double phase = 0.5 * pow(-1., -s + 1);
-			return phase * std::sqrt(l + s) * std::sqrt(l - s + 1.) * std::sqrt((2.*l + 1.)/(4.*M_PI));
-		}
-		else if (m == -s - 1){
-			double phase = 0.5 * pow(-1., -s);
-			return phase * std::sqrt(l - s) * std::sqrt(l + s + 1.) * std::sqrt((2.*l + 1.)/(4.*M_PI));
-		}
-		else return 0.;
-	}
-	if( std::abs(th - M_PI) < 1.e-14 ){
-		if (m == s - 1) {
-			double phase = 0.5 * pow(-1., l);
-			return phase * std::sqrt(l + s) * std::sqrt(l - s + 1.) * std::sqrt((2.*l + 1.)/(4.*M_PI));
-		}
-		else if (m == s + 1){
-			double phase = 0.5 * pow(-1., l + 1);
-			return phase * std::sqrt(l - s) * std::sqrt(l + s + 1.) * std::sqrt((2.*l + 1.)/(4.*M_PI));
-		}
-		else return 0.;
-	}
-	int lmin = std::max(std::abs(m), l - std::abs(s) - 1);
-	int lmax = l + std::abs(s) + 1;
-	double DyslmDtheta = 0;
-
-	for(int i = lmin; i <= lmax; i++){
-		DyslmDtheta += dAsljm(s, l, i, m)*Ylm(i, m, th);
-	}
-	return -DyslmDtheta*pow(sin(th), -1 - std::abs(s));
+	return yslm_derivative_jacobi(s, l, m, th);
 }
 
 double Yslm_derivative2(const int &s, const int &l, const int &m, const double &th){
@@ -1089,125 +1155,62 @@ void test_swsh_class(){
 // Grid-accelerated spheroidal-harmonic evaluation      //
 /////////////////////////////////////////////////////////
 
-// Precompute the scalar spherical harmonics Ylm(j, m, theta) over the full theta grid,
-// once, for every j needed by the spheroidal sums and their theta-derivatives. The
-// spheroidal harmonic S = sum_i b_i Yslm(l_i), and each Yslm = sum_j Asljm Ylm(j);
-// the same Ylm(j, theta) basis is shared across all coupling terms i and between S and
-// S', so tabulating it removes the dominant per-point Ylm (Legendre) recomputation.
+// The spheroidal harmonic is S = sum_i b_i sY_{l_i m}, with every l_i sharing the same
+// Jacobi parameters (a, b): one recurrence in n per theta gives every coupling term, and
+// the derivative needs one more recurrence at (a + 1, b + 1). The old grid built sY from
+// scalar Ylm divided by sin^|s|, which lost all precision near the poles (see
+// jacobi_form).
 void SpinWeightedHarmonic::fillYlmGrid(){
 	if(_gridFilled){ return; }
-	int as = std::abs(_s);
-	int lminC = getMinCouplingModeNumber();
+	int lmin = getMinCouplingModeNumber();
 	int imax = int(_bcoupling.size()) - 1;
 	while(imax > 0 && _bcoupling[imax] == 0.){ imax--; }
 	_imaxCoupling = imax;
-	int lmaxC = lminC + imax;
-	_jgridMin = std::abs(_m);                 // Ylm(j, m) vanishes for j < |m|
-	int jgridMax = lmaxC + as + 1;            // +1 covers the derivative window
-	int nj = jgridMax - _jgridMin + 1;
-	int nth = int(_theta.size());
-	_Ygrid.assign(nj, Vector(nth, 0.));
 
-	// One gsl_sf_legendre_array per theta gives every P_l^m up to jgridMax at once (a
-	// single l-recurrence), instead of a full array per (j, theta) as Ylm() would do.
-	// Mirror Ylm()'s convention exactly: fold m<0 via Y_l^{-m} = (-1)^m Y_l^{m}, and use
-	// the sph-normalised Legendre with Condon-Shortley phase (-1)^{|m|} so values match.
-	int mm = std::abs(_m);
-	double signm = (_m < 0) ? pow(-1., _m) : 1.;
-	double csphase = (mm % 2 == 0) ? 1.0 : -1.0;
-	//
-	// Only the single order mm is needed, so rather than gsl_sf_legendre_array (every order
-	// m' <= l, O(lmax^2) per theta) run the fixed-order upward l-recurrence for the
-	// sph-normalised Y_l^mm(theta, 0), O(lmax) per theta:
-	//   Y_mm^mm      = csphase^mm sqrt((2mm+1)/(4 pi) prod_{i<=mm} (2i-1)/(2i)) u^mm,  u = sin(theta)
-	//   Y_{mm+1}^mm  = sqrt(2mm+3) x Y_mm^mm
-	//   Y_l^mm       = alpha_l (x Y_{l-1}^mm - Y_{l-2}^mm/alpha_{l-1}),  alpha_l = sqrt((4l^2-1)/(l^2-mm^2))
-	// u is taken as sin(theta) directly rather than sqrt((1-x)(1+x)) from the rounded x = cos(theta)
-	// (what GSL does), which is more accurate near the poles. Theta-independent factors are hoisted.
-	double ymmNorm = (2.*mm + 1.)/(4.*M_PI);
-	for(int i = 1; i <= mm; i++){
-		ymmNorm *= (2.*i - 1.)/(2.*i);
+	JacobiForm jf = jacobi_form(_s, _m);
+	int a = jf.a, b = jf.b;
+	int nterm = imax + 1;
+	// theta-independent weights: c_i = b_i * norm(l_i), and the P' factor (n+a+b+1)/2
+	Vector coef(nterm, 0.), dcoef(nterm, 0.);
+	for(int i = 0; i < nterm; i++){
+		if(_bcoupling[i] == 0.){ continue; }
+		coef[i] = _bcoupling[i]*jacobi_norm(jf, _s, lmin + i, _m);
+		dcoef[i] = 0.5*double(i + a + b + 1)*coef[i];
 	}
-	ymmNorm = sqrt(ymmNorm);
-	if(mm % 2 == 1){ ymmNorm *= csphase; }   // csphase^mm with csphase = (-1)^mm
-	int nl = jgridMax - mm + 1;
-	std::vector<double> alpha(nl > 0 ? nl : 0, 0.), invAlphaPrev(nl > 0 ? nl : 0, 0.);
-	for(int l = mm + 2; l <= jgridMax; l++){
-		double l2 = double(l)*l, lm1 = double(l - 1)*(l - 1), m2 = double(mm)*mm;
-		alpha[l - mm] = sqrt((4.*l2 - 1.)/(l2 - m2));
-		invAlphaPrev[l - mm] = sqrt((lm1 - m2)/(4.*lm1 - 1.));
-	}
-	double sqrt2mp3 = sqrt(2.*mm + 3.);
-	std::vector<double> Ym(nl > 0 ? nl : 0, 0.);
+
+	int nth = int(_theta.size());
+	_Sgrid.assign(nth, 0.);
+	_SPgrid.assign(nth, 0.);
+	Vector P(nterm, 0.), Q(nterm > 1 ? nterm - 1 : 1, 0.);
 	for(int ith = 0; ith < nth; ith++){
 		if(ith > 0 && _theta[ith] == _theta[ith - 1]){
-			// repeated grid point (e.g. equatorial orbits): identical column
-			for(int jrel = 0; jrel < nj; jrel++){
-				_Ygrid[jrel][ith] = _Ygrid[jrel][ith - 1];
-			}
+			// repeated grid point (e.g. equatorial orbits): identical value
+			_Sgrid[ith] = _Sgrid[ith - 1];
+			_SPgrid[ith] = _SPgrid[ith - 1];
 			continue;
 		}
-		double x = std::cos(_theta[ith]);
-		double u = std::sin(_theta[ith]);
-		double y = ymmNorm;
-		for(int i = 0; i < mm; i++){ y *= u; }
-		if(nl > 0){ Ym[0] = y; }
-		if(nl > 1){ Ym[1] = sqrt2mp3*x*Ym[0]; }
-		for(int lrel = 2; lrel < nl; lrel++){
-			Ym[lrel] = alpha[lrel]*(x*Ym[lrel - 1] - invAlphaPrev[lrel]*Ym[lrel - 2]);
+		double th = _theta[ith];
+		double sh = sin(0.5*th), ch = cos(0.5*th), x = cos(th);
+		jacobi_recurrence(P, nterm, a, b, x);
+		double sumP = 0.;
+		for(int i = 0; i < nterm; i++){ sumP += coef[i]*P[i]; }
+		double sumQ = 0.;
+		if(nterm > 1){
+			jacobi_recurrence(Q, nterm - 1, a + 1, b + 1, x);
+			for(int i = 1; i < nterm; i++){ sumQ += dcoef[i]*Q[i - 1]; }
 		}
-		for(int j = _jgridMin; j <= jgridMax; j++){
-			_Ygrid[j - _jgridMin][ith] = signm*Ym[j - mm];
-		}
-	}
-
-	// Collapse the coupling sums, which are theta-independent, once:
-	//   S  = sum_i b_i Yslm(l_i)          = (sum_j (sum_i b_i Asljm(l_i,j)) Ylm(j))/sin^|s|
-	//   S' = sum_i b_i Yslm_derivative(l_i) = -(sum_j (sum_i b_i dAsljm(l_i,j)) Ylm(j))/sin^{|s|+1}
-	// so per theta only a single sum_j over the tabulated Ylm remains (no per-point 3j).
-	_Ccoef.assign(nj, 0.);
-	_Dcoef.assign(nj, 0.);
-	for(int jrel = 0; jrel < nj; jrel++){
-		int j = _jgridMin + jrel;
-		for(int i = 0; i <= _imaxCoupling; i++){
-			double bi = _bcoupling[i];
-			if(bi == 0.){ continue; }
-			int l = lminC + i;
-			if(std::abs(l - j) <= as){        _Ccoef[jrel] += bi*Asljm(_s, l, j, _m); }
-			if(std::abs(l - j) <= as + 1){    _Dcoef[jrel] += bi*dAsljm(_s, l, j, _m); }
-		}
+		_Sgrid[ith] = jacobi_envelope(sh, ch, a, b)*sumP;
+		_SPgrid[ith] = jacobi_envelope_derivative_factor(sh, ch, a, b)*sumP
+			- 2.*jacobi_envelope(sh, ch, a + 1, b + 1)*sumQ;
 	}
 	_gridFilled = true;
 }
 
-// S(theta[ith]) = (sum_j C_j Ylm(j,theta))/sin^|s|.  theta = 0/pi handled analytically.
 double SpinWeightedHarmonic::SslmGrid(int ith){
-	double th = _theta[ith];
-	int as = std::abs(_s);
-	if(as > 0 && (std::abs(th) < 1.e-14 || std::abs(th - M_PI) < 1.e-14)){
-		return Sslm(_s, _L, _m, _gamma, _bcoupling, th);
-	}
-	double sum = 0.;
-	int nj = int(_Ccoef.size());
-	for(int jrel = 0; jrel < nj; jrel++){
-		sum += _Ccoef[jrel]*_Ygrid[jrel][ith];
-	}
-	return (as == 0) ? sum : sum/pow(sin(th), as);
+	return _Sgrid[ith];
 }
 
-// S'(theta[ith]) = -(sum_j D_j Ylm(j,theta))/sin^{|s|+1}.
 double SpinWeightedHarmonic::SslmDerivativeGrid(int ith){
-	double th = _theta[ith];
-	int as = std::abs(_s);
-	// s = 0 derivative is Ylm_derivative (not expressible via the Ylm grid); use the
-	// free function there (cheap: a single term). Same for the theta = 0/pi endpoints.
-	if(as == 0 || std::abs(th) < 1.e-14 || std::abs(th - M_PI) < 1.e-14){
-		return Sslm_derivative(_s, _L, _m, _gamma, _bcoupling, th);
-	}
-	double sum = 0.;
-	int nj = int(_Dcoef.size());
-	for(int jrel = 0; jrel < nj; jrel++){
-		sum += _Dcoef[jrel]*_Ygrid[jrel][ith];
-	}
-	return -sum*pow(sin(th), -1 - as);
+	return _SPgrid[ith];
 }
+
