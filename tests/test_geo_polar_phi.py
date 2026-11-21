@@ -164,10 +164,11 @@ def _trajectory_samples(x):
 def test_position_of_mino_time_on_near_polar_orbit(a, p, x):
     """geo.position(lambda) = (t, r, theta, phi) against direct integration, including
     lambda just before and after a pole crossing.  Before the polar azimuthal frequency
-    was fixed, phi drifted secularly (1.9e-6 rad after two polar periods at x = 5e-4).
-    The remaining ~4e-9 rad error in phi near the pole is the truncated Fourier series
-    for phi_theta that position() still evaluates (azimuthalpolarfourier); it does not
-    grow with lambda."""
+    was fixed, phi drifted secularly (1.9e-6 rad after two polar periods at x = 5e-4), and
+    evaluating phi_theta from its truncated Fourier series left ~4e-9 rad near the pole.
+    The tolerance is set by conditioning: at the pole phi changes by ~pi over
+    Delta lambda ~ |x|/Upsilon_theta, so a 1e-15 relative error in lambda (in either the
+    reference or pybhpt) is already ~1e-10 rad in phi."""
     geo = KerrGeodesic(a, p, 0., x, 2**8)
     chi = _trajectory_samples(x)
     lam, t, r, theta, phi = _spherical_trajectory_reference(geo, chi)
@@ -175,7 +176,7 @@ def test_position_of_mino_time_on_near_polar_orbit(a, p, x):
     assert np.allclose(got[:, 1], r, rtol=1e-14, atol=0.)
     assert np.max(np.abs(got[:, 2] - theta)) < 1e-10
     assert np.max(np.abs(got[:, 0] - t)/np.abs(t)) < 1e-10
-    assert np.max(np.abs(got[:, 3] - phi)) < 1e-8
+    assert np.max(np.abs(got[:, 3] - phi)) < 2e-10
 
 
 @pytest.mark.parametrize("a, p, x", TRAJECTORY_ORBITS)
@@ -187,4 +188,4 @@ def test_position_of_coordinate_time_on_near_polar_orbit(a, p, x):
     got = np.array([geo.position_of_t(tt) for tt in t])
     assert np.allclose(got[:, 0], r, rtol=1e-14, atol=0.)
     assert np.max(np.abs(got[:, 1] - theta)) < 1e-10
-    assert np.max(np.abs(got[:, 2] - phi)) < 1e-8
+    assert np.max(np.abs(got[:, 2] - phi)) < 2e-10

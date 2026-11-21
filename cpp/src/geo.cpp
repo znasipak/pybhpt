@@ -193,7 +193,8 @@ GeodesicSource::GeodesicSource(double a, double p, double e, double x, int Nsamp
 	// The Fourier series for phi_theta converges only like (1 - |x|)^n and is truncated, so
 	// overwrite its samples with the exact evaluation (polar_phi_samples_exact).
 	if(std::abs(x) != 1.){
-		polar_phi_samples_exact(phiTh, qth, param == GeodesicParametrization::Mino, a, En, Lz, Qc, z1, z2, x, fourier_chi);
+		_polarAzimuthal = PolarAzimuthalAccumulation(a, En, Lz, Qc, z1, z2, x);
+		polar_phi_samples_exact(phiTh, qth, param == GeodesicParametrization::Mino, _polarAzimuthal, fourier_chi);
 	}
 
 	_geoConstants = GeodesicConstants(a, p, e, x, En, Lz, Qc, r1, r2, r3, r4, z1, z2, upT, upR, upTh, upPh, cR, cTh, cPh);
@@ -375,7 +376,13 @@ double GeodesicSource::getPolarPositionOfMinoTime(double lambda){
 	return acos(zp_of_angle(lambda*_geoConstants.upsilonTheta, _geoConstants.x, _geoCoefficients.theta));
 }
 double GeodesicSource::getAzimuthalPositionOfMinoTime(double lambda){
-	return lambda*_geoConstants.upsilonPhi + phip_of_angle(lambda*_geoConstants.upsilonR, _geoCoefficients.phiR) + phip_of_angle(lambda*_geoConstants.upsilonTheta, _geoCoefficients.phiTheta);
+	double qth = lambda*_geoConstants.upsilonTheta;
+	// same representation of Delta phi_theta as the trajectory samples (polar_phi_samples_exact);
+	// the Fourier series is kept only where it is exact (equatorial orbits)
+	double polar = _polarAzimuthal.isValid()
+		? _polarAzimuthal.ofPhase(qth, kepler_phase_of_angle(qth, _geoCoefficients.theta))
+		: phip_of_angle(qth, _geoCoefficients.phiTheta);
+	return lambda*_geoConstants.upsilonPhi + phip_of_angle(lambda*_geoConstants.upsilonR, _geoCoefficients.phiR) + polar;
 }
 Vector GeodesicSource::getPositionOfMinoTime(double lambda){
 	Vector xp(4);
@@ -582,6 +589,7 @@ void GeodesicSource::setConstants(double a, double p, double e, double x, double
 	_geoConstants.carterR = cR;
 	_geoConstants.carterTheta = cTh;
 	_geoConstants.carterPhi = cPhi;
+	_polarAzimuthal = (std::abs(x) != 1.) ? PolarAzimuthalAccumulation(a, En, Lz, Qc, z1, z2, x) : PolarAzimuthalAccumulation();
 }
 void GeodesicSource::setTrajectory(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta){
 	_geoTrajectory.tR = tR;
@@ -2431,8 +2439,10 @@ GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsampl
 	}
 	// The Fourier series for phi_theta converges only like (1 - |x|)^n and is truncated, so
 	// overwrite its samples with the exact evaluation (polar_phi_samples_exact).
+	PolarAzimuthalAccumulation polarAzimuthal;
 	if(std::abs(x) != 1.){
-		polar_phi_samples_exact(phiTh, qth, param == GeodesicParametrization::Mino, a, En, Lz, Qc, z1, z2, x, fourier_chi);
+		polarAzimuthal = PolarAzimuthalAccumulation(a, En, Lz, Qc, z1, z2, x);
+		polar_phi_samples_exact(phiTh, qth, param == GeodesicParametrization::Mino, polarAzimuthal, fourier_chi);
 	}
 
 	GeodesicSource geo;
@@ -2608,7 +2618,7 @@ double kerr_isco_frequency(double a){
 	return kerr_geo_azimuthal_frequency_circ_time(std::abs(a), kerr_isco(std::abs(a), sgnX), sgnX);
 }
 
-// Delta phi_theta at the polar samples, without the Fourier series.
+// Polar part of the azimuthal accumulation without the Fourier series.
 //
 // With z = z2 cos(chi), 1 - z^2 = x^2 cos^2 chi + sin^2 chi and dlambda/dchi = J(u) =
 // (C - beta u)^(-1/2) (u = z^2, beta = a^2 (1 - En^2), C = beta z1^2),
@@ -2617,17 +2627,15 @@ double kerr_isco_frequency(double a){
 //   R = -Lz beta / [ (sqrt(C - beta) + sqrt(C - beta u)) sqrt(C - beta u) sqrt(C - beta) ] - a En J(u),
 //
 // (see kerr_geo_azimuthal_mino_frequency_polar). The first term integrates in closed form,
-//   int_0^chi dchi/(x^2 cos^2 + sin^2) = atan2(sin chi, |x| cos chi)/|x|   for chi in [0, pi],
-// and R is smooth, so its cosine series converges in a few dozen terms and integrates term
-// by term. Then Phi(chi) = Lz J(1) atan2(...)/|x| + int_0^chi R, and the oscillating part
-// in the Mino phase q is Delta phi_theta(q) = Phi(chi(q)) - (Phi(pi)/pi) q, whose mean
-// Phi(pi)/pi is exactly the polar azimuthal frequency. The old series decays like
+//   int_0^chi dchi/(x^2 cos^2 + sin^2) = (n pi + atan2(sin c, |x| cos c))/|x|,  chi = n pi + c, |c| <= pi/2,
+// and R is smooth, even and pi-periodic, so its cosine series converges in a few dozen terms
+// and integrates term by term. Then Phi(chi) = Lz J(1) (...)/|x| + int_0^chi R, and the
+// oscillating part in the Mino phase q is Delta phi_theta(q) = Phi(chi(q)) - (Phi(pi)/pi) q,
+// whose mean Phi(pi)/pi is exactly the polar azimuthal frequency. The old series decays like
 // (1 - |x|)^n: truncated at 2^15 terms it left 3e-10 rad at x = 4.76e-4.
-void polar_phi_samples_exact(Vector &phiTh, const Vector &qth, bool mino, double a, double En,
-		double Lz, double Qc, double z1, double z2, double x, Vector &fourier_chi){
-	int halfSample = int(phiTh.size());
-	if(halfSample < 1){ return; }
-	double ax = std::abs(x);
+PolarAzimuthalAccumulation::PolarAzimuthalAccumulation(double a, double En, double Lz, double Qc, double z1, double z2, double x){
+	_ax = std::abs(x);
+	if(!(_ax > 0.) || !(_ax < 1.)){ return; }   // polar (x = 0) or equatorial: keep the series
 	double beta = a*a*(1. - En*En);
 	double C = beta*z1*z1;
 	double J1;
@@ -2635,52 +2643,70 @@ void polar_phi_samples_exact(Vector &phiTh, const Vector &qth, bool mino, double
 	if(schw){
 		J1 = dmino_dchi_schw(Lz, Qc);
 	}else{
-		if(!(C > beta)){ return; }   // cannot happen for a bound orbit; keep the series values
+		if(!(C > beta)){ return; }   // cannot happen for a bound orbit; keep the series
 		J1 = 1./sqrt(C - beta);
 	}
+	_kernel = Lz*J1/_ax;
 
-	// cosine coefficients of R on [0, pi] (R is even and pi-periodic in chi)
-	auto smooth = [&](double chi){
-		if(schw){ return 0.; }
-		double c = cos(chi);
-		double u = z2*z2*c*c;
-		double sqrtCu = sqrt(C - beta*u);
-		double sqrtC1 = sqrt(C - beta);
-		return -Lz*beta/((sqrtC1 + sqrtCu)*sqrtCu*sqrtC1) - a*En/sqrtCu;
-	};
-	Vector coef;
 	if(!schw){
-		double scale = std::abs(Lz*J1/ax);
+		double sqrtC1 = sqrt(C - beta);
+		auto smooth = [&](double chi){
+			double c = cos(chi);
+			double u = z2*z2*c*c;
+			double sqrtCu = sqrt(C - beta*u);
+			return -Lz*beta/((sqrtC1 + sqrtCu)*sqrtCu*sqrtC1) - a*En/sqrtCu;
+		};
+		double scale = std::abs(_kernel);
 		for(int M = 16; M <= 4096; M *= 2){
 			Vector f(M + 1);
 			for(int j = 0; j <= M; j++){ f[j] = smooth(M_PI*double(j)/double(M)); }
-			coef.assign(M + 1, 0.);
+			_coef.assign(M + 1, 0.);
 			for(int n = 0; n <= M; n++){
 				double s = 0.5*(f[0] + ((n % 2 == 0) ? 1. : -1.)*f[M]);
 				for(int j = 1; j < M; j++){ s += f[j]*cos(M_PI*double(n*j)/double(M)); }
-				coef[n] = 2.*s/double(M);
+				_coef[n] = 2.*s/double(M);
 			}
-			coef[0] *= 0.5;
-			coef[M] *= 0.5;
+			_coef[0] *= 0.5;
+			_coef[M] *= 0.5;
 			double tail = 0.;
-			for(int n = 3*M/4; n <= M; n++){ tail = std::max(tail, std::abs(coef[n])); }
-			if(tail < 1.e-16*(scale + std::abs(coef[0]))){ break; }
+			for(int n = 3*M/4; n <= M; n++){ tail = std::max(tail, std::abs(_coef[n])); }
+			if(tail < 1.e-16*(scale + std::abs(_coef[0]))){ break; }
 		}
+		// drop the round-off tail
+		size_t nkeep = _coef.size();
+		while(nkeep > 1 && std::abs(_coef[nkeep - 1]) < 1.e-18*(scale + std::abs(_coef[0]))){ nkeep--; }
+		_coef.resize(nkeep);
 	}
-	auto Phi = [&](double chi){
-		double val = Lz*J1*atan2(sin(chi), ax*cos(chi))/ax;
-		if(!coef.empty()){
-			val += coef[0]*chi;
-			for(size_t n = 1; n < coef.size(); n++){ val += coef[n]*sin(double(n)*chi)/double(n); }
-		}
-		return val;
-	};
-	double slope = Phi(M_PI)/M_PI;
+	_valid = true;
+	_slope = ofAnomaly(M_PI)/M_PI;
+}
+
+bool PolarAzimuthalAccumulation::isValid(){ return _valid; }
+
+double PolarAzimuthalAccumulation::ofAnomaly(double chi){
+	double n = std::round(chi/M_PI);
+	double c = chi - n*M_PI;
+	double val = _kernel*(n*M_PI + atan2(sin(c), _ax*cos(c)));
+	if(!_coef.empty()){
+		val += _coef[0]*chi;
+		for(size_t k = 1; k < _coef.size(); k++){ val += _coef[k]*sin(double(k)*chi)/double(k); }
+	}
+	return val;
+}
+
+double PolarAzimuthalAccumulation::ofPhase(double q, double chi){
+	return ofAnomaly(chi) - _slope*q;
+}
+
+void polar_phi_samples_exact(Vector &phiTh, const Vector &qth, bool mino,
+		PolarAzimuthalAccumulation &polarPhi, Vector &fourier_chi){
+	int halfSample = int(phiTh.size());
+	if(halfSample < 1 || !polarPhi.isValid()){ return; }
 	int Nsample = 2*(halfSample - 1);
 	for(int i = 0; i < halfSample; i++){
 		double q = mino ? 2.*M_PI*double(i)/double(Nsample) : qth[i];
 		double chi = (i == halfSample - 1) ? M_PI : kepler_phase_of_angle(q, fourier_chi);
 		if(i == 0){ chi = 0.; }
-		phiTh[i] = Phi(chi) - slope*q;
+		phiTh[i] = polarPhi.ofPhase(q, chi);
 	}
 }
