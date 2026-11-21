@@ -2,7 +2,6 @@
 
 #include "teukolsky.hpp"
 
-#define ZERO_FREQ_LIMIT 1.e-10
 #define MST_AUTO_FREQ 0.1
 #define SAMPLE_SIZE_INIT 256
 
@@ -47,7 +46,7 @@ int TeukolskyMode::generateSolutions(GeodesicSource& geo, SolutionMethod method,
 
 int TeukolskyMode::generateSolutions(double omega, GeodesicTrajectory &traj, GeodesicConstants &geoConst, Vector r, Vector theta, SolutionMethod method, int samplesize){
 	_omega = omega;
-	if(std::abs(_omega) < ZERO_FREQ_LIMIT){
+	if(std::abs(_omega) < ZERO_FREQUENCY_LIMIT){
 		// std::cout << "(TEUKOLSKY) (l, m, k, n) = ("<<_L<<", "<<_m<<", "<<_k<<", "<<_n<<") is a zero frequency mode\n";
 		_omega = 0;
 	}
@@ -68,7 +67,7 @@ int TeukolskyMode::generateSolutions(double omega, GeodesicTrajectory &traj, Geo
 }
 
 int TeukolskyMode::generateSolutions(SpinWeightedHarmonic& swsh, RadialTeukolsky& teuk, GeodesicTrajectory& traj, GeodesicConstants &geoConst){
-	if(std::abs(_omega) < ZERO_FREQ_LIMIT){
+	if(std::abs(_omega) < ZERO_FREQUENCY_LIMIT){
 		// std::cout << "(TEUKOLSKY) (l, m, k, n) = ("<<_L<<", "<<_m<<", "<<_k<<", "<<_n<<") is a zero frequency mode\n";
 		_omega = 0;
 	}
@@ -340,18 +339,18 @@ int minimum_radial_harmonic(int m, int k, GeodesicSource& geo){
 	double omegaR = geo.getTimeFrequency(1);
 	int n = 0;
 	if(omegaMK > 0){
-		while(std::abs(omegaMK + n*omegaR) > ZERO_FREQ_LIMIT && (omegaMK + n*omegaR) > 0.){
+		while(std::abs(omegaMK + n*omegaR) > ZERO_FREQUENCY_LIMIT && (omegaMK + n*omegaR) > 0.){
 			n--;
 		}
-		if(std::abs(omegaMK + n*omegaR) > ZERO_FREQ_LIMIT){
+		if(std::abs(omegaMK + n*omegaR) > ZERO_FREQUENCY_LIMIT){
 			n++;
 		}
 	}else{
-		while(std::abs(omegaMK + n*omegaR) > ZERO_FREQ_LIMIT && (omegaMK + n*omegaR) < 0.){
+		while(std::abs(omegaMK + n*omegaR) > ZERO_FREQUENCY_LIMIT && (omegaMK + n*omegaR) < 0.){
 			n++;
 		}
 	}
-	if(std::abs(omegaMK + n*omegaR) > ZERO_FREQ_LIMIT && omegaMK + n*omegaR < 0){
+	if(std::abs(omegaMK + n*omegaR) > ZERO_FREQUENCY_LIMIT && omegaMK + n*omegaR < 0){
 		n++;
 	}
 

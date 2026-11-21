@@ -18,7 +18,6 @@
 #define MST_AUTO_FREQ 1.e-2
 #define MST_AUTO_RADIAL 1000.
 #define MST_AUTO_POINTS_MAX 256
-#define ZERO_FREQ_MAX 1.e-11
 #define ASYM_AUTO_RMIN 100
 
 // Constructor
@@ -264,7 +263,7 @@ void RadialTeukolsky::generateRetardedBoundaryConditions(SolutionMethod method){
 // 	}
 
 // 	// these flags tell us which boundary data to calculate with MST expansions
-// 	if( flagHor && flagInf && std::abs(_omega) > ZERO_FREQ_MAX ){
+// 	if( flagHor && flagInf && std::abs(_omega) > ZERO_FREQUENCY_LIMIT ){
 // 		std::cout << "(RADIALSOLVER) Using MST expansions to generate boundary data. \n";
 // 		if(std::abs(_omega) < 1. && std::abs(2.*_omega*_radialPoints.back()) >= 0.5){
 // 			_infinityBoundary = 20./std::abs(_omega);
@@ -274,10 +273,10 @@ void RadialTeukolsky::generateRetardedBoundaryConditions(SolutionMethod method){
 
 // 		teuk_MST_series_boundary(_horizonBoundarySolution, _horizonBoundaryDerivative, _infinityBoundarySolution, _infinityBoundaryDerivative, *this, _horizonBoundary, _infinityBoundary);
 
-// 	}else if(flagHor && std::abs(_omega) > ZERO_FREQ_MAX){
+// 	}else if(flagHor && std::abs(_omega) > ZERO_FREQUENCY_LIMIT){
 // 		std::cout << "(RADIALSOLVER) Generating horizon side MST expansions. \n";
 // 		teuk_in_MST_series_boundary(_horizonBoundarySolution, _horizonBoundaryDerivative, *this, _horizonBoundary);
-// 	}else if(flagInf && std::abs(_omega) > ZERO_FREQ_MAX){
+// 	}else if(flagInf && std::abs(_omega) > ZERO_FREQUENCY_LIMIT){
 // 		std::cout << "(RADIALSOLVER) Generating infinity side MST expansions. \n";
 // 		if(std::abs(_omega) < 1. && std::abs(2.*_omega*_radialPoints.back()) >= 0.5){
 // 			_infinityBoundary /= std::abs(_omega);
@@ -620,7 +619,7 @@ void RadialTeukolsky::AUTOsolve(BoundaryCondition bc){
 // integrate the Teukolsky equation using a stable choice of spin-weight and then generates the requested
 // solution via the Teukolsky-Starobinsky transformations
 void RadialTeukolsky::generateSolutions(SolutionMethod method, bool make_stable){
-	if(std::abs(_omega) <= ZERO_FREQ_MAX){
+	if(std::abs(_omega) <= ZERO_FREQUENCY_LIMIT){
 		STATICsolve();
 	}else if(method == AUTO){
 		AUTOsolve();
@@ -651,7 +650,7 @@ void RadialTeukolsky::generateSolutions(SolutionMethod method, bool make_stable)
 }
 
 void RadialTeukolsky::generateSolutions(BoundaryCondition bc, SolutionMethod method, bool make_stable){
-	if(std::abs(_omega) <= ZERO_FREQ_MAX){
+	if(std::abs(_omega) <= ZERO_FREQUENCY_LIMIT){
 		STATICsolve(bc);
 	}else if(method == AUTO){
 		AUTOsolve(bc);
@@ -1218,7 +1217,7 @@ void flip_spin_of_radial_teukolsky_TS_subfunc(Complex &RFlip, Complex &RPFlip, C
 	double delta = r*r - 2.*r + a*a;
 	if(s < 0){
 		RFlip = (f0m*R + g0m*RP)/Cp;
-		if(std::abs(g0p) > 0. && std::abs(omega) > ZERO_FREQ_MAX){
+		if(std::abs(g0p) > 0. && std::abs(omega) > ZERO_FREQUENCY_LIMIT){
 			RPFlip = (Cm*R - f0p*RFlip)/g0p;
 		}else{
 			Complex df0m = df_coeff_TS_static(s, a, lambdaCH, r);
@@ -1226,7 +1225,7 @@ void flip_spin_of_radial_teukolsky_TS_subfunc(Complex &RFlip, Complex &RPFlip, C
 		}
 	}else{
 		RFlip = (f0p*R + g0p*RP)/Cm;
-		if(std::abs(g0m) > 0. && std::abs(omega) > ZERO_FREQ_MAX){
+		if(std::abs(g0m) > 0. && std::abs(omega) > ZERO_FREQUENCY_LIMIT){
 			RPFlip = (Cp*R - f0m*RFlip)/g0m;
 		}else{
 			Complex df0p = df_coeff_TS_static(s, a, lambdaCH, r);

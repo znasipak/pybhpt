@@ -86,6 +86,32 @@ public:
 	double getTimeFrequency(int m, int k, int n);
 };
 
+// Polar part of the azimuthal accumulation, evaluated without the Fourier series in the
+// polar Mino phase (which converges only like (1 - |x|)^n on nearly polar orbits).
+// With chi the polar anomaly (z = z2 cos chi), dphi_theta/dchi splits into a pole kernel
+// with a closed-form antiderivative plus a smooth remainder whose cosine series converges
+// in a few dozen terms (see geo.cpp). Shared by the trajectory samples used in the flux
+// calculation and by GeodesicSource::getAzimuthalPositionOfMinoTime.
+class PolarAzimuthalAccumulation{
+public:
+	PolarAzimuthalAccumulation(){}
+	PolarAzimuthalAccumulation(double a, double En, double Lz, double Qc, double z1, double z2, double x);
+
+	bool isValid();
+	// int_0^chi (dphi_theta/dchi) dchi, for any real chi
+	double ofAnomaly(double chi);
+	// Delta phi_theta = Phi(chi(q)) - Upsilon^theta_phi q / Upsilon_theta at Mino phase q,
+	// given chi = chi(q)
+	double ofPhase(double q, double chi);
+
+private:
+	bool _valid = false;
+	double _ax = 0.;
+	double _kernel = 0.;   // Lz J(1)/|x|, the weight of the pole kernel
+	double _slope = 0.;    // Phi(pi)/pi
+	Vector _coef;          // cosine coefficients of the smooth remainder
+};
+
 class GeodesicSource{
 public:
 	GeodesicSource(){};
@@ -170,6 +196,7 @@ private:
 	GeodesicConstants _geoConstants;
 	GeodesicTrajectory _geoTrajectory;
 	GeodesicTrajectory _geoCoefficients;
+	PolarAzimuthalAccumulation _polarAzimuthal;
 };
 
 // void output_geodesic(GeodesicSource geo, std::string dir);
@@ -263,12 +290,21 @@ void kerr_geo_time_mino_frequency_polar_schw(double &upT, double En, double Lz, 
 void kerr_geo_time_mino_frequency(double &upT, double a, double p, double e, double En, double Lz, double Qc, double z1, double z2, double r3, double r4, double upR, double upTh);
 void kerr_geo_azimuthal_mino_frequency_radial(double &upPh, double a, double p, double e, double En, double Lz, double Qc, double r3, double r4);
 void kerr_geo_azimuthal_mino_frequency_polar(double &upPh, double a, double En, double Lz, double Qc, double z1, double z2);
+void kerr_geo_azimuthal_mino_frequency_polar(double &upPh, double a, double En, double Lz, double Qc, double z1, double z2, double x);
 void kerr_geo_azimuthal_mino_frequency_polar_schw(double &upPh, double En, double Lz, double Qc, double z1, double z2);
+void kerr_geo_azimuthal_mino_frequency_polar_schw(double &upPh, double En, double Lz, double Qc, double z1, double z2, double x);
 void kerr_geo_azimuthal_mino_frequency(double &upPh, double a, double p, double e, double En, double Lz, double Qc, double z1, double z2, double r3, double r4, double upR, double upTh);
+void kerr_geo_azimuthal_mino_frequency(double &upPh, double a, double p, double e, double En, double Lz, double Qc, double z1, double z2, double r3, double r4, double upR, double upTh, double x);
 
 void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &upPh, double a, double p, double e, double x);
 void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &upPh, double a, double p, double e, double x, double En, double Lz, double Qc, double r1, double r2, double r3, double r4, double z1, double z2);
 void kerr_geo_carter_frequencies(double &cR, double &cTh, double &cPh, double upT, double upR, double upTh, double upPh, double a, double En, double Lz, double Qc, double z1, double z2);
+void kerr_geo_carter_frequencies(double &cR, double &cTh, double &cPh, double upT, double upR, double upTh, double upPh, double a, double En, double Lz, double Qc, double z1, double z2, double x);
+// Delta phi_theta at the polar phase samples qth from PolarAzimuthalAccumulation rather
+// than the truncated Fourier series in the polar phase. mino = true when qth is uniform in
+// the Mino phase; fourier_chi maps phase to chi.
+void polar_phi_samples_exact(Vector &phiTh, const Vector &qth, bool mino,
+	PolarAzimuthalAccumulation &polarPhi, Vector &fourier_chi);
 
 // void kerr_geo_time(Vector &tR, Vector &tTh, double upR, double upTh, double a, double p, double e, double x, double En, double Lz, double Qc, double r1, double r2, double r3, double r4, double z1, double z2);
 // void kerr_geo_radial_time(Vector &tR, double upR, double a, double p, double e, double En, double Lz, double r1, double r2, double r3, double r4);
