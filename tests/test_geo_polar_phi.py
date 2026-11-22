@@ -189,3 +189,47 @@ def test_position_of_coordinate_time_on_near_polar_orbit(a, p, x):
     assert np.allclose(got[:, 0], r, rtol=1e-14, atol=0.)
     assert np.max(np.abs(got[:, 1] - theta)) < 1e-10
     assert np.max(np.abs(got[:, 2] - phi)) < 2e-10
+
+
+def _regularized_phi_theta(geo, la):
+    """Delta phi_theta(lambda) rebuilt from the public regularized coefficients."""
+    K = geo.azimuthalpolarkernel
+    c = np.asarray(geo.regularizedazimuthalpolarfourier)
+    ax = abs(geo.x)
+    chi = np.asarray(geo.psi_polar(np.asarray(la)))
+    k = np.round(chi/np.pi)
+    r = chi - k*np.pi
+    n = np.arange(1, c.size)
+    Phi = K*(k*np.pi + np.arctan2(np.sin(r), ax*np.cos(r))) + c[0]*chi \
+        + np.sum(c[1:, None]/n[:, None]*np.sin(n[:, None]*chi[None, :]), axis=0)
+    return Phi - (K + c[0])*geo.minofrequencies[2]*np.asarray(la)
+
+
+@pytest.mark.parametrize("a, p, x", TRAJECTORY_ORBITS + [(0.0, 10.0, 0.3)])
+def test_regularized_azimuthal_polar_coefficients_rebuild_phi(a, p, x):
+    """The documented reconstruction from regularizedazimuthalpolarfourier and
+    azimuthalpolarkernel reproduces the integrated phi on spherical orbits, and the
+    smooth series is short."""
+    geo = KerrGeodesic(a, p, 0., x, 2**8)
+    c = np.asarray(geo.regularizedazimuthalpolarfourier)
+    assert 1 <= c.size <= 512
+    chi = _trajectory_samples(x)
+    if a == 0.:
+        lam = chi/geo.minofrequencies[2]   # dlambda/dchi is constant for a = 0
+        assert np.all(c == 0.)
+        phi = None
+    else:
+        lam, _, _, _, phi = _spherical_trajectory_reference(geo, chi)
+    rebuilt = _regularized_phi_theta(geo, lam)
+    # the radial part of phi is linear in lambda on a spherical orbit, so the polar
+    # oscillation is everything in azimuthal_position beyond Upsilon_phi * lambda
+    got = np.asarray(geo.azimuthal_position(lam)) - geo.minofrequencies[3]*lam
+    assert np.max(np.abs(rebuilt - got)) < 1e-12
+    if phi is not None:
+        assert np.max(np.abs(geo.minofrequencies[3]*lam + rebuilt - phi)) < 2e-10
+
+
+def test_regularized_azimuthal_polar_coefficients_empty_for_equatorial_orbits():
+    geo = KerrGeodesic(0.9, 6.0, 0.2, 1.0, 2**6)
+    assert np.asarray(geo.regularizedazimuthalpolarfourier).size == 0
+    assert geo.azimuthalpolarkernel == 0.
