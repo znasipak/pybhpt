@@ -118,3 +118,44 @@ def test_teukolsky_mode_precision_not_extrapolated_before_convergence():
     mode.solve(orbit)
     assert mode.precision('Up') >= 0.1
     assert mode.precision('In') >= 0.1
+
+# In Schwarzschild an inclined orbit is a rotated equatorial one, so a mode with
+# frequency (m + k) Omega can only be excited if |m + sgn(x) k| <= l. These modes
+# vanish by exact cancellation in the polar source integral; a too-coarse starting
+# polar grid once aliased that cancellation into O(1e-3) amplitudes for e > 0.
+@pytest.mark.parametrize("s", [-2, 2])
+@pytest.mark.parametrize("e", [0.001, 0.01, 0.2])
+@pytest.mark.parametrize("x, k_forbidden, k_allowed", [(0.5, 3, 1), (-0.5, -3, -1)])
+def test_teukolsky_mode_schwarzschild_forbidden_mode_vanishes(s, e, x, k_forbidden, k_allowed):
+    orbit = KerrGeodesic(0., 10., e, x)
+    forbidden = TeukolskyMode(s, 4, 3, k_forbidden, 0, orbit)
+    forbidden.solve(orbit)
+    allowed = TeukolskyMode(s, 4, 3, k_allowed, 0, orbit)
+    allowed.solve(orbit)
+    assert np.abs(forbidden.amplitude('Up')) < 1e-10*np.abs(allowed.amplitude('Up'))
+    assert np.abs(forbidden.amplitude('In')) < 1e-10*np.abs(allowed.amplitude('In'))
+
+# In Schwarzschild the energy flux carried by each (l, n) is independent of the
+# orbital inclination: summing the inclined (m, k) modes must reproduce the
+# equatorial (m, k = 0) modes of the same (l, n).
+@pytest.mark.parametrize("e", [0.01, 0.2])
+@pytest.mark.parametrize("x", [0.5, -0.5])
+def test_teukolsky_mode_schwarzschild_flux_independent_of_inclination(e, x):
+    from pybhpt.flux import FluxMode
+
+    def flux_ln(orbit, l, n, ks):
+        total = 0.
+        for m in range(-l, l + 1):
+            for k in ks:
+                mode = TeukolskyMode(-2, l, m, k, n, orbit)
+                mode.solve(orbit)
+                total += FluxMode(orbit, mode).Edot['I']
+        return total
+
+    equatorial = KerrGeodesic(0., 10., e, 1.)
+    inclined = KerrGeodesic(0., 10., e, x)
+    for l in range(2, 5):
+        for n in range(-1, 2):
+            ref = flux_ln(equatorial, l, n, [0])
+            val = flux_ln(inclined, l, n, range(-2*l, 2*l + 1))
+            assert np.isclose(val, ref, rtol=1e-9, atol=0), f"(l, n) = ({l}, {n}): {val} vs {ref}"

@@ -595,7 +595,18 @@ TeukolskyAmplitudes teukolsky_amplitude(int s, int L, int m, int k, int n, Geode
 	while(NsampleR < 2*std::abs(n) + 2){
 		NsampleR *= 2;
 	}
-	while(NsampleTh < 2*std::abs(k) + 2){
+	// The polar grid must also start above the polar integrand's bandwidth, not just resolve
+	// the k-th harmonic. In Schwarzschild the polar integrand is a rotated spin-weighted
+	// harmonic times exp(i k q_theta), so it is band-limited to harmonics
+	// |j| <= |k +/- m| + L + 2 (sign of Lz; the +2 covers the source's velocity factors),
+	// and in Kerr that band carries nearly all of its power. A coarser start can be fooled:
+	// at a = 0, x = 0.5 the (L, m, k) = (4, 3, 3) integrand has no j = +/-4 harmonic, so the
+	// 4- and 8-point trapezoid sums agree exactly while both alias the j = 8 harmonic. The
+	// refinement test then reads dLast = 0 as converged, and the symmetry-forbidden mode
+	// comes back O(1e-3) with ~1e-13 reported precision. An N-point trapezoid sum is exact
+	// for |j| < N, so starting at N > bandwidth removes that alias.
+	int polarBandwidth = std::abs(k + (geoConstants.Lz < 0. ? -m : m)) + L + 2;
+	while(NsampleTh < 2*std::abs(k) + 2 || NsampleTh <= polarBandwidth){
 		NsampleTh *= 2;
 	}
 	int radialLength = rp.size(), polarLength = thp.size();
