@@ -1682,6 +1682,15 @@ void kerr_geo_azimuthal_mino_frequency_radial(double &upPh, double a, double p, 
 // the first term averages to Lz J(1)/|x| exactly, and the second is the smooth
 //   -Lz beta / [ (sqrt(C - beta) + sqrt(C - beta u)) sqrt(C - beta u) sqrt(C - beta) ],
 // which the trapezoid rule resolves at once. 1 - u is never formed by subtraction.
+// The smooth remainder R(chi) of dphi_theta/dchi once the pole kernel Lz J(1)/(1 - u) is
+// removed (see above), with beta = a^2 (1 - En^2), C = beta z1^2 and sqrtC1 = sqrt(C - beta).
+static double dphip_polar_remainder_dchi(double chi, double a, double En, double Lz, double z2, double beta, double C, double sqrtC1){
+	double c = cos(chi);
+	double u = z2*z2*c*c;
+	double sqrtCu = sqrt(C - beta*u);
+	return -Lz*beta/((sqrtC1 + sqrtCu)*sqrtCu*sqrtC1) - a*En/sqrtCu;
+}
+
 void kerr_geo_azimuthal_mino_frequency_polar(double &upPh, double a, double En, double Lz, double Qc, double z1, double z2, double x){
 	double beta = a*a*(1. - En*En);
 	double C = beta*z1*z1;
@@ -1691,13 +1700,13 @@ void kerr_geo_azimuthal_mino_frequency_polar(double &upPh, double a, double En, 
 		int Nsample = pow(2, 5);
 		double sum = 0.;
 		for(int i = 0; i < Nsample; i++){
-			sum += dVphizdMino(zp_chi(2.*M_PI*i/(Nsample), x), a, En, Lz, Qc)*dmino_dchi(2.*M_PI*i/(Nsample), a, En, z1, z2);
+			sum += dVphizdMino(zp_chi(2.*M_PI*i/Nsample, x), a, En, Lz, Qc)*dmino_dchi(2.*M_PI*i/Nsample, a, En, z1, z2);
 		}
 		upPh = sum/Nsample;
 		double periodCompare = 0.;
 		while(std::abs(1. - periodCompare/upPh) > FREQ_EPS && Nsample < pow(2, 15)){
 			for(int i = 0; i < Nsample; i++){
-				sum += dVphizdMino(zp_chi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), x), a, En, Lz, Qc)*dmino_dchi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), a, En, z1, z2);
+				sum += dVphizdMino(zp_chi(2.*M_PI*i/Nsample + M_PI/Nsample, x), a, En, Lz, Qc)*dmino_dchi(2.*M_PI*i/Nsample + M_PI/Nsample, a, En, z1, z2);
 			}
 			periodCompare = upPh;
 			Nsample *= 2;
@@ -1707,22 +1716,16 @@ void kerr_geo_azimuthal_mino_frequency_polar(double &upPh, double a, double En, 
 	}
 	double sqrtC1 = sqrt(C - beta);
 	double J1 = 1./sqrtC1;
-	auto smooth = [&](double chi){
-		double c = cos(chi);
-		double u = z2*z2*c*c;
-		double sqrtCu = sqrt(C - beta*u);
-		return -Lz*beta/((sqrtC1 + sqrtCu)*sqrtCu*sqrtC1) - a*En/sqrtCu;
-	};
 	int Nsample = pow(2, 3);
 	double sum = 0.;
 	for(int i = 0; i < Nsample; i++){
-		sum += smooth(2.*M_PI*i/double(Nsample));
+		sum += dphip_polar_remainder_dchi(2.*M_PI*i/Nsample, a, En, Lz, z2, beta, C, sqrtC1);
 	}
 	double mean = sum/Nsample;
 	double meanCompare = 0.;
 	while(std::abs(mean - meanCompare) > FREQ_EPS*(std::abs(mean) + std::abs(Lz*J1/ax)) && Nsample < pow(2, 15)){
 		for(int i = 0; i < Nsample; i++){
-			sum += smooth(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample));
+			sum += dphip_polar_remainder_dchi(2.*M_PI*i/Nsample + M_PI/Nsample, a, En, Lz, z2, beta, C, sqrtC1);
 		}
 		meanCompare = mean;
 		Nsample *= 2;
@@ -2665,22 +2668,16 @@ Vector phip_polar_regularized_fourier(double a, double En, double Lz, double Qc,
 	double beta = a*a*(1. - En*En);
 	double C = beta*z1*z1;
 	double sqrtC1 = sqrt(C - beta);
-	auto smooth = [&](double chi){
-		double c = cos(chi);
-		double u = z2*z2*c*c;
-		double sqrtCu = sqrt(C - beta*u);
-		return -Lz*beta/((sqrtC1 + sqrtCu)*sqrtCu*sqrtC1) - a*En/sqrtCu;
-	};
 	double scale = std::abs(phip_polar_kernel(a, En, Lz, Qc, z1, x));
 	Vector coef;
 	for(int M = 16; M <= 4096; M *= 2){
 		Vector f(M + 1);
-		for(int j = 0; j <= M; j++){ f[j] = smooth(M_PI*double(j)/double(M)); }
+		for(int j = 0; j <= M; j++){ f[j] = dphip_polar_remainder_dchi(M_PI*j/M, a, En, Lz, z2, beta, C, sqrtC1); }
 		coef.assign(M + 1, 0.);
 		for(int n = 0; n <= M; n++){
 			double s = 0.5*(f[0] + ((n % 2 == 0) ? 1. : -1.)*f[M]);
-			for(int j = 1; j < M; j++){ s += f[j]*cos(M_PI*double(n*j)/double(M)); }
-			coef[n] = 2.*s/double(M);
+			for(int j = 1; j < M; j++){ s += f[j]*cos(M_PI*n*j/M); }
+			coef[n] = 2.*s/M;
 		}
 		coef[0] *= 0.5;
 		coef[M] *= 0.5;
