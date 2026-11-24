@@ -7,6 +7,13 @@
 #include <gsl/gsl_odeiv2.h>
 #include <boost/numeric/odeint.hpp>
 #include "mst.hpp"
+
+// Below this |omega| a mode is treated as zero-frequency: the radial solver uses the
+// static solutions and the mode carries no flux. Shared by the radial solver,
+// TeukolskyMode and the flux functions so all three agree on which modes are static.
+#ifndef ZERO_FREQUENCY_LIMIT
+#define ZERO_FREQUENCY_LIMIT 1.e-12
+#endif
 #include "gsn_asymp.hpp"
 
 enum SolutionMethod {AUTO, MST, ASYM, HBL, GSN, TEUK};

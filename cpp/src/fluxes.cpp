@@ -5,7 +5,6 @@
 #define FLUX_EPSILON 5.e-10
 #define FLUX_LMAX 100
 #define COUNT_MAX 1000
-#define ZERO_FREQ_MAX 1.e-8
 
 void ELQdot_to_pexdot(double &pdot, double &edot, double &xdot, double a, double p, double e, double x, double Edot, double Lzdot, double Qdot){
 	double dpdE, dedE, dxdE;
@@ -849,7 +848,7 @@ FluxList flux_mode(int s, GeodesicSource& geo, TeukolskyMode& teukMode, int incl
 	}
 	double LdotPrefactor = 0.;
 	double QdotPrefactor = 0.;
-	if(std::abs(teukMode.getFrequency()) > 1.e-8){
+	if(std::abs(teukMode.getFrequency()) > ZERO_FREQUENCY_LIMIT){
 		LdotPrefactor = angular_momentum_flux_factor(geo, teukMode);
 		QdotPrefactor = carter_flux_factor(geo, teukMode);
 	}
@@ -881,7 +880,7 @@ Fluxes scalar_energy_flux_mode(double a, double gamma, double omega, double hori
 }
 
 Fluxes scalar_energy_flux_mode(GeodesicSource& geo, TeukolskyMode& teukMode){
-	if(std::abs(teukMode.getFrequency()) > ZERO_FREQ_MAX){
+	if(std::abs(teukMode.getFrequency()) > ZERO_FREQUENCY_LIMIT){
 		if(std::abs(teukMode.getTeukolskyAmplitude(Up)) + std::abs(teukMode.getTeukolskyAmplitude(In)) == 0.){
 			teukMode.generateSolutions(geo);
 		}
@@ -893,7 +892,7 @@ Fluxes scalar_energy_flux_mode(GeodesicSource& geo, TeukolskyMode& teukMode){
 }
 
 Fluxes gravitational_energy_flux_mode(GeodesicSource& geo, TeukolskyMode& teukMode){
-	if(std::abs(teukMode.getFrequency()) > ZERO_FREQ_MAX){
+	if(std::abs(teukMode.getFrequency()) > ZERO_FREQUENCY_LIMIT){
 		if(std::abs(teukMode.getTeukolskyAmplitude(Up)) + std::abs(teukMode.getTeukolskyAmplitude(In)) == 0.){
 			teukMode.generateSolutions(geo);
 		}

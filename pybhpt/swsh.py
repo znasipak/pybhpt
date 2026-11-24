@@ -49,6 +49,13 @@ def Yslm(s, l, m, th, ph = None):
     -------
     array_like
         The values of the spherical harmonic at the specified angles.
+
+    Notes
+    -----
+    The normalization is computed separately from the angular factor and can overflow
+    for very large l. When |m| is close to l this happens around l = 1000, and the
+    result is then nan. Below that, the error grows slowly with l, to a few times
+    1e-12 (relative to the largest value of the harmonic) at l = 800.
     """
     assert isinstance(s, int) and isinstance(l, int) and isinstance(m, int), "s, l, and m must be integers"
     if ph is not None:
@@ -77,6 +84,12 @@ def Yslm_derivative(s, l, m, th, ph = None):
     -------
     array_like
         The derivatives of the spherical harmonic at the specified angles.
+
+    Notes
+    -----
+    The normalization is computed separately from the angular factor and can overflow
+    for very large l. When |m| is close to l this happens around l = 1000, and the
+    result is then nan. It uses the same normalization as `Yslm`.
     """
     assert isinstance(s, int) and isinstance(l, int) and isinstance(m, int), "s, l, and m must be integers"
     if ph is not None:

@@ -85,6 +85,8 @@ cdef extern from "geo.hpp":
         vector[double] getRadialCoefficients()
         vector[double] getPolarCoefficients()
         vector[double] getAzimuthalCoefficients(int j)
+        vector[double] getRegularizedAzimuthalPolarCoefficients()
+        double getAzimuthalPolarKernel()
 
         GeodesicConstants getConstants()
         GeodesicTrajectory getTrajectory()
@@ -497,6 +499,17 @@ cdef class KerrGeodesic:
             deltaX[i] = deltaX_cpp[i]
         return deltaX
     
+    def get_regularized_azimuthal_polar_coefficients(self):
+        cdef vector[double] coef_cpp = self.geocpp.getRegularizedAzimuthalPolarCoefficients()
+        cdef int n = coef_cpp.size()
+        cdef np.ndarray[ndim=1, dtype=np.float64_t] coef = np.empty(n, dtype = np.float64)
+        for i in range(n):
+            coef[i] = coef_cpp[i]
+        return coef
+
+    def get_azimuthal_polar_kernel(self):
+        return self.geocpp.getAzimuthalPolarKernel()
+
     def get_azimuthal_coefficients(self, int j):
         cdef vector[double] deltaX_cpp = self.geocpp.getAzimuthalCoefficients(j)
         cdef int n = deltaX_cpp.size()

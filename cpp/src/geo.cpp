@@ -101,7 +101,7 @@ GeodesicSource::GeodesicSource(double a, double p, double e, double x, int Nsamp
 		// std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
 
 		// start = std::chrono::system_clock::now();
-		kerr_geo_carter_frequencies(cR, cTh, cPh, upT, upR, upTh, upPh, a, En, Lz, Qc, z1, z2);
+		kerr_geo_carter_frequencies(cR, cTh, cPh, upT, upR, upTh, upPh, a, En, Lz, Qc, z1, z2, x);
 		// end = std::chrono::system_clock::now();
 		// elapsed_seconds = end-start;
 		// std::cout << "Carter frequencies have been calculated \n";
@@ -190,10 +190,16 @@ GeodesicSource::GeodesicSource(double a, double p, double e, double x, int Nsamp
 	}else{
 		kerr_trajectory_from_phase(tR, tTh, rp, thetap, phiR, phiTh, qr, qth, p, e, x, fourier_tr, fourier_tz, fourier_psi, fourier_chi, fourier_phir, fourier_phiz);
 	}
+	// The Fourier series for phi_theta converges only like (1 - |x|)^n and is truncated, so
+	// overwrite its samples with the exact evaluation (polar_phi_samples_exact).
+	Vector fourier_phiz_reg = phip_polar_regularized_fourier(a, En, Lz, Qc, z1, z2, x);
+	polar_phi_samples_exact(phiTh, qth, param == GeodesicParametrization::Mino,
+		phip_polar_kernel(a, En, Lz, Qc, z1, x), x, fourier_phiz_reg, fourier_chi);
 
 	_geoConstants = GeodesicConstants(a, p, e, x, En, Lz, Qc, r1, r2, r3, r4, z1, z2, upT, upR, upTh, upPh, cR, cTh, cPh);
 	_geoTrajectory = GeodesicTrajectory(tR, tTh, rp, thetap, phiR, phiTh, qr, qth, jacR, jacTh);
 	_geoCoefficients = GeodesicTrajectory(fourier_tr, fourier_tz, fourier_psi, fourier_chi, fourier_phir, fourier_phiz);
+	_geoCoefficients.phiThetaRegularized = fourier_phiz_reg;
 }
 int GeodesicSource::getOrbitalSampleNumber(){ return 2*(_geoTrajectory.tR.size() - 1); }
 double GeodesicSource::getBlackHoleSpin(){ return _geoConstants.a; }
@@ -370,7 +376,14 @@ double GeodesicSource::getPolarPositionOfMinoTime(double lambda){
 	return acos(zp_of_angle(lambda*_geoConstants.upsilonTheta, _geoConstants.x, _geoCoefficients.theta));
 }
 double GeodesicSource::getAzimuthalPositionOfMinoTime(double lambda){
-	return lambda*_geoConstants.upsilonPhi + phip_of_angle(lambda*_geoConstants.upsilonR, _geoCoefficients.phiR) + phip_of_angle(lambda*_geoConstants.upsilonTheta, _geoCoefficients.phiTheta);
+	double qth = lambda*_geoConstants.upsilonTheta;
+	// same representation of Delta phi_theta as the trajectory samples (polar_phi_samples_exact);
+	// the Fourier series is kept only where it is exact (equatorial orbits)
+	double polar = _geoCoefficients.phiThetaRegularized.empty()
+		? phip_of_angle(qth, _geoCoefficients.phiTheta)
+		: phip_polar_regularized(qth, kepler_phase_of_angle(qth, _geoCoefficients.theta),
+			getAzimuthalPolarKernel(), _geoConstants.x, _geoCoefficients.phiThetaRegularized);
+	return lambda*_geoConstants.upsilonPhi + phip_of_angle(lambda*_geoConstants.upsilonR, _geoCoefficients.phiR) + polar;
 }
 Vector GeodesicSource::getPositionOfMinoTime(double lambda){
 	Vector xp(4);
@@ -534,6 +547,11 @@ Vector GeodesicSource::getTimeCoefficients(int j){
 }
 Vector GeodesicSource::getRadialCoefficients(){ return _geoCoefficients.r; }
 Vector GeodesicSource::getPolarCoefficients(){ return _geoCoefficients.theta; }
+Vector GeodesicSource::getRegularizedAzimuthalPolarCoefficients(){ return _geoCoefficients.phiThetaRegularized; }
+double GeodesicSource::getAzimuthalPolarKernel(){
+	if(_geoCoefficients.phiThetaRegularized.empty()){ return 0.; }
+	return phip_polar_kernel(_geoConstants.a, _geoConstants.En, _geoConstants.Lz, _geoConstants.Q, _geoConstants.z1, _geoConstants.x);
+}
 Vector GeodesicSource::getAzimuthalCoefficients(int j){
 	switch(j){
 		case 1:
@@ -605,6 +623,10 @@ void GeodesicSource::setCoefficients(Vector tR, Vector tTheta, Vector r, Vector 
 	_geoCoefficients.theta = theta;
 	_geoCoefficients.phiR = phiR;
 	_geoCoefficients.phiTheta = phiTheta;
+}
+void GeodesicSource::setCoefficients(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta, Vector phiThetaRegularized){
+	setCoefficients(tR, tTheta, r, theta, phiR, phiTheta);
+	_geoCoefficients.phiThetaRegularized = phiThetaRegularized;
 }
 // void GeodesicSource::save(std::string dir){
 // 	int Nsample = getOrbitalSampleNumber();
@@ -807,12 +829,12 @@ GeodesicSource load_geodesic(std::string file){
 
 	double cR = 0., cTh = 0., cPh = 0.;
 	if(e > 0. || std::abs(x) < 1.){
-		kerr_geo_carter_frequencies(cR, cTh, cPh, upT, upR, upTh, upPh, a, En, Lz, Qc, z1, z2);
+		kerr_geo_carter_frequencies(cR, cTh, cPh, upT, upR, upTh, upPh, a, En, Lz, Qc, z1, z2, x);
 	}
 
 	GeodesicSource geo;
 	geo.setConstants(a, p, e, x, En, Lz, Qc, r1, r2, r3, r4, z1, z2, upT, upR, upTh, upPh, cR, cTh, cPh);
-	geo.setCoefficients(ftR, ftTh, frp, fthetap, fphiR, fphiTh);
+	geo.setCoefficients(ftR, ftTh, frp, fthetap, fphiR, fphiTh, phip_polar_regularized_fourier(a, En, Lz, Qc, z1, z2, x));
 
 	int halfSample = Nsample/2 + 1;
 	Vector tR(halfSample);
@@ -1483,7 +1505,7 @@ void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &u
 // 	kerr_geo_mino_frequencies(upT, upR, upTh, upPh, a, p, e, x, En, Lz, Qc, r1, r2, r3, r4, z1, z2);
 // }
 
-void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &upPh, double a, double p, double e, double , double En, double Lz, double Qc, double , double , double r3, double r4, double z1, double z2){
+void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &upPh, double a, double p, double e, double x, double En, double Lz, double Qc, double , double , double r3, double r4, double z1, double z2){
 	kerr_geo_radial_mino_frequency(upR, a, p, e, En, r3, r4);
 	if(std::abs(a) > 0){
 		kerr_geo_polar_mino_frequency(upTh, a, En, z1, z2);
@@ -1491,23 +1513,26 @@ void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &u
 		kerr_geo_polar_mino_frequency_schw(upTh, Lz, Qc);
 	}
 	kerr_geo_time_mino_frequency(upT, a, p, e, En, Lz, Qc, z1, z2, r3, r4, upR, upTh);
-	kerr_geo_azimuthal_mino_frequency(upPh, a, p, e, En, Lz, Qc, z1, z2, r3, r4, upR, upTh);
+	kerr_geo_azimuthal_mino_frequency(upPh, a, p, e, En, Lz, Qc, z1, z2, r3, r4, upR, upTh, x);
 }
 
-void kerr_geo_carter_frequencies(double &cR, double &cTh, double &cPh, double upT, double upR, double upTh, double upPh, double a, double En, double Lz, double Qc, double z1, double z2){
+void kerr_geo_carter_frequencies(double &cR, double &cTh, double &cPh, double upT, double upR, double upTh, double upPh, double a, double En, double Lz, double Qc, double z1, double z2, double x){
 	double upTTh, upPhTh;
 	if(std::abs(a) > 0){
 		kerr_geo_time_mino_frequency_polar(upTTh, a, En, Lz, Qc, z1, z2);
-		kerr_geo_azimuthal_mino_frequency_polar(upPhTh, a, En, Lz, Qc, z1, z2);
+		kerr_geo_azimuthal_mino_frequency_polar(upPhTh, a, En, Lz, Qc, z1, z2, x);
 	}else{
 		kerr_geo_time_mino_frequency_polar_schw(upTTh, En, Lz, Qc, z1, z2);
-		kerr_geo_azimuthal_mino_frequency_polar_schw(upPhTh, En, Lz, Qc, z1, z2);
+		kerr_geo_azimuthal_mino_frequency_polar_schw(upPhTh, En, Lz, Qc, z1, z2, x);
 	}
 	double freqFactor = a*Lz - a*a*En - upTTh*upTh;
 	double mFactor = Lz - a*En - upPhTh*upTh;
 	cR = freqFactor*upR/upT;
 	cTh = freqFactor*upTh/upT + upTh;
 	cPh = freqFactor*upPh/upT - mFactor;
+}
+void kerr_geo_carter_frequencies(double &cR, double &cTh, double &cPh, double upT, double upR, double upTh, double upPh, double a, double En, double Lz, double Qc, double z1, double z2){
+	kerr_geo_carter_frequencies(cR, cTh, cPh, upT, upR, upTh, upPh, a, En, Lz, Qc, z1, z2, sqrt((1. - z2)*(1. + z2)));
 }
 
 void kerr_geo_radial_mino_period(double &LaR, double a, double p, double e, double En, double r3, double r4){
@@ -1643,51 +1668,96 @@ void kerr_geo_azimuthal_mino_frequency_radial(double &upPh, double a, double p, 
 		upPh = sum/Nsample;
 	}
 }
+// Polar part of the azimuthal Mino frequency: the chi-average of
+//
+//   dphi/dchi = (Lz/(1 - z^2) - a En) dlambda/dchi,   z = z2 cos(chi),  1 - z2^2 = x^2.
+//
+// On a nearly polar orbit 1/(1 - z^2) = 1/(x^2 cos^2 chi + sin^2 chi) is a spike of height
+// 1/x^2 and width x at each pole, so a uniform trapezoid rule converges only like e^(-N x).
+// Capped at 2^15 points it was 3.4e-7 off at x = 4.76e-4. Writing
+// dlambda/dchi = J(u) = (C - beta u)^(-1/2), u = z^2, beta = a^2 (1 - En^2), C = beta z1^2,
+//
+//   Lz J(u)/(1 - u) = Lz J(1)/(1 - u) + Lz (J(u) - J(1))/(1 - u),
+//
+// the first term averages to Lz J(1)/|x| exactly, and the second is the smooth
+//   -Lz beta / [ (sqrt(C - beta) + sqrt(C - beta u)) sqrt(C - beta u) sqrt(C - beta) ],
+// which the trapezoid rule resolves at once. 1 - u is never formed by subtraction.
+// The smooth remainder R(chi) of dphi_theta/dchi once the pole kernel Lz J(1)/(1 - u) is
+// removed (see above), with beta = a^2 (1 - En^2), C = beta z1^2 and sqrtC1 = sqrt(C - beta).
+static double dphip_polar_remainder_dchi(double chi, double a, double En, double Lz, double z2, double beta, double C, double sqrtC1){
+	double c = cos(chi);
+	double u = z2*z2*c*c;
+	double sqrtCu = sqrt(C - beta*u);
+	return -Lz*beta/((sqrtC1 + sqrtCu)*sqrtCu*sqrtC1) - a*En/sqrtCu;
+}
+
+void kerr_geo_azimuthal_mino_frequency_polar(double &upPh, double a, double En, double Lz, double Qc, double z1, double z2, double x){
+	double beta = a*a*(1. - En*En);
+	double C = beta*z1*z1;
+	double ax = std::abs(x);
+	if(!(C > beta) || !(ax > 0.)){
+		// z1 <= 1 cannot occur for a bound orbit; keep the direct average as a fallback
+		int Nsample = pow(2, 5);
+		double sum = 0.;
+		for(int i = 0; i < Nsample; i++){
+			sum += dVphizdMino(zp_chi(2.*M_PI*i/Nsample, x), a, En, Lz, Qc)*dmino_dchi(2.*M_PI*i/Nsample, a, En, z1, z2);
+		}
+		upPh = sum/Nsample;
+		double periodCompare = 0.;
+		while(std::abs(1. - periodCompare/upPh) > FREQ_EPS && Nsample < pow(2, 15)){
+			for(int i = 0; i < Nsample; i++){
+				sum += dVphizdMino(zp_chi(2.*M_PI*i/Nsample + M_PI/Nsample, x), a, En, Lz, Qc)*dmino_dchi(2.*M_PI*i/Nsample + M_PI/Nsample, a, En, z1, z2);
+			}
+			periodCompare = upPh;
+			Nsample *= 2;
+			upPh = sum/Nsample;
+		}
+		return;
+	}
+	double sqrtC1 = sqrt(C - beta);
+	double J1 = 1./sqrtC1;
+	int Nsample = pow(2, 3);
+	double sum = 0.;
+	for(int i = 0; i < Nsample; i++){
+		sum += dphip_polar_remainder_dchi(2.*M_PI*i/Nsample, a, En, Lz, z2, beta, C, sqrtC1);
+	}
+	double mean = sum/Nsample;
+	double meanCompare = 0.;
+	while(std::abs(mean - meanCompare) > FREQ_EPS*(std::abs(mean) + std::abs(Lz*J1/ax)) && Nsample < pow(2, 15)){
+		for(int i = 0; i < Nsample; i++){
+			sum += dphip_polar_remainder_dchi(2.*M_PI*i/Nsample + M_PI/Nsample, a, En, Lz, z2, beta, C, sqrtC1);
+		}
+		meanCompare = mean;
+		Nsample *= 2;
+		mean = sum/Nsample;
+	}
+	upPh = Lz*J1/ax + mean;
+}
+// Without x, recover it from z2 = sqrt(1 - x^2). That loses relative accuracy ~eps/x^2
+// near the pole, so callers that know x should pass it.
 void kerr_geo_azimuthal_mino_frequency_polar(double &upPh, double a, double En, double Lz, double Qc, double z1, double z2){
-	double x = sqrt(1. - z2*z2);
-	int Nsample = pow(2, 5);
-	double sum = 0.;
-	for(int i = 0; i < Nsample; i++){
-		sum += dVphizdMino(zp_chi(2.*M_PI*i/(Nsample), x), a, En, Lz, Qc)*dmino_dchi(2.*M_PI*i/(Nsample), a, En, z1, z2);
-	}
-	upPh = sum/Nsample;
-	double periodCompare = 0.;
-	while(std::abs(1. - periodCompare/upPh) > FREQ_EPS && Nsample < pow(2, 15)){
-		for(int i = 0; i < Nsample; i++){
-			sum += dVphizdMino(zp_chi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), x), a, En, Lz, Qc)*dmino_dchi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), a, En, z1, z2);
-		}
-		periodCompare = upPh;
-		Nsample *= 2;
-		upPh = sum/Nsample;
-	}
+	kerr_geo_azimuthal_mino_frequency_polar(upPh, a, En, Lz, Qc, z1, z2, sqrt((1. - z2)*(1. + z2)));
 }
-void kerr_geo_azimuthal_mino_frequency_polar_schw(double &upPh, double En, double Lz, double Qc, double , double z2){
-	double x = sqrt(1. - z2*z2);
-	int Nsample = pow(2, 5);
-	double sum = 0.;
-	for(int i = 0; i < Nsample; i++){
-		sum += dVphizdMino(zp_chi(2.*M_PI*i/(Nsample), x), 0., En, Lz, Qc)*dmino_dchi_schw(Lz, Qc);
-	}
-	upPh = sum/Nsample;
-	double periodCompare = 0.;
-	while(std::abs(1. - periodCompare/upPh) > FREQ_EPS && Nsample < pow(2, 15)){
-		for(int i = 0; i < Nsample; i++){
-			sum += dVphizdMino(zp_chi(2.*M_PI*double(i)/double(Nsample) + M_PI/double(Nsample), x), 0., En, Lz, Qc)*dmino_dchi_schw(Lz, Qc);
-		}
-		periodCompare = upPh;
-		Nsample *= 2;
-		upPh = sum/Nsample;
-	}
+// a = 0: dlambda/dchi is constant and the chi-average of 1/(1 - z^2) is 1/|x| exactly
+// (see the Kerr version above), so no quadrature is needed.
+void kerr_geo_azimuthal_mino_frequency_polar_schw(double &upPh, double , double Lz, double Qc, double , double , double x){
+	upPh = Lz*dmino_dchi_schw(Lz, Qc)/std::abs(x);
 }
-void kerr_geo_azimuthal_mino_frequency(double &upPh, double a, double p, double e, double En, double Lz, double Qc, double z1, double z2, double r3, double r4, double upR, double upTh){
+void kerr_geo_azimuthal_mino_frequency_polar_schw(double &upPh, double En, double Lz, double Qc, double z1, double z2){
+	kerr_geo_azimuthal_mino_frequency_polar_schw(upPh, En, Lz, Qc, z1, z2, sqrt((1. - z2)*(1. + z2)));
+}
+void kerr_geo_azimuthal_mino_frequency(double &upPh, double a, double p, double e, double En, double Lz, double Qc, double z1, double z2, double r3, double r4, double upR, double upTh, double x){
 	double upPhR, upPhTh;
 	kerr_geo_azimuthal_mino_frequency_radial(upPhR, a, p, e, En, Lz, Qc, r3, r4);
 	if(std::abs(a) > 0.){
-		kerr_geo_azimuthal_mino_frequency_polar(upPhTh, a, En, Lz, Qc, z1, z2);
+		kerr_geo_azimuthal_mino_frequency_polar(upPhTh, a, En, Lz, Qc, z1, z2, x);
 	}else{
-		kerr_geo_azimuthal_mino_frequency_polar_schw(upPhTh, En, Lz, Qc, z1, z2);
+		kerr_geo_azimuthal_mino_frequency_polar_schw(upPhTh, En, Lz, Qc, z1, z2, x);
 	}
 	upPh = upPhR*upR + upPhTh*upTh;
+}
+void kerr_geo_azimuthal_mino_frequency(double &upPh, double a, double p, double e, double En, double Lz, double Qc, double z1, double z2, double r3, double r4, double upR, double upTh){
+	kerr_geo_azimuthal_mino_frequency(upPh, a, p, e, En, Lz, Qc, z1, z2, r3, r4, upR, upTh, sqrt((1. - z2)*(1. + z2)));
 }
 
 Vector angle_vector(int Nsample){
@@ -2319,7 +2389,7 @@ GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsampl
 		// std::cout << "Polar roots have been calculated \n";
 		kerr_geo_mino_frequencies(upT, upR, upTh, upPh, a, p, e, x, En, Lz, Qc, r1, r2, r3, r4, z1, z2);
 		// std::cout << "Frequencies have been calculated \n";
-		kerr_geo_carter_frequencies(cR, cTh, cPh, upT, upR, upTh, upPh, a, En, Lz, Qc, z1, z2);
+		kerr_geo_carter_frequencies(cR, cTh, cPh, upT, upR, upTh, upPh, a, En, Lz, Qc, z1, z2, x);
 		// std::cout << "Carter frequencies have been calculated \n";
 	}
 	if( std::abs(x*x + z2 - 1.) > 1.e-10 ){
@@ -2379,11 +2449,16 @@ GeodesicSource kerr_geo_orbit(double a, double p, double e, double x, int Nsampl
 	}else{
 		kerr_trajectory_from_phase(tR, tTh, rp, thetap, phiR, phiTh, qr, qth, p, e, x, fourier_tr, fourier_tz, fourier_psi, fourier_chi, fourier_phir, fourier_phiz);
 	}
+	// The Fourier series for phi_theta converges only like (1 - |x|)^n and is truncated, so
+	// overwrite its samples with the exact evaluation (polar_phi_samples_exact).
+	Vector fourier_phiz_reg = phip_polar_regularized_fourier(a, En, Lz, Qc, z1, z2, x);
+	polar_phi_samples_exact(phiTh, qth, param == GeodesicParametrization::Mino,
+		phip_polar_kernel(a, En, Lz, Qc, z1, x), x, fourier_phiz_reg, fourier_chi);
 
 	GeodesicSource geo;
 	geo.setConstants(a, p, e, x, En, Lz, Qc, r1, r2, r3, r4, z1, z2, upT, upR, upTh, upPh, cR, cTh, cPh);
 	geo.setTrajectory(tR, tTh, rp, thetap, phiR, phiTh, qr, qth, jacR, jacTh);
-	geo.setCoefficients(fourier_tr, fourier_tz, fourier_psi, fourier_chi, fourier_phir, fourier_phiz);
+	geo.setCoefficients(fourier_tr, fourier_tz, fourier_psi, fourier_chi, fourier_phir, fourier_phiz, fourier_phiz_reg);
 
 	return geo;
 }
@@ -2551,4 +2626,97 @@ double kerr_isco(double a, int sgnX){
 double kerr_isco_frequency(double a){
 	int sgnX = int(a/std::abs(a));
 	return kerr_geo_azimuthal_frequency_circ_time(std::abs(a), kerr_isco(std::abs(a), sgnX), sgnX);
+}
+
+// Regularized polar azimuthal accumulation (no Fourier series in the Mino phase).
+//
+// With z = z2 cos(chi), 1 - z^2 = x^2 cos^2 chi + sin^2 chi and dlambda/dchi = J(u) =
+// (C - beta u)^(-1/2) (u = z^2, beta = a^2 (1 - En^2), C = beta z1^2),
+//
+//   dphi_theta/dchi = Lz J(1)/(1 - u) + R(chi),
+//   R = -Lz beta / [ (sqrt(C - beta) + sqrt(C - beta u)) sqrt(C - beta u) sqrt(C - beta) ] - a En J(u),
+//
+// (see kerr_geo_azimuthal_mino_frequency_polar). The first term integrates in closed form,
+//   int_0^chi dchi/(x^2 cos^2 + sin^2) = (n pi + atan2(sin c, |x| cos c))/|x|,  chi = n pi + c, |c| <= pi/2,
+// and R is smooth, even and pi-periodic, so its cosine series converges in a few dozen terms
+// and integrates term by term. Phi(pi)/pi = K + c_0 is exactly the polar azimuthal frequency.
+// The old series in the Mino phase decays like (1 - |x|)^n: truncated at 2^15 terms it left
+// 3e-10 rad at x = 4.76e-4.
+static bool phip_polar_regularized_applies(double a, double En, double z1, double x){
+	double ax = std::abs(x);
+	if(!(ax > 0.) || !(ax < 1.)){ return false; }   // polar (x = 0) or equatorial
+	if(!(std::abs(a) > 0.)){ return true; }
+	double beta = a*a*(1. - En*En);
+	return beta*z1*z1 > beta;   // z1 > 1 for every bound orbit
+}
+
+double phip_polar_kernel(double a, double En, double Lz, double Qc, double z1, double x){
+	if(!phip_polar_regularized_applies(a, En, z1, x)){ return 0.; }
+	double J1;
+	if(!(std::abs(a) > 0.)){
+		J1 = dmino_dchi_schw(Lz, Qc);
+	}else{
+		double beta = a*a*(1. - En*En);
+		J1 = 1./sqrt(beta*z1*z1 - beta);
+	}
+	return Lz*J1/std::abs(x);
+}
+
+Vector phip_polar_regularized_fourier(double a, double En, double Lz, double Qc, double z1, double z2, double x){
+	if(!phip_polar_regularized_applies(a, En, z1, x)){ return Vector(); }
+	if(!(std::abs(a) > 0.)){ return Vector(1, 0.); }   // a = 0: R vanishes identically
+	double beta = a*a*(1. - En*En);
+	double C = beta*z1*z1;
+	double sqrtC1 = sqrt(C - beta);
+	double scale = std::abs(phip_polar_kernel(a, En, Lz, Qc, z1, x));
+	Vector coef;
+	for(int M = 16; M <= 4096; M *= 2){
+		Vector f(M + 1);
+		for(int j = 0; j <= M; j++){ f[j] = dphip_polar_remainder_dchi(M_PI*j/M, a, En, Lz, z2, beta, C, sqrtC1); }
+		coef.assign(M + 1, 0.);
+		for(int n = 0; n <= M; n++){
+			double s = 0.5*(f[0] + ((n % 2 == 0) ? 1. : -1.)*f[M]);
+			for(int j = 1; j < M; j++){ s += f[j]*cos(M_PI*n*j/M); }
+			coef[n] = 2.*s/M;
+		}
+		coef[0] *= 0.5;
+		coef[M] *= 0.5;
+		double tail = 0.;
+		for(int n = 3*M/4; n <= M; n++){ tail = std::max(tail, std::abs(coef[n])); }
+		if(tail < 1.e-16*(scale + std::abs(coef[0]))){ break; }
+	}
+	// drop the round-off tail
+	size_t nkeep = coef.size();
+	while(nkeep > 1 && std::abs(coef[nkeep - 1]) < 1.e-18*(scale + std::abs(coef[0]))){ nkeep--; }
+	coef.resize(nkeep);
+	return coef;
+}
+
+double phip_polar_regularized_of_anomaly(double chi, double kernel, double x, Vector &coef){
+	double n = std::round(chi/M_PI);
+	double c = chi - n*M_PI;
+	double val = kernel*(n*M_PI + atan2(sin(c), std::abs(x)*cos(c)));
+	if(!coef.empty()){
+		val += coef[0]*chi;
+		for(size_t k = 1; k < coef.size(); k++){ val += coef[k]*sin(double(k)*chi)/double(k); }
+	}
+	return val;
+}
+
+double phip_polar_regularized(double q, double chi, double kernel, double x, Vector &coef){
+	double c0 = coef.empty() ? 0. : coef[0];
+	return phip_polar_regularized_of_anomaly(chi, kernel, x, coef) - (kernel + c0)*q;
+}
+
+void polar_phi_samples_exact(Vector &phiTh, const Vector &qth, bool mino, double kernel, double x,
+		Vector &coef, Vector &fourier_chi){
+	int halfSample = int(phiTh.size());
+	if(halfSample < 1 || coef.empty()){ return; }
+	int Nsample = 2*(halfSample - 1);
+	for(int i = 0; i < halfSample; i++){
+		double q = mino ? 2.*M_PI*double(i)/double(Nsample) : qth[i];
+		double chi = (i == halfSample - 1) ? M_PI : kepler_phase_of_angle(q, fourier_chi);
+		if(i == 0){ chi = 0.; }
+		phiTh[i] = phip_polar_regularized(q, chi, kernel, x, coef);
+	}
 }

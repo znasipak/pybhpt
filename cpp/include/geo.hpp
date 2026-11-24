@@ -29,6 +29,11 @@ public:
 	Vector theta;
 	Vector phiR;
 	Vector phiTheta;
+	// Regularized form of phiTheta (coefficients only): cosine coefficients, in the polar
+	// anomaly chi, of the smooth part of dphi_theta/dchi once the closed-form pole kernel
+	// is removed (see phip_polar_regularized_fourier). Unlike the phiTheta Fourier series
+	// it converges for any inclination. Empty for equatorial orbits.
+	Vector phiThetaRegularized;
 
 	// Sampling-grid metadata for the source integrator. qr/qth hold the Mino
 	// phase at each sample (which equals the uniform index grid for Mino, but is
@@ -149,6 +154,9 @@ public:
 	Vector getRadialCoefficients();
 	Vector getPolarCoefficients();
 	Vector getAzimuthalCoefficients(int j);
+	// regularized representation of Delta phi_theta (see phip_polar_regularized_fourier)
+	Vector getRegularizedAzimuthalPolarCoefficients();
+	double getAzimuthalPolarKernel();
 
 	GeodesicConstants getConstants();
 	GeodesicTrajectory getTrajectory();
@@ -164,6 +172,7 @@ public:
 	void setTrajectory(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta,
 		Vector qr, Vector qth, Vector jacR, Vector jacTh);
 	void setCoefficients(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta);
+	void setCoefficients(Vector tR, Vector tTheta, Vector r, Vector theta, Vector phiR, Vector phiTheta, Vector phiThetaRegularized);
 	// void save(std::string dir);
 
 private:
@@ -263,12 +272,31 @@ void kerr_geo_time_mino_frequency_polar_schw(double &upT, double En, double Lz, 
 void kerr_geo_time_mino_frequency(double &upT, double a, double p, double e, double En, double Lz, double Qc, double z1, double z2, double r3, double r4, double upR, double upTh);
 void kerr_geo_azimuthal_mino_frequency_radial(double &upPh, double a, double p, double e, double En, double Lz, double Qc, double r3, double r4);
 void kerr_geo_azimuthal_mino_frequency_polar(double &upPh, double a, double En, double Lz, double Qc, double z1, double z2);
+void kerr_geo_azimuthal_mino_frequency_polar(double &upPh, double a, double En, double Lz, double Qc, double z1, double z2, double x);
 void kerr_geo_azimuthal_mino_frequency_polar_schw(double &upPh, double En, double Lz, double Qc, double z1, double z2);
+void kerr_geo_azimuthal_mino_frequency_polar_schw(double &upPh, double En, double Lz, double Qc, double z1, double z2, double x);
 void kerr_geo_azimuthal_mino_frequency(double &upPh, double a, double p, double e, double En, double Lz, double Qc, double z1, double z2, double r3, double r4, double upR, double upTh);
+void kerr_geo_azimuthal_mino_frequency(double &upPh, double a, double p, double e, double En, double Lz, double Qc, double z1, double z2, double r3, double r4, double upR, double upTh, double x);
 
 void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &upPh, double a, double p, double e, double x);
 void kerr_geo_mino_frequencies(double &upT, double &upR, double &upTh, double &upPh, double a, double p, double e, double x, double En, double Lz, double Qc, double r1, double r2, double r3, double r4, double z1, double z2);
 void kerr_geo_carter_frequencies(double &cR, double &cTh, double &cPh, double upT, double upR, double upTh, double upPh, double a, double En, double Lz, double Qc, double z1, double z2);
+void kerr_geo_carter_frequencies(double &cR, double &cTh, double &cPh, double upT, double upR, double upTh, double upPh, double a, double En, double Lz, double Qc, double z1, double z2, double x);
+// Regularized polar azimuthal accumulation. With chi the polar anomaly (z = z2 cos chi),
+//   Phi(chi) = int_0^chi dphi_theta/dchi = K A(chi) + c_0 chi + sum_{n>=1} c_n sin(n chi)/n,
+//   A(chi) = n pi + atan2(sin c, |x| cos c),  chi = n pi + c, |c| <= pi/2,
+// with K = phip_polar_kernel and c_n = phip_polar_regularized_fourier, and the oscillating
+// part in the polar Mino phase q is Delta phi_theta = Phi(chi(q)) - (K + c_0) q.
+// The coefficients are empty when the decomposition does not apply (equatorial orbits).
+double phip_polar_kernel(double a, double En, double Lz, double Qc, double z1, double x);
+Vector phip_polar_regularized_fourier(double a, double En, double Lz, double Qc, double z1, double z2, double x);
+double phip_polar_regularized_of_anomaly(double chi, double kernel, double x, Vector &coef);
+double phip_polar_regularized(double q, double chi, double kernel, double x, Vector &coef);
+// Delta phi_theta at the polar phase samples qth from the regularized form rather than the
+// truncated phiTheta Fourier series. mino = true when qth is uniform in the Mino phase;
+// fourier_chi maps phase to chi.
+void polar_phi_samples_exact(Vector &phiTh, const Vector &qth, bool mino, double kernel, double x,
+	Vector &coef, Vector &fourier_chi);
 
 // void kerr_geo_time(Vector &tR, Vector &tTh, double upR, double upTh, double a, double p, double e, double x, double En, double Lz, double Qc, double r1, double r2, double r3, double r4, double z1, double z2);
 // void kerr_geo_radial_time(Vector &tR, double upR, double a, double p, double e, double En, double Lz, double r1, double r2, double r3, double r4);

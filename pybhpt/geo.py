@@ -442,7 +442,13 @@ class KerrGeodesic:
     azimuthalradialfourier : numpy.ndarray
         The Fourier coefficients of azimuthal position with respect to the radial Mino phase.
     azimuthalpolarfourier : numpy.ndarray
-        The Fourier coefficients of azimuthal position with respect to the polar Mino phase.  
+        The Fourier coefficients of azimuthal position with respect to the polar Mino phase.
+        Truncated, and inaccurate near the poles on nearly polar orbits.
+    regularizedazimuthalpolarfourier : numpy.ndarray
+        Cosine coefficients, in the polar anomaly, of the smooth part of the polar azimuthal
+        accumulation. Accurate for any inclination.
+    azimuthalpolarkernel : float
+        Weight of the closed-form pole kernel that complements regularizedazimuthalpolarfourier.
     """
     def __init__(self, a, p, e, x, nsamples = 2**8, parametrization = "darwin"):
         if a < 0 or a > 1:
@@ -680,10 +686,55 @@ class KerrGeodesic:
     
     @property
     def azimuthalpolarfourier(self):
-        """
+        r"""
         The Fourier coefficients of azimuthal position with respect to the polar Mino phase.
+
+        Notes
+        -----
+        On nearly polar orbits (small :math:`|x|`) this series converges only like
+        :math:`(1 - |x|)^n`, because :math:`\Delta\phi_\theta` changes by about
+        :math:`\pi` over a polar phase interval of width :math:`\sim|x|` at each pole
+        crossing. The stored series is truncated and can be off by :math:`\sim 10^{-9}`
+        rad at :math:`x \sim 5\times10^{-4}`. pybhpt itself no longer uses it for
+        non-equatorial orbits: :meth:`azimuthal_position`, :meth:`position` and the
+        trajectory samples use the regularized representation
+        (:attr:`regularizedazimuthalpolarfourier`, :attr:`azimuthalpolarkernel`).
         """
         return self.base.get_azimuthal_coefficients(2)
+
+    @property
+    def regularizedazimuthalpolarfourier(self):
+        r"""
+        Cosine coefficients :math:`c_n` of the smooth part of the polar azimuthal
+        accumulation, as a function of the polar anomaly :math:`\chi`
+        (:math:`\cos\theta = z_2\cos\chi`).
+
+        With :math:`K` = :attr:`azimuthalpolarkernel`, the polar part of
+        :math:`d\phi/d\chi` is :math:`K|x|/(x^2\cos^2\chi + \sin^2\chi) + R(\chi)`,
+        with :math:`R(\chi) = \sum_n c_n \cos(n\chi)` smooth. Integrating,
+
+        .. math::
+
+            \Phi(\chi) = K\,A(\chi) + c_0\chi + \sum_{n\ge1} \frac{c_n}{n}\sin(n\chi),
+            \qquad A(\chi) = k\pi + \operatorname{atan2}(\sin c, |x|\cos c),
+
+        for :math:`\chi = k\pi + c`, :math:`|c| \le \pi/2`. The oscillating azimuthal
+        accumulation at Mino time :math:`\lambda` is
+        :math:`\Delta\phi_\theta = \Phi(\chi) - (K + c_0)\,\Upsilon_\theta\lambda`,
+        with :math:`\chi` = ``psi_polar(lambda)``. Unlike
+        :attr:`azimuthalpolarfourier`, this converges in a few dozen terms for any
+        inclination. Empty for equatorial orbits, where :math:`\Delta\phi_\theta = 0`.
+        """
+        return self.base.get_regularized_azimuthal_polar_coefficients()
+
+    @property
+    def azimuthalpolarkernel(self):
+        r"""
+        Weight :math:`K = L_z J(1)/|x|` of the pole kernel in the regularized polar
+        azimuthal accumulation, where :math:`J(1)` is :math:`d\lambda/d\chi` at the poles.
+        See :attr:`regularizedazimuthalpolarfourier`. Zero for equatorial orbits.
+        """
+        return self.base.get_azimuthal_polar_kernel()
     
     def mode_frequency(self, m, k, n):
         """

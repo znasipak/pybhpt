@@ -60,16 +60,12 @@ private:
 	Vector _Slm;
 	Vector _SlmP;
 
-	// Scalar spherical-harmonic grid: _Ygrid[j - _jgridMin][ith] = Ylm(j, m, theta[ith]).
-	// Filled once (fillYlmGrid) and reused by the spheroidal-harmonic sums and their
-	// theta-derivatives, so the expensive per-point Ylm evaluation is not repeated
-	// across coupling terms or between the solution and its derivative.
-	std::vector<Vector> _Ygrid;
-	// Collapsed, theta-independent coefficients: S(theta)  = (sum_j _Ccoef[j] Ylm(j,theta))/sin^|s|,
-	// S'(theta) = -(sum_j _Dcoef[j] Ylm(j,theta))/sin^{|s|+1}, with j offset by _jgridMin.
-	Vector _Ccoef;
-	Vector _Dcoef;
-	int _jgridMin = 0;
+	// S and S' on the theta grid, filled once (fillYlmGrid) from the Jacobi form of the
+	// spin-weighted harmonics (see jacobi_parameters in swsh.cpp), which stays accurate to the
+	// poles. One recurrence per theta serves every coupling term and both the solution
+	// and its derivative.
+	Vector _Sgrid;
+	Vector _SPgrid;
 	int _imaxCoupling = 0;   // highest coupling index with a nonzero coefficient
 	bool _gridFilled = false;
 	void fillYlmGrid();
