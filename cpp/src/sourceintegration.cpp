@@ -107,10 +107,16 @@ static double reldiff_or_zero(Complex old_value, Complex new_value){
 // back to the bare last step (factor 1). The rho < 0.75 cap is essential: once the
 // difference sequence bottoms out on solution noise, rho -> 1 from noise rather than from
 // real convergence and an uncapped rho/(1-rho) would inflate the estimate by orders of
-// magnitude. The result is floored at a fraction of the roundoff/cancellation level.
+// magnitude. The extrapolation also needs the previous step to have been in the geometric
+// regime: dPrev >= 1 means the coarser grid was off by order unity, and a sudden collapse
+// after it (rho << 1) says nothing about the remaining error. E.g. a = 0, p = 6.801,
+// e = 0.4, x = -1, (l, m, n) = (2, 2, 33) at 512 samples has dLast = 0.45, dPrev = 349,
+// and extrapolated to 5.8e-4 while the amplitude was 6 orders above its converged value.
+// In that case report the bare last step. The result is floored at a fraction of the
+// roundoff/cancellation level.
 static double conservative_precision(double dLast, double dPrev, double roundoff){
 	double rho = dPrev > 0. ? dLast/dPrev : 0.;
-	double factor = rho < 0.75 ? rho/(1. - rho) : 1.;
+	double factor = (rho < 0.75 && dPrev < 1.) ? rho/(1. - rho) : 1.;
 	return std::max(dLast * factor, 0.1 * roundoff);
 }
 

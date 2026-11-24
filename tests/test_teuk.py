@@ -107,6 +107,18 @@ def test_teukolsky_mode_gsn_unsupported_spin(s):
     with pytest.raises(ValueError):
         mode.solve(orbit, method="GSN")
 
+# The precision estimate extrapolates the nested-grid differences geometrically. On this
+# counter-rotating high-n mode the 256- and 512-sample grids disagree by 45% after a
+# 349x previous step, so the sum is not yet in the geometric regime and the reported
+# precision must not claim ~1e-3: the 512-sample amplitude is 6 orders above its
+# converged value (~6.6e-12 from 1024 samples on).
+def test_teukolsky_mode_precision_not_extrapolated_before_convergence():
+    orbit = KerrGeodesic(0.0, 6.801, 0.4, -1.0, 2**9)
+    mode = TeukolskyMode(-2, 2, 2, 0, 33, orbit)
+    mode.solve(orbit)
+    assert mode.precision('Up') >= 0.1
+    assert mode.precision('In') >= 0.1
+
 # In Schwarzschild an inclined orbit is a rotated equatorial one, so a mode with
 # frequency (m + k) Omega can only be excited if |m + sgn(x) k| <= l. These modes
 # vanish by exact cancellation in the polar source integral; a too-coarse starting
